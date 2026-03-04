@@ -4,15 +4,15 @@
 <br />
 <div align="center">
 
-  <h2 align="center">NAME OF CHOSEN GAME</h2>
+  <h2 align="center">KATANA ZERO</h2>
 
   <p align="center">
-    Short description of the game.
+    SAMURAI IN NEON CITY
     <br />
     <strong>Original game : </strong>
-    <a href="https://www.google.be/"><strong>General info »</strong></a>
+    <a href="https://en.wikipedia.org/wiki/Katana_Zero"><strong>General info »</strong></a>
     ·
-    <a href="https://www.google.be/"><strong>Youtube video »<strong></a>
+    <a href="https://www.youtube.com/watch?v=1GkqYgIKh98"><strong>Youtube video »<strong></a>
     <br />
     <br />
   </p>
@@ -46,12 +46,14 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-TODO: add screenshot 
+<img src="images_&_spritesheets/gitRepoImages/city.jpg" alt="city">
+<img src="images_&_spritesheets/gitRepoImages/dancedancedance.gif" alt="dancedancedance">
 
 Here's why:
-TODO: describe why you chose this game 
-* reason 1
-* reason .. 
+ 
+* An absolute masterpiece of a game
+* Technically challenging due to some complex mechanics
+* Interesting to make
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -61,16 +63,19 @@ TODO: describe why you chose this game
 This section gives a clear and detailed overview of which parts of the original game I planned to make.
 
 ### The minimum I will most certainly develop:
-* .. 
-* .. 
+* Mechanic that slows the time
+* Ability to pet a cat
+* Smooth movement and roll mechanic
 
 ### What I will probably make as well:
-* .. 
-* .. 
+* Decent fighting mechanics
+* Time reverse 
+* Some more enviroment interaction
+
 
 ### What I plan to create if I have enough time left:
-* .. 
-* .. 
+* More advanced ai for enemies
+* Particles(at least for running)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
