@@ -71,13 +71,13 @@ This section gives a clear and detailed overview of which parts of the original 
 
 ### What I will probably make as well:
 * Extended fighting mechanics(big range katana attack)
-* Particles for running
-* Visuals for time slow mechanic
+* Dust particles for running
 * Smooth movement that feels nice
 
 ### What I plan to create if I have enough time left:
 * More advanced ai for enemies
 * Time reverse animation at the end
+* Visuals for time slow mechanic
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
