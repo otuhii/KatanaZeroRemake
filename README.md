@@ -63,19 +63,21 @@ Here's why:
 This section gives a clear and detailed overview of which parts of the original game I planned to make.
 
 ### The minimum I will most certainly develop:
-* Mechanic that slows the time
+* Basic fighting mechanics(regular melee range katana attack) performed by your mouse
+* Interection with environment items(flowerpot, bottles) that can be picked up and then thrown
+* Time slow ability(no visuals)
 * Ability to pet a cat
-* Smooth movement and roll mechanic
+* HUD(and other signifiers for example time left to pass the level)
 
 ### What I will probably make as well:
-* Decent fighting mechanics
-* Time reverse 
-* Some more enviroment interaction
-
+* Extended fighting mechanics(big range katana attack)
+* Time reverse animation at the end
+* Visuals for time slow mechanic
+* Smooth movement that feels nice
 
 ### What I plan to create if I have enough time left:
 * More advanced ai for enemies
-* Particles(at least for running)
+* Particles for running
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -149,9 +151,9 @@ Explain where you applied inheritance (mandatory).
 <!-- CONTACT -->
 ## Contact
 
-Your Name - email@student.howest.be
+Oleh Tykhyi - oleh.tykhyi@student.howest.be
 
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
+Project Link: [https://github.com/HowestDAE/gd14-olehtykhyi#](https://github.com/your_username/repo_name)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
