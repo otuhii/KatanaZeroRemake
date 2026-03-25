@@ -68,11 +68,11 @@ This section gives a clear and detailed overview of which parts of the original 
 * Time slow ability(no visuals)
 * Ability to pet a cat
 * HUD(and other signifiers for example time left to pass the level)
+* Smooth movement that feels nice
 
 ### What I will probably make as well:
 * Extended fighting mechanics(big range katana attack)
 * Dust particles for running
-* Smooth movement that feels nice
 
 ### What I plan to create if I have enough time left:
 * More advanced ai for enemies
