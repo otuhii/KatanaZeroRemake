@@ -10,6 +10,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KatanaZeroRemakeFirstLevel"
 		{5ADAB721-CB6C-4EF5-89EB-20EC51A13CFC} = {5ADAB721-CB6C-4EF5-89EB-20EC51A13CFC}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PlayerMovementTest", "CollisionTest\CollisionTest.vcxproj", "{6F978733-33AC-428B-856C-A2BF101B83B7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5ADAB721-CB6C-4EF5-89EB-20EC51A13CFC} = {5ADAB721-CB6C-4EF5-89EB-20EC51A13CFC}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -34,6 +39,14 @@ Global
 		{A00C7538-7067-47E2-B4F7-723DF9EDC8DC}.Release|x64.Build.0 = Release|x64
 		{A00C7538-7067-47E2-B4F7-723DF9EDC8DC}.Release|x86.ActiveCfg = Release|Win32
 		{A00C7538-7067-47E2-B4F7-723DF9EDC8DC}.Release|x86.Build.0 = Release|Win32
+		{6F978733-33AC-428B-856C-A2BF101B83B7}.Debug|x64.ActiveCfg = Debug|x64
+		{6F978733-33AC-428B-856C-A2BF101B83B7}.Debug|x64.Build.0 = Debug|x64
+		{6F978733-33AC-428B-856C-A2BF101B83B7}.Debug|x86.ActiveCfg = Debug|Win32
+		{6F978733-33AC-428B-856C-A2BF101B83B7}.Debug|x86.Build.0 = Debug|Win32
+		{6F978733-33AC-428B-856C-A2BF101B83B7}.Release|x64.ActiveCfg = Release|x64
+		{6F978733-33AC-428B-856C-A2BF101B83B7}.Release|x64.Build.0 = Release|x64
+		{6F978733-33AC-428B-856C-A2BF101B83B7}.Release|x86.ActiveCfg = Release|Win32
+		{6F978733-33AC-428B-856C-A2BF101B83B7}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
