@@ -2,7 +2,7 @@
 #include "Player.h"
 
 Player::Player(Sprite* sprite) 
-	: Entity(sprite), m_State{PlayerState::fall}
+	: Entity(sprite), m_State{PlayerState::staying}
 {
 	InitializePlayerSpriteFrames();
 	GetSprite()->SetCurrentAnimationState(m_PlayerSpriteFrames[static_cast<int>(m_State)]);

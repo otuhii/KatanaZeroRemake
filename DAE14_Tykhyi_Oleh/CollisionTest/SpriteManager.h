@@ -3,7 +3,6 @@
 
 class Sprite;
 
-
 class SpriteManager final
 {
 public:
@@ -14,11 +13,11 @@ public:
 
 	Sprite* GetSprite(int index) const;
 
-	void AddSprite(int rows, int cols, const std::string& path);
+	Sprite* CreateSprite(const std::string& path);
+
 	void RemoveSprite(int index);
 
 private:
 	std::vector<Sprite*> m_pSprites;
-
 };
 

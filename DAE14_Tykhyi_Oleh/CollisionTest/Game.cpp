@@ -18,9 +18,8 @@ Game::~Game( )
 void Game::Initialize( )
 {
 	m_pSpriteManager = new SpriteManager();
-	m_pSpriteManager->AddSprite(10, 7, "ProcessedPlayerSpriteSheet.png");
 
-	m_pPlayer = new Player(m_pSpriteManager->GetSprite(0));
+	m_pPlayer = new Player(m_pSpriteManager->CreateSprite("ProcessedPlayerSpriteSheet.png"));
 }
 
 void Game::Cleanup( )

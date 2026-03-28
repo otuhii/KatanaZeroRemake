@@ -2,8 +2,8 @@
 #include "Sprite.h"
 #include "Texture.h"
 
-Sprite::Sprite(const int rows, const int cols, const std::string& spritesheetTexturePath)
-	: m_Rows{rows}, m_Cols{cols}, m_AccumulatedTime{0.f}, m_FrameCount{0}
+Sprite::Sprite(const std::string& spritesheetTexturePath)
+	: m_AccumulatedTime{0.f}, m_FrameCount{0}
 {
 	m_pSpritesheet = new Texture{ spritesheetTexturePath };
 }
@@ -33,7 +33,7 @@ void Sprite::Draw(const Vector2f& drawPos) const
 		glScalef(2.f, 2.f, 1.f);
 
 		Rectf srcRect{
-			m_CurrentAnimationState.frameDimension.left+m_CurrentAnimationState.frameDimension.width * m_FrameCount, // TODO i think i can update this shit in the update function
+			m_CurrentAnimationState.frameDimension.left+m_CurrentAnimationState.frameDimension.width * m_FrameCount,
 			m_CurrentAnimationState.frameDimension.bottom,
 			m_CurrentAnimationState.frameDimension.width,
 			m_CurrentAnimationState.frameDimension.height

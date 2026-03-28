@@ -15,7 +15,7 @@ public:
 		int maxFrameCount{};
 	};
 
-	Sprite(int rows, int cols, const std::string& spritesheetTexturePath);
+	Sprite(const std::string& spritesheetTexturePath);
 
 	~Sprite();
 
@@ -27,9 +27,6 @@ public:
 	void SetCurrentAnimationState(const CurrentAnimationState& animationState);
 
 private:
-
-	const int m_Rows{};
-	const int m_Cols{};
 
 	CurrentAnimationState m_CurrentAnimationState{};
 

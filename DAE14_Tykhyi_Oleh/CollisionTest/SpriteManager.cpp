@@ -23,19 +23,26 @@ Sprite* SpriteManager::GetSprite(int index) const
 	return m_pSprites.at(index);
 }
 
-void SpriteManager::AddSprite(int rows, int cols, const std::string& path) // bad indexing
+Sprite* SpriteManager::CreateSprite(const std::string& path) 
 {
-	m_pSprites.push_back(new Sprite{ rows, cols, path });
+	Sprite* pNewSprite = new Sprite{ path };
+
+	m_pSprites.push_back(pNewSprite);
+
+	return pNewSprite;
 }
 
-
-
-void SpriteManager::RemoveSprite(int itemIndex) //TODO better deletion and addition of elements
+//TODO consider that after deletion of the sprite, my player or enemy instance still have that address, maybe i should consider adding some check when it calls
+void SpriteManager::RemoveSprite(int itemIndex) 
 {
-	if (m_pSprites.at(itemIndex) != nullptr)
+	if (itemIndex < 0 || itemIndex >= m_pSprites.size())
 	{
-		delete m_pSprites[itemIndex];
-		m_pSprites[itemIndex] = nullptr;
+		return;
 	}
 
+	delete m_pSprites[itemIndex];
+
+	m_pSprites[itemIndex] = m_pSprites.back();
+
+	m_pSprites.pop_back();
 }
