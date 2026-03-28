@@ -10,17 +10,64 @@ Player::Player(Sprite* sprite)
 
 void Player::Draw(const Vector2f& drawPos) const
 {
-	GetSprite()->Draw(drawPos);
+	GetSprite()->Draw(drawPos, true, false);
 }
 
-void Player::Update(float elapsedSec)
+void Player::Update(float elapsedSec, const Uint8* pStates)
 {
-	GetSprite()->SetCurrentAnimationState(m_PlayerSpriteFrames[static_cast<int>(m_State)]);
+	HandleKeyboard(pStates);
 }
 
 void Player::SetState(PlayerState state)
 {
+	if (m_State == state)
+	{
+		return; // no animation flickering
+	}
+
 	m_State = state;
+	GetSprite()->SetCurrentAnimationState(m_PlayerSpriteFrames[static_cast<int>(m_State)]);
+}
+
+
+void Player::ProcessStateChange(bool isMoving)
+{
+	switch (m_State)
+	{
+	case PlayerState::staying:
+	{
+		if (isMoving)
+		{
+			SetState(PlayerState::beforeRun);
+		}
+		break;
+	}
+	case PlayerState::beforeRun:
+	{
+		if (GetSprite()->IsFinished())
+		{
+			SetState(PlayerState::run);
+		}
+
+		if (!isMoving)
+		{
+			SetState(PlayerState::staying);
+		}
+		break;
+	}
+	case PlayerState::run:
+	{
+		if (!isMoving)
+		{
+			SetState(PlayerState::staying);
+		}
+	}
+	}
+}
+
+void Player::HandleKeyboard(const Uint8* pStates)
+{
+	ProcessStateChange(pStates[SDL_SCANCODE_D]);
 }
 
 void Player::InitializePlayerSpriteFrames()

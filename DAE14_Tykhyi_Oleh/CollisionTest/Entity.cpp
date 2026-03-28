@@ -7,6 +7,11 @@ Entity::Entity(Sprite* sprite)
 
 }
 
+//void Entity::Update(float elapsedSec)
+//{
+//
+//}
+
 Sprite* Entity::GetSprite() const
 {
 	return m_pSprite;

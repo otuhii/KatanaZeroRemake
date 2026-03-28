@@ -9,7 +9,7 @@ public:
 
 	virtual void Draw(const Vector2f& drawPos) const = 0;
 
-	virtual void Update(float elapsedSec) = 0;
+	/*virtual void Update(float elapsedSec);*/
 
 protected:
 	Sprite* GetSprite() const;
