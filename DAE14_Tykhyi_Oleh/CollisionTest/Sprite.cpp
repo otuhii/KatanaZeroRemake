@@ -25,19 +25,49 @@ void Sprite::SetCurrentAnimationState(const CurrentAnimationState & animationSta
 	m_CurrentAnimationState = animationState;
 }
 
+void Sprite::FlipHorizontally()
+{
+	m_IsFlippedHorizontally = true;
+}
+
+void Sprite::FlipVertically()
+{
+	m_IsFlippedVertically = true;
+}
+
+void Sprite::ResetHorizontalFlip()
+{
+	m_IsFlippedHorizontally = false;
+}
+
+void Sprite::ResetVerticalFlip()
+{
+	m_IsFlippedVertically = false;
+}
+
 bool Sprite::IsFinished() const
 {
 	return m_LastFrameReached;
 }
 
-void Sprite::Draw(const Vector2f& drawPos, bool horizontalFlip, bool verticalFlip) const
+bool Sprite::IsFlippedHorizontally() const
+{
+	return m_IsFlippedHorizontally;
+}
+
+bool Sprite::IsFlippedVertically() const
+{
+	return m_IsFlippedVertically;
+}
+
+void Sprite::Draw(const Vector2f& drawPos) const
 {
 	glPushMatrix();
 	{
 		glTranslatef(drawPos.x, drawPos.y, 0.f);
 		glScalef(3.f, 3.f, 1.f);
 
-		if (horizontalFlip)
+		if (m_IsFlippedHorizontally)
 		{
 			float halfWidth{
 				m_CurrentAnimationState.frameDimension.width * 0.5f
@@ -49,7 +79,7 @@ void Sprite::Draw(const Vector2f& drawPos, bool horizontalFlip, bool verticalFli
 			glTranslatef(-halfWidth, 0.f, 0.f);
 		}
 
-		if (verticalFlip)
+		if (m_IsFlippedVertically)
 		{
 			float halfHeight{
 				m_CurrentAnimationState.frameDimension.height * 0.5f

@@ -1,20 +1,21 @@
 #include "pch.h"
 #include "Player.h"
 
-Player::Player(Sprite* sprite) 
-	: Entity(sprite), m_State{PlayerState::staying}
+Player::Player(Sprite* sprite, const Vector2f& position, float speed) 
+	: Entity(sprite, position, Vector2f{}, speed), m_State(PlayerState::staying)
 {
 	InitializePlayerSpriteFrames();
 	GetSprite()->SetCurrentAnimationState(m_PlayerSpriteFrames[static_cast<int>(m_State)]);
 }
 
-void Player::Draw(const Vector2f& drawPos) const
+void Player::Draw() const
 {
-	GetSprite()->Draw(drawPos, true, false);
+	GetSprite()->Draw(GetPosition());
 }
 
 void Player::Update(float elapsedSec, const Uint8* pStates)
 {
+	Entity::Update(elapsedSec);
 	HandleKeyboard(pStates);
 }
 
@@ -67,7 +68,21 @@ void Player::ProcessStateChange(bool isMoving)
 
 void Player::HandleKeyboard(const Uint8* pStates)
 {
-	ProcessStateChange(pStates[SDL_SCANCODE_D]);
+	if (pStates[SDL_SCANCODE_D])
+	{
+		SetVelocityX(1);
+		GetSprite()->ResetHorizontalFlip();
+	}
+	else if (pStates[SDL_SCANCODE_A])
+	{
+		SetVelocityX(-1);
+		GetSprite()->FlipHorizontally();
+	}
+	else
+	{
+		SetVelocityX(0);
+	}
+	ProcessStateChange((pStates[SDL_SCANCODE_D] || pStates[SDL_SCANCODE_A]));
 }
 
 void Player::InitializePlayerSpriteFrames()

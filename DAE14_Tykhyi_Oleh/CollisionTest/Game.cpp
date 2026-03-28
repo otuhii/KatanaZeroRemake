@@ -19,7 +19,7 @@ void Game::Initialize( )
 {
 	m_pSpriteManager = new SpriteManager();
 
-	m_pPlayer = new Player(m_pSpriteManager->CreateSprite("ProcessedPlayerSpriteSheet.png"));
+	m_pPlayer = new Player(m_pSpriteManager->CreateSprite("ProcessedPlayerSpriteSheet.png"), Vector2f{ 30.f, 30.f }, 200.f);
 }
 
 void Game::Cleanup( )
@@ -41,7 +41,7 @@ void Game::Draw( ) const
 {
 	ClearBackground( );
 
-	m_pPlayer->Draw(Vector2f{30.f, 30.f});
+	m_pPlayer->Draw();
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )

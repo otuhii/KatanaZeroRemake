@@ -22,14 +22,22 @@ public:
 
 	~Sprite();
 
-	void Draw(const Vector2f& drawPos, bool horizontalFlip, bool verticalFlip) const;
+	void Draw(const Vector2f& drawPos) const;
 
 	void Update(float elapsedSec);
 
 	void SetCurrentAnimationState(const Rectf& frameDimension, float frameTime, int maxFrameCount);
 	void SetCurrentAnimationState(const CurrentAnimationState& animationState);
 
+	void FlipHorizontally();
+	void FlipVertically();
+
+	void ResetHorizontalFlip();
+	void ResetVerticalFlip();
+
 	bool IsFinished() const;
+	bool IsFlippedHorizontally() const;
+	bool IsFlippedVertically() const;
 private:
 
 	CurrentAnimationState m_CurrentAnimationState{};
@@ -38,6 +46,11 @@ private:
 	int m_FrameCount{};
 
 	bool m_LastFrameReached{};
+
+	bool 
+		m_IsFlippedHorizontally{},
+		m_IsFlippedVertically{};
+
 
 	Texture* m_pSpritesheet;
 

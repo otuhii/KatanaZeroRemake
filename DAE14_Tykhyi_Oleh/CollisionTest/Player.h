@@ -19,9 +19,9 @@ public:
 		count
 	};
 
-	Player(Sprite* sprite);
+	Player(Sprite* sprite, const Vector2f& position, float speed);
 
-	void Draw(const Vector2f& drawPos) const override;
+	void Draw() const override;
 
 	void Update(float elapsedSec, const Uint8* pStates);
 
