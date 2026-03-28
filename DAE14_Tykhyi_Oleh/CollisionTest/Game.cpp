@@ -1,5 +1,8 @@
 #include "pch.h"
 #include "Game.h"
+#include "SpriteManager.h"
+#include "Player.h"
+
 
 Game::Game( const Window& window ) 
 	:BaseGame{ window }
@@ -14,11 +17,16 @@ Game::~Game( )
 
 void Game::Initialize( )
 {
-	
+	m_pSpriteManager = new SpriteManager();
+	m_pSpriteManager->AddSprite(10, 7, "ProcessedPlayerSpriteSheet.png");
+
+	m_pPlayer = new Player(m_pSpriteManager->GetSprite(0));
 }
 
 void Game::Cleanup( )
 {
+	delete m_pSpriteManager;
+	delete m_pPlayer;
 }
 
 void Game::Update( float elapsedSec )
@@ -33,11 +41,16 @@ void Game::Update( float elapsedSec )
 	//{
 	//	std::cout << "Left and up arrow keys are down\n";
 	//}
+	m_pPlayer->Update(elapsedSec);
+
+	m_pSpriteManager->Update(elapsedSec);
 }
 
 void Game::Draw( ) const
 {
 	ClearBackground( );
+
+	m_pPlayer->Draw(Vector2f{30.f, 30.f});
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
