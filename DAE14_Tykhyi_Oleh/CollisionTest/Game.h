@@ -32,6 +32,9 @@ private:
 	void Cleanup( );
 	void ClearBackground( ) const;
 
+	void TestJsonExporter();
+
+
 	Player* m_pPlayer;
 	SpriteManager* m_pSpriteManager;
 

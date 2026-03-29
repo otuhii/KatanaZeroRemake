@@ -1,4 +1,8 @@
 #pragma once
+
+//Json parser library Include - https://github.com/nlohmann/json
+#include "../Libraries/Json/json.hpp"
+
 //ML Detection Extension
 #ifdef _DEBUG
 #define _CRTDBG_MAP_ALLOC

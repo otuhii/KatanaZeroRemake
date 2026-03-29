@@ -3,6 +3,9 @@
 #include "SpriteManager.h"
 #include "Player.h"
 
+#include "JsonImporter.h"
+
+#include <iostream>
 
 Game::Game( const Window& window ) 
 	:BaseGame{ window }
@@ -17,9 +20,11 @@ Game::~Game( )
 
 void Game::Initialize( )
 {
+	TestJsonExporter();
+
 	m_pSpriteManager = new SpriteManager();
 
-	m_pPlayer = new Player(m_pSpriteManager->CreateSprite("ProcessedPlayerSpriteSheet.png"), Vector2f{ 30.f, 30.f }, 200.f);
+	m_pPlayer = new Player(m_pSpriteManager->CreateSprite("img/ProcessedPlayerSpriteSheet.png"), Vector2f{ 30.f, 30.f }, 200.f);
 }
 
 void Game::Cleanup( )
@@ -32,7 +37,7 @@ void Game::Update( float elapsedSec )
 {
 	const Uint8 *pStates = SDL_GetKeyboardState( nullptr );
 	
-	m_pPlayer->Update(elapsedSec, pStates);
+	m_pPlayer->Update(elapsedSec, pStates, GetViewPort());
 
 	m_pSpriteManager->Update(elapsedSec);
 }
@@ -111,4 +116,26 @@ void Game::ClearBackground( ) const
 {
 	glClearColor( 0.0f, 0.0f, 0.3f, 1.0f );
 	glClear( GL_COLOR_BUFFER_BIT );
+}
+
+
+
+
+void Game::TestJsonExporter()
+{
+	JsonImporter importer;
+
+	std::vector<GameObject> gameObjects{ importer.ImportGameObjects("json/testExportData.json") };
+
+	if (gameObjects.size() > 0)
+	{
+		for (const GameObject& gameObject : gameObjects)
+		{
+			std::cout << gameObject.position << std::endl;
+			std::cout << gameObject.objectName << std::endl;
+			std::cout << gameObject.texturePath << std::endl;
+			std::cout << "===========================================" << std::endl;
+		}
+
+	}
 }

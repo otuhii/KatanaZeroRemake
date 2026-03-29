@@ -23,16 +23,20 @@ public:
 
 	void Draw() const override;
 
-	void Update(float elapsedSec, const Uint8* pStates);
+	void Update(float elapsedSec, const Uint8* pStates, const Rectf& viewport);
 
 	void SetState(PlayerState state);
+
+	//void DebugState();
 private:
 	PlayerState m_State;
-
+	
 	std::vector<Sprite::CurrentAnimationState> m_PlayerSpriteFrames{};
 
 	void ProcessStateChange(bool isMoving);
 	void HandleKeyboard(const Uint8* pStates);
 	void InitializePlayerSpriteFrames();
+
+
 };
 

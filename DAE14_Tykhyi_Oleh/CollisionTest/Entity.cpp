@@ -1,15 +1,22 @@
 #include "pch.h"
 #include "Entity.h"
 
+
 Entity::Entity(Sprite* sprite, const Vector2f& position, const Vector2f& velocity, float speed)
-	: m_pSprite{sprite}, m_Velocity(velocity), m_Speed(speed)
+	: m_pSprite(sprite), m_Velocity(velocity), m_Speed(speed), m_IsOnGround(true)
 {
 
 }
 
-void Entity::Update(float elapsedSec)
+void Entity::Update(float elapsedSec, const Rectf& viewport)
 {
-	m_Position = m_Position + m_Velocity.Normalized() * elapsedSec * m_Speed;
+	float 
+		gravity{ -981.f };
+
+
+	m_Velocity.y += gravity * elapsedSec;
+
+	m_Position += m_Velocity * elapsedSec;
 }
 
 void Entity::SetSpeed(float speed)
@@ -22,9 +29,29 @@ void Entity::SetVelocity(const Vector2f& velocity)
 	m_Velocity = velocity;
 }
 
+void Entity::SetPositionX(float xPos)
+{
+	m_Position.x = xPos;
+}
+
+void Entity::SetPositionY(float yPos)
+{
+	m_Position.y = yPos;
+}
+
 void Entity::SetPosition(const Vector2f& position)
 {
 	m_Position = position;
+}
+
+void Entity::SetIsOnGroundState(bool state)
+{
+	m_IsOnGround = state;
+}
+
+bool Entity::IsOnGround() const
+{
+	return m_IsOnGround;
 }
 
 void Entity::SetVelocityX(float xVel)
@@ -55,6 +82,16 @@ float Entity::GetVelocityY() const
 const Vector2f& Entity::GetVelocity() const
 {
 	return m_Velocity;
+}
+
+float Entity::GetPositionX() const
+{
+	return m_Position.x;
+}
+
+float Entity::GetPositionY() const
+{
+	return m_Position.y;
 }
 
 const Vector2f& Entity::GetPosition() const
