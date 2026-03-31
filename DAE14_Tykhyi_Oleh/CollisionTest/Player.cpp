@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Player.h"
+#include "CurrentAnimationState.h"
 
 Player::Player(Sprite* sprite, const Vector2f& position, float speed) 
 	: Entity(sprite, position, Vector2f{}, speed), m_State(PlayerState::staying)
@@ -178,37 +179,37 @@ void Player::InitializePlayerSpriteFrames()
 
 	m_PlayerSpriteFrames.resize(static_cast<size_t>(PlayerState::count));
 
-	m_PlayerSpriteFrames[static_cast<int>(PlayerState::staying)] = Sprite::CurrentAnimationState{
+	m_PlayerSpriteFrames[static_cast<int>(PlayerState::staying)] = CurrentAnimationState{
 		Rectf{0.f, 0.f, firstThreeRowsDims.x, firstThreeRowsDims.y},
 		0.1f,
 		10
 	};
-	m_PlayerSpriteFrames[static_cast<int>(PlayerState::beforeRun)] = Sprite::CurrentAnimationState{
+	m_PlayerSpriteFrames[static_cast<int>(PlayerState::beforeRun)] = CurrentAnimationState{
 		Rectf{0.f, 42.f, firstThreeRowsDims.x, firstThreeRowsDims.y},
 		0.1f,
 		4
 	};
-	m_PlayerSpriteFrames[static_cast<int>(PlayerState::run)] = Sprite::CurrentAnimationState{
+	m_PlayerSpriteFrames[static_cast<int>(PlayerState::run)] = CurrentAnimationState{
 		Rectf{0.f, 84.f, firstThreeRowsDims.x, firstThreeRowsDims.y},
 		0.1f,
 		10
 	};
-	m_PlayerSpriteFrames[static_cast<int>(PlayerState::roll)] = Sprite::CurrentAnimationState{
+	m_PlayerSpriteFrames[static_cast<int>(PlayerState::roll)] = CurrentAnimationState{
 		Rectf{0.f, 126.f, fourthRowDims.x, fourthRowDims.y},
 		0.1f,
 		7
 	};
-	m_PlayerSpriteFrames[static_cast<int>(PlayerState::jump)] = Sprite::CurrentAnimationState{
+	m_PlayerSpriteFrames[static_cast<int>(PlayerState::jump)] = CurrentAnimationState{
 		Rectf{0.f, 158.f, fifthRowDims.x, fifthRowDims.y},
 		0.1f,
 		4
 	};
-	m_PlayerSpriteFrames[static_cast<int>(PlayerState::fall)] = Sprite::CurrentAnimationState{
+	m_PlayerSpriteFrames[static_cast<int>(PlayerState::fall)] = CurrentAnimationState{
 		Rectf{192.f, 158.f, fifthRowDims.x, fifthRowDims.y},
 		0.1f,
 		4
 	};
-	m_PlayerSpriteFrames[static_cast<int>(PlayerState::attack)] = Sprite::CurrentAnimationState{
+	m_PlayerSpriteFrames[static_cast<int>(PlayerState::attack)] = CurrentAnimationState{
 		Rectf{0.f, 206.f, sixthRowDims.x, sixthRowDims.y},
 		0.1f,
 		7

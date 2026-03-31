@@ -171,8 +171,10 @@ xcopy "$(ProjectDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClCompile Include="SpriteManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CurrentAnimationState.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="EnvironmentObject.h" />
     <ClInclude Include="JsonImporter.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Player.h" />

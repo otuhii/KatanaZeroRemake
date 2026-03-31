@@ -1,22 +1,17 @@
 #pragma once
 #include <vector>
-#include <iostream>
 #include <fstream>
+#include <iostream>
 
-
-struct GameObject {
-	Vector2f position;
-	std::string texturePath;
-	std::string objectName;
-};
+#include "EnvironmentObject.h"
 
 using Json = nlohmann::json;
-void from_json(const Json& j, GameObject& g);
+void from_json(const Json& j, EnvironmentObject& g);
 
 class JsonImporter
 {
 public:
-	std::vector<GameObject> ImportGameObjects(const std::string& jsonPath);
+	std::vector<EnvironmentObject> ImportEnvironmentObjects(const std::string& jsonPath);
 
 private:
 	Json ParseJsonFile(const std::string& jsonPath);

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "JsonImporter.h"
 
-void from_json(const Json& j, GameObject& g)
+void from_json(const Json& j, EnvironmentObject& g)
 {
 	g.texturePath = j.value("texturePath", "default.png");
 	g.position.x = j.at("xPosition").get<float>();
@@ -10,7 +10,7 @@ void from_json(const Json& j, GameObject& g)
 }
 
 
-std::vector<GameObject> JsonImporter::ImportGameObjects(const std::string& jsonPath)
+std::vector<EnvironmentObject> JsonImporter::ImportEnvironmentObjects(const std::string& jsonPath)
 {
 	Json data{ ParseJsonFile(jsonPath) };
 
@@ -24,7 +24,7 @@ std::vector<GameObject> JsonImporter::ImportGameObjects(const std::string& jsonP
 	{
 		if (data.contains("objects") && data["objects"].is_array() && !data["objects"].empty())
 		{
-			return data["objects"][0]["prog2GameObjects"].get<std::vector<GameObject>>();
+			return data["objects"][0]["prog2EnvironmentObjects"].get<std::vector<EnvironmentObject>>();
 		}
 	}
 	catch (const Json::exception& exception)

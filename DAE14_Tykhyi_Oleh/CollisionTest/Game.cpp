@@ -119,21 +119,19 @@ void Game::ClearBackground( ) const
 }
 
 
-
-
 void Game::TestJsonExporter()
 {
 	JsonImporter importer;
 
-	std::vector<GameObject> gameObjects{ importer.ImportGameObjects("json/testExportData.json") };
+	std::vector<EnvironmentObject> environmentObjects{ importer.ImportEnvironmentObjects("json/testExportData.json") };
 
-	if (gameObjects.size() > 0)
+	if (environmentObjects.size() > 0)
 	{
-		for (const GameObject& gameObject : gameObjects)
+		for (const EnvironmentObject& environmentObject : environmentObjects)
 		{
-			std::cout << gameObject.position << std::endl;
-			std::cout << gameObject.objectName << std::endl;
-			std::cout << gameObject.texturePath << std::endl;
+			std::cout << environmentObject.position << std::endl;
+			std::cout << environmentObject.objectName << std::endl;
+			std::cout << environmentObject.texturePath << std::endl;
 			std::cout << "===========================================" << std::endl;
 		}
 

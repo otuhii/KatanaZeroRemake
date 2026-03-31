@@ -1,4 +1,5 @@
 #pragma once
+#include "CurrentAnimationState.h"
 #include <string>
 
 class Texture;
@@ -6,15 +7,6 @@ class Texture;
 class Sprite final
 {
 public:
-	struct CurrentAnimationState
-	{
-
-		Rectf frameDimension{};
-
-		float frameTime{};
-		int maxFrameCount{};
-	};
-
 	Sprite(const std::string& spritesheetTexturePath);
 
 	Sprite(const Sprite&) = delete;
