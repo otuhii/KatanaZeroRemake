@@ -1,12 +1,12 @@
 #include "pch.h"
 #include "Player.h"
-#include "CurrentAnimationState.h"
+#include "AnimationFrameInfo.h"
 
 Player::Player(Sprite* sprite, const Vector2f& position, float speed) 
 	: Entity(sprite, position, Vector2f{}, speed), m_State(PlayerState::staying)
 {
 	InitializePlayerSpriteFrames();
-	GetSprite()->SetCurrentAnimationState(m_PlayerSpriteFrames[static_cast<int>(m_State)]);
+	GetSprite()->SetAnimationFrameInfo(m_PlayerSpriteFrames[static_cast<int>(m_State)]);
 }
 
 void Player::Draw() const
@@ -40,7 +40,7 @@ void Player::SetState(PlayerState state)
 	}
 
 	m_State = state;
-	GetSprite()->SetCurrentAnimationState(m_PlayerSpriteFrames[static_cast<int>(m_State)]);
+	GetSprite()->SetAnimationFrameInfo(m_PlayerSpriteFrames[static_cast<int>(m_State)]);
 }
 
 //void Player::DebugState()
@@ -179,42 +179,42 @@ void Player::InitializePlayerSpriteFrames()
 
 	m_PlayerSpriteFrames.resize(static_cast<size_t>(PlayerState::count));
 
-	m_PlayerSpriteFrames[static_cast<int>(PlayerState::staying)] = CurrentAnimationState{
+	m_PlayerSpriteFrames[static_cast<int>(PlayerState::staying)] = AnimationFrameInfo{
 		Rectf{0.f, 0.f, firstThreeRowsDims.x, firstThreeRowsDims.y},
 		0.1f,
 		10
 	};
-	m_PlayerSpriteFrames[static_cast<int>(PlayerState::beforeRun)] = CurrentAnimationState{
+	m_PlayerSpriteFrames[static_cast<int>(PlayerState::beforeRun)] = AnimationFrameInfo{
 		Rectf{0.f, 42.f, firstThreeRowsDims.x, firstThreeRowsDims.y},
 		0.1f,
 		4
 	};
-	m_PlayerSpriteFrames[static_cast<int>(PlayerState::run)] = CurrentAnimationState{
+	m_PlayerSpriteFrames[static_cast<int>(PlayerState::run)] = AnimationFrameInfo{
 		Rectf{0.f, 84.f, firstThreeRowsDims.x, firstThreeRowsDims.y},
 		0.1f,
 		10
 	};
-	m_PlayerSpriteFrames[static_cast<int>(PlayerState::roll)] = CurrentAnimationState{
+	m_PlayerSpriteFrames[static_cast<int>(PlayerState::roll)] = AnimationFrameInfo{
 		Rectf{0.f, 126.f, fourthRowDims.x, fourthRowDims.y},
 		0.1f,
 		7
 	};
-	m_PlayerSpriteFrames[static_cast<int>(PlayerState::jump)] = CurrentAnimationState{
+	m_PlayerSpriteFrames[static_cast<int>(PlayerState::jump)] = AnimationFrameInfo{
 		Rectf{0.f, 158.f, fifthRowDims.x, fifthRowDims.y},
 		0.1f,
 		4
 	};
-	m_PlayerSpriteFrames[static_cast<int>(PlayerState::fall)] = CurrentAnimationState{
+	m_PlayerSpriteFrames[static_cast<int>(PlayerState::fall)] = AnimationFrameInfo{
 		Rectf{192.f, 158.f, fifthRowDims.x, fifthRowDims.y},
 		0.1f,
 		4
 	};
-	m_PlayerSpriteFrames[static_cast<int>(PlayerState::attack)] = CurrentAnimationState{
+	m_PlayerSpriteFrames[static_cast<int>(PlayerState::attack)] = AnimationFrameInfo{
 		Rectf{0.f, 206.f, sixthRowDims.x, sixthRowDims.y},
 		0.1f,
 		7
 	};
-	/*m_PlayerSpriteFrames[static_cast<int>(PlayerState::sp)] = Sprite::CurrentAnimationState{
+	/*m_PlayerSpriteFrames[static_cast<int>(PlayerState::sp)] = Sprite::AnimationFrameInfo{
 		Rectf{0.f, 245.f, splashDims.x, splashDims.y},
 		1.f,
 		5

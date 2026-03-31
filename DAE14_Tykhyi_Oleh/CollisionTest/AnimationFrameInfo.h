@@ -1,6 +1,6 @@
 #pragma once
 
-struct CurrentAnimationState
+struct AnimationFrameInfo
 {
 
 	Rectf frameDimension{};

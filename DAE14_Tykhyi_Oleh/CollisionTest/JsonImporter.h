@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "EnvironmentObject.h"
+#include "AnimationFrameInfo.h"
 
 using Json = nlohmann::json;
 void from_json(const Json& j, EnvironmentObject& g);
@@ -12,7 +13,7 @@ class JsonImporter
 {
 public:
 	std::vector<EnvironmentObject> ImportEnvironmentObjects(const std::string& jsonPath);
-
+	std::vector<AnimationFrameInfo> ImportAnimationFrameObjects(const std::string& jsonPath);
 private:
 	Json ParseJsonFile(const std::string& jsonPath);
 };

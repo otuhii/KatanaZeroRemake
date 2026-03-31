@@ -31,7 +31,7 @@ public:
 private:
 	PlayerState m_State;
 	
-	std::vector<CurrentAnimationState> m_PlayerSpriteFrames{};
+	std::vector<AnimationFrameInfo> m_PlayerSpriteFrames{};
 
 	void ProcessStateChange(bool isMoving);
 	void HandleKeyboard(const Uint8* pStates);

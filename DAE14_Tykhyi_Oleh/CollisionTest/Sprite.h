@@ -1,5 +1,5 @@
 #pragma once
-#include "CurrentAnimationState.h"
+#include "AnimationFrameInfo.h"
 #include <string>
 
 class Texture;
@@ -18,8 +18,8 @@ public:
 
 	void Update(float elapsedSec);
 
-	void SetCurrentAnimationState(const Rectf& frameDimension, float frameTime, int maxFrameCount);
-	void SetCurrentAnimationState(const CurrentAnimationState& animationState);
+	void SetAnimationFrameInfo(const Rectf& frameDimension, float frameTime, int maxFrameCount);
+	void SetAnimationFrameInfo(const AnimationFrameInfo& animationState);
 
 	void FlipHorizontally();
 	void FlipVertically();
@@ -32,7 +32,7 @@ public:
 	bool IsFlippedVertically() const;
 private:
 
-	CurrentAnimationState m_CurrentAnimationState{};
+	AnimationFrameInfo m_AnimationFrameInfo{};
 
 	float m_AccumulatedTime{};
 	int m_FrameCount{};

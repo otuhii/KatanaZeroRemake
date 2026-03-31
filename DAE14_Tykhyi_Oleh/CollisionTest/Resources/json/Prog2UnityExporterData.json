@@ -1,0 +1,110 @@
+{
+  "objects": [
+    {
+      "prog2GameObjects": [
+        {
+          "texturePath": "T_No_Texture_Assigned.png",
+          "renderLayer": 0,
+          "xPosition": 227.0,
+          "yPosition": 224.0
+        },
+        {
+          "xPosition": 0.0,
+          "yPosition": 64.0,
+          "prog2Rectf": {
+            "left": -64.0,
+            "bottom": -64.0,
+            "width": 128.0,
+            "height": 128.0
+          },
+          "isTrigger": false
+        },
+        {
+          "texturePath": "T_No_Texture_Assigned.png",
+          "renderLayer": 0,
+          "xPosition": 48.0,
+          "yPosition": 0.0,
+          "prog2Rectf": {
+            "left": 0.0,
+            "bottom": 0.0,
+            "width": 128.0,
+            "height": 128.0
+          },
+          "isTrigger": false
+        },
+        {
+          "texturePath": "T_No_Texture_Assigned.png",
+          "renderLayer": 0,
+          "xPosition": 168.0,
+          "yPosition": 0.0,
+          "prog2Rectf": {
+            "left": 0.0,
+            "bottom": 0.0,
+            "width": 128.0,
+            "height": 128.0
+          },
+          "isTrigger": false,
+          "objectName": "Pfb_Custom_Data_Prog2",
+          "layerName": "Default"
+        },
+        {
+          "texturePath": "T_Example.png",
+          "renderLayer": 0,
+          "xPosition": 345.0,
+          "yPosition": 81.0
+        },
+        {
+          "texturePath": "T_No_Texture_Assigned.png",
+          "renderLayer": 0,
+          "xPosition": -246.047531,
+          "yPosition": 117.4637,
+          "prog2Rectf": {
+            "left": 0.0,
+            "bottom": 0.0,
+            "width": 128.0,
+            "height": 128.0
+          },
+          "isTrigger": false,
+          "objectName": "Pfb_Custom_Data_Prog2 (1)",
+          "layerName": "Default"
+        },
+        {
+          "texturePath": "T_No_Texture_Assigned.png",
+          "renderLayer": 0,
+          "xPosition": 41.0967255,
+          "yPosition": 281.445557,
+          "prog2Rectf": {
+            "left": 0.0,
+            "bottom": 0.0,
+            "width": 128.0,
+            "height": 128.0
+          },
+          "isTrigger": false,
+          "objectName": "Pfb_Custom_Data_Prog2 (2)",
+          "layerName": "Default"
+        },
+        {
+          "texturePath": "T_No_Texture_Assigned.png",
+          "renderLayer": 0,
+          "xPosition": -194.0,
+          "yPosition": -64.0
+        },
+        {
+          "texturePath": "T_No_Texture_Assigned.png",
+          "renderLayer": 0,
+          "xPosition": 609.0,
+          "yPosition": 242.0,
+          "prog2Rectf": {
+            "left": 0.0,
+            "bottom": 0.0,
+            "width": 128.0,
+            "height": 128.0
+          },
+          "isTrigger": false,
+          "objectName": "Pfb_Custom_Data_Prog2 (3)",
+          "layerName": "Default"
+        }
+      ]
+    }
+  ]
+}

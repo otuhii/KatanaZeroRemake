@@ -123,7 +123,7 @@ void Game::TestJsonExporter()
 {
 	JsonImporter importer;
 
-	std::vector<EnvironmentObject> environmentObjects{ importer.ImportEnvironmentObjects("json/testExportData.json") };
+	std::vector<EnvironmentObject> environmentObjects{ importer.ImportEnvironmentObjects("json/Prog2UnityExporterData.json") };
 
 	if (environmentObjects.size() > 0)
 	{
@@ -135,5 +135,20 @@ void Game::TestJsonExporter()
 			std::cout << "===========================================" << std::endl;
 		}
 
+	}
+
+
+
+	std::vector<AnimationFrameInfo> animationFrames{ importer.ImportAnimationFrameObjects("json/PlayerAnimationFramesInfo.json") };
+
+	if (animationFrames.size() > 0)
+	{
+		for (const AnimationFrameInfo& animationFrame : animationFrames)
+		{
+			std::cout << Vector2f{ animationFrame.frameDimension.width, animationFrame.frameDimension.height } << std::endl;
+			std::cout << animationFrame.frameTime << std::endl;
+			std::cout << animationFrame.maxFrameCount << std::endl;
+			std::cout << "==============================================" << std::endl;
+		}
 	}
 }

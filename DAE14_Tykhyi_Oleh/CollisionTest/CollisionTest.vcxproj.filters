@@ -62,7 +62,7 @@
     <ClInclude Include="JsonImporter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CurrentAnimationState.h">
+    <ClInclude Include="AnimationFrameInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="EnvironmentObject.h">

@@ -1,12 +1,33 @@
 #include "pch.h"
 #include "JsonImporter.h"
 
-void from_json(const Json& j, EnvironmentObject& g)
+void from_json(const Json& j, Rectf& rect)
 {
-	g.texturePath = j.value("texturePath", "default.png");
-	g.position.x = j.at("xPosition").get<float>();
-	g.position.y = j.at("yPosition").get<float>();
-	g.objectName = j.value("objectName", "Unknown");
+	rect.left = j.at("left").get<float>();
+	rect.bottom = j.at("bottom").get<float>();
+	rect.width = j.at("width").get<float>();
+	rect.height = j.at("height").get<float>();
+}
+
+//TODO add Rectf support for this class
+void from_json(const Json& j, EnvironmentObject& envObj)
+{
+	envObj.texturePath = j.value("texturePath", "default.png");
+	envObj.position.x = j.at("xPosition").get<float>();
+	envObj.position.y = j.at("yPosition").get<float>();
+	envObj.objectName = j.value("objectName", "Unknown");
+
+}
+
+void from_json(const Json& j, AnimationFrameInfo& anFrame)
+{
+	anFrame.frameTime = j.at("frameTime").get<float>();
+	anFrame.maxFrameCount = j.at("maxFrameCount").get<int>();
+
+	if (j.contains("dimensionRect") && !j["dimensionRect"].is_null())
+	{
+		anFrame.frameDimension = j.at("dimensionRect").get<Rectf>();
+	}
 }
 
 
@@ -24,7 +45,7 @@ std::vector<EnvironmentObject> JsonImporter::ImportEnvironmentObjects(const std:
 	{
 		if (data.contains("objects") && data["objects"].is_array() && !data["objects"].empty())
 		{
-			return data["objects"][0]["prog2EnvironmentObjects"].get<std::vector<EnvironmentObject>>();
+			return data["objects"][0]["prog2GameObjects"].get<std::vector<EnvironmentObject>>();
 		}
 	}
 	catch (const Json::exception& exception)
@@ -36,7 +57,32 @@ std::vector<EnvironmentObject> JsonImporter::ImportEnvironmentObjects(const std:
 	return {};
 }
 
+std::vector<AnimationFrameInfo> JsonImporter::ImportAnimationFrameObjects(const std::string& jsonPath)
+{
+	Json data{ ParseJsonFile(jsonPath) };
 
+	if (data.is_discarded() ||
+		data.empty())
+	{
+		return {};
+	}
+
+	try
+	{
+		if (data.contains("frames") && data["frames"].is_array() && !data["frames"].empty())
+		{
+			return data["frames"].get<std::vector<AnimationFrameInfo>>();
+		}
+	}
+
+	catch (const Json::exception & exception)
+	{
+		std::cout << "JSON parsing Error: " << exception.what() << std::endl
+			<< "PATH-> " << jsonPath << std::endl;
+	}
+
+	return {};
+}
 
 Json JsonImporter::ParseJsonFile(const std::string& jsonPath)
 {

@@ -13,16 +13,16 @@ Sprite::~Sprite()
 	delete m_pSpritesheet;
 }
 
-void Sprite::SetCurrentAnimationState(const Rectf& frameDimension, float frameTime, int maxFrameCount)
+void Sprite::SetAnimationFrameInfo(const Rectf& frameDimension, float frameTime, int maxFrameCount)
 {
-	m_CurrentAnimationState.frameTime = frameTime;
-	m_CurrentAnimationState.frameDimension = frameDimension;
-	m_CurrentAnimationState.maxFrameCount = maxFrameCount;
+	m_AnimationFrameInfo.frameTime = frameTime;
+	m_AnimationFrameInfo.frameDimension = frameDimension;
+	m_AnimationFrameInfo.maxFrameCount = maxFrameCount;
 }
 
-void Sprite::SetCurrentAnimationState(const CurrentAnimationState & animationState)
+void Sprite::SetAnimationFrameInfo(const AnimationFrameInfo & animationState)
 {
-	m_CurrentAnimationState = animationState;
+	m_AnimationFrameInfo = animationState;
 }
 
 void Sprite::FlipHorizontally()
@@ -70,7 +70,7 @@ void Sprite::Draw(const Vector2f& drawPos) const
 		if (m_IsFlippedHorizontally)
 		{
 			float halfWidth{
-				m_CurrentAnimationState.frameDimension.width * 0.5f
+				m_AnimationFrameInfo.frameDimension.width * 0.5f
 			};
 			glTranslatef(halfWidth, 0.f, 0.f);
 
@@ -82,7 +82,7 @@ void Sprite::Draw(const Vector2f& drawPos) const
 		if (m_IsFlippedVertically)
 		{
 			float halfHeight{
-				m_CurrentAnimationState.frameDimension.height * 0.5f
+				m_AnimationFrameInfo.frameDimension.height * 0.5f
 			};
 			glTranslatef(0.f, halfHeight, 0.f);
 
@@ -92,10 +92,10 @@ void Sprite::Draw(const Vector2f& drawPos) const
 		}
 
 		Rectf srcRect{
-			m_CurrentAnimationState.frameDimension.left+m_CurrentAnimationState.frameDimension.width * m_FrameCount,
-			m_CurrentAnimationState.frameDimension.bottom,
-			m_CurrentAnimationState.frameDimension.width,
-			m_CurrentAnimationState.frameDimension.height
+			m_AnimationFrameInfo.frameDimension.left+m_AnimationFrameInfo.frameDimension.width * m_FrameCount,
+			m_AnimationFrameInfo.frameDimension.bottom,
+			m_AnimationFrameInfo.frameDimension.width,
+			m_AnimationFrameInfo.frameDimension.height
 		};
 
 		m_pSpritesheet->Draw(Vector2f{}, srcRect);
@@ -109,16 +109,16 @@ void Sprite::Update(float elapsedSec)
 
 	m_AccumulatedTime += elapsedSec;
 
-	if (m_AccumulatedTime > m_CurrentAnimationState.frameTime)
+	if (m_AccumulatedTime > m_AnimationFrameInfo.frameTime)
 	{
-		m_AccumulatedTime -= m_CurrentAnimationState.frameTime;
+		m_AccumulatedTime -= m_AnimationFrameInfo.frameTime;
 
-		if (m_FrameCount == m_CurrentAnimationState.maxFrameCount - 1)
+		if (m_FrameCount == m_AnimationFrameInfo.maxFrameCount - 1)
 		{
 			m_LastFrameReached = true;
 		}
 
-		m_FrameCount = (m_FrameCount + 1) % m_CurrentAnimationState.maxFrameCount;
+		m_FrameCount = (m_FrameCount + 1) % m_AnimationFrameInfo.maxFrameCount;
 	}
 }
 
