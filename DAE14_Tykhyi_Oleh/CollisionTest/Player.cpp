@@ -2,11 +2,14 @@
 #include "Player.h"
 #include "AnimationFrameInfo.h"
 
-Player::Player(Sprite* sprite, const Vector2f& position, float speed) 
-	: Entity(sprite, position, Vector2f{}, speed), m_State(PlayerState::staying)
+Player::Player(Sprite* sprite, Sprite* splashSprite, const std::vector<AnimationFrameInfo>& playerAnimation, const Vector2f& position, float speed)
+	: Entity(sprite, position, Vector2f{}, speed),
+	m_SplashSprite(splashSprite),
+	m_State(PlayerState::staying),
+	m_PlayerSpriteFrames(playerAnimation)
 {
-	InitializePlayerSpriteFrames();
 	GetSprite()->SetAnimationFrameInfo(m_PlayerSpriteFrames[static_cast<int>(m_State)]);
+	m_SplashSprite->SetAnimationFrameInfo(m_PlayerSpriteFrames[static_cast<int>(PlayerState::attackSplash)]);
 }
 
 void Player::Draw() const
@@ -165,58 +168,4 @@ void Player::HandleKeyboard(const Uint8* pStates)
 	}
 	
 	ProcessStateChange((pStates[SDL_SCANCODE_D] || pStates[SDL_SCANCODE_A]));
-}
-
-void Player::InitializePlayerSpriteFrames()
-{
-	const Vector2f
-		firstThreeRowsDims{ 42.f, 42.f },
-		fourthRowDims{ 52.f, 32.f },
-		fifthRowDims{ 48.f, 48.f },
-		sixthRowDims{ 52.f, 39.f },
-		splashDims{ 100.f, 28.f };
-
-
-	m_PlayerSpriteFrames.resize(static_cast<size_t>(PlayerState::count));
-
-	m_PlayerSpriteFrames[static_cast<int>(PlayerState::staying)] = AnimationFrameInfo{
-		Rectf{0.f, 0.f, firstThreeRowsDims.x, firstThreeRowsDims.y},
-		0.1f,
-		10
-	};
-	m_PlayerSpriteFrames[static_cast<int>(PlayerState::beforeRun)] = AnimationFrameInfo{
-		Rectf{0.f, 42.f, firstThreeRowsDims.x, firstThreeRowsDims.y},
-		0.1f,
-		4
-	};
-	m_PlayerSpriteFrames[static_cast<int>(PlayerState::run)] = AnimationFrameInfo{
-		Rectf{0.f, 84.f, firstThreeRowsDims.x, firstThreeRowsDims.y},
-		0.1f,
-		10
-	};
-	m_PlayerSpriteFrames[static_cast<int>(PlayerState::roll)] = AnimationFrameInfo{
-		Rectf{0.f, 126.f, fourthRowDims.x, fourthRowDims.y},
-		0.1f,
-		7
-	};
-	m_PlayerSpriteFrames[static_cast<int>(PlayerState::jump)] = AnimationFrameInfo{
-		Rectf{0.f, 158.f, fifthRowDims.x, fifthRowDims.y},
-		0.1f,
-		4
-	};
-	m_PlayerSpriteFrames[static_cast<int>(PlayerState::fall)] = AnimationFrameInfo{
-		Rectf{192.f, 158.f, fifthRowDims.x, fifthRowDims.y},
-		0.1f,
-		4
-	};
-	m_PlayerSpriteFrames[static_cast<int>(PlayerState::attack)] = AnimationFrameInfo{
-		Rectf{0.f, 206.f, sixthRowDims.x, sixthRowDims.y},
-		0.1f,
-		7
-	};
-	/*m_PlayerSpriteFrames[static_cast<int>(PlayerState::sp)] = Sprite::AnimationFrameInfo{
-		Rectf{0.f, 245.f, splashDims.x, splashDims.y},
-		1.f,
-		5
-	};*/ //TODO change splash handling and maybe i should not hardcode x and y values for player sprite frames
 }

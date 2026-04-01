@@ -3,8 +3,6 @@
 #include "SpriteManager.h"
 #include "Player.h"
 
-#include "JsonImporter.h"
-
 #include <iostream>
 
 Game::Game( const Window& window ) 
@@ -20,11 +18,14 @@ Game::~Game( )
 
 void Game::Initialize( )
 {
-	TestJsonExporter();
-
 	m_pSpriteManager = new SpriteManager();
 
-	m_pPlayer = new Player(m_pSpriteManager->CreateSprite("img/ProcessedPlayerSpriteSheet.png"), Vector2f{ 30.f, 30.f }, 200.f);
+	m_pPlayer = new Player(
+		m_pSpriteManager->CreateSprite("img/ProcessedPlayerSpriteSheet.png"),
+		m_pSpriteManager->CreateSprite("img/SplashAnimation.png"),
+		m_JsonImporter.ImportAnimationFrameObjects("json/PlayerAnimationFramesInfo.json"),
+		Vector2f{ 30.f, 30.f }, 
+		300.f);
 }
 
 void Game::Cleanup( )
@@ -121,9 +122,7 @@ void Game::ClearBackground( ) const
 
 void Game::TestJsonExporter()
 {
-	JsonImporter importer;
-
-	std::vector<EnvironmentObject> environmentObjects{ importer.ImportEnvironmentObjects("json/Prog2UnityExporterData.json") };
+	std::vector<EnvironmentObject> environmentObjects{ m_JsonImporter.ImportEnvironmentObjects("json/Prog2UnityExporterData.json") };
 
 	if (environmentObjects.size() > 0)
 	{
@@ -138,8 +137,7 @@ void Game::TestJsonExporter()
 	}
 
 
-
-	std::vector<AnimationFrameInfo> animationFrames{ importer.ImportAnimationFrameObjects("json/PlayerAnimationFramesInfo.json") };
+	std::vector<AnimationFrameInfo> animationFrames{ m_JsonImporter.ImportAnimationFrameObjects("json/PlayerAnimationFramesInfo.json") };
 
 	if (animationFrames.size() > 0)
 	{

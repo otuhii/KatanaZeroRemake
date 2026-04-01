@@ -1,6 +1,8 @@
 #pragma once
 #include "BaseGame.h"
 
+#include "JsonImporter.h"
+
 class SpriteManager;
 class Player;
 
@@ -34,8 +36,10 @@ private:
 
 	void TestJsonExporter();
 
+	JsonImporter    m_JsonImporter{}; //TODO maybe change this to pointer later
 
-	Player* m_pPlayer;
-	SpriteManager* m_pSpriteManager;
+
+	SpriteManager*  m_pSpriteManager{};
+	Player*			m_pPlayer{};
 
 };

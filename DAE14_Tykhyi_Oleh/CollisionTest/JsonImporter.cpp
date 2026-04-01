@@ -31,7 +31,7 @@ void from_json(const Json& j, AnimationFrameInfo& anFrame)
 }
 
 
-std::vector<EnvironmentObject> JsonImporter::ImportEnvironmentObjects(const std::string& jsonPath)
+std::vector<EnvironmentObject> JsonImporter::ImportEnvironmentObjects(const std::string& jsonPath) const
 {
 	Json data{ ParseJsonFile(jsonPath) };
 
@@ -57,7 +57,7 @@ std::vector<EnvironmentObject> JsonImporter::ImportEnvironmentObjects(const std:
 	return {};
 }
 
-std::vector<AnimationFrameInfo> JsonImporter::ImportAnimationFrameObjects(const std::string& jsonPath)
+std::vector<AnimationFrameInfo> JsonImporter::ImportAnimationFrameObjects(const std::string& jsonPath) const
 {
 	Json data{ ParseJsonFile(jsonPath) };
 
@@ -84,7 +84,7 @@ std::vector<AnimationFrameInfo> JsonImporter::ImportAnimationFrameObjects(const 
 	return {};
 }
 
-Json JsonImporter::ParseJsonFile(const std::string& jsonPath)
+Json JsonImporter::ParseJsonFile(const std::string& jsonPath) const
 {
 	std::ifstream inputFile{ jsonPath };
 	if (!inputFile.is_open())

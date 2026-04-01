@@ -1,5 +1,6 @@
 #pragma once
 #include "Entity.h"
+
 #include <vector>
 
 class Player final : public Entity
@@ -15,11 +16,12 @@ public:
 		jump,
 		fall,
 		attack,
+		attackSplash,
 
 		count
 	};
 
-	Player(Sprite* sprite, const Vector2f& position, float speed);
+	Player(Sprite* sprite, Sprite* splashSprite, const std::vector<AnimationFrameInfo>& playerAnimation, const Vector2f& position, float speed);
 
 	void Draw() const override;
 
@@ -33,10 +35,9 @@ private:
 	
 	std::vector<AnimationFrameInfo> m_PlayerSpriteFrames{};
 
+	Sprite* m_SplashSprite;
+
 	void ProcessStateChange(bool isMoving);
 	void HandleKeyboard(const Uint8* pStates);
-	void InitializePlayerSpriteFrames();
-
-
 };
 
