@@ -2,7 +2,11 @@
 #include "Player.h"
 #include "AnimationFrameInfo.h"
 
+#include "UserUtils.h"
+#include "utils.h"
+
 #include <iostream>
+
 
 Player::Player(Sprite* sprite, Sprite* splashSprite, const std::vector<AnimationFrameInfo>& playerAnimation, const Vector2f& position, float speed)
 	: Entity(sprite, position, Vector2f{}, speed),
@@ -20,6 +24,7 @@ void Player::Draw() const
 {
 	GetSprite()->Draw(GetPosition());
 	m_SplashSprite->Draw(GetPosition()); //TODO fix position for it
+
 }
 
 void Player::Update(float elapsedSec, const Uint8* pStates, const Rectf& viewport)
@@ -53,11 +58,26 @@ void Player::SetState(PlayerState state)
 	m_SplashSprite->ResetAnimation();
 }
 
-void Player::ProcessMouseUpEvent(const SDL_MouseButtonEvent & e)
+void Player::ProcessMouseUpEvent(const SDL_MouseButtonEvent & e, const Rectf& viewport)
 {
 	if (e.button == SDL_BUTTON_LEFT)
 	{
-		SetState(PlayerState::attack);
+		if (m_State != PlayerState::attack)
+		{
+			SetState(PlayerState::attack);
+
+			if (e.x < GetPositionX()) // TODO i should check it in the middle of the sprite/hitbox
+			{
+				GetSprite()->FlipHorizontally();
+			}
+			else
+			{
+				GetSprite()->ResetHorizontalFlip();
+			}
+		}
+		m_SplashSprite->RotateBy(CalculateSplashRotation(
+			Vector2f{static_cast<float>(e.x), static_cast<float>(e.y)}
+		));
 	}
 }
 
@@ -199,4 +219,39 @@ void Player::HandleKeyboard(const Uint8* pStates)
 		(pStates[SDL_SCANCODE_D] || pStates[SDL_SCANCODE_A]),
 		(pStates[SDL_SCANCODE_D] && pStates[SDL_SCANCODE_S]) || (pStates[SDL_SCANCODE_A] && pStates[SDL_SCANCODE_S])
 	);
+}
+
+float Player::CalculateSplashRotation(const Vector2f& mouseVec)
+{
+	//Vector2f
+	//	playerDirectionVector{ GetPositionX(), GetPositionY() },
+	//	mouseDirectionVector{ mouseVec-GetPosition() };
+
+	//float angle{ UserUtils::AngleBetweenVectors(
+	//	mouseDirectionVector,
+	//	playerDirectionVector
+	//) };
+
+	///*if (angle > M_PI / 2)
+	//{
+	//	angle -= static_cast<float>(M_PI / 2);
+	//	GetSprite()->FlipHorizontally();
+	//	m_SplashSprite->FlipHorizontally();
+	//}
+	//else if (angle < -M_PI / 2)
+	//{
+	//	angle += static_cast<float>(M_PI / 2);
+	//	GetSprite()->FlipHorizontally();
+	//	m_SplashSprite->FlipHorizontally();
+	//}*/
+
+	//angle *= static_cast<float>(180 / M_PI);
+
+	//std::cout << "ANGLE -> " << angle << std::endl;
+
+	//return -angle;
+
+
+	//TODO after i will do basic collisions and stuff, add a rotation for splash because i will have move accurate mouse position then
+	return 0.f;
 }

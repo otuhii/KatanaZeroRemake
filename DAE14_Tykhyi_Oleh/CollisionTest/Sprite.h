@@ -21,6 +21,10 @@ public:
 	void SetAnimationFrameInfo(const Rectf& frameDimension, float frameTime, int maxFrameCount);
 	void SetAnimationFrameInfo(const AnimationFrameInfo& animationState);
 
+	void RotateBy(float angle);
+
+	void ResetRotation();
+
 	void SetVisible(bool isVisible);
 	void FlipHorizontally();
 	void FlipVertically();
@@ -37,7 +41,6 @@ public:
 
 	void ResetAnimation();
 private:
-
 	AnimationFrameInfo m_AnimationFrameInfo{};
 
 	float m_AccumulatedTime{};
@@ -49,6 +52,8 @@ private:
 		m_LastFrameReached{},
 		m_IsVisible{};
 
+	float
+		m_RotationAngle{};
 
 	Texture* m_pSpritesheet;
 

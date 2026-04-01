@@ -27,6 +27,16 @@ void Sprite::SetAnimationFrameInfo(const AnimationFrameInfo & animationState)
 	m_AnimationFrameInfo = animationState;
 }
 
+void Sprite::RotateBy(float angle)
+{
+	m_RotationAngle = angle;
+}
+
+void Sprite::ResetRotation()
+{
+	m_RotationAngle = 0.f;
+}
+
 void Sprite::SetVisible(bool isVisible)
 {
 	m_IsVisible = isVisible;
@@ -80,8 +90,9 @@ int Sprite::GetCurrentFrameCount() const
 void Sprite::ResetAnimation()
 {
 	m_AccumulatedTime = 0.f;
-	m_FrameCount = 0.f;
+	m_FrameCount = 0;
 	m_LastFrameReached = false;
+	m_RotationAngle = 0.f;
 }
 
 void Sprite::Draw(const Vector2f& drawPos) const
@@ -91,6 +102,7 @@ void Sprite::Draw(const Vector2f& drawPos) const
 	glPushMatrix();
 	{
 		glTranslatef(drawPos.x, drawPos.y, 0.f);
+		glRotatef(m_RotationAngle, 0.f, 0.f, 1.f);
 		glScalef(3.f, 3.f, 1.f);
 
 		if (m_IsFlippedHorizontally)

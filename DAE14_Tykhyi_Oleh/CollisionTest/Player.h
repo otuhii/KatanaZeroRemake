@@ -29,7 +29,7 @@ public:
 
 	void SetState(PlayerState state);
 
-	void ProcessMouseUpEvent(const SDL_MouseButtonEvent& e);
+	void ProcessMouseUpEvent(const SDL_MouseButtonEvent& e, const Rectf& viewport);
 private:
 	PlayerState m_State;
 	
@@ -39,5 +39,7 @@ private:
 
 	void ProcessStateChange(bool isMoving, bool roll);
 	void HandleKeyboard(const Uint8* pStates);
+
+	float CalculateSplashRotation(const Vector2f& mouseVec);
 };
 

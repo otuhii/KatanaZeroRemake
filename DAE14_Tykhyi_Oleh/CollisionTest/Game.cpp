@@ -84,7 +84,7 @@ void Game::ProcessMouseDownEvent( const SDL_MouseButtonEvent& e )
 
 void Game::ProcessMouseUpEvent( const SDL_MouseButtonEvent& e )
 {
-	m_pPlayer->ProcessMouseUpEvent(e);
+	m_pPlayer->ProcessMouseUpEvent(e, GetViewPort());
 }
 
 void Game::ClearBackground( ) const
