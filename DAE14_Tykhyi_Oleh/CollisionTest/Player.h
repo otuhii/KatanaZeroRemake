@@ -37,7 +37,7 @@ private:
 
 	Sprite* m_SplashSprite;
 
-	void ProcessStateChange(bool isMoving);
+	void ProcessStateChange(bool isMoving, bool roll);
 	void HandleKeyboard(const Uint8* pStates);
 };
 

@@ -62,26 +62,29 @@ void Player::ProcessMouseUpEvent(const SDL_MouseButtonEvent & e)
 }
 
 // TODO write down my state system so it will be easier to program
-void Player::ProcessStateChange(bool isMoving)
+void Player::ProcessStateChange(bool isMoving, bool roll)
 {
 	const float
 		velocityThreshold{ 0.1f };
-	if (m_State == PlayerState::attack)
-	{
-		int
-			renderSplashAfterFrame{ 2 };
 
+	if (m_State == PlayerState::attack || m_State == PlayerState::roll)
+	{
 		if (GetSprite()->IsFinished())
 		{
 			SetState(PlayerState::staying);
 			m_SplashSprite->SetVisible(false);
 			m_SplashSprite->ResetAnimation();
 		}
-		else if (GetSprite()->GetCurrentFrameCount() >= renderSplashAfterFrame)
+		else if (m_State == PlayerState::attack)
 		{
-			m_SplashSprite->SetVisible(true);
-		}
+			int
+				renderSplashAfterFrame{ 2 };
 
+			if (GetSprite()->GetCurrentFrameCount() >= renderSplashAfterFrame)
+			{
+				m_SplashSprite->SetVisible(true);
+			}
+		}
 		return;
 	}
 
@@ -95,76 +98,105 @@ void Player::ProcessStateChange(bool isMoving)
 		{
 			SetState(PlayerState::fall);
 		}
+
+		return;
 	}
-	else
+	
+	if (roll)
 	{
-		if (m_State == PlayerState::jump || m_State == PlayerState::fall)
+		SetState(PlayerState::roll);
+		return;
+	}
+
+	switch (m_State)
+	{
+	case PlayerState::jump:
+	case PlayerState::fall:
+		SetState(PlayerState::staying);
+		break;
+	case PlayerState::staying:
+	{
+		if (isMoving)
+		{
+			SetState(PlayerState::beforeRun);
+		}
+		break;
+	}
+	case PlayerState::beforeRun:
+	{
+		if (GetSprite()->IsFinished())
+		{
+			SetState(PlayerState::run);
+		}
+
+		if (!isMoving)
 		{
 			SetState(PlayerState::staying);
 		}
-
-		switch (m_State)
-		{
-		
-		case PlayerState::staying:
-		{
-			if (isMoving)
-			{
-				SetState(PlayerState::beforeRun);
-			}
-			break;
-		}
-		case PlayerState::beforeRun:
-		{
-			if (GetSprite()->IsFinished())
-			{
-				SetState(PlayerState::run);
-			}
-
-			if (!isMoving)
-			{
-				SetState(PlayerState::staying);
-			}
-			break;
-		}
-		case PlayerState::run:
-		{
-			if (!isMoving)
-			{
-				SetState(PlayerState::staying);
-			}
-		}
-		}
+		break;
 	}
-
+	case PlayerState::run:
+	{
+		if (!isMoving)
+		{
+			SetState(PlayerState::staying);
+		}
+		break;
+	}
+	}
 }
 
 void Player::HandleKeyboard(const Uint8* pStates)
 {
-
-	if (pStates[SDL_SCANCODE_D])
+	if (m_State != PlayerState::roll)
 	{
-		SetVelocityX(GetSpeed());
-		GetSprite()->ResetHorizontalFlip();
-	}
-	else if (pStates[SDL_SCANCODE_A])
-	{
-		SetVelocityX(-GetSpeed());
-		GetSprite()->FlipHorizontally();
-	}
-	else
-	{
-		SetVelocityX(0.f);
-	}
-
-	if (pStates[SDL_SCANCODE_W])
-	{
-		if (IsOnGround())
+		if (pStates[SDL_SCANCODE_D])
 		{
-			SetVelocityY(500.f);
-			SetIsOnGroundState(false); //TODO CHANGE HANDLING
+			if (pStates[SDL_SCANCODE_S])
+			{
+				float rollSpeed{ 500.f }; //TODO change this to more robust option because now my roll is really dependant on animation which is apparently not so good
+
+				SetVelocityX(rollSpeed);
+				GetSprite()->ResetHorizontalFlip();
+			}
+			else
+			{
+				SetVelocityX(GetSpeed());
+				GetSprite()->ResetHorizontalFlip();
+			}
+		}
+		else if (pStates[SDL_SCANCODE_A])
+		{
+			if (pStates[SDL_SCANCODE_S])
+			{
+				float rollSpeed{ 500.f }; //TODO change this to more robust option because now my roll is really dependant on animation which is apparently not so good
+
+				SetVelocityX(-rollSpeed);
+				GetSprite()->FlipHorizontally();
+			}
+			else
+			{
+				SetVelocityX(-GetSpeed());
+				GetSprite()->FlipHorizontally();
+			}
+		}
+		else
+		{
+			SetVelocityX(0.f);
+		}
+
+		if (pStates[SDL_SCANCODE_W])
+		{
+			if (IsOnGround())
+			{
+				SetVelocityY(500.f);
+				SetIsOnGroundState(false); //TODO CHANGE HANDLING
+			}
 		}
 	}
-	
-	ProcessStateChange((pStates[SDL_SCANCODE_D] || pStates[SDL_SCANCODE_A]));
+
+	ProcessStateChange(
+		(pStates[SDL_SCANCODE_D] || pStates[SDL_SCANCODE_A]),
+		(pStates[SDL_SCANCODE_D] && pStates[SDL_SCANCODE_S]) || (pStates[SDL_SCANCODE_A] && pStates[SDL_SCANCODE_S])
+	);
 }
