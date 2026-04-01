@@ -2,6 +2,8 @@
 #include "Player.h"
 #include "AnimationFrameInfo.h"
 
+#include <iostream>
+
 Player::Player(Sprite* sprite, Sprite* splashSprite, const std::vector<AnimationFrameInfo>& playerAnimation, const Vector2f& position, float speed)
 	: Entity(sprite, position, Vector2f{}, speed),
 	m_SplashSprite(splashSprite),
@@ -9,12 +11,15 @@ Player::Player(Sprite* sprite, Sprite* splashSprite, const std::vector<Animation
 	m_PlayerSpriteFrames(playerAnimation)
 {
 	GetSprite()->SetAnimationFrameInfo(m_PlayerSpriteFrames[static_cast<int>(m_State)]);
+
 	m_SplashSprite->SetAnimationFrameInfo(m_PlayerSpriteFrames[static_cast<int>(PlayerState::attackSplash)]);
+	m_SplashSprite->SetVisible(false);
 }
 
 void Player::Draw() const
 {
 	GetSprite()->Draw(GetPosition());
+	m_SplashSprite->Draw(GetPosition()); //TODO fix position for it
 }
 
 void Player::Update(float elapsedSec, const Uint8* pStates, const Rectf& viewport)
@@ -44,46 +49,41 @@ void Player::SetState(PlayerState state)
 
 	m_State = state;
 	GetSprite()->SetAnimationFrameInfo(m_PlayerSpriteFrames[static_cast<int>(m_State)]);
+	GetSprite()->ResetAnimation();
+	m_SplashSprite->ResetAnimation();
 }
 
-//void Player::DebugState()
-//{
-//	system("CLS");
-//
-//	std::cout << GetVelocity() << std::endl;
-//
-//	switch (m_State)
-//	{
-//	case PlayerState::staying:
-//		std::cout << "STAYING STATE" << std::endl;
-//		break;
-//	case PlayerState::beforeRun:
-//		std::cout << "BEFORE RUN STATE" << std::endl;
-//		break;
-//	case PlayerState::run:
-//		std::cout << "RUN STATE" << std::endl;
-//		break;
-//	case PlayerState::roll:
-//		std::cout << "ROLL STATE" << std::endl;
-//		break;
-//	case PlayerState::jump:
-//		std::cout << "JUMP STATE" << std::endl;
-//		break;
-//	case PlayerState::fall:
-//		std::cout << "FALL STATE" << std::endl;
-//		break;
-//	case PlayerState::attack:
-//		std::cout << "ATTACK STATE" << std::endl;
-//		break;
-//	}
-//}
+void Player::ProcessMouseUpEvent(const SDL_MouseButtonEvent & e)
+{
+	if (e.button == SDL_BUTTON_LEFT)
+	{
+		SetState(PlayerState::attack);
+	}
+}
 
 // TODO write down my state system so it will be easier to program
 void Player::ProcessStateChange(bool isMoving)
 {
 	const float
 		velocityThreshold{ 0.1f };
-	//TODO consider using std::numeric_limits<float>::epsilon() and not this 0.1f value
+	if (m_State == PlayerState::attack)
+	{
+		int
+			renderSplashAfterFrame{ 2 };
+
+		if (GetSprite()->IsFinished())
+		{
+			SetState(PlayerState::staying);
+			m_SplashSprite->SetVisible(false);
+			m_SplashSprite->ResetAnimation();
+		}
+		else if (GetSprite()->GetCurrentFrameCount() >= renderSplashAfterFrame)
+		{
+			m_SplashSprite->SetVisible(true);
+		}
+
+		return;
+	}
 
 	if (!IsOnGround())
 	{
@@ -137,7 +137,6 @@ void Player::ProcessStateChange(bool isMoving)
 		}
 	}
 
-	//DebugState();
 }
 
 void Player::HandleKeyboard(const Uint8* pStates)

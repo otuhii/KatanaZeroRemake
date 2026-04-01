@@ -21,6 +21,7 @@ public:
 	void SetAnimationFrameInfo(const Rectf& frameDimension, float frameTime, int maxFrameCount);
 	void SetAnimationFrameInfo(const AnimationFrameInfo& animationState);
 
+	void SetVisible(bool isVisible);
 	void FlipHorizontally();
 	void FlipVertically();
 
@@ -30,6 +31,11 @@ public:
 	bool IsFinished() const;
 	bool IsFlippedHorizontally() const;
 	bool IsFlippedVertically() const;
+	bool IsVisible() const;
+
+	int GetCurrentFrameCount() const;
+
+	void ResetAnimation();
 private:
 
 	AnimationFrameInfo m_AnimationFrameInfo{};
@@ -37,11 +43,11 @@ private:
 	float m_AccumulatedTime{};
 	int m_FrameCount{};
 
-	bool m_LastFrameReached{};
-
 	bool 
 		m_IsFlippedHorizontally{},
-		m_IsFlippedVertically{};
+		m_IsFlippedVertically{},
+		m_LastFrameReached{},
+		m_IsVisible{};
 
 
 	Texture* m_pSpritesheet;

@@ -29,7 +29,7 @@ public:
 
 	void SetState(PlayerState state);
 
-	//void DebugState();
+	void ProcessMouseUpEvent(const SDL_MouseButtonEvent& e);
 private:
 	PlayerState m_State;
 	

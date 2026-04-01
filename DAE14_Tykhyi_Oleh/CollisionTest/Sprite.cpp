@@ -2,8 +2,10 @@
 #include "Sprite.h"
 #include "Texture.h"
 
+#include <iostream>
+
 Sprite::Sprite(const std::string& spritesheetTexturePath)
-	: m_AccumulatedTime{0.f}, m_FrameCount{0}
+	: m_AccumulatedTime{ 0.f }, m_FrameCount{ 0 }, m_IsVisible{ true }
 {
 	m_pSpritesheet = new Texture{ spritesheetTexturePath };
 }
@@ -23,6 +25,11 @@ void Sprite::SetAnimationFrameInfo(const Rectf& frameDimension, float frameTime,
 void Sprite::SetAnimationFrameInfo(const AnimationFrameInfo & animationState)
 {
 	m_AnimationFrameInfo = animationState;
+}
+
+void Sprite::SetVisible(bool isVisible)
+{
+	m_IsVisible = isVisible;
 }
 
 void Sprite::FlipHorizontally()
@@ -60,8 +67,27 @@ bool Sprite::IsFlippedVertically() const
 	return m_IsFlippedVertically;
 }
 
+bool Sprite::IsVisible() const
+{
+	return m_IsVisible;
+}
+
+int Sprite::GetCurrentFrameCount() const
+{
+	return m_FrameCount;
+}
+
+void Sprite::ResetAnimation()
+{
+	m_AccumulatedTime = 0.f;
+	m_FrameCount = 0.f;
+	m_LastFrameReached = false;
+}
+
 void Sprite::Draw(const Vector2f& drawPos) const
 {
+	if (!m_IsVisible) { return; }
+
 	glPushMatrix();
 	{
 		glTranslatef(drawPos.x, drawPos.y, 0.f);
@@ -105,6 +131,8 @@ void Sprite::Draw(const Vector2f& drawPos) const
 
 void Sprite::Update(float elapsedSec)
 {
+	if (!m_IsVisible) { return; }
+
 	m_LastFrameReached = false;
 
 	m_AccumulatedTime += elapsedSec;
