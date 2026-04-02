@@ -1,7 +1,10 @@
 #include "pch.h"
 #include "Game.h"
+
 #include "SpriteManager.h"
 #include "Player.h"
+#include "Map.h"
+
 
 #include <iostream>
 
@@ -20,6 +23,10 @@ void Game::Initialize( )
 {
 	m_pSpriteManager = new SpriteManager();
 
+	m_pMap = new Map{
+		m_JsonImporter.ImportEnvironmentObjects("json/GameEnvironment.json")
+	};
+
 	m_pPlayer = new Player(
 		m_pSpriteManager->CreateSprite("img/ProcessedPlayerSpriteSheet.png"),
 		m_pSpriteManager->CreateSprite("img/SplashAnimation.png"),
@@ -30,6 +37,7 @@ void Game::Initialize( )
 
 void Game::Cleanup( )
 {
+	delete m_pMap;
 	delete m_pSpriteManager;
 	delete m_pPlayer;
 }
@@ -46,6 +54,8 @@ void Game::Update( float elapsedSec )
 void Game::Draw( ) const
 {
 	ClearBackground( );
+
+	m_pMap->Draw();
 
 	m_pPlayer->Draw();
 }
@@ -93,34 +103,3 @@ void Game::ClearBackground( ) const
 	glClear( GL_COLOR_BUFFER_BIT );
 }
 
-
-void Game::TestJsonExporter()
-{
-	std::vector<EnvironmentObject> environmentObjects{ m_JsonImporter.ImportEnvironmentObjects("json/Prog2UnityExporterData.json") };
-
-	if (environmentObjects.size() > 0)
-	{
-		for (const EnvironmentObject& environmentObject : environmentObjects)
-		{
-			std::cout << environmentObject.position << std::endl;
-			std::cout << environmentObject.objectName << std::endl;
-			std::cout << environmentObject.texturePath << std::endl;
-			std::cout << "===========================================" << std::endl;
-		}
-
-	}
-
-
-	std::vector<AnimationFrameInfo> animationFrames{ m_JsonImporter.ImportAnimationFrameObjects("json/PlayerAnimationFramesInfo.json") };
-
-	if (animationFrames.size() > 0)
-	{
-		for (const AnimationFrameInfo& animationFrame : animationFrames)
-		{
-			std::cout << Vector2f{ animationFrame.frameDimension.width, animationFrame.frameDimension.height } << std::endl;
-			std::cout << animationFrame.frameTime << std::endl;
-			std::cout << animationFrame.maxFrameCount << std::endl;
-			std::cout << "==============================================" << std::endl;
-		}
-	}
-}

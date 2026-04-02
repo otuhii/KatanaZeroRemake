@@ -5,6 +5,7 @@
 
 class SpriteManager;
 class Player;
+class Map;
 
 class Game : public BaseGame
 {
@@ -34,11 +35,9 @@ private:
 	void Cleanup( );
 	void ClearBackground( ) const;
 
-	void TestJsonExporter();
-
 	JsonImporter    m_JsonImporter{}; //TODO maybe change this to pointer later
 
-
+	Map*			m_pMap;
 	SpriteManager*  m_pSpriteManager{};
 	Player*			m_pPlayer{};
 

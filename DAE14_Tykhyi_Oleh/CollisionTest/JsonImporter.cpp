@@ -9,16 +9,6 @@ void from_json(const Json& j, Rectf& rect)
 	rect.height = j.at("height").get<float>();
 }
 
-//TODO add Rectf support for this class
-void from_json(const Json& j, EnvironmentObject& envObj)
-{
-	envObj.texturePath = j.value("texturePath", "default.png");
-	envObj.position.x = j.at("xPosition").get<float>();
-	envObj.position.y = j.at("yPosition").get<float>();
-	envObj.objectName = j.value("objectName", "Unknown");
-
-}
-
 void from_json(const Json& j, AnimationFrameInfo& anFrame)
 {
 	anFrame.frameTime = j.at("frameTime").get<float>();
@@ -31,9 +21,11 @@ void from_json(const Json& j, AnimationFrameInfo& anFrame)
 }
 
 
-std::vector<EnvironmentObject> JsonImporter::ImportEnvironmentObjects(const std::string& jsonPath) const
+std::vector<EnvironmentBaseObject*> JsonImporter::ImportEnvironmentObjects(const std::string& jsonPath) const
 {
 	Json data{ ParseJsonFile(jsonPath) };
+
+	std::vector<EnvironmentBaseObject*> objects{};
 
 	if (data.is_discarded() ||
 		data.empty())
@@ -43,18 +35,67 @@ std::vector<EnvironmentObject> JsonImporter::ImportEnvironmentObjects(const std:
 
 	try 
 	{
-		if (data.contains("objects") && data["objects"].is_array() && !data["objects"].empty())
+		if (data.contains("objects") && !data["objects"].empty())
 		{
-			return data["objects"][0]["prog2GameObjects"].get<std::vector<EnvironmentObject>>();
+			Json envObjects = data["objects"][0]["prog2GameObjects"];
+
+			for (size_t index{ 0 }; index < envObjects.size(); ++index)
+			{
+				Json obj = envObjects[index];
+
+				float
+					x{ obj.at("xPosition").get<float>() },
+					y{ obj.at("yPosition").get<float>() };
+
+				std::string
+					texPath{ obj.value("texturePath", "default.png") };
+
+				Rectf 
+					firstCollider{};
+
+				if (obj.contains("firstCollider") && !obj["firstCollider"].is_null())
+				{
+					firstCollider = obj.at("firstCollider").get<Rectf>();
+				}
+
+				EnvironmentBaseObject* newEnvObj{};
+
+				if (obj.contains("secondCollider"))
+				{
+					Rectf
+						secondCollider{ obj.at("secondCollider").get<Rectf>() };
+
+					newEnvObj = new EnvironmentStairObject{
+						x,
+						y,
+						firstCollider,
+						secondCollider,
+						texPath
+					};
+				}
+				else
+				{
+					newEnvObj = new EnvironmentBaseObject(
+						x,
+						y,
+						firstCollider,
+						texPath
+					);
+				}
+
+
+				objects.push_back(newEnvObj);
+			}
 		}
 	}
-	catch (const Json::exception& exception)
+	catch (const nlohmann::json::exception& exception)
 	{
-		std::cout << "JSON parsing Error: " << exception.what() << std::endl 
+		std::cout << "JSON parsing Error: " << exception.what() << std::endl
 			<< "PATH-> " << jsonPath << std::endl;
 	}
 
-	return {};
+	return objects;
+	
 }
 
 std::vector<AnimationFrameInfo> JsonImporter::ImportAnimationFrameObjects(const std::string& jsonPath) const

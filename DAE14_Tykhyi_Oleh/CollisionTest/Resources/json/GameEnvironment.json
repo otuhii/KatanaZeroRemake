@@ -1,0 +1,65 @@
+{
+  "objects": [
+    {
+      "prog2GameObjects": [
+        {
+          "texturePath": "env_stair_tile.png",
+          "renderLayer": 0,
+          "xPosition": 58.0,
+          "yPosition": 83.0,
+          "firstCollider": {
+            "left": 58.0,
+            "bottom": 83.0,
+            "width": 15.9067993,
+            "height": 16.2492065
+          },
+          "isTrigger": false,
+          "positionX": 58.0,
+          "positionY": 83.0,
+          "secondCollider": {
+            "left": 73.95622,
+            "bottom": 99.23016,
+            "width": 16.0437775,
+            "height": 15.7698326
+          }
+        },
+        {
+          "texturePath": "env_stair_tile.png",
+          "renderLayer": 0,
+          "xPosition": 25.6,
+          "yPosition": 50.5,
+          "firstCollider": {
+            "left": 25.6,
+            "bottom": 50.5,
+            "width": 15.9067993,
+            "height": 16.2492065
+          },
+          "isTrigger": false,
+          "positionX": 25.6,
+          "positionY": 50.5,
+          "secondCollider": {
+            "left": 41.55622,
+            "bottom": 66.73016,
+            "width": 16.0437775,
+            "height": 15.7698326
+          }
+        },
+        {
+          "texturePath": "env_ground.png",
+          "renderLayer": 0,
+          "xPosition": -124.685,
+          "yPosition": -13.9533539,
+          "firstCollider": {
+            "left": 0.0,
+            "bottom": 0.0,
+            "width": 800.0,
+            "height": 64.0
+          },
+          "isTrigger": false,
+          "objectName": "Pfb_Env_BigGroundTile",
+          "layerName": "Default"
+        }
+      ]
+    }
+  ]
+}
