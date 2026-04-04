@@ -208,10 +208,12 @@ xcopy "$(ProjectDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </ExcludedFromBuild>
       <FileType>Document</FileType>
-      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)Resources\json\</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)\Resources\json\</DestinationFolders>
     </CopyFileToFolders>
     <None Include="Resources\json\PlayerAnimationFramesInfo.json">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)Resources\json\</DestinationFolders>
     </None>
   </ItemGroup>
 </Project>

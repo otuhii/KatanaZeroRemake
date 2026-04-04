@@ -205,6 +205,21 @@
             "width": 16.0437775,
             "height": 15.7698326
           }
+        },
+        {
+          "texturePath": "env_ground.png",
+          "renderLayer": 0,
+          "xPosition": 1090.58447,
+          "yPosition": 284.5,
+          "firstCollider": {
+            "left": 1090.0,
+            "bottom": 284.0,
+            "width": 800.0,
+            "height": 64.0
+          },
+          "isTrigger": false,
+          "objectName": "Pfb_Env_BigGroundTile (1)",
+          "layerName": "Default"
         }
       ]
     }

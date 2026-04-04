@@ -20,6 +20,7 @@ public:
 
 	const std::vector<Rectf>& GetColliders() const;
 
+	const Vector2f& GetPosition() const;
 private:
 	Vector2f m_Position;
 	std::string m_TexturePath; 

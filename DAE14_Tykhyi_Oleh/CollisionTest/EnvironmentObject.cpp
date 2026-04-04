@@ -18,3 +18,9 @@ const std::vector<Rectf>& EnvironmentObject::GetColliders() const
 {
 	return m_Colliders;
 }
+
+
+const Vector2f& EnvironmentObject::GetPosition() const
+{
+	return m_Position;
+}
