@@ -5,7 +5,6 @@
 Entity::Entity(Sprite* sprite, const Vector2f& position, const Vector2f& velocity, float speed)
 	: m_pSprite(sprite), m_Velocity(velocity), m_Speed(speed), m_IsOnGround(true)
 {
-
 }
 
 void Entity::Update(float elapsedSec, const Rectf& viewport)
@@ -17,6 +16,8 @@ void Entity::Update(float elapsedSec, const Rectf& viewport)
 	m_Velocity.y += gravity * elapsedSec;
 
 	m_Position += m_Velocity * elapsedSec;
+
+	
 }
 
 void Entity::SetSpeed(float speed)
@@ -47,6 +48,19 @@ void Entity::SetPosition(const Vector2f& position)
 void Entity::SetIsOnGroundState(bool state)
 {
 	m_IsOnGround = state;
+}
+
+void Entity::UpdateHitbox()
+{
+	const float
+		hitboxWidth{ 26.f },
+		hitboxHeight{ 30.f };
+
+	m_Hitbox.width = hitboxWidth * GetSprite()->GetScale();
+	m_Hitbox.height = hitboxHeight * GetSprite()->GetScale();
+
+	m_Hitbox.left = m_Position.x + (m_Hitbox.width * 0.5f);
+	m_Hitbox.bottom = m_Position.y;
 }
 
 bool Entity::IsOnGround() const
@@ -97,6 +111,11 @@ float Entity::GetPositionY() const
 const Vector2f& Entity::GetPosition() const
 {
 	return m_Position;
+}
+
+const Rectf& Entity::GetHitbox() const
+{
+	return m_Hitbox;
 }
 
 Sprite* Entity::GetSprite() const

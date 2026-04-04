@@ -25,6 +25,8 @@ public:
 
 	void ResetRotation();
 
+	void SetScale(float scale);
+
 	void SetVisible(bool isVisible);
 	void FlipHorizontally();
 	void FlipVertically();
@@ -38,6 +40,9 @@ public:
 	bool IsVisible() const;
 
 	int GetCurrentFrameCount() const;
+	const Rectf& GetCurrentFrameDimensions() const;
+
+	float GetScale() const;
 
 	void ResetAnimation();
 private:
@@ -46,14 +51,15 @@ private:
 	float m_AccumulatedTime{};
 	int m_FrameCount{};
 
-	bool 
+	bool
 		m_IsFlippedHorizontally{},
 		m_IsFlippedVertically{},
 		m_LastFrameReached{},
 		m_IsVisible{};
 
 	float
-		m_RotationAngle{};
+		m_RotationAngle{},
+		m_ScaleValue{};
 
 	Texture* m_pSpritesheet;
 

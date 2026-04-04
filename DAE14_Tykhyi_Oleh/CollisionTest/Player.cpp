@@ -7,7 +7,6 @@
 
 #include <iostream>
 
-
 Player::Player(Sprite* sprite, Sprite* splashSprite, const std::vector<AnimationFrameInfo>& playerAnimation, const Vector2f& position, float speed)
 	: Entity(sprite, position, Vector2f{}, speed),
 	m_SplashSprite(splashSprite),
@@ -25,6 +24,9 @@ void Player::Draw() const
 	GetSprite()->Draw(GetPosition());
 	m_SplashSprite->Draw(GetPosition()); //TODO fix position for it
 
+	
+	utils::SetColor(Color4f{ 0.f, 1.f, 0.f, 1.f });
+	utils::DrawRect(GetHitbox());
 }
 
 void Player::Update(float elapsedSec, const Uint8* pStates, const Rectf& viewport)
@@ -43,6 +45,8 @@ void Player::Update(float elapsedSec, const Uint8* pStates, const Rectf& viewpor
 	{
 		SetIsOnGroundState(false);
 	}
+
+	UpdateHitbox();
 }
 
 void Player::SetState(PlayerState state)

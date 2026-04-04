@@ -21,6 +21,8 @@ public:
 
 	void SetIsOnGroundState(bool state);
 
+	void UpdateHitbox();
+	
 	bool			IsOnGround()	const;
 
 	float			GetSpeed()		const;
@@ -33,6 +35,7 @@ public:
 	float			GetPositionY()	const;
 	const Vector2f& GetPosition()	const;
 
+	const Rectf&    GetHitbox()		const;
 protected:
 	Sprite* GetSprite() const;
 
@@ -45,5 +48,7 @@ private:
 
 	Vector2f m_Velocity{};
 	Vector2f m_Position{};
+
+	Rectf m_Hitbox{};
 };
 

@@ -5,9 +5,11 @@
 #include <iostream>
 
 Sprite::Sprite(const std::string& spritesheetTexturePath)
-	: m_AccumulatedTime{ 0.f }, m_FrameCount{ 0 }, m_IsVisible{ true }
+	: m_AccumulatedTime{ 0.f }, m_FrameCount{ 0 }, m_IsVisible{ true }, m_ScaleValue{ 1.f }
 {
 	m_pSpritesheet = new Texture{ spritesheetTexturePath };
+
+	SetScale(2.f);
 }
 
 Sprite::~Sprite()
@@ -35,6 +37,11 @@ void Sprite::RotateBy(float angle)
 void Sprite::ResetRotation()
 {
 	m_RotationAngle = 0.f;
+}
+
+void Sprite::SetScale(float scale)
+{
+	m_ScaleValue = scale;
 }
 
 void Sprite::SetVisible(bool isVisible)
@@ -87,6 +94,16 @@ int Sprite::GetCurrentFrameCount() const
 	return m_FrameCount;
 }
 
+const Rectf& Sprite::GetCurrentFrameDimensions() const
+{
+	return m_AnimationFrameInfo.frameDimension;
+}
+
+float Sprite::GetScale() const
+{
+	return m_ScaleValue;
+}
+
 void Sprite::ResetAnimation()
 {
 	m_AccumulatedTime = 0.f;
@@ -103,7 +120,7 @@ void Sprite::Draw(const Vector2f& drawPos) const
 	{
 		glTranslatef(drawPos.x, drawPos.y, 0.f);
 		glRotatef(m_RotationAngle, 0.f, 0.f, 1.f);
-		glScalef(3.f, 3.f, 1.f);
+		glScalef(m_ScaleValue, m_ScaleValue, 1.f);
 
 		if (m_IsFlippedHorizontally)
 		{
