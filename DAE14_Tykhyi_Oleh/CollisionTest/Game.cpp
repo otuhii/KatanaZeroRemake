@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Game.h"
 
+#include "CollisionManager.h"
 #include "SpriteManager.h"
 #include "Player.h"
 #include "Map.h"
@@ -23,6 +24,8 @@ void Game::Initialize( )
 {
 	m_pSpriteManager = new SpriteManager();
 
+	m_pCollisionManager = new CollisionManager();
+
 	m_pMap = new Map{
 		m_JsonImporter.ImportEnvironmentObjects("json/GameEnvironment.json")
 	};
@@ -31,7 +34,7 @@ void Game::Initialize( )
 		m_pSpriteManager->CreateSprite("img/ProcessedPlayerSpriteSheet.png"),
 		m_pSpriteManager->CreateSprite("img/SplashAnimation.png"),
 		m_JsonImporter.ImportAnimationFrameObjects("json/PlayerAnimationFramesInfo.json"),
-		Vector2f{ 30.f, 30.f }, 
+		Vector2f{ 100.f, 100.f }, 
 		300.f);
 }
 
@@ -39,6 +42,7 @@ void Game::Cleanup( )
 {
 	delete m_pMap;
 	delete m_pSpriteManager;
+	delete m_pCollisionManager;
 	delete m_pPlayer;
 }
 
@@ -49,6 +53,8 @@ void Game::Update( float elapsedSec )
 	const Uint8 *pStates = SDL_GetKeyboardState( nullptr );
 	
 	m_pPlayer->Update(elapsedSec, pStates, GetViewPort());
+
+	m_pCollisionManager->HandleMovement(m_pPlayer, *m_pMap, elapsedSec);
 
 	m_pSpriteManager->Update(elapsedSec);
 }

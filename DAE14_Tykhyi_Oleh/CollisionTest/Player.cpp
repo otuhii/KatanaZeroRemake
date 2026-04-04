@@ -17,6 +17,8 @@ Player::Player(Sprite* sprite, Sprite* splashSprite, const std::vector<Animation
 
 	m_SplashSprite->SetAnimationFrameInfo(m_PlayerSpriteFrames[static_cast<int>(PlayerState::attackSplash)]);
 	m_SplashSprite->SetVisible(false);
+
+	UpdateHitbox();
 }
 
 void Player::Draw() const
@@ -32,21 +34,9 @@ void Player::Draw() const
 void Player::Update(float elapsedSec, const Uint8* pStates, const Rectf& viewport)
 {
 	HandleKeyboard(pStates);
-
 	Entity::Update(elapsedSec, viewport);
 
-	if (GetPosition().y < 0) // TODO proper collision check with every obstacle and not just 0 coord
-	{
-		SetPositionY(0.f);
-		SetVelocityY(0.f);
-		SetIsOnGroundState(true);
-	}
-	else
-	{
-		SetIsOnGroundState(false);
-	}
-
-	UpdateHitbox();
+	
 }
 
 void Player::SetState(PlayerState state)

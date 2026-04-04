@@ -161,6 +161,7 @@ xcopy "$(ProjectDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EnvironmentObject.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -175,6 +176,7 @@ xcopy "$(ProjectDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimationFrameInfo.h" />
+    <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EnvironmentObject.h" />
     <ClInclude Include="Game.h" />
