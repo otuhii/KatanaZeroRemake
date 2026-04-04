@@ -203,5 +203,15 @@ xcopy "$(ProjectDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
   <!-- Include the custom .targets file -->
   <ItemGroup>
     <None Include="Prog2Game.targets" />
+    <CopyFileToFolders Include="Resources\json\GameEnvironment.json">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </ExcludedFromBuild>
+      <FileType>Document</FileType>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)Resources\json\</DestinationFolders>
+    </CopyFileToFolders>
+    <None Include="Resources\json\PlayerAnimationFramesInfo.json">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+    </None>
   </ItemGroup>
 </Project>
