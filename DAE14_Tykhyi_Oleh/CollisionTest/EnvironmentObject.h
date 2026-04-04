@@ -4,12 +4,19 @@
 class EnvironmentObject final
 {
 public:
+	enum class EnvironmentObjectType {
+		platform,
+		stairs
+	};
+
 	EnvironmentObject(
 		float positionX,
 		float positionY,
 		const std::vector<Rectf>& colliders,
 		const std::string& texturePath
 	);
+
+
 
 	const std::vector<Rectf>& GetColliders() const;
 

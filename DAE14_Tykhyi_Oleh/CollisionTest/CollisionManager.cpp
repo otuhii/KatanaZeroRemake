@@ -39,6 +39,10 @@ void CollisionManager::HandleAABB(Entity* pEntity, const Rectf& objectCollider, 
 	Rectf
 		entityHitbox{ pEntity->GetHitbox() };
 
+	const float
+		velEps{ 0.1f },
+		maxStepHeight{ 15.f };
+
 	if (isHorizontalMovement) //shrinking hitbox in the bottom part because otherwise collision 
 							  //is triggered when he is simply standing on the floor
 	{
@@ -53,11 +57,24 @@ void CollisionManager::HandleAABB(Entity* pEntity, const Rectf& objectCollider, 
 	{
 		if (isHorizontalMovement)
 		{
-			if (pEntity->GetVelocityX() > 0)
+			float 
+				overlapHeight{ (objectCollider.bottom + objectCollider.height) - entityHitbox.bottom };
+
+			if (overlapHeight <= maxStepHeight && overlapHeight > 0) //step-up logic which checks if current
+				//overlapped wall can be handled as a stair step
+			{
+				pEntity->SetPositionY(objectCollider.bottom + objectCollider.height);
+				pEntity->UpdateHitbox();
+				return;
+			}
+
+
+
+			if (pEntity->GetVelocityX() > velEps)
 			{
 				pEntity->SetPositionX(objectCollider.left - entityHitbox.width);
 			}
-			else 
+			else if (pEntity->GetVelocityX() < -velEps)
 			{
 				pEntity->SetPositionX(objectCollider.left + objectCollider.width);
 			}
@@ -77,10 +94,6 @@ void CollisionManager::HandleAABB(Entity* pEntity, const Rectf& objectCollider, 
 			pEntity->SetVelocityY(0.f);
 		}
 
-		pEntity->UpdateHitbox();
 	}
-	else
-	{
-		pEntity->UpdateHitbox();
-	}
+	pEntity->UpdateHitbox();
 }

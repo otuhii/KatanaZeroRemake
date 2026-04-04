@@ -5,20 +5,20 @@
         {
           "texturePath": "env_stair_tile.png",
           "renderLayer": 0,
-          "xPosition": 58.0,
-          "yPosition": 83.0,
+          "xPosition": 80.9,
+          "yPosition": 110.9,
           "firstCollider": {
-            "left": 58.0,
-            "bottom": 83.0,
+            "left": 80.9,
+            "bottom": 110.9,
             "width": 15.9067993,
             "height": 16.2492065
           },
           "isTrigger": false,
-          "positionX": 58.0,
-          "positionY": 83.0,
+          "positionX": 80.9,
+          "positionY": 110.9,
           "secondCollider": {
-            "left": 73.95622,
-            "bottom": 99.23016,
+            "left": 96.8562241,
+            "bottom": 127.130173,
             "width": 16.0437775,
             "height": 15.7698326
           }
@@ -26,20 +26,20 @@
         {
           "texturePath": "env_stair_tile.png",
           "renderLayer": 0,
-          "xPosition": 25.6,
-          "yPosition": 50.5,
+          "xPosition": 289.6,
+          "yPosition": 91.6,
           "firstCollider": {
-            "left": 25.6,
-            "bottom": 50.5,
+            "left": 289.6,
+            "bottom": 91.6,
             "width": 15.9067993,
             "height": 16.2492065
           },
           "isTrigger": false,
-          "positionX": 25.6,
-          "positionY": 50.5,
+          "positionX": 289.6,
+          "positionY": 91.6,
           "secondCollider": {
-            "left": 41.55622,
-            "bottom": 66.73016,
+            "left": 305.5562,
+            "bottom": 107.83017,
             "width": 16.0437775,
             "height": 15.7698326
           }
@@ -58,6 +58,48 @@
           "isTrigger": false,
           "objectName": "Pfb_Env_BigGroundTile",
           "layerName": "Default"
+        },
+        {
+          "texturePath": "env_stair_tile.png",
+          "renderLayer": 0,
+          "xPosition": 255.988419,
+          "yPosition": 59.57807,
+          "firstCollider": {
+            "left": 255.988419,
+            "bottom": 59.57807,
+            "width": 15.9067993,
+            "height": 16.2492065
+          },
+          "isTrigger": false,
+          "positionX": 255.988419,
+          "positionY": 59.57807,
+          "secondCollider": {
+            "left": 271.944641,
+            "bottom": 75.80824,
+            "width": 16.0437775,
+            "height": 15.7698326
+          }
+        },
+        {
+          "texturePath": "env_stair_tile.png",
+          "renderLayer": 0,
+          "xPosition": 321.803833,
+          "yPosition": 124.009224,
+          "firstCollider": {
+            "left": 321.803833,
+            "bottom": 124.009224,
+            "width": 15.9067993,
+            "height": 16.2492065
+          },
+          "isTrigger": false,
+          "positionX": 321.803833,
+          "positionY": 124.009224,
+          "secondCollider": {
+            "left": 337.760071,
+            "bottom": 140.2394,
+            "width": 16.0437775,
+            "height": 15.7698326
+          }
         }
       ]
     }

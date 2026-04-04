@@ -35,7 +35,7 @@ void Game::Initialize( )
 		m_pSpriteManager->CreateSprite("img/SplashAnimation.png"),
 		m_JsonImporter.ImportAnimationFrameObjects("json/PlayerAnimationFramesInfo.json"),
 		Vector2f{ 100.f, 100.f }, 
-		300.f);
+		250.f);
 }
 
 void Game::Cleanup( )

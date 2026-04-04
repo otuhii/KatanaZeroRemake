@@ -51,7 +51,7 @@ void Entity::SetIsOnGroundState(bool state)
 void Entity::UpdateHitbox()
 {
 	const float
-		hitboxWidth{ 26.f },
+		hitboxWidth{ 20.f },
 		hitboxHeight{ 30.f };
 
 	m_Hitbox.width = hitboxWidth * GetSprite()->GetScale();
