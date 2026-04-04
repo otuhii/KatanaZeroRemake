@@ -21,11 +21,11 @@ void from_json(const Json& j, AnimationFrameInfo& anFrame)
 }
 
 
-std::vector<EnvironmentBaseObject*> JsonImporter::ImportEnvironmentObjects(const std::string& jsonPath) const
+std::vector<EnvironmentObject> JsonImporter::ImportEnvironmentObjects(const std::string& jsonPath) const
 {
 	Json data{ ParseJsonFile(jsonPath) };
 
-	std::vector<EnvironmentBaseObject*> objects{};
+	std::vector<EnvironmentObject> objects{};
 
 	if (data.is_discarded() ||
 		data.empty())
@@ -50,41 +50,25 @@ std::vector<EnvironmentBaseObject*> JsonImporter::ImportEnvironmentObjects(const
 				std::string
 					texPath{ obj.value("texturePath", "default.png") };
 
-				Rectf 
-					firstCollider{};
+				std::vector<Rectf> colliders;
 
 				if (obj.contains("firstCollider") && !obj["firstCollider"].is_null())
 				{
-					firstCollider = obj.at("firstCollider").get<Rectf>();
+					colliders.push_back(obj.at("firstCollider").get<Rectf>());
 				}
-
-				EnvironmentBaseObject* newEnvObj{};
 
 				if (obj.contains("secondCollider"))
 				{
-					Rectf
-						secondCollider{ obj.at("secondCollider").get<Rectf>() };
-
-					newEnvObj = new EnvironmentStairObject{
-						x,
-						y,
-						firstCollider,
-						secondCollider,
-						texPath
-					};
-				}
-				else
-				{
-					newEnvObj = new EnvironmentBaseObject(
-						x,
-						y,
-						firstCollider,
-						texPath
-					);
+					colliders.push_back(obj.at("secondCollider").get<Rectf>());
 				}
 
-
-				objects.push_back(newEnvObj);
+				objects.push_back(EnvironmentObject{
+					x,
+					y,
+					colliders,
+					texPath
+					});
+				
 			}
 		}
 	}
