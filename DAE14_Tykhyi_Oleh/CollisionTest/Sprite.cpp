@@ -9,7 +9,11 @@ Sprite::Sprite(const std::string& spritesheetTexturePath)
 {
 	m_pSpritesheet = new Texture{ spritesheetTexturePath };
 
-	SetScale(2.f);
+	m_AnimationFrameInfo.frameDimension.width = m_pSpritesheet->GetWidth();
+	m_AnimationFrameInfo.frameDimension.height = m_pSpritesheet->GetHeight();
+	m_AnimationFrameInfo.maxFrameCount = 1;
+	m_AnimationFrameInfo.frameTime = 1.f;
+
 }
 
 Sprite::~Sprite()

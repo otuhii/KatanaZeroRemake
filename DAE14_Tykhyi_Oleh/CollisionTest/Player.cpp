@@ -18,6 +18,9 @@ Player::Player(Sprite* sprite, Sprite* splashSprite, const std::vector<Animation
 	m_SplashSprite->SetAnimationFrameInfo(m_PlayerSpriteFrames[static_cast<int>(PlayerState::attackSplash)]);
 	m_SplashSprite->SetVisible(false);
 
+	GetSprite()->SetScale(2.f);
+	m_SplashSprite->SetScale(2.f);
+
 	UpdateHitbox();
 }
 
@@ -35,8 +38,6 @@ void Player::Update(float elapsedSec, const Uint8* pStates, const Rectf& viewpor
 {
 	HandleKeyboard(pStates);
 	Entity::Update(elapsedSec, viewport);
-
-	
 }
 
 void Player::SetState(PlayerState state)

@@ -3,8 +3,10 @@
 #include <fstream>
 #include <iostream>
 
-#include "EnvironmentObject.h"
+#include "EnvironmentActiveObject.h"
 #include "AnimationFrameInfo.h"
+#include "Map.h"
+#include "SpriteManager.h"
 
 using Json = nlohmann::json;
 void from_json(const Json& j, Rectf& rect);
@@ -13,7 +15,7 @@ void from_json(const Json& j, AnimationFrameInfo& anFrame);
 class JsonImporter
 {
 public:
-	std::vector<EnvironmentObject> ImportEnvironmentObjects(const std::string& jsonPath) const;
+	void ImportEnvironmentObjects(const std::string& jsonPath, Map& gameMap, SpriteManager& spriteManager) const;
 	std::vector<AnimationFrameInfo> ImportAnimationFrameObjects(const std::string& jsonPath) const;
 private:
 	Json ParseJsonFile(const std::string& jsonPath) const;

@@ -25,7 +25,7 @@ void CollisionManager::CheckCollision(Entity* pEntity, const Map& map, bool isHo
 	const float
 		objectTriggerRange{ 200.f };
 
-	for (const EnvironmentObject& object : map.GetEnvironmentObjects())
+	for (const EnvironmentActiveObject& object : map.GetEnvironmentActiveObjects())
 	{
 		for (const Rectf& collider : object.GetColliders())
 		{

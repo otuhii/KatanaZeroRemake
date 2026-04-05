@@ -3,25 +3,35 @@
 
 #include "utils.h"
 
-Map::Map(const std::vector<EnvironmentObject>& environmentObjects)
-	: m_EnvironmentObjects(environmentObjects)
-{
-}
-
 void Map::Draw() const
 {
 	utils::SetColor(Color4f{ 1.f, 1.f, 0.f, 1.f });
 
-	for (const EnvironmentObject& obj : m_EnvironmentObjects)
+	for (const EnvironmentActiveObject& obj : m_EnvironmentActiveObjects)
 	{
-		for (const Rectf& collider : obj.GetColliders())
-		{
-			utils::FillRect(collider);
-		}
+		obj.GetTexture()->Draw(obj.GetPosition());
+
+	}
+
+	for (const EnvironmentCosmeticObject& obj : m_EnvironmentCosmeticObjects)
+	{
+		obj.GetTexture()->Draw(obj.GetPosition());
 	}
 }
 
-const std::vector<EnvironmentObject>& Map::GetEnvironmentObjects() const
+const std::vector<EnvironmentActiveObject>& Map::GetEnvironmentActiveObjects() const
 {
-	return m_EnvironmentObjects;
+	return m_EnvironmentActiveObjects;
 }
+
+void Map::SetEnvironmentActiveObjects(const std::vector<EnvironmentActiveObject>& activeObjects)
+{
+	m_EnvironmentActiveObjects = activeObjects;
+}
+
+void Map::SetEnvironmentCosmeticObjects(const std::vector<EnvironmentCosmeticObject>& cosmeticObjects) 
+{
+	m_EnvironmentCosmeticObjects = cosmeticObjects;
+}
+
+

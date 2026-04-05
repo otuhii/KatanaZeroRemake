@@ -6,7 +6,6 @@
 #include "Player.h"
 #include "Map.h"
 
-
 #include <iostream>
 
 Game::Game( const Window& window ) 
@@ -26,9 +25,9 @@ void Game::Initialize( )
 
 	m_pCollisionManager = new CollisionManager();
 
-	m_pMap = new Map{
-		m_JsonImporter.ImportEnvironmentObjects("json/GameEnvironment.json")
-	};
+	m_pMap = new Map{};
+
+	m_JsonImporter.ImportEnvironmentObjects("json/GameEnvironment.json", *m_pMap, *m_pSpriteManager);
 
 	m_pPlayer = new Player(
 		m_pSpriteManager->CreateSprite("img/ProcessedPlayerSpriteSheet.png"),

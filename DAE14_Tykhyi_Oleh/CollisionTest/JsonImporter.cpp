@@ -21,16 +21,18 @@ void from_json(const Json& j, AnimationFrameInfo& anFrame)
 }
 
 
-std::vector<EnvironmentObject> JsonImporter::ImportEnvironmentObjects(const std::string& jsonPath) const
+void JsonImporter::ImportEnvironmentObjects(const std::string& jsonPath, Map& gameMap, SpriteManager& SpriteManager) const
 {
 	Json data{ ParseJsonFile(jsonPath) };
 
-	std::vector<EnvironmentObject> objects{};
+	std::vector<EnvironmentActiveObject> activeObjects{};
+	std::vector<EnvironmentCosmeticObject> cosmeticObjects{};
+
 
 	if (data.is_discarded() ||
 		data.empty())
 	{
-		return {};
+		return;
 	}
 
 	try 
@@ -52,23 +54,28 @@ std::vector<EnvironmentObject> JsonImporter::ImportEnvironmentObjects(const std:
 
 				std::vector<Rectf> colliders;
 
-				if (obj.contains("firstCollider") && !obj["firstCollider"].is_null())
+				if (obj.contains("colliders") && obj["colliders"].is_array())
 				{
-					colliders.push_back(obj.at("firstCollider").get<Rectf>());
-				}
+					colliders = obj.at("colliders").get<std::vector<Rectf>>();
 
-				if (obj.contains("secondCollider"))
+					activeObjects.push_back(EnvironmentActiveObject
+						{
+							x,
+							y,
+							colliders,
+							SpriteManager.CreateSprite("img/"+texPath)
+						});
+
+				}
+				else
 				{
-					colliders.push_back(obj.at("secondCollider").get<Rectf>());
+					cosmeticObjects.push_back(EnvironmentCosmeticObject
+						{
+							x,
+							y,
+							SpriteManager.CreateSprite("img/"+texPath)
+						});
 				}
-
-				objects.push_back(EnvironmentObject{
-					x,
-					y,
-					colliders,
-					texPath
-					});
-				
 			}
 		}
 	}
@@ -78,8 +85,8 @@ std::vector<EnvironmentObject> JsonImporter::ImportEnvironmentObjects(const std:
 			<< "PATH-> " << jsonPath << std::endl;
 	}
 
-	return objects;
-	
+	gameMap.SetEnvironmentActiveObjects(activeObjects);
+	gameMap.SetEnvironmentCosmeticObjects(cosmeticObjects);
 }
 
 std::vector<AnimationFrameInfo> JsonImporter::ImportAnimationFrameObjects(const std::string& jsonPath) const

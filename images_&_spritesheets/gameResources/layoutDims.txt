@@ -1,9 +1,0 @@
-first 3 rows - 42x42
-
-4 row - 52x32
-5 row - 48x48
-
-
-6 row - 52x39mmn
-
-splash 100 x 28

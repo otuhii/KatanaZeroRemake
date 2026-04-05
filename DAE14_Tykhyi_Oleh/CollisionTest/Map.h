@@ -1,16 +1,20 @@
 #pragma once
 #include <vector>
-#include "EnvironmentObject.h"
+#include "EnvironmentActiveObject.h"
+#include "EnvironmentCosmeticObject.h"
 
 class Map final
 {
 public:
-	Map(const std::vector<EnvironmentObject>& environmentObjects);
 
 	void Draw() const;
 
-	const std::vector<EnvironmentObject>& GetEnvironmentObjects() const;
+	const std::vector<EnvironmentActiveObject>& GetEnvironmentActiveObjects() const;
+
+	void SetEnvironmentActiveObjects(const std::vector<EnvironmentActiveObject>& activeObjects);
+	void SetEnvironmentCosmeticObjects(const std::vector<EnvironmentCosmeticObject>& cosmeticObjects);
 
 private:
-	std::vector<EnvironmentObject> m_EnvironmentObjects{};
+	std::vector<EnvironmentActiveObject> m_EnvironmentActiveObjects{};
+	std::vector<EnvironmentCosmeticObject> m_EnvironmentCosmeticObjects{};
 };
