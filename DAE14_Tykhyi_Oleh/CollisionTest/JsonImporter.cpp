@@ -52,6 +52,10 @@ void JsonImporter::ImportEnvironmentObjects(const std::string& jsonPath, Map& ga
 				std::string
 					texPath{ obj.value("texturePath", "default.png") };
 
+				Sprite* pTexture{ SpriteManager.CreateSprite("img/" + texPath) };
+
+				pTexture->SetScale(obj.at("scale").get<float>());
+
 				std::vector<Rectf> colliders;
 
 				if (obj.contains("colliders") && obj["colliders"].is_array())
@@ -63,7 +67,7 @@ void JsonImporter::ImportEnvironmentObjects(const std::string& jsonPath, Map& ga
 							x,
 							y,
 							colliders,
-							SpriteManager.CreateSprite("img/"+texPath)
+							pTexture
 						});
 
 				}
@@ -73,7 +77,7 @@ void JsonImporter::ImportEnvironmentObjects(const std::string& jsonPath, Map& ga
 						{
 							x,
 							y,
-							SpriteManager.CreateSprite("img/"+texPath)
+							pTexture
 						});
 				}
 			}
