@@ -6,11 +6,13 @@ EnvironmentActiveObject::EnvironmentActiveObject(
 	float positionX,
 	float positionY,
 	const std::vector<Rectf>& colliders,
-	const Sprite* pTexture
+	const Sprite* pTexture,
+	EnvironmentObjectType type
 )
 	: m_Colliders(colliders),
 	m_Position(positionX, positionY),
-	m_pTexture(pTexture)
+	m_pTexture(pTexture),
+	m_Type{type}
 {
 }
 
@@ -28,4 +30,9 @@ const Vector2f& EnvironmentActiveObject::GetPosition() const
 const Sprite* EnvironmentActiveObject::GetTexture() const
 {
 	return m_pTexture;
+}
+
+EnvironmentActiveObject::EnvironmentObjectType EnvironmentActiveObject::GetType() const
+{
+	return m_Type;
 }

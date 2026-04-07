@@ -15,9 +15,9 @@ void CollisionManager::HandleMovement(Entity* pEntity, const Map& map, float ela
 
 	entityPosition.y += entityVelocity.y * elapsedSec;
 	pEntity->SetPositionY(entityPosition.y);
-
 	pEntity->SetIsOnGroundState(false); //assuming that player is in the air
 	CheckCollision(pEntity, map, false);
+	
 }
 
 void CollisionManager::CheckCollision(Entity* pEntity, const Map& map, bool isHorizontalMovement) const
@@ -29,7 +29,8 @@ void CollisionManager::CheckCollision(Entity* pEntity, const Map& map, bool isHo
 	{
 		for (const Rectf& collider : object.GetColliders())
 		{
-			HandleAABB(pEntity, collider, isHorizontalMovement);
+			HandleAABB(
+				pEntity, collider, isHorizontalMovement);
 		}
 	}
 }
@@ -61,14 +62,13 @@ void CollisionManager::HandleAABB(Entity* pEntity, const Rectf& objectCollider, 
 				overlapHeight{ (objectCollider.bottom + objectCollider.height) - entityHitbox.bottom };
 
 			if (overlapHeight <= maxStepHeight && overlapHeight > 0) //step-up logic which checks if current
-				//overlapped wall can be handled as a stair step
+																	//overlapped wall can be handled as a stair step
 			{
 				pEntity->SetPositionY(objectCollider.bottom + objectCollider.height);
+				pEntity->SetVelocityY(0.f);
 				pEntity->UpdateHitbox();
 				return;
 			}
-
-
 
 			if (pEntity->GetVelocityX() > velEps)
 			{

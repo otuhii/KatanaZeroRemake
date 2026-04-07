@@ -20,6 +20,15 @@ void from_json(const Json& j, AnimationFrameInfo& anFrame)
 	}
 }
 
+EnvironmentActiveObject::EnvironmentObjectType StringToType(const std::string& typeStr)
+{
+	if (typeStr == "stairs")
+	{
+		return EnvironmentActiveObject::EnvironmentObjectType::stairs;
+	}
+	return EnvironmentActiveObject::EnvironmentObjectType::platform; 
+}
+
 
 void JsonImporter::ImportEnvironmentObjects(const std::string& jsonPath, Map& gameMap, SpriteManager& SpriteManager) const
 {
@@ -67,7 +76,8 @@ void JsonImporter::ImportEnvironmentObjects(const std::string& jsonPath, Map& ga
 							x,
 							y,
 							colliders,
-							pTexture
+							pTexture,
+							StringToType(obj.at("objectType").get<std::string>())
 						});
 
 				}
