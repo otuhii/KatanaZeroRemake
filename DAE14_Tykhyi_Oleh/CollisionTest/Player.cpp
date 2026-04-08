@@ -233,7 +233,7 @@ void Player::HandleKeyboard(const Uint8* pStates, float elapsedSec)
 		if (!IsOnGround() && pStates[SDL_SCANCODE_S])
 		{
 			float 
-				fallSpeedUp{ 1500.f };
+				fallSpeedUp{ 2000.f };
 
 			SetVelocityY(GetVelocityY() - fallSpeedUp * elapsedSec);
 		}
