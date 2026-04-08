@@ -98,9 +98,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Prog2Game.targets" />
-    <None Include="Resources\json\PlayerAnimationFramesInfo.json" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Resources\json\GameEnvironment.json" />
+    <CopyFileToFolders Include="Resources\json\PlayerAnimationFramesInfo.json" />
   </ItemGroup>
 </Project>

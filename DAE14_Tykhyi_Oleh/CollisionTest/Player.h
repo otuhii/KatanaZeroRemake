@@ -11,9 +11,12 @@ public:
 
 		staying,
 		beforeRun,
+		afterRun,
 		run,
 		roll,
 		jump,
+		crouch,
+		postCrouch,
 		fall,
 		attack,
 		attackSplash,

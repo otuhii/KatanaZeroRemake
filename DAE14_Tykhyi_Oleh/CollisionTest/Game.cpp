@@ -30,11 +30,11 @@ void Game::Initialize( )
 	m_JsonImporter.ImportEnvironmentObjects("json/GameEnvironment.json", *m_pMap, *m_pSpriteManager);
 
 	m_pPlayer = new Player(
-		m_pSpriteManager->CreateSprite("img/ProcessedPlayerSpriteSheet.png"),
+		m_pSpriteManager->CreateSprite("img/final_ProcessedPlayerSpriteSheet.png"),
 		m_pSpriteManager->CreateSprite("img/SplashAnimation.png"),
 		m_JsonImporter.ImportAnimationFrameObjects("json/PlayerAnimationFramesInfo.json"),
 		Vector2f{ 100.f, 100.f }, 
-		250.f);
+		350.f);
 }
 
 void Game::Cleanup( )
