@@ -14,7 +14,7 @@ public:
 
 	~Sprite();
 
-	void Draw(const Vector2f& drawPos, bool pivot) const;
+	void Draw(const Vector2f& drawPos, bool pivotX, bool pivotY) const;
 
 	void Update(float elapsedSec);
 

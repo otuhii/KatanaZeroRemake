@@ -36,6 +36,7 @@ public:
 	const Vector2f& GetPosition()	const;
 
 	const Rectf&    GetHitbox()		const;
+
 protected:
 	Sprite* GetSprite() const;
 

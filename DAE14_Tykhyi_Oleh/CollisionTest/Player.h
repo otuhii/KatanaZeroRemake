@@ -43,6 +43,7 @@ private:
 	void ProcessStateChange(bool isMoving, bool roll);
 	void HandleKeyboard(const Uint8* pStates, float elapsedSec);
 
+	void DrawSplash() const;
 	float CalculateSplashRotation(const Vector2f& mouseVec);
 };
 

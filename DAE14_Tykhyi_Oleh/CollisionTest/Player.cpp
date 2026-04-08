@@ -26,12 +26,11 @@ Player::Player(Sprite* sprite, Sprite* splashSprite, const std::vector<Animation
 
 void Player::Draw() const
 {
-	GetSprite()->Draw(GetPosition(), true);
-	m_SplashSprite->Draw(GetPosition(), true); //TODO fix position for it
+	GetSprite()->Draw(GetPosition(), true, false);
+	DrawSplash();
 
-	
 	utils::SetColor(Color4f{ 0.f, 1.f, 0.f, 1.f });
-	utils::DrawRect(GetHitbox());
+	//utils::DrawRect(GetHitbox());
 }
 
 void Player::Update(float elapsedSec, const Uint8* pStates, const Rectf& viewport)
@@ -243,37 +242,45 @@ void Player::HandleKeyboard(const Uint8* pStates, float elapsedSec)
 	);
 }
 
+void Player::DrawSplash() const
+{
+	Vector2f
+		splashPosition{ GetPosition() };
+
+	if (m_SplashSprite->IsVisible())
+	{
+		splashPosition.y += (GetSprite()->GetCurrentFrameDimensions().height) * 0.5f;
+	}
+
+
+	float offset{ 30.0f };
+	if (GetSprite()->IsFlippedHorizontally())
+	{
+		splashPosition.x -= offset;
+		m_SplashSprite->FlipVertically();
+	}
+	else
+	{
+		splashPosition.x += offset;
+		m_SplashSprite->ResetVerticalFlip();
+	}
+
+	m_SplashSprite->Draw(splashPosition, true, true);
+}
+
+
 float Player::CalculateSplashRotation(const Vector2f& mouseVec)
 {
-	//Vector2f
-	//	playerDirectionVector{ GetPositionX(), GetPositionY() },
-	//	mouseDirectionVector{ mouseVec-GetPosition() };
+	Vector2f 
+		splashOrigin{ GetPosition() };
 
-	//float angle{ UserUtils::AngleBetweenVectors(
-	//	mouseDirectionVector,
-	//	playerDirectionVector
-	//) };
+	splashOrigin.y += (GetSprite()->GetCurrentFrameDimensions().height) * 0.5f;
 
-	///*if (angle > M_PI / 2)
-	//{
-	//	angle -= static_cast<float>(M_PI / 2);
-	//	GetSprite()->FlipHorizontally();
-	//	m_SplashSprite->FlipHorizontally();
-	//}
-	//else if (angle < -M_PI / 2)
-	//{
-	//	angle += static_cast<float>(M_PI / 2);
-	//	GetSprite()->FlipHorizontally();
-	//	m_SplashSprite->FlipHorizontally();
-	//}*/
+	Vector2f
+		direction{ mouseVec - splashOrigin };
 
-	//angle *= static_cast<float>(180 / M_PI);
+	float
+		angle{ static_cast<float>(180.f / M_PI) * std::atan2(direction.y, direction.x)};
 
-	//std::cout << "ANGLE -> " << angle << std::endl;
-
-	//return -angle;
-
-
-	//TODO after i will do basic collisions and stuff, add a rotation for splash because i will have move accurate mouse position then
-	return 0.f;
+	return angle;
 }

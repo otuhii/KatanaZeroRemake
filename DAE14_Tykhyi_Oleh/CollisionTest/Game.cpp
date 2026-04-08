@@ -7,6 +7,7 @@
 #include "Map.h"
 
 #include <iostream>
+#include "utils.h"
 
 Game::Game( const Window& window ) 
 	:BaseGame{ window }
@@ -109,4 +110,5 @@ void Game::ClearBackground( ) const
 	glClearColor( 0.0f, 0.0f, 0.3f, 1.0f );
 	glClear( GL_COLOR_BUFFER_BIT );
 }
+
 
