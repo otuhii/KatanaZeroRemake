@@ -59,7 +59,7 @@ void CollisionManager::HandleAABB(Entity* pEntity, const Rectf& objectCollider, 
 																	  //overlapped wall can be handled as a stair step
 			{
 				pEntity->SetPositionY(objectCollider.bottom + objectCollider.height);
-				pEntity->SetVelocity(Vector2f{0.f, 0.f});
+				pEntity->SetVelocityY(0.f);
 				pEntity->SetIsOnGroundState(true);
 				return;
 			}
@@ -73,7 +73,7 @@ void CollisionManager::HandleAABB(Entity* pEntity, const Rectf& objectCollider, 
 			{
 				pEntity->SetPositionX(objectCollider.left + objectCollider.width);
 			}
-			pEntity->SetVelocity(Vector2f{ 0.f, 0.f });
+			pEntity->SetVelocityX(0.f);
 		}
 		else 
 		{
@@ -86,7 +86,7 @@ void CollisionManager::HandleAABB(Entity* pEntity, const Rectf& objectCollider, 
 				pEntity->SetPositionY(objectCollider.bottom + objectCollider.height);
 				pEntity->SetIsOnGroundState(true);
 			}
-			pEntity->SetVelocity(Vector2f{ 0.f, 0.f });
+			pEntity->SetVelocityY( 0.f );
 		}
 	}
 	

@@ -13,7 +13,6 @@ void Entity::Update(float elapsedSec, const Rectf& viewport)
 	float 
 		gravity{ -981.f };
 
-
 	m_Velocity.y += gravity * elapsedSec;
 
 }

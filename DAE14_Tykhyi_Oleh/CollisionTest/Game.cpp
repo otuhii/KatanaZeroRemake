@@ -47,8 +47,7 @@ void Game::Cleanup( )
 
 void Game::Update( float elapsedSec )
 {
-	//std::cout << 1 / elapsedSec << std::endl;
-
+	std::cout << 1 / elapsedSec << std::endl;
 
 	const Uint8 *pStates = SDL_GetKeyboardState( nullptr );
 	

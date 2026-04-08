@@ -31,12 +31,12 @@ void Player::Draw() const
 
 	
 	utils::SetColor(Color4f{ 0.f, 1.f, 0.f, 1.f });
-	utils::DrawRect(GetHitbox());
+	//utils::DrawRect(GetHitbox());
 }
 
 void Player::Update(float elapsedSec, const Uint8* pStates, const Rectf& viewport)
 {
-	HandleKeyboard(pStates);
+	HandleKeyboard(pStates, elapsedSec);
 	Entity::Update(elapsedSec, viewport);
 }
 
@@ -146,7 +146,7 @@ void Player::ProcessStateChange(bool isMoving, bool roll)
 
 		if (!isMoving)
 		{
-			SetState(PlayerState::staying);
+			SetState(PlayerState::afterRun);
 		}
 		break;
 	}
@@ -154,14 +154,25 @@ void Player::ProcessStateChange(bool isMoving, bool roll)
 	{
 		if (!isMoving)
 		{
-			SetState(PlayerState::staying);
+			SetState(PlayerState::afterRun);
 		}
 		break;
+	}
+	case PlayerState::afterRun:
+	{
+		if (isMoving)
+		{
+			SetState(PlayerState::beforeRun);
+		}
+		else if (GetSprite()->IsFinished())
+		{
+			SetState(PlayerState::staying);
+		}
 	}
 	}
 }
 
-void Player::HandleKeyboard(const Uint8* pStates)
+void Player::HandleKeyboard(const Uint8* pStates, float elapsedSec)
 {
 	if (m_State != PlayerState::roll)
 	{
@@ -197,14 +208,30 @@ void Player::HandleKeyboard(const Uint8* pStates)
 		}
 		else
 		{
-			SetVelocityX(0.f);
+			float
+				friction{ 2000.f },
+				currentVelocityX{ GetVelocityX() },
+				velEps{ 0.1f };
+
+			if (std::abs(currentVelocityX) > velEps)
+			{
+				float
+					newVelocityX{ currentVelocityX - (currentVelocityX / std::abs(currentVelocityX) * friction * elapsedSec) };
+
+				if ((currentVelocityX > 0 && newVelocityX < 0) ||
+					(currentVelocityX < 0 && newVelocityX > 0))
+				{
+					newVelocityX = 0.f;
+				}
+				SetVelocityX(newVelocityX);
+			}
 		}
 
 		if (pStates[SDL_SCANCODE_W])
 		{
 			if (IsOnGround())
 			{
-				SetVelocityY(500.f);
+				SetVelocityY(450.f);
 				SetIsOnGroundState(false); //TODO CHANGE HANDLING
 			}
 		}
