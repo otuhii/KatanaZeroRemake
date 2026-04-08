@@ -33,10 +33,13 @@ public:
 	void SetState(PlayerState state);
 
 	void ProcessMouseUpEvent(const SDL_MouseButtonEvent& e, const Rectf& viewport);
+
+	std::vector<Vector2f> GetSplashHitbox() const;
 private:
 	PlayerState m_State;
 	
 	std::vector<AnimationFrameInfo> m_PlayerSpriteFrames{};
+	std::vector<Vector2f>			m_SplashHitboxPoints{};
 
 	Sprite* m_SplashSprite;
 
@@ -45,5 +48,7 @@ private:
 
 	void DrawSplash() const;
 	float CalculateSplashRotation(const Vector2f& mouseVec);
+
+	void UpdateSplashHitbox();
 };
 

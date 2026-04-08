@@ -5,7 +5,8 @@
 #include "UserUtils.h"
 #include "utils.h"
 
-#include <iostream>
+#include "Matrix2x3.h"
+
 
 Player::Player(Sprite* sprite, Sprite* splashSprite, const std::vector<AnimationFrameInfo>& playerAnimation, const Vector2f& position, float speed)
 	: Entity(sprite, position, Vector2f{}, speed),
@@ -30,7 +31,7 @@ void Player::Draw() const
 	DrawSplash();
 
 	utils::SetColor(Color4f{ 0.f, 1.f, 0.f, 1.f });
-	//utils::DrawRect(GetHitbox());
+	utils::DrawRect(GetHitbox());
 }
 
 void Player::Update(float elapsedSec, const Uint8* pStates, const Rectf& viewport)
@@ -68,12 +69,30 @@ void Player::ProcessMouseUpEvent(const SDL_MouseButtonEvent & e, const Rectf& vi
 			{
 				GetSprite()->ResetHorizontalFlip();
 			}
+
+			m_SplashSprite->RotateBy(CalculateSplashRotation(
+				Vector2f{ static_cast<float>(e.x), static_cast<float>(e.y) }
+			));
+
+			UpdateSplashHitbox();
 		}
-		m_SplashSprite->RotateBy(CalculateSplashRotation(
-			Vector2f{static_cast<float>(e.x), static_cast<float>(e.y)}
-		));
+		
 	}
 }
+
+
+std::vector<Vector2f> Player::GetSplashHitbox() const
+{
+	if (m_State == PlayerState::attack)
+	{
+		return m_SplashHitboxPoints;
+	}
+	else
+	{
+		return std::vector<Vector2f>{};
+	}
+}
+
 
 // TODO write down my state system so it will be easier to program
 void Player::ProcessStateChange(bool isMoving, bool roll)
@@ -85,6 +104,11 @@ void Player::ProcessStateChange(bool isMoving, bool roll)
 	{
 		if (GetSprite()->IsFinished())
 		{
+			if (m_State == PlayerState::roll)
+			{
+				SetVelocityX(0.f);
+			}
+
 			SetState(PlayerState::staying);
 			m_SplashSprite->SetVisible(false);
 			m_SplashSprite->ResetAnimation();
@@ -208,7 +232,7 @@ void Player::HandleKeyboard(const Uint8* pStates, float elapsedSec)
 		else
 		{
 			float
-				friction{ 2000.f },
+				friction{ 1200.f },
 				currentVelocityX{ GetVelocityX() },
 				velEps{ 0.1f };
 
@@ -252,10 +276,10 @@ void Player::DrawSplash() const
 		splashOrigin.y += (GetSprite()->GetCurrentFrameDimensions().height) * 0.75f;
 
 		const float
-			offset{ 30.0f };
+			offset{ 30.f };
 
 		//offseting origin depending on the angle of splash rotation
-		float rotAngle{ (float(M_PI) / 180.f) * m_SplashSprite->GetRotation() };
+		float rotAngle{ static_cast<float>(M_PI / 180.f) * m_SplashSprite->GetRotation() };
 
 		splashOrigin.x += std::cosf(rotAngle) * offset;
 		splashOrigin.y += std::sinf(rotAngle) * offset;
@@ -272,6 +296,12 @@ void Player::DrawSplash() const
 	}
 
 	m_SplashSprite->Draw(splashOrigin, true, true);
+
+	if (m_SplashSprite->IsVisible())
+	{
+		utils::SetColor(Color4f{ 0.f, 1.f, 0.f, 1.f });
+		utils::DrawPolygon(m_SplashHitboxPoints);
+	}
 }
 
 float Player::CalculateSplashRotation(const Vector2f& mouseVec)
@@ -289,3 +319,80 @@ float Player::CalculateSplashRotation(const Vector2f& mouseVec)
 
 	return angle;
 }
+
+
+//SIMPLE IMPLEMENTATION OF ATTACK BOX AT THE TIP OF THE ATTACK SPRITE
+//	i am not sure if it is a good thing to generate hitboxes 
+// and like physics related stuff based on animation of the attack 
+
+//Rectf Player::GetAttackHitbox() const
+//{
+//	const float
+//		attackRange{ 70.f },
+//		splashRotationAngle{ (float(M_PI) / 180.f) * m_SplashSprite->GetRotation() };
+//
+//	Vector2f 
+//		anchorPoint{ GetPosition() };
+//
+//	anchorPoint.y += (GetSprite()->GetCurrentFrameDimensions().height) * 0.75f;
+//
+//	Vector2f hitboxCenter{
+//		anchorPoint.x + std::cosf(splashRotationAngle) * attackRange,
+//		anchorPoint.y + std::sinf(splashRotationAngle) * attackRange
+//	};
+//
+//	float size{ 80.f };
+//
+//	return Rectf{
+//		hitboxCenter.x - size * 0.5f,
+//		hitboxCenter.y - size * 0.5f,
+//		size,
+//		size
+//	};
+//
+//
+//}
+
+void Player::UpdateSplashHitbox()
+{
+	const std::vector<Vector2f> baseSplashHitbox{
+		Vector2f{0.f, 10.f},
+		Vector2f{0.f, -10.f},
+		Vector2f{100.f, -20.f},
+		Vector2f{100.f, 20.f}
+	};
+
+	const float
+		rotationAngle{ m_SplashSprite->GetRotation() },
+		offset{ 30.f };
+
+	Vector2f
+		anchorPoint{ GetPosition() };
+		
+	anchorPoint.y += (GetSprite()->GetCurrentFrameDimensions().height) * 0.75f;
+
+	anchorPoint.x += std::cosf(static_cast<float>(M_PI / 180.f) * rotationAngle) * offset;
+	anchorPoint.y += std::sinf(static_cast<float>(M_PI / 180.f) * rotationAngle) * offset;
+
+	Matrix2x3
+		hitboxRotation{},
+		hitboxTranslation{},
+		hitboxVerticalFlip{},
+		transformation{};
+
+	hitboxRotation.SetAsRotate(rotationAngle);
+	hitboxVerticalFlip.SetAsScale(1, -1);
+	hitboxTranslation.SetAsTranslate(anchorPoint);
+
+	if (m_SplashSprite->IsFlippedVertically())
+	{
+		transformation = hitboxTranslation * hitboxRotation * hitboxVerticalFlip;
+	}
+	else
+	{
+		transformation = hitboxTranslation * hitboxRotation;
+	}
+
+	m_SplashHitboxPoints = transformation.Transform(baseSplashHitbox);
+}
+
