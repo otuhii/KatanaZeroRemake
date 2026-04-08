@@ -31,16 +31,19 @@ void Entity::SetVelocity(const Vector2f& velocity)
 void Entity::SetPositionX(float xPos)
 {
 	m_Position.x = xPos;
+	UpdateHitbox();
 }
 
 void Entity::SetPositionY(float yPos)
 {
 	m_Position.y = yPos;
+	UpdateHitbox();
 }
 
 void Entity::SetPosition(const Vector2f& position)
 {
 	m_Position = position;
+	UpdateHitbox();
 }
 
 void Entity::SetIsOnGroundState(bool state)

@@ -6,45 +6,51 @@
           "texturePath": "end_jumpthrough_platform.png",
           "objectType": "platform",
           "renderLayer": 0,
-          "xPosition": 587.2,
-          "yPosition": 275.1,
+          "xPosition": 579.5824,
+          "yPosition": 278.3,
           "scale": 1.0,
           "colliders": [
             {
-              "left": 587.0,
-              "bottom": 343.0,
+              "left": 579.0,
+              "bottom": 346.0,
               "width": 540.0,
-              "height": 3.0
+              "height": 4.0
             },
             {
-              "left": 586.0,
-              "bottom": 328.0,
-              "width": 12.0,
-              "height": 12.0
+              "left": 579.0,
+              "bottom": 326.0,
+              "width": 9.0,
+              "height": 9.0
+            },
+            {
+              "left": 589.0,
+              "bottom": 317.0,
+              "width": 9.0,
+              "height": 9.0
             },
             {
               "left": 599.0,
-              "bottom": 316.0,
-              "width": 13.0,
-              "height": 12.0
+              "bottom": 308.0,
+              "width": 9.0,
+              "height": 9.0
             },
             {
-              "left": 612.0,
-              "bottom": 303.0,
-              "width": 13.0,
-              "height": 13.0
+              "left": 617.0,
+              "bottom": 289.0,
+              "width": 8.0,
+              "height": 8.0
+            },
+            {
+              "left": 608.0,
+              "bottom": 298.0,
+              "width": 9.0,
+              "height": 9.0
             },
             {
               "left": 626.0,
-              "bottom": 290.0,
-              "width": 13.0,
-              "height": 12.0
-            },
-            {
-              "left": 639.0,
-              "bottom": 279.0,
-              "width": 13.0,
-              "height": 11.0
+              "bottom": 282.0,
+              "width": 14.0,
+              "height": 7.0
             }
           ],
           "isTrigger": false,
@@ -62,14 +68,26 @@
             {
               "left": 897.0,
               "bottom": 157.0,
-              "width": 15.0,
-              "height": 16.0
+              "width": 7.0,
+              "height": 7.0
+            },
+            {
+              "left": 905.0,
+              "bottom": 165.0,
+              "width": 8.0,
+              "height": 8.0
             },
             {
               "left": 913.0,
               "bottom": 173.0,
-              "width": 16.0,
-              "height": 15.0
+              "width": 8.0,
+              "height": 8.0
+            },
+            {
+              "left": 921.0,
+              "bottom": 181.0,
+              "width": 8.0,
+              "height": 7.0
             }
           ],
           "isTrigger": false
@@ -85,14 +103,26 @@
             {
               "left": 833.0,
               "bottom": 95.0,
-              "width": 15.0,
-              "height": 16.0
+              "width": 7.0,
+              "height": 7.0
+            },
+            {
+              "left": 841.0,
+              "bottom": 103.0,
+              "width": 8.0,
+              "height": 8.0
             },
             {
               "left": 849.0,
               "bottom": 111.0,
-              "width": 16.0,
-              "height": 15.0
+              "width": 8.0,
+              "height": 8.0
+            },
+            {
+              "left": 857.0,
+              "bottom": 119.0,
+              "width": 8.0,
+              "height": 7.0
             }
           ],
           "isTrigger": false
@@ -127,14 +157,26 @@
             {
               "left": 800.0,
               "bottom": 63.0,
-              "width": 15.0,
-              "height": 16.0
+              "width": 7.0,
+              "height": 7.0
+            },
+            {
+              "left": 808.0,
+              "bottom": 71.0,
+              "width": 8.0,
+              "height": 8.0
             },
             {
               "left": 816.0,
               "bottom": 79.0,
-              "width": 16.0,
-              "height": 15.0
+              "width": 8.0,
+              "height": 8.0
+            },
+            {
+              "left": 824.0,
+              "bottom": 87.0,
+              "width": 8.0,
+              "height": 7.0
             }
           ],
           "isTrigger": false
@@ -150,14 +192,26 @@
             {
               "left": 865.0,
               "bottom": 125.0,
-              "width": 15.0,
-              "height": 16.0
+              "width": 7.0,
+              "height": 7.0
+            },
+            {
+              "left": 873.0,
+              "bottom": 133.0,
+              "width": 8.0,
+              "height": 8.0
             },
             {
               "left": 881.0,
-              "bottom": 142.0,
-              "width": 16.0,
-              "height": 15.0
+              "bottom": 141.0,
+              "width": 8.0,
+              "height": 8.0
+            },
+            {
+              "left": 889.0,
+              "bottom": 149.0,
+              "width": 8.0,
+              "height": 7.0
             }
           ],
           "isTrigger": false
@@ -173,14 +227,26 @@
             {
               "left": 929.0,
               "bottom": 189.0,
-              "width": 15.0,
-              "height": 16.0
+              "width": 7.0,
+              "height": 7.0
+            },
+            {
+              "left": 937.0,
+              "bottom": 197.0,
+              "width": 8.0,
+              "height": 8.0
             },
             {
               "left": 945.0,
               "bottom": 205.0,
-              "width": 16.0,
-              "height": 15.0
+              "width": 8.0,
+              "height": 8.0
+            },
+            {
+              "left": 953.0,
+              "bottom": 213.0,
+              "width": 8.0,
+              "height": 7.0
             }
           ],
           "isTrigger": false
@@ -196,14 +262,26 @@
             {
               "left": 962.0,
               "bottom": 221.0,
-              "width": 15.0,
-              "height": 16.0
+              "width": 7.0,
+              "height": 7.0
+            },
+            {
+              "left": 970.0,
+              "bottom": 229.0,
+              "width": 8.0,
+              "height": 8.0
             },
             {
               "left": 978.0,
               "bottom": 237.0,
-              "width": 16.0,
-              "height": 15.0
+              "width": 8.0,
+              "height": 8.0
+            },
+            {
+              "left": 986.0,
+              "bottom": 245.0,
+              "width": 8.0,
+              "height": 7.0
             }
           ],
           "isTrigger": false
@@ -219,14 +297,26 @@
             {
               "left": 994.0,
               "bottom": 253.0,
-              "width": 15.0,
-              "height": 16.0
+              "width": 7.0,
+              "height": 7.0
+            },
+            {
+              "left": 1002.0,
+              "bottom": 261.0,
+              "width": 8.0,
+              "height": 8.0
             },
             {
               "left": 1010.0,
               "bottom": 269.0,
-              "width": 16.0,
-              "height": 15.0
+              "width": 8.0,
+              "height": 8.0
+            },
+            {
+              "left": 1018.0,
+              "bottom": 277.0,
+              "width": 8.0,
+              "height": 7.0
             }
           ],
           "isTrigger": false
@@ -242,14 +332,26 @@
             {
               "left": 1026.0,
               "bottom": 284.0,
-              "width": 15.0,
-              "height": 16.0
+              "width": 7.0,
+              "height": 7.0
+            },
+            {
+              "left": 1034.0,
+              "bottom": 292.0,
+              "width": 8.0,
+              "height": 8.0
             },
             {
               "left": 1042.0,
-              "bottom": 301.0,
-              "width": 16.0,
-              "height": 15.0
+              "bottom": 300.0,
+              "width": 8.0,
+              "height": 8.0
+            },
+            {
+              "left": 1050.0,
+              "bottom": 308.0,
+              "width": 8.0,
+              "height": 7.0
             }
           ],
           "isTrigger": false
@@ -265,14 +367,26 @@
             {
               "left": 1058.0,
               "bottom": 316.0,
-              "width": 15.0,
-              "height": 16.0
+              "width": 7.0,
+              "height": 7.0
+            },
+            {
+              "left": 1066.0,
+              "bottom": 324.0,
+              "width": 8.0,
+              "height": 8.0
             },
             {
               "left": 1074.0,
               "bottom": 332.0,
-              "width": 16.0,
-              "height": 15.0
+              "width": 8.0,
+              "height": 8.0
+            },
+            {
+              "left": 1082.0,
+              "bottom": 340.0,
+              "width": 8.0,
+              "height": 7.0
             }
           ],
           "isTrigger": false
@@ -281,13 +395,13 @@
           "texturePath": "env_ground.png",
           "objectType": "platform",
           "renderLayer": 0,
-          "xPosition": 1090.58447,
-          "yPosition": 284.5,
+          "xPosition": 1090.2,
+          "yPosition": 286.2,
           "scale": 1.0,
           "colliders": [
             {
               "left": 1090.0,
-              "bottom": 284.0,
+              "bottom": 286.0,
               "width": 800.0,
               "height": 64.0
             }
@@ -300,13 +414,13 @@
           "texturePath": "env_top_platform.png",
           "objectType": "platform",
           "renderLayer": 0,
-          "xPosition": -61.0,
-          "yPosition": 275.0,
+          "xPosition": -69.1,
+          "yPosition": 278.3,
           "scale": 1.0,
           "colliders": [
             {
-              "left": -61.0,
-              "bottom": 275.0,
+              "left": -70.0,
+              "bottom": 278.0,
               "width": 648.0,
               "height": 72.0
             }
@@ -332,25 +446,6 @@
           "yPosition": 302.5345,
           "scale": 2.0,
           "colliders": []
-        },
-        {
-          "texturePath": "env_top_platform.png",
-          "objectType": "platform",
-          "renderLayer": 0,
-          "xPosition": -553.53595,
-          "yPosition": 66.73172,
-          "scale": 1.0,
-          "colliders": [
-            {
-              "left": -554.0,
-              "bottom": 66.0,
-              "width": 648.0,
-              "height": 72.0
-            }
-          ],
-          "isTrigger": false,
-          "objectName": "Pfb_Env_BigGroundTile 1 (1)",
-          "layerName": "Default"
         }
       ]
     }

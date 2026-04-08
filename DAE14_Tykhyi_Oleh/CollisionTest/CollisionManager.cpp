@@ -17,20 +17,15 @@ void CollisionManager::HandleMovement(Entity* pEntity, const Map& map, float ela
 	pEntity->SetPositionY(entityPosition.y);
 	pEntity->SetIsOnGroundState(false); //assuming that player is in the air
 	CheckCollision(pEntity, map, false);
-	
 }
 
 void CollisionManager::CheckCollision(Entity* pEntity, const Map& map, bool isHorizontalMovement) const
 {
-	const float
-		objectTriggerRange{ 200.f };
-
 	for (const EnvironmentActiveObject& object : map.GetEnvironmentActiveObjects())
 	{
 		for (const Rectf& collider : object.GetColliders())
 		{
-			HandleAABB(
-				pEntity, collider, isHorizontalMovement);
+			HandleAABB(pEntity, collider, isHorizontalMovement);
 		}
 	}
 }
@@ -42,7 +37,7 @@ void CollisionManager::HandleAABB(Entity* pEntity, const Rectf& objectCollider, 
 
 	const float
 		velEps{ 0.1f },
-		maxStepHeight{ 15.f };
+		maxStepHeight{ 7.f };
 
 	if (isHorizontalMovement) //shrinking hitbox in the bottom part because otherwise collision 
 							  //is triggered when he is simply standing on the floor
@@ -53,22 +48,22 @@ void CollisionManager::HandleAABB(Entity* pEntity, const Rectf& objectCollider, 
 		entityHitbox.height -= shrinkValue;
 	}
 
-
 	if (utils::IsOverlapping(entityHitbox, objectCollider))
 	{
-		if (isHorizontalMovement)
+		if (isHorizontalMovement && pEntity->IsOnGround())
 		{
 			float 
 				overlapHeight{ (objectCollider.bottom + objectCollider.height) - entityHitbox.bottom };
 
 			if (overlapHeight <= maxStepHeight && overlapHeight > 0) //step-up logic which checks if current
-																	//overlapped wall can be handled as a stair step
+																	  //overlapped wall can be handled as a stair step
 			{
 				pEntity->SetPositionY(objectCollider.bottom + objectCollider.height);
-				pEntity->SetVelocityY(0.f);
-				pEntity->UpdateHitbox();
+				pEntity->SetVelocity(Vector2f{0.f, 0.f});
+				pEntity->SetIsOnGroundState(true);
 				return;
 			}
+
 
 			if (pEntity->GetVelocityX() > velEps)
 			{
@@ -78,22 +73,21 @@ void CollisionManager::HandleAABB(Entity* pEntity, const Rectf& objectCollider, 
 			{
 				pEntity->SetPositionX(objectCollider.left + objectCollider.width);
 			}
-			pEntity->SetVelocityX(0.f);
+			pEntity->SetVelocity(Vector2f{ 0.f, 0.f });
 		}
-		else
+		else 
 		{
-			if (pEntity->GetVelocityY() > 0)
+			if (pEntity->GetVelocityY() > velEps)
 			{
-				pEntity->SetPositionY(objectCollider.bottom - entityHitbox.height);
+				pEntity->SetPositionY(objectCollider.bottom - pEntity->GetHitbox().height);
 			}
 			else 
 			{
 				pEntity->SetPositionY(objectCollider.bottom + objectCollider.height);
 				pEntity->SetIsOnGroundState(true);
 			}
-			pEntity->SetVelocityY(0.f);
+			pEntity->SetVelocity(Vector2f{ 0.f, 0.f });
 		}
-
 	}
-	pEntity->UpdateHitbox();
+	
 }
