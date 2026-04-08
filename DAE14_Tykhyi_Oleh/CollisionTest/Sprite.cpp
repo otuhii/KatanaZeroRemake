@@ -13,7 +13,6 @@ Sprite::Sprite(const std::string& spritesheetTexturePath)
 	m_AnimationFrameInfo.frameDimension.height = m_pSpritesheet->GetHeight();
 	m_AnimationFrameInfo.maxFrameCount = 1;
 	m_AnimationFrameInfo.frameTime = 1.f;
-
 }
 
 Sprite::~Sprite()
@@ -116,21 +115,31 @@ void Sprite::ResetAnimation()
 	m_RotationAngle = 0.f;
 }
 
-void Sprite::Draw(const Vector2f& drawPos) const
+void Sprite::Draw(const Vector2f& drawPos, bool pivot) const
 {
 	if (!m_IsVisible) { return; }
 
 	glPushMatrix();
 	{
+		float 
+			halfWidth{m_AnimationFrameInfo.frameDimension.width * 0.5f},
+			halfHeight{m_AnimationFrameInfo.frameDimension.height * 0.5f};
+
 		glTranslatef(drawPos.x, drawPos.y, 0.f);
 		glRotatef(m_RotationAngle, 0.f, 0.f, 1.f);
 		glScalef(m_ScaleValue, m_ScaleValue, 1.f);
 
+		if (pivot)
+		{
+			Vector2f
+				pivotPoint{ -halfWidth,0.f };
+
+			glTranslatef(pivotPoint.x, pivotPoint.y, 0.f);
+		}
+
 		if (m_IsFlippedHorizontally)
 		{
-			float halfWidth{
-				m_AnimationFrameInfo.frameDimension.width * 0.5f
-			};
+			
 			glTranslatef(halfWidth, 0.f, 0.f);
 
 			glScalef(-1.f, 1.f, 1.f);
@@ -140,9 +149,7 @@ void Sprite::Draw(const Vector2f& drawPos) const
 
 		if (m_IsFlippedVertically)
 		{
-			float halfHeight{
-				m_AnimationFrameInfo.frameDimension.height * 0.5f
-			};
+			
 			glTranslatef(0.f, halfHeight, 0.f);
 
 			glScalef(1.f, -1.f, 1.f);

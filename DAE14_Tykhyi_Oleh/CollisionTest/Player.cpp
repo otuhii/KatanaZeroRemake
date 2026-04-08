@@ -26,12 +26,12 @@ Player::Player(Sprite* sprite, Sprite* splashSprite, const std::vector<Animation
 
 void Player::Draw() const
 {
-	GetSprite()->Draw(GetPosition());
-	m_SplashSprite->Draw(GetPosition()); //TODO fix position for it
+	GetSprite()->Draw(GetPosition(), true);
+	m_SplashSprite->Draw(GetPosition(), true); //TODO fix position for it
 
 	
 	utils::SetColor(Color4f{ 0.f, 1.f, 0.f, 1.f });
-	//utils::DrawRect(GetHitbox());
+	utils::DrawRect(GetHitbox());
 }
 
 void Player::Update(float elapsedSec, const Uint8* pStates, const Rectf& viewport)

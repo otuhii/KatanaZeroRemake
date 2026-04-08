@@ -59,7 +59,7 @@ void Entity::UpdateHitbox()
 	m_Hitbox.width = hitboxWidth * GetSprite()->GetScale();
 	m_Hitbox.height = hitboxHeight * GetSprite()->GetScale();
 
-	m_Hitbox.left = m_Position.x + (m_Hitbox.width * 0.5f);
+	m_Hitbox.left = m_Position.x - (m_Hitbox.width * 0.5f);
 	m_Hitbox.bottom = m_Position.y;
 }
 
