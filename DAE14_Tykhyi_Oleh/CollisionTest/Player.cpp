@@ -38,11 +38,6 @@ void Player::Update(float elapsedSec, const Uint8* pStates, const Rectf& viewpor
 {
 	HandleKeyboard(pStates, elapsedSec);
 	Entity::Update(elapsedSec, viewport);
-
-	if (m_State == PlayerState::attack)
-	{
-		UpdateSplashHitbox();
-	}
 }
 
 void Player::SetState(PlayerState state)
@@ -60,28 +55,30 @@ void Player::SetState(PlayerState state)
 
 void Player::ProcessMouseUpEvent(const SDL_MouseButtonEvent & e, const Rectf& viewport)
 {
-	if (e.button == SDL_BUTTON_LEFT)
+	if (e.button == SDL_BUTTON_LEFT && 
+		m_State != PlayerState::attack)
 	{
-		if (m_State != PlayerState::attack)
+		SetState(PlayerState::attack);
+
+		Vector2f
+			mousePos{ static_cast<float>(e.x), static_cast<float>(e.y) };
+
+		Dash(mousePos);
+
+		if (mousePos.x < GetPositionX()) // TODO i should check it in the middle of the sprite/hitbox
 		{
-			SetState(PlayerState::attack);
-
-			if (e.x < GetPositionX()) // TODO i should check it in the middle of the sprite/hitbox
-			{
-				GetSprite()->FlipHorizontally();
-			}
-			else
-			{
-				GetSprite()->ResetHorizontalFlip();
-			}
-
-			m_SplashSprite->RotateBy(CalculateSplashRotation(
-				Vector2f{ static_cast<float>(e.x), static_cast<float>(e.y) }
-			));
-
-			UpdateSplashHitbox();
+			GetSprite()->FlipHorizontally();
 		}
-		
+		else
+		{
+			GetSprite()->ResetHorizontalFlip();
+		}
+
+		m_SplashSprite->RotateBy(CalculateSplashRotation(
+			 mousePos
+		));
+
+		UpdateSplashHitbox();
 	}
 }
 
@@ -228,6 +225,12 @@ void Player::ProcessStateChange(bool isMoving, bool roll, bool crouch)
 
 void Player::HandleKeyboard(const Uint8* pStates, float elapsedSec)
 {
+	if (m_State == PlayerState::attack)
+	{
+		UpdateSplashHitbox();
+		ApplyAirResistance(elapsedSec);
+	}
+
 	if (m_State != PlayerState::roll)
 	{
 		if (!IsOnGround() && pStates[SDL_SCANCODE_S])
@@ -420,6 +423,20 @@ void Player::UpdateSplashHitbox()
 	m_SplashHitboxPoints = transformation.Transform(baseSplashHitbox);
 }
 
+void Player::Dash(const Vector2f& mousePos)
+{
+	Vector2f
+		playerPos{ GetPosition() };
+
+	Vector2f
+		dashDirection{ (mousePos - playerPos).Normalized() };
+
+	float
+		dashForce{ 900.f };
+
+	SetVelocity(dashForce * dashDirection);
+}
+
 void Player::ApplyFriction(float elapsedSec)
 {
 	float
@@ -438,6 +455,25 @@ void Player::ApplyFriction(float elapsedSec)
 			newVelocityX = 0.f;
 		}
 		SetVelocityX(newVelocityX);
+	}
+}
+
+void Player::ApplyAirResistance(float elapsedSec)
+{
+	float
+		airResistance{ 2000.f };
+
+	Vector2f
+		currentVelocity{ GetVelocity() };
+
+	if (currentVelocity.Length() > 10.f)
+	{
+		currentVelocity -= currentVelocity.Normalized() * airResistance * elapsedSec;
+		SetVelocity(currentVelocity);
+	}
+	else
+	{
+		SetVelocity(Vector2f{ 0.f, 0.f });
 	}
 }
 
