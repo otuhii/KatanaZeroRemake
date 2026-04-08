@@ -43,12 +43,14 @@ private:
 
 	Sprite* m_SplashSprite;
 
-	void ProcessStateChange(bool isMoving, bool roll);
+	void ProcessStateChange(bool isMoving, bool roll, bool crouch);
 	void HandleKeyboard(const Uint8* pStates, float elapsedSec);
 
 	void DrawSplash() const;
 	float CalculateSplashRotation(const Vector2f& mouseVec);
 
 	void UpdateSplashHitbox();
+
+	void ApplyFriction(float elapsedSec);
 };
 

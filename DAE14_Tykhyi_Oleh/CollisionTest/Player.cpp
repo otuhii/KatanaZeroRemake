@@ -1,11 +1,11 @@
 #include "pch.h"
+
 #include "Player.h"
 #include "AnimationFrameInfo.h"
-
 #include "UserUtils.h"
-#include "utils.h"
 
 #include "Matrix2x3.h"
+#include "utils.h"
 
 
 Player::Player(Sprite* sprite, Sprite* splashSprite, const std::vector<AnimationFrameInfo>& playerAnimation, const Vector2f& position, float speed)
@@ -38,6 +38,11 @@ void Player::Update(float elapsedSec, const Uint8* pStates, const Rectf& viewpor
 {
 	HandleKeyboard(pStates, elapsedSec);
 	Entity::Update(elapsedSec, viewport);
+
+	if (m_State == PlayerState::attack)
+	{
+		UpdateSplashHitbox();
+	}
 }
 
 void Player::SetState(PlayerState state)
@@ -95,7 +100,7 @@ std::vector<Vector2f> Player::GetSplashHitbox() const
 
 
 // TODO write down my state system so it will be easier to program
-void Player::ProcessStateChange(bool isMoving, bool roll)
+void Player::ProcessStateChange(bool isMoving, bool roll, bool crouch)
 {
 	const float
 		velocityThreshold{ 0.1f };
@@ -154,10 +159,36 @@ void Player::ProcessStateChange(bool isMoving, bool roll)
 		break;
 	case PlayerState::staying:
 	{
+		if (crouch && IsOnGround())
+		{
+			SetState(PlayerState::crouch);
+		}
+
 		if (isMoving)
 		{
 			SetState(PlayerState::beforeRun);
 		}
+		break;
+	}
+	case PlayerState::crouch:
+	{
+		if (!crouch)
+		{
+			SetState(PlayerState::postCrouch);
+		}
+		break;
+	}
+	case PlayerState::postCrouch:
+	{
+		if (isMoving)
+		{
+			SetState(PlayerState::beforeRun);
+		}
+		else if (GetSprite()->IsFinished())
+		{
+			SetState(PlayerState::staying);
+		}
+
 		break;
 	}
 	case PlayerState::beforeRun:
@@ -199,9 +230,17 @@ void Player::HandleKeyboard(const Uint8* pStates, float elapsedSec)
 {
 	if (m_State != PlayerState::roll)
 	{
+		if (!IsOnGround() && pStates[SDL_SCANCODE_S])
+		{
+			float 
+				fallSpeedUp{ 1500.f };
+
+			SetVelocityY(GetVelocityY() - fallSpeedUp * elapsedSec);
+		}
+
 		if (pStates[SDL_SCANCODE_D])
 		{
-			if (pStates[SDL_SCANCODE_S])
+			if (pStates[SDL_SCANCODE_S] && IsOnGround())
 			{
 				float rollSpeed{ 500.f }; //TODO change this to more robust option because now my roll is really dependant on animation which is apparently not so good
 
@@ -216,7 +255,7 @@ void Player::HandleKeyboard(const Uint8* pStates, float elapsedSec)
 		}
 		else if (pStates[SDL_SCANCODE_A])
 		{
-			if (pStates[SDL_SCANCODE_S])
+			if (pStates[SDL_SCANCODE_S] && IsOnGround())
 			{
 				float rollSpeed{ 500.f }; //TODO change this to more robust option because now my roll is really dependant on animation which is apparently not so good
 
@@ -231,23 +270,7 @@ void Player::HandleKeyboard(const Uint8* pStates, float elapsedSec)
 		}
 		else
 		{
-			float
-				friction{ 1200.f },
-				currentVelocityX{ GetVelocityX() },
-				velEps{ 0.1f };
-
-			if (std::abs(currentVelocityX) > velEps)
-			{
-				float
-					newVelocityX{ currentVelocityX - (currentVelocityX / std::abs(currentVelocityX) * friction * elapsedSec) };
-
-				if ((currentVelocityX > 0 && newVelocityX < 0) ||
-					(currentVelocityX < 0 && newVelocityX > 0))
-				{
-					newVelocityX = 0.f;
-				}
-				SetVelocityX(newVelocityX);
-			}
+			ApplyFriction(elapsedSec);
 		}
 
 		if (pStates[SDL_SCANCODE_W])
@@ -262,7 +285,8 @@ void Player::HandleKeyboard(const Uint8* pStates, float elapsedSec)
 
 	ProcessStateChange(
 		(pStates[SDL_SCANCODE_D] || pStates[SDL_SCANCODE_A]),
-		(pStates[SDL_SCANCODE_D] && pStates[SDL_SCANCODE_S]) || (pStates[SDL_SCANCODE_A] && pStates[SDL_SCANCODE_S])
+		(pStates[SDL_SCANCODE_D] && pStates[SDL_SCANCODE_S]) || (pStates[SDL_SCANCODE_A] && pStates[SDL_SCANCODE_S]),
+		pStates[SDL_SCANCODE_S] && !pStates[SDL_SCANCODE_D] && !pStates[SDL_SCANCODE_A]
 	);
 }
 
@@ -394,5 +418,26 @@ void Player::UpdateSplashHitbox()
 	}
 
 	m_SplashHitboxPoints = transformation.Transform(baseSplashHitbox);
+}
+
+void Player::ApplyFriction(float elapsedSec)
+{
+	float
+		friction{ 1200.f },
+		currentVelocityX{ GetVelocityX() },
+		velEps{ 0.1f };
+
+	if (std::abs(currentVelocityX) > velEps)
+	{
+		float
+			newVelocityX{ currentVelocityX - (currentVelocityX / std::abs(currentVelocityX) * friction * elapsedSec) };
+
+		if ((currentVelocityX > 0 && newVelocityX < 0) ||
+			(currentVelocityX < 0 && newVelocityX > 0))
+		{
+			newVelocityX = 0.f;
+		}
+		SetVelocityX(newVelocityX);
+	}
 }
 
