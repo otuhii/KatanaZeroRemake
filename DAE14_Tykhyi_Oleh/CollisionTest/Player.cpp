@@ -245,29 +245,34 @@ void Player::HandleKeyboard(const Uint8* pStates, float elapsedSec)
 void Player::DrawSplash() const
 {
 	Vector2f
-		splashPosition{ GetPosition() };
+		splashOrigin{ GetPosition() };
 
 	if (m_SplashSprite->IsVisible())
 	{
-		splashPosition.y += (GetSprite()->GetCurrentFrameDimensions().height) * 0.5f;
-	}
+		splashOrigin.y += (GetSprite()->GetCurrentFrameDimensions().height) * 0.75f;
+
+		const float
+			offset{ 30.0f };
+
+		//offseting origin depending on the angle of splash rotation
+		float rotAngle{ (float(M_PI) / 180.f) * m_SplashSprite->GetRotation() };
+
+		splashOrigin.x += std::cosf(rotAngle) * offset;
+		splashOrigin.y += std::sinf(rotAngle) * offset;
 
 
-	float offset{ 30.0f };
-	if (GetSprite()->IsFlippedHorizontally())
-	{
-		splashPosition.x -= offset;
-		m_SplashSprite->FlipVertically();
-	}
-	else
-	{
-		splashPosition.x += offset;
-		m_SplashSprite->ResetVerticalFlip();
+		if (GetSprite()->IsFlippedHorizontally())
+		{
+			m_SplashSprite->FlipVertically();
+		}
+		else
+		{
+			m_SplashSprite->ResetVerticalFlip();
+		}
 	}
 
-	m_SplashSprite->Draw(splashPosition, true, true);
+	m_SplashSprite->Draw(splashOrigin, true, true);
 }
-
 
 float Player::CalculateSplashRotation(const Vector2f& mouseVec)
 {

@@ -43,6 +43,7 @@ public:
 	const Rectf& GetCurrentFrameDimensions() const;
 
 	float GetScale() const;
+	float GetRotation() const;
 
 	void ResetAnimation();
 private:

@@ -107,6 +107,11 @@ float Sprite::GetScale() const
 	return m_ScaleValue;
 }
 
+float Sprite::GetRotation() const
+{
+	return m_RotationAngle;
+}
+
 void Sprite::ResetAnimation()
 {
 	m_AccumulatedTime = 0.f;
