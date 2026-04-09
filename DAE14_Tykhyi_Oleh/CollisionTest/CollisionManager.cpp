@@ -72,7 +72,6 @@ void CollisionManager::HandleAABB(Entity* pEntity, EnvironmentActiveObject::Envi
 				return;
 			}
 
-
 			if (pEntity->GetVelocityX() > velEps)
 			{
 				pEntity->SetPositionX(objectCollider.left - entityHitbox.width);
@@ -120,10 +119,14 @@ bool CollisionManager::CanMoveThroughPlatform(Entity* pEntity, const Rectf& obje
 		return true;
 	}
 
-	float
-		platformTop{ objectCollider.bottom + objectCollider.height };
+	if (entityVelocity.y < velEps && pEntity->CanJumpThroughPlatform())
+	{
+		return true;
+	}
 
-	float playerFeet{ entityHitbox.bottom };
+	float
+		platformTop{ objectCollider.bottom + objectCollider.height },
+		playerFeet{ entityHitbox.bottom };
 
 	if (playerFeet < platformTop - 15.f)
 	{

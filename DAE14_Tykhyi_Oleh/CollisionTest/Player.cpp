@@ -238,6 +238,8 @@ void Player::HandleKeyboard(const Uint8* pStates, float elapsedSec)
 		downButton	{ static_cast<bool>(pStates[SDL_SCANCODE_S]) },
 		jumpButton	{ static_cast<bool>(pStates[SDL_SCANCODE_W]) };
 
+	SetCanJumpThroughPlatform(downButton || m_State == PlayerState::roll);
+
 	if (m_State != PlayerState::roll)
 	{
 		HandleVerticalMovement(downButton, jumpButton, elapsedSec);

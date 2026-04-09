@@ -50,6 +50,11 @@ void Entity::SetIsOnGroundState(bool state)
 	m_IsOnGround = state;
 }
 
+void Entity::SetCanJumpThroughPlatform(bool canJump)
+{
+	m_CanJumpThroughPlatform = canJump;
+}
+
 void Entity::UpdateHitbox()
 {
 	const float
@@ -121,6 +126,11 @@ const Rectf& Entity::GetHitbox() const
 bool Entity::IsSpriteAnimationFinished() const
 {
 	return m_pSprite->IsFinished();
+}
+
+bool Entity::CanJumpThroughPlatform()
+{
+	return m_CanJumpThroughPlatform;
 }
 
 Sprite* Entity::GetSprite() const

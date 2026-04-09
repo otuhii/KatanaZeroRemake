@@ -20,9 +20,10 @@ public:
 	void SetPosition(const Vector2f& position);
 
 	void SetIsOnGroundState(bool state);
+	void SetCanJumpThroughPlatform(bool canJump);
 
 	void UpdateHitbox();
-	
+
 	bool			IsOnGround()	const;
 
 	float			GetSpeed()		const;
@@ -35,9 +36,10 @@ public:
 	float			GetPositionY()	const;
 	const Vector2f& GetPosition()	const;
 
-	const Rectf&    GetHitbox()		const;
+	const Rectf& GetHitbox()		const;
 
 	bool			IsSpriteAnimationFinished() const;
+	bool			CanJumpThroughPlatform();
 protected:
 	Sprite* GetSprite() const;
 
@@ -46,7 +48,9 @@ private:
 
 	float m_Speed{};
 
-	bool m_IsOnGround{};
+	bool
+		m_IsOnGround{},
+		m_CanJumpThroughPlatform{};
 
 	Vector2f m_Velocity{};
 	Vector2f m_Position{};
