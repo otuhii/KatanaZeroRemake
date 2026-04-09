@@ -26,6 +26,10 @@ EnvironmentActiveObject::EnvironmentObjectType StringToType(const std::string& t
 	{
 		return EnvironmentActiveObject::EnvironmentObjectType::stairs;
 	}
+	if (typeStr == "jumpthroughplatform")
+	{
+		return EnvironmentActiveObject::EnvironmentObjectType::jumpThroughPlatform;
+	}
 	return EnvironmentActiveObject::EnvironmentObjectType::platform; 
 }
 
@@ -61,9 +65,12 @@ void JsonImporter::ImportEnvironmentObjects(const std::string& jsonPath, Map& ga
 				std::string
 					texPath{ obj.value("texturePath", "default.png") };
 
-				Sprite* pTexture{ SpriteManager.CreateSprite("img/" + texPath) };
-
-				pTexture->SetScale(obj.at("scale").get<float>());
+				Sprite* pTexture{ nullptr };
+				if (texPath != "default.png")
+				{
+					pTexture = SpriteManager.CreateSprite("img/" + texPath);
+					pTexture->SetScale(obj.at("scale").get<float>());
+				}
 
 				std::vector<Rectf> colliders;
 

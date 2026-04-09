@@ -9,7 +9,8 @@ public:
 		none=-1,
 
 		platform,
-		stairs
+		stairs,
+		jumpThroughPlatform
 	};
 
 	EnvironmentActiveObject(

@@ -9,7 +9,11 @@ void Map::Draw() const
 
 	for (const EnvironmentActiveObject& obj : m_EnvironmentActiveObjects)
 	{
-		obj.GetTexture()->Draw(obj.GetPosition(), false, false);
+		if (obj.GetTexture() != nullptr)
+		{
+			obj.GetTexture()->Draw(obj.GetPosition(), false, false);
+		}
+
 		utils::SetColor(Color4f{ 0.f, 1.f, 0.f, 1.f });
 		for (const Rectf& collider : obj.GetColliders())
 		{
@@ -19,7 +23,10 @@ void Map::Draw() const
 
 	for (const EnvironmentCosmeticObject& obj : m_EnvironmentCosmeticObjects)
 	{
-		obj.GetTexture()->Draw(obj.GetPosition(), false, false);
+		if (obj.GetTexture() != nullptr)
+		{
+			obj.GetTexture()->Draw(obj.GetPosition(), false, false);
+		}
 	}
 }
 
