@@ -21,10 +21,9 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{6f978733-33ac-428b-856c-a2bf101b83b7}</ProjectGuid>
-    <RootNamespace>CollisionTest</RootNamespace>
+    <ProjectGuid>{618b187e-171f-4135-96b3-8ee57cb1d8e7}</ProjectGuid>
+    <RootNamespace>EnemyTest</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>PlayerMovementTest</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -161,36 +160,22 @@ xcopy "$(ProjectDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
-    <ClCompile Include="EnvironmentCosmeticObject.cpp" />
-    <ClCompile Include="EnvironmentActiveObject.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="JsonImporter.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Map.cpp" />
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="SpriteManager.cpp" />
-    <ClCompile Include="UserUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimationFrameInfo.h" />
-    <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Entity.h" />
-    <ClInclude Include="EnvironmentCosmeticObject.h" />
-    <ClInclude Include="EnvironmentActiveObject.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="JsonImporter.h" />
-    <ClInclude Include="Map.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="Player.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="SpriteManager.h" />
-    <ClInclude Include="UserUtils.h" />
   </ItemGroup>
   <!-- Import the custom .targets file -->
   <Import Project="Prog2Game.targets" />
@@ -207,17 +192,5 @@ xcopy "$(ProjectDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
   <!-- Include the custom .targets file -->
   <ItemGroup>
     <None Include="Prog2Game.targets" />
-    <CopyFileToFolders Include="Resources\json\GameEnvironment.json">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </ExcludedFromBuild>
-      <FileType>Document</FileType>
-      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)\Resources\json\</DestinationFolders>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Resources\json\PlayerAnimationFramesInfo.json">
-      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
-      <FileType>Document</FileType>
-      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)\Resources\json\</DestinationFolders>
-    </CopyFileToFolders>
   </ItemGroup>
 </Project>

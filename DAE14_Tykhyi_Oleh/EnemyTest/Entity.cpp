@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "Entity.h"
 
-#include "CollisionManager.h"
 
 Entity::Entity(Sprite* sprite, const Vector2f& position, const Vector2f& velocity, float speed)
 	: m_pSprite(sprite), m_Velocity(velocity), m_Speed(speed), m_IsOnGround(true), m_Position{position}

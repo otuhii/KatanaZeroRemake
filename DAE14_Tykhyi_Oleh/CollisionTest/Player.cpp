@@ -32,7 +32,9 @@ void Player::Draw() const
 {
 	GetSprite()->Draw(GetPosition(), true, false);
 	DrawSplash();
-	DrawHitboxes();
+	
+	
+	//DrawHitboxes();
 }
 
 void Player::Update(float elapsedSec, const Uint8* pStates, const Rectf& viewport)
