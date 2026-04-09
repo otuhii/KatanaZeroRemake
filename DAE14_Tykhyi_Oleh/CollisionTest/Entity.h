@@ -37,6 +37,7 @@ public:
 
 	const Rectf&    GetHitbox()		const;
 
+	bool			IsSpriteAnimationFinished() const;
 protected:
 	Sprite* GetSprite() const;
 

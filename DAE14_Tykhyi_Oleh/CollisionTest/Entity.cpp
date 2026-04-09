@@ -118,6 +118,11 @@ const Rectf& Entity::GetHitbox() const
 	return m_Hitbox;
 }
 
+bool Entity::IsSpriteAnimationFinished() const
+{
+	return m_pSprite->IsFinished();
+}
+
 Sprite* Entity::GetSprite() const
 {
 	return m_pSprite;

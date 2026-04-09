@@ -46,20 +46,22 @@ private:
 	const float
 		m_FallSpeedUp	{ 2000.f },
 		m_RollSpeed		{ 500.f },
-		m_JumpImpulse	{ 450.f };
+		m_JumpImpulse	{ 450.f },
+		m_FrictionForce	{ 1200.f },
+		m_AirResistance	{ 2000.f },
+		m_VelEps		{ 0.1f };
+
 
 	void DrawSplash() const;
-
-	void ProcessStateChange(bool isMoving, bool roll, bool crouch);
-	void HandleKeyboard(const Uint8* pStates, float elapsedSec);
-	void UpdateAttackState(float elapsedSec);
-	void UpdateSplashHitbox();
 	
+	void UpdateCurrentState(float elapsedSec);
+	void ProcessStateChange(bool isMoving, bool roll, bool crouch);
 
-	void HandleActionStates();
-	void HandleAirStates();
-	void HandleGroundStates(bool isMoving, bool roll, bool crouch);
+	PlayerState GetNextState(bool isMoving, bool roll, bool crouch);
+	PlayerState GetNextAirState();
+	PlayerState GetNextGroundState(bool isMoving, bool roll, bool crouch);
 
+	void HandleKeyboard(const Uint8* pStates, float elapsedSec);
 
 	void Attack(const Vector2f& mousePos);
 	void AttackDash(const Vector2f& mousePos);
@@ -69,7 +71,12 @@ private:
 
 	void ApplyFriction(float elapsedSec);
 	void ApplyAirResistance(float elapsedSec);
+
 	float CalculateSplashRotation(const Vector2f& mouseVec);
+
+	void UpdateSplashHitbox();
+	void UpdateAttackState(float elapsedSec);
+
 
 	void DrawHitboxes() const;
 };
