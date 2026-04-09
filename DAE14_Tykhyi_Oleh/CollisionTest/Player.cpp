@@ -32,7 +32,6 @@ void Player::Draw() const
 {
 	GetSprite()->Draw(GetPosition(), true, false);
 	DrawSplash();
-
 	DrawHitboxes();
 }
 
@@ -40,6 +39,7 @@ void Player::Update(float elapsedSec, const Uint8* pStates, const Rectf& viewpor
 {
 	HandleKeyboard(pStates, elapsedSec);
 	UpdateCurrentState(elapsedSec);
+	UpdateCooldowns(elapsedSec);
 	Entity::Update(elapsedSec, viewport);
 }
 
@@ -72,8 +72,10 @@ void Player::ProcessMouseUpEvent(const SDL_MouseButtonEvent & e, const Rectf& vi
 
 	if (e.button == SDL_BUTTON_LEFT)
 	{
-		if (m_State != PlayerState::attack)
+		if (m_State != PlayerState::attack && 
+			m_AttackCooldownTimer <= 0.f)
 		{
+			m_AttackCooldownTimer = m_AttackCooldown;
 			Attack(mousePos);
 		}
 	}
@@ -244,6 +246,14 @@ void Player::HandleKeyboard(const Uint8* pStates, float elapsedSec)
 
 	ProcessJumpThroughPlatform(downButton);
 
+	bool
+		rollIntent{ isMoving && downButton && m_RollCooldownTimer <= 0.f };
+
+	if (IsOnGround())
+	{
+		m_AirAttackCount = 0;
+	}
+
 	if (m_State != PlayerState::roll)
 	{
 		HandleVerticalMovement(downButton, jumpButton, elapsedSec);
@@ -252,9 +262,14 @@ void Player::HandleKeyboard(const Uint8* pStates, float elapsedSec)
 
 	ProcessStateChange(
 		isMoving,
-		isMoving && downButton,
+		rollIntent,
 		downButton && !isMoving
 	);
+
+	if (rollIntent)
+	{
+		m_RollCooldownTimer = m_RollCooldown;
+	}
 }
 
 void Player::Attack(const Vector2f& mousePos)
@@ -279,6 +294,9 @@ void Player::Attack(const Vector2f& mousePos)
 
 void Player::AttackDash(const Vector2f& mousePos)
 {
+	SetIsOnGroundState(false);
+	m_AirAttackCount++;
+
 	Vector2f
 		playerPos{ GetPosition() };
 
@@ -286,7 +304,8 @@ void Player::AttackDash(const Vector2f& mousePos)
 		dashDirection{ (mousePos - playerPos).Normalized() };
 
 	float
-		dashForce{ 900.f };
+		decayFactor{ 0.2f },
+		dashForce{ std::powf(decayFactor, static_cast<float>(m_AirAttackCount-1)) * m_BaseDashForce };
 
 	SetVelocity(dashForce * dashDirection);
 }
@@ -349,7 +368,7 @@ void Player::HandleHorizontalMovement(bool left, bool right, bool down, float el
 
 	float currentSpeed{ GetSpeed() };
 	//roll
-	if (rollIntent)
+	if (rollIntent && m_RollCooldownTimer <= 0)
 	{
 		currentSpeed = m_RollSpeed;
 	}
@@ -471,6 +490,21 @@ void Player::UpdateAttackState(float elapsedSec)
 	}
 	UpdateSplashHitbox();
 	ApplyAirResistance(elapsedSec);
+}
+
+void Player::UpdateCooldowns(float elapsedSec)
+{
+	m_AttackCooldownTimer -= elapsedSec;
+	if (m_AttackCooldownTimer < 0.f)
+	{
+		m_AttackCooldownTimer = 0.f;
+	}
+
+	m_RollCooldownTimer -= elapsedSec;
+	if (m_RollCooldownTimer < 0.f)
+	{
+		m_RollCooldownTimer = 0.f;
+	}
 }
 
 void Player::DrawHitboxes() const

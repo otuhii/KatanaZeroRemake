@@ -49,8 +49,19 @@ private:
 		m_JumpImpulse	{ 450.f },
 		m_FrictionForce	{ 1200.f },
 		m_AirResistance	{ 2000.f },
-		m_VelEps		{ 0.1f };
+		m_VelEps		{ 0.1f },
+		m_BaseDashForce	{950.f};
 
+	const float
+		m_RollCooldown{ 0.4f },
+		m_AttackCooldown{ 0.25f };
+
+	float
+		m_RollCooldownTimer{0.f},
+		m_AttackCooldownTimer{0.f};
+
+	int
+		m_AirAttackCount{};
 
 	void DrawSplash() const;
 	
@@ -78,6 +89,7 @@ private:
 	void UpdateSplashHitbox();
 	void UpdateAttackState(float elapsedSec);
 
+	void UpdateCooldowns(float elapsedSec);
 
 	void DrawHitboxes() const;
 };
