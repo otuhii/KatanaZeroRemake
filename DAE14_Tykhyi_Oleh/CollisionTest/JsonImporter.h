@@ -13,9 +13,6 @@ void from_json(const Json& j, Rectf& rect);
 void from_json(const Json& j, AnimationFrameInfo& anFrame);
 EnvironmentActiveObject::EnvironmentObjectType StringToType(const std::string& typeStr);
 
-
-
-
 class JsonImporter
 {
 public:

@@ -41,7 +41,10 @@ void CollisionManager::HandleAABB(Entity* pEntity, EnvironmentActiveObject::Envi
 
 	if (type == EnvironmentActiveObject::EnvironmentObjectType::jumpThroughPlatform)
 	{
-		return;
+		if (CanMoveThroughPlatform(pEntity, objectCollider, isHorizontalMovement))
+		{
+			return;
+		}
 	}
 
 	if (isHorizontalMovement) //shrinking hitbox in the bottom part because otherwise collision 
@@ -95,4 +98,37 @@ void CollisionManager::HandleAABB(Entity* pEntity, EnvironmentActiveObject::Envi
 		}
 	}
 	
+}
+
+bool CollisionManager::CanMoveThroughPlatform(Entity* pEntity, const Rectf& objectCollider, bool isHorizontalMovement) const
+{
+	const float
+		velEps{ 0.1f };
+
+	Vector2f
+		entityVelocity{ pEntity->GetVelocity() };
+	Rectf
+		entityHitbox{ pEntity->GetHitbox() };
+
+	if (isHorizontalMovement)
+	{
+		return true;
+	}
+
+	if (entityVelocity.y > velEps)
+	{
+		return true;
+	}
+
+	float
+		platformTop{ objectCollider.bottom + objectCollider.height };
+
+	float playerFeet{ entityHitbox.bottom };
+
+	if (playerFeet < platformTop - 15.f)
+	{
+		return true;
+	}
+
+	return false;
 }

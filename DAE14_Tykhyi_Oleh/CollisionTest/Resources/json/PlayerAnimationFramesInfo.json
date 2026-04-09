@@ -1,0 +1,138 @@
+{
+  "frames": [
+    {
+      "_frameName": "staying",
+
+      "frameTime": 0.1,
+      "maxFrameCount": 10,
+      "dimensionRect": {
+        "left": 0.0,
+        "bottom": 0.0,
+        "width": 42.0,
+        "height": 42.0
+      }
+    },
+    {
+      "_frameName": "beforeRun",
+
+      "frameTime": 0.05,
+      "maxFrameCount": 4,
+      "dimensionRect": {
+        "left": 0.0,
+        "bottom": 42.0,
+        "width": 42.0,
+        "height": 42.0
+      }
+    },
+    {
+      "_frameName": "afterRun",
+
+      "frameTime": 0.07,
+      "maxFrameCount": 4,
+      "dimensionRect": {
+        "left": 168.0,
+        "bottom": 48.0,
+        "width": 42.0,
+        "height": 36.0
+      }
+    },
+    {
+      "_frameName": "run",
+
+      "frameTime": 0.07,
+      "maxFrameCount": 10,
+      "dimensionRect": {
+        "left": 0.0,
+        "bottom": 124.0,
+        "width": 42.0,
+        "height": 42.0
+      }
+    },
+    {
+      "_frameName": "roll",
+
+      "frameTime": 0.07,
+      "maxFrameCount": 7,
+      "dimensionRect": {
+        "left": 0.0,
+        "bottom": 166.0,
+        "width": 52.0,
+        "height": 32.0
+      }
+    },
+    {
+      "_frameName": "jump",
+
+      "frameTime": 0.08,
+      "maxFrameCount": 4,
+      "dimensionRect": {
+        "left": 0.0,
+        "bottom": 198.0,
+        "width": 48.0,
+        "height": 48.0
+      }
+    },
+    {
+      "_frameName": "crouch",
+
+      "frameTime": 0.1,
+      "maxFrameCount": 1,
+      "dimensionRect": {
+        "left": 0.0,
+        "bottom": 84.0,
+        "width": 36.0,
+        "height": 40.0
+      }
+    },
+    {
+      "_frameName": "postCrouch",
+
+      "frameTime": 0.1,
+      "maxFrameCount": 2,
+      "dimensionRect": {
+        "left": 36.0,
+        "bottom": 84.0,
+        "width": 36.0,
+        "height": 40.0
+      }
+    },
+    {
+      "_frameName": "fall",
+
+
+      "frameTime": 0.1,
+      "maxFrameCount": 4,
+      "dimensionRect": {
+        "left": 192.0,
+        "bottom": 198.0,
+        "width": 48.0,
+        "height": 48.0
+      }
+    },
+    {
+      "_frameName": "attack",
+
+      "frameTime": 0.03,
+      "maxFrameCount": 7,
+      "dimensionRect": {
+        "left": 0.0,
+        "bottom": 246.0,
+        "width": 52.0,
+        "height": 39.0
+      }
+    },
+    {
+      "_frameName": "splash",
+
+
+      "frameTime": 0.042,
+      "maxFrameCount": 5,
+      "dimensionRect": {
+        "left": 0.0,
+        "bottom": 0.0,
+        "width": 100.0,
+        "height": 26.0
+      }
+    }
+  ]
+}

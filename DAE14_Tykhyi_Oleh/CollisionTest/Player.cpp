@@ -60,7 +60,6 @@ void Player::SetState(PlayerState state)
 	m_SplashSprite->ResetAnimation();
 }
 
-
 void Player::ProcessMouseUpEvent(const SDL_MouseButtonEvent & e, const Rectf& viewport)
 {
 	Vector2f
@@ -118,7 +117,6 @@ void Player::DrawSplash() const
 
 	m_SplashSprite->Draw(splashOrigin, true, true);
 }
-
 
 void Player::UpdateCurrentState(float elapsedSec)
 {
