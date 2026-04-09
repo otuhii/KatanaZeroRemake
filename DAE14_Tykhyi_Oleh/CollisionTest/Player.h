@@ -43,17 +43,34 @@ private:
 
 	Sprite* m_SplashSprite;
 
+	const float
+		m_FallSpeedUp	{ 2000.f },
+		m_RollSpeed		{ 500.f },
+		m_JumpImpulse	{ 450.f };
+
+	void DrawSplash() const;
 
 	void ProcessStateChange(bool isMoving, bool roll, bool crouch);
 	void HandleKeyboard(const Uint8* pStates, float elapsedSec);
-
-	void DrawSplash() const;
-	float CalculateSplashRotation(const Vector2f& mouseVec);
+	void UpdateAttackState(float elapsedSec);
 	void UpdateSplashHitbox();
+	
+
+	void HandleActionStates();
+	void HandleAirStates();
+	void HandleGroundStates(bool isMoving, bool roll, bool crouch);
 
 
-	void Dash(const Vector2f& mousePos);
+	void Attack(const Vector2f& mousePos);
+	void AttackDash(const Vector2f& mousePos);
+
+	void HandleVerticalMovement(bool down, bool jump, float elapsedSec);
+	void HandleHorizontalMovement(bool left, bool right, bool down, float elapsedSec);
+
 	void ApplyFriction(float elapsedSec);
 	void ApplyAirResistance(float elapsedSec);
+	float CalculateSplashRotation(const Vector2f& mouseVec);
+
+	void DrawHitboxes() const;
 };
 

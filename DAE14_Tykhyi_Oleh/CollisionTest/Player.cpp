@@ -30,58 +30,40 @@ void Player::Draw() const
 	GetSprite()->Draw(GetPosition(), true, false);
 	DrawSplash();
 
-	utils::SetColor(Color4f{ 0.f, 1.f, 0.f, 1.f });
-	utils::DrawRect(GetHitbox());
+	DrawHitboxes();
 }
 
 void Player::Update(float elapsedSec, const Uint8* pStates, const Rectf& viewport)
 {
 	HandleKeyboard(pStates, elapsedSec);
+	UpdateAttackState(elapsedSec);
 	Entity::Update(elapsedSec, viewport);
 }
 
 void Player::SetState(PlayerState state)
 {
-	if (m_State == state)
-	{
-		return; // no animation flickering
-	}
-
+	if (m_State == state) { return; } // no animation flickering
 	m_State = state;
+
 	GetSprite()->SetAnimationFrameInfo(m_PlayerSpriteFrames[static_cast<int>(m_State)]);
 	GetSprite()->ResetAnimation();
 	m_SplashSprite->ResetAnimation();
 }
 
+
 void Player::ProcessMouseUpEvent(const SDL_MouseButtonEvent & e, const Rectf& viewport)
 {
-	if (e.button == SDL_BUTTON_LEFT && 
-		m_State != PlayerState::attack)
+	Vector2f
+		mousePos{ static_cast<float>(e.x), static_cast<float>(e.y) };
+
+	if (e.button == SDL_BUTTON_LEFT)
 	{
-		SetState(PlayerState::attack);
-
-		Vector2f
-			mousePos{ static_cast<float>(e.x), static_cast<float>(e.y) };
-
-		Dash(mousePos);
-
-		if (mousePos.x < GetPositionX()) // TODO i should check it in the middle of the sprite/hitbox
+		if (m_State != PlayerState::attack)
 		{
-			GetSprite()->FlipHorizontally();
+			Attack(mousePos);
 		}
-		else
-		{
-			GetSprite()->ResetHorizontalFlip();
-		}
-
-		m_SplashSprite->RotateBy(CalculateSplashRotation(
-			 mousePos
-		));
-
-		UpdateSplashHitbox();
 	}
 }
-
 
 std::vector<Vector2f> Player::GetSplashHitbox() const
 {
@@ -93,204 +75,6 @@ std::vector<Vector2f> Player::GetSplashHitbox() const
 	{
 		return std::vector<Vector2f>{};
 	}
-}
-
-
-// TODO write down my state system so it will be easier to program
-void Player::ProcessStateChange(bool isMoving, bool roll, bool crouch)
-{
-	const float
-		velocityThreshold{ 0.1f };
-
-	if (m_State == PlayerState::attack || m_State == PlayerState::roll)
-	{
-		if (GetSprite()->IsFinished())
-		{
-			if (m_State == PlayerState::roll)
-			{
-				SetVelocityX(0.f);
-			}
-
-			SetState(PlayerState::staying);
-			m_SplashSprite->SetVisible(false);
-			m_SplashSprite->ResetAnimation();
-		}
-		else if (m_State == PlayerState::attack)
-		{
-			int
-				renderSplashAfterFrame{ 2 };
-
-			if (GetSprite()->GetCurrentFrameCount() >= renderSplashAfterFrame)
-			{
-				m_SplashSprite->SetVisible(true);
-			}
-		}
-		return;
-	}
-
-	if (!IsOnGround())
-	{
-		if (GetVelocityY() > velocityThreshold)
-		{
-			SetState(PlayerState::jump);
-		}
-		else
-		{
-			SetState(PlayerState::fall);
-		}
-
-		return;
-	}
-	
-	if (roll)
-	{
-		SetState(PlayerState::roll);
-		return;
-	}
-
-	switch (m_State)
-	{
-	case PlayerState::jump:
-	case PlayerState::fall:
-		SetState(PlayerState::staying);
-		break;
-	case PlayerState::staying:
-	{
-		if (crouch && IsOnGround())
-		{
-			SetState(PlayerState::crouch);
-		}
-
-		if (isMoving)
-		{
-			SetState(PlayerState::beforeRun);
-		}
-		break;
-	}
-	case PlayerState::crouch:
-	{
-		if (!crouch)
-		{
-			SetState(PlayerState::postCrouch);
-		}
-		break;
-	}
-	case PlayerState::postCrouch:
-	{
-		if (isMoving)
-		{
-			SetState(PlayerState::beforeRun);
-		}
-		else if (GetSprite()->IsFinished())
-		{
-			SetState(PlayerState::staying);
-		}
-
-		break;
-	}
-	case PlayerState::beforeRun:
-	{
-		if (GetSprite()->IsFinished())
-		{
-			SetState(PlayerState::run);
-		}
-
-		if (!isMoving)
-		{
-			SetState(PlayerState::afterRun);
-		}
-		break;
-	}
-	case PlayerState::run:
-	{
-		if (!isMoving)
-		{
-			SetState(PlayerState::afterRun);
-		}
-		break;
-	}
-	case PlayerState::afterRun:
-	{
-		if (isMoving)
-		{
-			SetState(PlayerState::beforeRun);
-		}
-		else if (GetSprite()->IsFinished())
-		{
-			SetState(PlayerState::staying);
-		}
-	}
-	}
-}
-
-void Player::HandleKeyboard(const Uint8* pStates, float elapsedSec)
-{
-	if (m_State == PlayerState::attack)
-	{
-		UpdateSplashHitbox();
-		ApplyAirResistance(elapsedSec);
-	}
-
-	if (m_State != PlayerState::roll)
-	{
-		if (!IsOnGround() && pStates[SDL_SCANCODE_S])
-		{
-			float 
-				fallSpeedUp{ 2000.f };
-
-			SetVelocityY(GetVelocityY() - fallSpeedUp * elapsedSec);
-		}
-
-		if (pStates[SDL_SCANCODE_D])
-		{
-			if (pStates[SDL_SCANCODE_S] && IsOnGround())
-			{
-				float rollSpeed{ 500.f }; //TODO change this to more robust option because now my roll is really dependant on animation which is apparently not so good
-
-				SetVelocityX(rollSpeed);
-				GetSprite()->ResetHorizontalFlip();
-			}
-			else
-			{
-				SetVelocityX(GetSpeed());
-				GetSprite()->ResetHorizontalFlip();
-			}
-		}
-		else if (pStates[SDL_SCANCODE_A])
-		{
-			if (pStates[SDL_SCANCODE_S] && IsOnGround())
-			{
-				float rollSpeed{ 500.f }; //TODO change this to more robust option because now my roll is really dependant on animation which is apparently not so good
-
-				SetVelocityX(-rollSpeed);
-				GetSprite()->FlipHorizontally();
-			}
-			else
-			{
-				SetVelocityX(-GetSpeed());
-				GetSprite()->FlipHorizontally();
-			}
-		}
-		else
-		{
-			ApplyFriction(elapsedSec);
-		}
-
-		if (pStates[SDL_SCANCODE_W])
-		{
-			if (IsOnGround())
-			{
-				SetVelocityY(450.f);
-				SetIsOnGroundState(false); //TODO CHANGE HANDLING
-			}
-		}
-	}
-
-	ProcessStateChange(
-		(pStates[SDL_SCANCODE_D] || pStates[SDL_SCANCODE_A]),
-		(pStates[SDL_SCANCODE_D] && pStates[SDL_SCANCODE_S]) || (pStates[SDL_SCANCODE_A] && pStates[SDL_SCANCODE_S]),
-		pStates[SDL_SCANCODE_S] && !pStates[SDL_SCANCODE_D] && !pStates[SDL_SCANCODE_A]
-	);
 }
 
 void Player::DrawSplash() const
@@ -323,62 +107,57 @@ void Player::DrawSplash() const
 	}
 
 	m_SplashSprite->Draw(splashOrigin, true, true);
+}
 
-	if (m_SplashSprite->IsVisible())
+void Player::ProcessStateChange(bool isMoving, bool roll, bool crouch)
+{
+	if (m_State == PlayerState::attack ||
+		m_State == PlayerState::roll)
 	{
-		utils::SetColor(Color4f{ 0.f, 1.f, 0.f, 1.f });
-		utils::DrawPolygon(m_SplashHitboxPoints);
+		HandleActionStates();
+		return;
+	}
+	
+	if (!IsOnGround())
+	{
+		HandleAirStates();
+	}
+	else
+	{
+		HandleGroundStates(isMoving, roll, crouch);
 	}
 }
 
-float Player::CalculateSplashRotation(const Vector2f& mouseVec)
+void Player::HandleKeyboard(const Uint8* pStates, float elapsedSec)
 {
-	Vector2f 
-		splashOrigin{ GetPosition() };
+	bool
+		moveRight	{ static_cast<bool>(pStates[SDL_SCANCODE_D]) },
+		moveLeft	{ static_cast<bool>(pStates[SDL_SCANCODE_A]) },
+		isMoving	{ static_cast<bool>(moveRight || moveLeft) },
+		downButton	{ static_cast<bool>(pStates[SDL_SCANCODE_S]) },
+		jumpButton	{ static_cast<bool>(pStates[SDL_SCANCODE_W]) };
 
-	splashOrigin.y += (GetSprite()->GetCurrentFrameDimensions().height) * 0.5f;
+	if (m_State != PlayerState::roll)
+	{
+		HandleVerticalMovement(downButton, jumpButton, elapsedSec);
+		HandleHorizontalMovement(moveLeft, moveRight, downButton, elapsedSec);
+	}
 
-	Vector2f
-		direction{ mouseVec - splashOrigin };
-
-	float
-		angle{ static_cast<float>(180.f / M_PI) * std::atan2(direction.y, direction.x)};
-
-	return angle;
+	ProcessStateChange(
+		isMoving,
+		isMoving && downButton,
+		downButton && !isMoving
+	);
 }
 
-
-//SIMPLE IMPLEMENTATION OF ATTACK BOX AT THE TIP OF THE ATTACK SPRITE
-//	i am not sure if it is a good thing to generate hitboxes 
-// and like physics related stuff based on animation of the attack 
-
-//Rectf Player::GetAttackHitbox() const
-//{
-//	const float
-//		attackRange{ 70.f },
-//		splashRotationAngle{ (float(M_PI) / 180.f) * m_SplashSprite->GetRotation() };
-//
-//	Vector2f 
-//		anchorPoint{ GetPosition() };
-//
-//	anchorPoint.y += (GetSprite()->GetCurrentFrameDimensions().height) * 0.75f;
-//
-//	Vector2f hitboxCenter{
-//		anchorPoint.x + std::cosf(splashRotationAngle) * attackRange,
-//		anchorPoint.y + std::sinf(splashRotationAngle) * attackRange
-//	};
-//
-//	float size{ 80.f };
-//
-//	return Rectf{
-//		hitboxCenter.x - size * 0.5f,
-//		hitboxCenter.y - size * 0.5f,
-//		size,
-//		size
-//	};
-//
-//
-//}
+void Player::UpdateAttackState(float elapsedSec)
+{
+	if (m_State == PlayerState::attack)
+	{
+		UpdateSplashHitbox();
+		ApplyAirResistance(elapsedSec);
+	}
+}
 
 void Player::UpdateSplashHitbox()
 {
@@ -423,7 +202,127 @@ void Player::UpdateSplashHitbox()
 	m_SplashHitboxPoints = transformation.Transform(baseSplashHitbox);
 }
 
-void Player::Dash(const Vector2f& mousePos)
+void Player::HandleActionStates()
+{
+	if (GetSprite()->IsFinished())
+	{
+		if (m_State == PlayerState::roll)
+		{
+			SetVelocityX(0.f);
+		}
+
+		SetState(PlayerState::staying);
+		m_SplashSprite->SetVisible(false);
+		m_SplashSprite->ResetAnimation();
+	}
+	else if (m_State == PlayerState::attack)
+	{
+		int
+			renderSplashAfterFrame{ 2 };
+
+		if (GetSprite()->GetCurrentFrameCount() >= renderSplashAfterFrame)
+		{
+			m_SplashSprite->SetVisible(true);
+		}
+	}
+}
+
+void Player::HandleAirStates()
+{
+	const float
+		velocityThreshold{ 0.1f };
+	
+	if (GetVelocityY() > velocityThreshold)
+	{
+		SetState(PlayerState::jump);
+	}
+	else
+	{
+		SetState(PlayerState::fall);
+	}
+
+	return;
+}
+
+void Player::HandleGroundStates(bool isMoving, bool roll, bool crouch)
+{
+	if (roll)
+	{
+		SetState(PlayerState::roll);
+		return;
+	}
+
+	if (m_State == PlayerState::jump || m_State == PlayerState::fall)
+	{
+		SetState(PlayerState::staying);
+		return;
+	}
+
+	if (m_State == PlayerState::crouch || m_State == PlayerState::postCrouch)
+	{
+		if (!crouch && m_State == PlayerState::crouch)
+		{
+			SetState(PlayerState::postCrouch);
+		}
+		else if (isMoving)
+		{
+			SetState(PlayerState::beforeRun);
+		}
+		else if (m_State == PlayerState::postCrouch && GetSprite()->IsFinished())
+		{
+			SetState(PlayerState::staying);
+		}
+		return;
+	}
+
+	if (isMoving)
+	{
+		if (m_State == PlayerState::staying || m_State == PlayerState::afterRun)
+		{
+			SetState(PlayerState::beforeRun);
+		}
+		else if (m_State == PlayerState::beforeRun && GetSprite()->IsFinished())
+		{
+			SetState(PlayerState::run);
+		}
+	}
+	else
+	{
+		if (m_State == PlayerState::run || m_State == PlayerState::beforeRun)
+		{
+			SetState(PlayerState::afterRun);
+		}
+		else if (m_State == PlayerState::afterRun && GetSprite()->IsFinished())
+		{
+			SetState(PlayerState::staying);
+		}
+		else if (crouch)
+		{
+			SetState(PlayerState::crouch);
+		}
+	}
+}
+
+void Player::Attack(const Vector2f& mousePos)
+{
+	SetState(PlayerState::attack);
+	AttackDash(mousePos);
+
+	if (mousePos.x < GetPositionX())
+	{
+		GetSprite()->FlipHorizontally();
+	}
+	else
+	{
+		GetSprite()->ResetHorizontalFlip();
+	}
+
+	m_SplashSprite->RotateBy(CalculateSplashRotation(
+		mousePos
+	));
+}
+
+void Player::AttackDash(const Vector2f& mousePos)
 {
 	Vector2f
 		playerPos{ GetPosition() };
@@ -435,6 +334,53 @@ void Player::Dash(const Vector2f& mousePos)
 		dashForce{ 900.f };
 
 	SetVelocity(dashForce * dashDirection);
+}
+
+void Player::HandleVerticalMovement(bool down, bool jump, float elapsedSec)
+{
+	if (!IsOnGround() && down)
+	{
+		SetVelocityY(GetVelocityY() - m_FallSpeedUp * elapsedSec);
+	}
+
+	if (jump && IsOnGround())
+	{
+		SetIsOnGroundState(false);
+		SetVelocityY(m_JumpImpulse);
+	}
+}
+
+void Player::HandleHorizontalMovement(bool left, bool right, bool down, float elapsedSec)
+{
+	if (!left && !right)
+	{
+		ApplyFriction(elapsedSec);
+		return;
+	}
+
+	float direction{1.f};
+	if (left)
+	{
+		direction = -1.f;
+	}
+
+	float currentSpeed{ GetSpeed() };
+	//roll
+	if (down && IsOnGround())
+	{
+		currentSpeed = m_RollSpeed;
+	}
+
+	SetVelocityX(direction * currentSpeed);
+
+	if (left)
+	{
+		GetSprite()->FlipHorizontally();
+	}
+	else
+	{
+		GetSprite()->ResetHorizontalFlip();
+	}
 }
 
 void Player::ApplyFriction(float elapsedSec)
@@ -474,6 +420,34 @@ void Player::ApplyAirResistance(float elapsedSec)
 	else
 	{
 		SetVelocity(Vector2f{ 0.f, 0.f });
+	}
+}
+
+float Player::CalculateSplashRotation(const Vector2f& mouseVec)
+{
+	Vector2f
+		splashOrigin{ GetPosition() };
+
+	splashOrigin.y += (GetSprite()->GetCurrentFrameDimensions().height) * 0.5f;
+
+	Vector2f
+		direction{ mouseVec - splashOrigin };
+
+	float
+		angle{ static_cast<float>(180.f / M_PI) * std::atan2(direction.y, direction.x) };
+
+	return angle;
+}
+
+void Player::DrawHitboxes() const
+{
+	utils::SetColor(Color4f{ 0.f, 1.f, 0.f, 1.f });
+	utils::DrawRect(GetHitbox());
+
+	if (m_SplashSprite->IsVisible())
+	{
+		utils::SetColor(Color4f{ 0.f, 1.f, 0.f, 1.f });
+		utils::DrawPolygon(m_SplashHitboxPoints);
 	}
 }
 
