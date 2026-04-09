@@ -25,12 +25,12 @@ void CollisionManager::CheckCollision(Entity* pEntity, const Map& map, bool isHo
 	{
 		for (const Rectf& collider : object.GetColliders())
 		{
-			HandleAABB(pEntity, collider, isHorizontalMovement);
+			HandleAABB(pEntity, object.GetType(), collider, isHorizontalMovement);
 		}
 	}
 }
 
-void CollisionManager::HandleAABB(Entity* pEntity, const Rectf& objectCollider, bool isHorizontalMovement) const
+void CollisionManager::HandleAABB(Entity* pEntity, EnvironmentActiveObject::EnvironmentObjectType type, const Rectf& objectCollider, bool isHorizontalMovement) const
 {
 	Rectf
 		entityHitbox{ pEntity->GetHitbox() };
@@ -38,6 +38,11 @@ void CollisionManager::HandleAABB(Entity* pEntity, const Rectf& objectCollider, 
 	const float
 		velEps{ 0.1f },
 		maxStepHeight{ 7.f };
+
+	if (type == EnvironmentActiveObject::EnvironmentObjectType::jumpThroughPlatform)
+	{
+		return;
+	}
 
 	if (isHorizontalMovement) //shrinking hitbox in the bottom part because otherwise collision 
 							  //is triggered when he is simply standing on the floor
