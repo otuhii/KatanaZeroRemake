@@ -66,6 +66,7 @@ private:
 	void Attack(const Vector2f& mousePos);
 	void AttackDash(const Vector2f& mousePos);
 
+	void ProcessJumpThroughPlatform(bool downButton);
 	void HandleVerticalMovement(bool down, bool jump, float elapsedSec);
 	void HandleHorizontalMovement(bool left, bool right, bool down, float elapsedSec);
 

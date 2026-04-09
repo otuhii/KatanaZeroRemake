@@ -119,7 +119,7 @@ bool CollisionManager::CanMoveThroughPlatform(Entity* pEntity, const Rectf& obje
 		return true;
 	}
 
-	if (entityVelocity.y < velEps && pEntity->CanJumpThroughPlatform())
+	if (pEntity->CanJumpThroughPlatform())
 	{
 		return true;
 	}

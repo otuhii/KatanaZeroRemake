@@ -4,7 +4,7 @@
 #include "AnimationFrameInfo.h"
 #include "UserUtils.h"
 
-#include "Matrix2x3.h"
+#include "Matrix2x3.h"     
 #include "utils.h"
 
 
@@ -51,6 +51,11 @@ void Player::SetState(PlayerState state)
 	{
 		m_SplashSprite->SetVisible(false);
 		m_SplashSprite->ResetAnimation();
+	}
+
+	if (m_State == PlayerState::attack || m_State == PlayerState::roll)
+	{
+		SetCanJumpThroughPlatform(false);
 	}
 
 	m_State = state;
@@ -137,7 +142,6 @@ Player::PlayerState Player::GetNextState(bool isMoving, bool roll, bool crouch)
 		if (IsSpriteAnimationFinished())
 		{
 			if (m_State == PlayerState::roll) { SetVelocityX(0.f); }
-
 			return PlayerState::staying;
 		}
 		return m_State;
@@ -238,7 +242,7 @@ void Player::HandleKeyboard(const Uint8* pStates, float elapsedSec)
 		downButton	{ static_cast<bool>(pStates[SDL_SCANCODE_S]) },
 		jumpButton	{ static_cast<bool>(pStates[SDL_SCANCODE_W]) };
 
-	SetCanJumpThroughPlatform(downButton || m_State == PlayerState::roll);
+	ProcessJumpThroughPlatform(downButton);
 
 	if (m_State != PlayerState::roll)
 	{
@@ -257,6 +261,7 @@ void Player::Attack(const Vector2f& mousePos)
 {
 	SetState(PlayerState::attack);
 	AttackDash(mousePos);
+	SetCanJumpThroughPlatform(true);
 
 	if (mousePos.x < GetPositionX())
 	{
@@ -284,6 +289,26 @@ void Player::AttackDash(const Vector2f& mousePos)
 		dashForce{ 900.f };
 
 	SetVelocity(dashForce * dashDirection);
+}
+
+void Player::ProcessJumpThroughPlatform(bool downButton)
+{
+	if (downButton)
+	{
+		SetCanJumpThroughPlatform(true);
+	}
+
+	if ((CanJumpThroughPlatform() 
+		&& !IsOnGround()) || 
+		m_State == PlayerState::attack)
+	{
+		return;
+	}
+
+	if (GetVelocityY() > m_VelEps || (IsOnGround() && !downButton))
+	{
+		SetCanJumpThroughPlatform(false);
+	}
 }
 
 void Player::HandleVerticalMovement(bool down, bool jump, float elapsedSec)
