@@ -17,7 +17,7 @@ void Map::Draw() const
 		utils::SetColor(Color4f{ 0.f, 1.f, 0.f, 1.f });
 		for (const Rectf& collider : obj.GetColliders())
 		{
-			//utils::DrawRect(collider);
+			utils::DrawRect(collider);
 		}
 	}
 

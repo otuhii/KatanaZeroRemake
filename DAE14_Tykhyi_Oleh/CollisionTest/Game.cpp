@@ -24,12 +24,15 @@ Game::~Game( )
 
 void Game::Initialize( )
 {
+	const float
+		spriteScaleValue{ 2.f };
+
 	m_pSpriteManager = new SpriteManager();
 	m_pCollisionManager = new CollisionManager();
 
 	m_pEnemyManager = new EnemyManager{ m_pSpriteManager, m_JsonImporter };
-	m_pEnemyManager->AddEnemy(Enemy::EnemyType::grunt, Vector2f{200.f, 350.f}, 100.f, 2.f);
-	m_pEnemyManager->AddEnemy(Enemy::EnemyType::gangster, Vector2f{ 500.f, 350.f }, 100.f, 2.f);
+	m_pEnemyManager->AddEnemy(Enemy::EnemyType::grunt, Vector2f{200.f, 350.f}, 100.f, spriteScaleValue);
+	m_pEnemyManager->AddEnemy(Enemy::EnemyType::gangster, Vector2f{ 500.f, 350.f }, 100.f, spriteScaleValue);
 
 	m_pMap = new Map{};
 
@@ -41,7 +44,7 @@ void Game::Initialize( )
 		m_JsonImporter.ImportAnimationFrameObjects("json/PlayerAnimationFramesInfo.json"),
 		Vector2f{ 100.f, 100.f }, 
 		350.f,
-		2.f
+		spriteScaleValue
 	);
 }
 

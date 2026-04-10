@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Enemy.h"
 
+#include "utils.h"
 
 Enemy::Enemy(EnemyType type, Sprite* sprite, const std::vector<AnimationFrameInfo>& enemyAnimationFrames, const Vector2f& position, float speed, float scale)
 	:  Entity(sprite, position, Vector2f{0.f, 0.f}, speed),
@@ -17,6 +18,9 @@ Enemy::Enemy(EnemyType type, Sprite* sprite, const std::vector<AnimationFrameInf
 void Enemy::Draw() const
 {
 	Entity::Draw();
+
+	utils::SetColor(Color4f{ 0.f, 1.f, 0.f, 1.f });
+	utils::DrawRect(GetHitbox());
 }
 
 void Enemy::Update(float elapsedSec, const Rectf& viewport)
