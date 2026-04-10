@@ -163,6 +163,7 @@ xcopy "$(ProjectDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
   <ItemGroup>
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EnvironmentCosmeticObject.cpp" />
     <ClCompile Include="EnvironmentActiveObject.cpp" />
@@ -180,6 +181,7 @@ xcopy "$(ProjectDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClInclude Include="AnimationFrameInfo.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EnvironmentCosmeticObject.h" />
     <ClInclude Include="EnvironmentActiveObject.h" />

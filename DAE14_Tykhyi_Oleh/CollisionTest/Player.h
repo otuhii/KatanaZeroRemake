@@ -24,7 +24,7 @@ public:
 		count
 	};
 
-	Player(Sprite* sprite, Sprite* splashSprite, const std::vector<AnimationFrameInfo>& playerAnimation, const Vector2f& position, float speed);
+	Player(Sprite* sprite, Sprite* splashSprite, const std::vector<AnimationFrameInfo>& playerAnimation, const Vector2f& position, float speed, float scale);
 
 	void Draw() const override;
 

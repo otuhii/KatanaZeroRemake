@@ -8,6 +8,11 @@ Entity::Entity(Sprite* sprite, const Vector2f& position, const Vector2f& velocit
 {
 }
 
+void Entity::Draw() const
+{
+	m_pSprite->Draw(m_Position, true, false);
+}
+
 void Entity::Update(float elapsedSec, const Rectf& viewport)
 {
 	float 

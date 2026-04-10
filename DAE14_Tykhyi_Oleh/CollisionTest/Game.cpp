@@ -3,6 +3,8 @@
 
 #include "CollisionManager.h"
 #include "SpriteManager.h"
+#include "EnemyManager.h"
+
 #include "Player.h"
 #include "Map.h"
 
@@ -23,8 +25,11 @@ Game::~Game( )
 void Game::Initialize( )
 {
 	m_pSpriteManager = new SpriteManager();
-
 	m_pCollisionManager = new CollisionManager();
+
+	m_pEnemyManager = new EnemyManager{ m_pSpriteManager, m_JsonImporter };
+	m_pEnemyManager->AddEnemy(Enemy::EnemyType::grunt, Vector2f{200.f, 350.f}, 100.f, 2.f);
+	m_pEnemyManager->AddEnemy(Enemy::EnemyType::gangster, Vector2f{ 500.f, 350.f }, 100.f, 2.f);
 
 	m_pMap = new Map{};
 
@@ -35,7 +40,9 @@ void Game::Initialize( )
 		m_pSpriteManager->CreateSprite("img/SplashAnimation.png"),
 		m_JsonImporter.ImportAnimationFrameObjects("json/PlayerAnimationFramesInfo.json"),
 		Vector2f{ 100.f, 100.f }, 
-		350.f);
+		350.f,
+		2.f
+	);
 }
 
 void Game::Cleanup( )
@@ -44,17 +51,20 @@ void Game::Cleanup( )
 	delete m_pSpriteManager;
 	delete m_pCollisionManager;
 	delete m_pPlayer;
+	delete m_pEnemyManager;
 }
 
 void Game::Update( float elapsedSec )
 {
-	//std::cout << 1 / elapsedSec << std::endl;
+	std::cout << 1 / elapsedSec << std::endl;
 
 	const Uint8 *pStates = SDL_GetKeyboardState( nullptr );
 	
 	m_pPlayer->Update(elapsedSec, pStates, GetViewPort());
 
 	m_pCollisionManager->HandleMovement(m_pPlayer, *m_pMap, elapsedSec);
+
+	m_pEnemyManager->Update(elapsedSec);
 
 	m_pSpriteManager->Update(elapsedSec);
 }
@@ -66,6 +76,8 @@ void Game::Draw( ) const
 	m_pMap->Draw();
 
 	m_pPlayer->Draw();
+
+	m_pEnemyManager->Draw();
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )

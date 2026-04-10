@@ -4,9 +4,11 @@
 #include "JsonImporter.h"
 
 class SpriteManager;
+class EnemyManager;
+class CollisionManager;
+
 class Player;
 class Map;
-class CollisionManager;
 
 class Game : public BaseGame
 {
@@ -38,8 +40,10 @@ private:
 
 	JsonImporter		m_JsonImporter{}; //TODO maybe change this to pointer later
 
+	EnemyManager*		m_pEnemyManager{};
 	SpriteManager*		m_pSpriteManager{};
 	CollisionManager*	m_pCollisionManager{};
+	
 	Map*				m_pMap;
 	Player*				m_pPlayer{};
 

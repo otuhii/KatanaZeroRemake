@@ -8,7 +8,7 @@
 #include "utils.h"
 
 
-Player::Player(Sprite* sprite, Sprite* splashSprite, const std::vector<AnimationFrameInfo>& playerAnimation, const Vector2f& position, float speed)
+Player::Player(Sprite* sprite, Sprite* splashSprite, const std::vector<AnimationFrameInfo>& playerAnimation, const Vector2f& position, float speed, float scale)
 	: Entity(sprite, position, Vector2f{}, speed),
 	m_SplashSprite(splashSprite),
 	m_State(PlayerState::staying),
@@ -19,9 +19,6 @@ Player::Player(Sprite* sprite, Sprite* splashSprite, const std::vector<Animation
 	m_SplashSprite->SetAnimationFrameInfo(m_PlayerSpriteFrames[static_cast<int>(PlayerState::attackSplash)]);
 	m_SplashSprite->SetVisible(false);
 
-	const float
-		scale{ 2.f };
-
 	GetSprite()->SetScale(scale);
 	m_SplashSprite->SetScale(scale);
 
@@ -30,9 +27,8 @@ Player::Player(Sprite* sprite, Sprite* splashSprite, const std::vector<Animation
 
 void Player::Draw() const
 {
-	GetSprite()->Draw(GetPosition(), true, false);
+	Entity::Draw();
 	DrawSplash();
-	
 	
 	//DrawHitboxes();
 }

@@ -6,7 +6,7 @@ class Entity
 public:
 	Entity(Sprite* sprite, const Vector2f& position, const Vector2f& velocity, float speed);
 
-	virtual void Draw() const = 0;
+	virtual void Draw() const;
 
 	virtual void Update(const float elapsedSec, const Rectf& viewport);
 
