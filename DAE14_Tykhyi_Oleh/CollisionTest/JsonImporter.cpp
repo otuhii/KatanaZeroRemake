@@ -20,34 +20,17 @@ void from_json(const Json& j, AnimationFrameInfo& anFrame)
 	}
 }
 
-EnvironmentActiveObject::EnvironmentObjectType StringToType(const std::string& typeStr)
-{
-	if (typeStr == "stairs")
-	{
-		return EnvironmentActiveObject::EnvironmentObjectType::stairs;
-	}
-	if (typeStr == "jumpthroughplatform")
-	{
-		return EnvironmentActiveObject::EnvironmentObjectType::jumpThroughPlatform;
-	}
-	return EnvironmentActiveObject::EnvironmentObjectType::platform; 
-}
 
-void JsonImporter::ImportEnvironmentInfo(const std::string& jsonPath, Map& gameMap, SpriteManager& SpriteManager, EnemyManager& enemyManager, float& playerSpeed) const
+
+JsonImporter::GameData JsonImporter::ImportGameInfo(const std::string& jsonPath, SpriteManager& spriteManager) const
 {
 	Json data{ ParseJsonFile(jsonPath) };
 
-	std::vector<EnvironmentActiveObject>	activeObjects{};
-	std::vector<EnvironmentCosmeticObject>	cosmeticObjects{};
-	std::vector<Vector2f>					controlPoints{};
+	if (data.is_discarded() || data.empty()) return GameData{};
 
-	if (data.is_discarded() ||
-		data.empty())
-	{
-		return;
-	}
+	GameData processedData{};
 
-	try 
+	try
 	{
 		if (data.contains("objects") && !data["objects"].empty())
 		{
@@ -57,76 +40,7 @@ void JsonImporter::ImportEnvironmentInfo(const std::string& jsonPath, Map& gameM
 			{
 				Json obj = envObjects[index];
 
-				float
-					x{ obj.at("xPosition").get<float>() },
-					y{ obj.at("yPosition").get<float>() };
-
-				std::string objectType{ obj.at("objectType").get<std::string>() };
-
-				if (objectType == "playerinfo")
-				{
-					gameMap.SetRespawnPoint(Vector2f{ x, y });
-					playerSpeed = obj.at("speed").get<float>();
-				}
-				else if (objectType == "enemygrunt")
-				{
-					enemyManager.AddEnemy(
-						Enemy::EnemyType::grunt,
-						Vector2f{ x, y },
-						obj.at("speed").get<float>(),
-						2.f
-					);
-				}
-				else if (objectType == "enemygangster")
-				{
-					enemyManager.AddEnemy(
-						Enemy::EnemyType::gangster,
-						Vector2f{ x,y },
-						obj.at("speed").get<float>(),
-						2.f
-					);
-				}
-				else if (objectType == "controlpoint")
-				{
-					controlPoints.push_back(Vector2f{ x, y });
-				}
-				else
-				{
-					std::string
-						texPath{ obj.value("texturePath", "default.png") };
-
-					Sprite* pTexture{ nullptr };
-					if (texPath != "default.png")
-					{
-						pTexture = SpriteManager.CreateSprite("img/env/" + texPath);
-						pTexture->SetScale(obj.at("scale").get<float>());
-					}
-
-					std::vector<Rectf> colliders;
-
-					if (obj.contains("colliders") && obj["colliders"].is_array())
-					{
-						colliders = obj.at("colliders").get<std::vector<Rectf>>();
-
-						activeObjects.push_back(EnvironmentActiveObject
-							{
-								x,
-								y,
-								colliders,
-								pTexture,
-								StringToType(objectType)
-							});
-					}
-					else
-					{
-						cosmeticObjects.push_back(EnvironmentCosmeticObject
-							{
-								x,
-								y,
-								pTexture
-							});
-					}
-				}
+				ProcessJsonObject(obj, processedData, spriteManager);
 			}
 		}
 	}
@@ -136,9 +50,8 @@ void JsonImporter::ImportEnvironmentInfo(const std::string& jsonPath, Map& gameM
 			<< "PATH-> " << jsonPath << std::endl;
 	}
 
-	gameMap.SetEnvironmentActiveObjects(activeObjects);
-	gameMap.SetEnvironmentCosmeticObjects(cosmeticObjects);
-	gameMap.SetControlPoints(controlPoints);
+
+	return processedData;
 }
 
 std::vector<AnimationFrameInfo> JsonImporter::ImportAnimationFrameObjects(const std::string& jsonPath) const
@@ -191,4 +104,130 @@ Json JsonImporter::ParseJsonFile(const std::string& jsonPath) const
 	inputFile.close();
 
 	return parsedData;
+}
+
+void JsonImporter::ProcessJsonObject(const Json& object, GameData& dst, SpriteManager& spriteManager) const
+{
+	std::string
+		objectType{ object.at("objectType").get<std::string>() };
+
+	if (objectType == "playerinfo")
+	{
+		AddPlayerInfo(object, dst);
+	}
+	else if (objectType == "enemygrunt")
+	{
+		AddEnemy(Enemy::EnemyType::grunt, object, dst);
+	}
+	else if (objectType == "enemygangster")
+	{
+		AddEnemy(Enemy::EnemyType::gangster, object, dst);
+	}
+	else if (objectType == "controlpoint")
+	{
+		AddControlPoint(object, dst);
+	}
+	else if (objectType == "platform" || objectType == "stairs" || objectType == "jumpthroughplatform")
+	{
+		AddActiveObject(object, dst, spriteManager);
+	}
+	else if (objectType == "cosmetic")
+	{
+		AddCosmeticObject(object, dst, spriteManager);
+	}
+}
+
+void JsonImporter::AddPlayerInfo(const Json& object, GameData& dst) const
+{
+	dst.playerSpeed = object.at("speed").get<float>();
+	dst.respawnPoint.x = object.at("xPosition").get<float>();
+	dst.respawnPoint.y = object.at("yPosition").get<float>();
+}
+
+void JsonImporter::AddEnemy(Enemy::EnemyType type, const Json& object, GameData& dst) const
+{
+	Vector2f position{
+		object.at("xPosition").get<float>(),
+		object.at("yPosition").get<float>()
+	};
+
+	float
+		speed{ object.at("speed").get<float>() };
+
+	dst.enemiesInfo.push_back(GameData::EnemyInfo{
+		type,
+		position,
+		speed
+	});
+}
+
+void JsonImporter::AddControlPoint(const Json& object, GameData& dst) const
+{
+	dst.controlPoints.push_back(Vector2f{
+		object.at("xPosition").get<float>(),
+		object.at("yPosition").get<float>()
+	});
+}
+
+void JsonImporter::AddCosmeticObject(const Json& object, GameData& dst, SpriteManager& spriteManager ) const
+{
+	std::string
+		texPath{ object.value("texturePath", "default.png") };
+
+	Sprite*
+		pTexture{ nullptr };
+
+	if (texPath != "default.png")
+	{
+		pTexture = spriteManager.CreateSprite("img/env/" + texPath);
+		pTexture->SetScale(object.at("scale").get<float>());
+	}
+
+	dst.cosmeticObjects.push_back(EnvironmentCosmeticObject{
+		object.at("xPosition").get<float>(),
+		object.at("yPosition").get<float>(),
+		pTexture
+	});
+}
+
+void JsonImporter::AddActiveObject(const Json& object, GameData& dst, SpriteManager& spriteManager) const
+{
+	if (object.contains("colliders") && object["colliders"].is_array())
+	{
+		std::string
+			texPath{ object.value("texturePath", "default.png") };
+
+		std::vector<Rectf>
+			colliders{object.at("colliders").get<std::vector<Rectf>>()};
+
+		Sprite*
+			pTexture{ nullptr };
+
+		if (texPath != "default.png")
+		{
+			pTexture = spriteManager.CreateSprite("img/env/" + texPath);
+			pTexture->SetScale(object.at("scale").get<float>());
+		}
+
+		dst.activeObjects.push_back(EnvironmentActiveObject{
+			object.at("xPosition").get<float>(),
+			object.at("yPosition").get<float>(),
+			colliders,
+			pTexture,
+			StringToType(object.at("objectType").get<std::string>())
+		});
+	}
+}
+
+EnvironmentActiveObject::EnvironmentObjectType JsonImporter::StringToType(const std::string& typeStr) const
+{
+	if (typeStr == "stairs")
+	{
+		return EnvironmentActiveObject::EnvironmentObjectType::stairs;
+	}
+	if (typeStr == "jumpthroughplatform")
+	{
+		return EnvironmentActiveObject::EnvironmentObjectType::jumpThroughPlatform;
+	}
+	return EnvironmentActiveObject::EnvironmentObjectType::platform;
 }

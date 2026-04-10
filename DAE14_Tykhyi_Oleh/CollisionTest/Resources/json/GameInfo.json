@@ -395,7 +395,7 @@
         },
         {
           "texturePath": "spr_set_plant.png",
-          "objectType": "platform",
+          "objectType": "cosmetic",
           "renderLayer": 0,
           "xPosition": 397.9,
           "yPosition": 350.1,
@@ -404,7 +404,7 @@
         },
         {
           "texturePath": "env_table.png",
-          "objectType": "platform",
+          "objectType": "cosmetic",
           "renderLayer": 0,
           "xPosition": 19.2224121,
           "yPosition": 307.1,
@@ -412,7 +412,7 @@
           "colliders": []
         },
         {
-          "objectType": "stairs",
+          "objectType": "platform",
           "xPosition": 617.2,
           "yPosition": 306.9,
           "scale": 1.0,
@@ -478,8 +478,8 @@
           "texturePath": "spr_mask.png",
           "objectType": "playerinfo",
           "renderLayer": 0,
-          "xPosition": 199.0,
-          "yPosition": 65.0,
+          "xPosition": 195.3,
+          "yPosition": 63.6,
           "scale": 1.0,
           "colliders": [],
           "speed": 300.0

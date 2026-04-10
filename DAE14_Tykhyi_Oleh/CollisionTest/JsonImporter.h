@@ -4,22 +4,48 @@
 #include <iostream>
 
 #include "EnvironmentActiveObject.h"
+#include "EnvironmentCosmeticObject.h"
 #include "AnimationFrameInfo.h"
-#include "Map.h"
 #include "SpriteManager.h"
-#include "EnemyManager.h"
+#include "Enemy.h"
 
 using Json = nlohmann::json;
 void from_json(const Json& j, Rectf& rect);
 void from_json(const Json& j, AnimationFrameInfo& anFrame);
-EnvironmentActiveObject::EnvironmentObjectType StringToType(const std::string& typeStr);
 
 class JsonImporter
 {
 public:
-	void ImportEnvironmentInfo(const std::string& jsonPath, Map& gameMap, SpriteManager& spriteManager, EnemyManager& enemyManager, float& playerSpeed) const;
+	struct GameData {
+		std::vector<EnvironmentActiveObject> activeObjects;
+		std::vector<EnvironmentCosmeticObject> cosmeticObjects;
+		std::vector<Vector2f> controlPoints;
+
+		struct EnemyInfo {
+			Enemy::EnemyType type{};
+			Vector2f position{};
+			float speed{};
+		};
+
+		std::vector<EnemyInfo> enemiesInfo;
+
+		Vector2f respawnPoint{};
+		float playerSpeed{};
+	};
+
+
+	GameData ImportGameInfo(const std::string& jsonPath, SpriteManager& spriteManager) const;
 	std::vector<AnimationFrameInfo> ImportAnimationFrameObjects(const std::string& jsonPath) const;
 private:
 	Json ParseJsonFile(const std::string& jsonPath) const;
+	void ProcessJsonObject(const Json& object, GameData& dst, SpriteManager& spriteManager) const;
+
+	void AddPlayerInfo(const Json& object, GameData& dst) const;
+	void AddEnemy(Enemy::EnemyType type, const Json& object, GameData& dst) const;
+	void AddControlPoint(const Json& object, GameData& dst) const;
+	void AddCosmeticObject(const Json& object, GameData& dst, SpriteManager& spriteManager) const;
+	void AddActiveObject(const Json& object, GameData& dst, SpriteManager& spriteManager) const;
+
+	EnvironmentActiveObject::EnvironmentObjectType StringToType(const std::string& typeStr) const;
 };
 

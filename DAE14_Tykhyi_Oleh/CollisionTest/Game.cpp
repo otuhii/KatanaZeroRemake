@@ -27,38 +27,28 @@ void Game::Initialize( )
 	const float
 		spriteScaleValue{ 2.f };
 
-	float
-		playerSpeed{};
+	JsonImporter::GameData
+		importedGameInfo{};
 
 	m_pSpriteManager = new SpriteManager();
 	m_pCollisionManager = new CollisionManager();
-	
-	
 	m_pEnemyManager = new EnemyManager{};
-	m_pEnemyManager->InitializeEnemyType(
-		Enemy::EnemyType::grunt,
-		m_pSpriteManager->CreateSprite("img/chr/grunt_spritesheet.png"),
-		m_JsonImporter.ImportAnimationFrameObjects("json/enemy_Grunt_FrameInfo.json")
-	);
-
-	m_pEnemyManager->InitializeEnemyType(
-		Enemy::EnemyType::gangster,
-		m_pSpriteManager->CreateSprite("img/chr/gangster_spritesheet.png"),
-		m_JsonImporter.ImportAnimationFrameObjects("json/enemy_Gangster_FrameInfo.json")
-	);
-
 	m_pMap = new Map{};
 
-	m_JsonImporter.ImportEnvironmentInfo("json/GameInfo.json", *m_pMap, *m_pSpriteManager, *m_pEnemyManager, playerSpeed);
+	importedGameInfo = m_JsonImporter.ImportGameInfo("json/GameInfo.json", *m_pSpriteManager);
 
 	m_pPlayer = new Player(
 		m_pSpriteManager->CreateSprite("img/chr/zero_spritesheet.png"),
 		m_pSpriteManager->CreateSprite("img/chr/SplashAnimation.png"),
 		m_JsonImporter.ImportAnimationFrameObjects("json/PlayerAnimationFramesInfo.json"),
-		m_pMap->GetRespawnPoint(),
-		playerSpeed,
+		importedGameInfo.respawnPoint,
+		importedGameInfo.playerSpeed,
 		spriteScaleValue
 	);
+	
+	MapSetup(importedGameInfo);
+	EnemyTypeInitialization();
+	CreateEnemies(importedGameInfo, spriteScaleValue);
 }
 
 void Game::Cleanup( )
@@ -138,5 +128,41 @@ void Game::ClearBackground( ) const
 	glClearColor( 0.0f, 0.0f, 0.3f, 1.0f );
 	glClear( GL_COLOR_BUFFER_BIT );
 }
+
+void Game::EnemyTypeInitialization()
+{
+	m_pEnemyManager->InitializeEnemyType(
+		Enemy::EnemyType::grunt,
+		m_pSpriteManager->CreateSprite("img/chr/grunt_spritesheet.png"),
+		m_JsonImporter.ImportAnimationFrameObjects("json/enemy_Grunt_FrameInfo.json")
+	);
+
+	m_pEnemyManager->InitializeEnemyType(
+		Enemy::EnemyType::gangster,
+		m_pSpriteManager->CreateSprite("img/chr/gangster_spritesheet.png"),
+		m_JsonImporter.ImportAnimationFrameObjects("json/enemy_Gangster_FrameInfo.json")
+	);
+}
+
+void Game::CreateEnemies(const JsonImporter::GameData& gameData, float scale)
+{
+	for (const JsonImporter::GameData::EnemyInfo& enemyInfo : gameData.enemiesInfo)
+	{
+		m_pEnemyManager->AddEnemy(
+			enemyInfo.type,
+			enemyInfo.position,
+			enemyInfo.speed,
+			scale
+		);
+	}
+}
+
+void Game::MapSetup(const JsonImporter::GameData& gameData)
+{
+	m_pMap->SetEnvironmentActiveObjects(gameData.activeObjects);
+	m_pMap->SetEnvironmentCosmeticObjects(gameData.cosmeticObjects);
+	m_pMap->SetControlPoints(gameData.controlPoints);
+}
+
 
 

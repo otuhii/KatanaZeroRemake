@@ -69,9 +69,19 @@ void Map::SetRespawnPoint(const Vector2f& respawnPoint)
 	m_RespawnPoint = respawnPoint;
 }
 
+void Map::SetPlayerSpeed(float speed)
+{
+	m_PlayerSpeed = speed;
+}
+
 const Vector2f& Map::GetRespawnPoint() const
 {
 	return m_RespawnPoint;
+}
+
+float Map::GetPlayerSpeed() const
+{
+	return m_PlayerSpeed;
 }
 
 
