@@ -112,7 +112,9 @@
     <None Include="Prog2Game.targets" />
   </ItemGroup>
   <ItemGroup>
-    <CopyFileToFolders Include="Resources\json\GameEnvironment.json" />
+    <CopyFileToFolders Include="Resources\json\GameInfo.json" />
     <CopyFileToFolders Include="Resources\json\PlayerAnimationFramesInfo.json" />
+    <CopyFileToFolders Include="Resources\json\enemy_Gangster_FrameInfo.json" />
+    <CopyFileToFolders Include="Resources\json\enemy_Grunt_FrameInfo.json" />
   </ItemGroup>
 </Project>

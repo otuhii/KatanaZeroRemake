@@ -2,16 +2,12 @@
 #include "EnemyManager.h"
 #include "SpriteManager.h"
 
-EnemyManager::EnemyManager(SpriteManager* m_pSpriteManager, const JsonImporter& jsonImporter)
+EnemyManager::EnemyManager()
 {
 	size_t typeOptionCount{
 		static_cast<size_t>(Enemy::EnemyType::count)
 	};
-
 	m_EnemyTypeTemplates.resize(typeOptionCount);
-
-	LoadSpriteSheets(m_pSpriteManager);
-	LoadAnimationFrames(jsonImporter);
 }
 
 EnemyManager::~EnemyManager()
@@ -50,14 +46,7 @@ void EnemyManager::AddEnemy(Enemy::EnemyType type, const Vector2f& position, flo
 	});
 }
 
-void EnemyManager::LoadSpriteSheets(SpriteManager* m_pSpriteManager)
+void EnemyManager::InitializeEnemyType(Enemy::EnemyType type, Sprite* pSpritesheet, const std::vector<AnimationFrameInfo>& animationFrameInfo)
 {
-	m_EnemyTypeTemplates[static_cast<int>(Enemy::EnemyType::grunt)].spriteSheet = m_pSpriteManager->CreateSprite("img/grunt_spritesheet.png");
-	m_EnemyTypeTemplates[static_cast<int>(Enemy::EnemyType::gangster)].spriteSheet = m_pSpriteManager->CreateSprite("img/gangster_spritesheet.png");
-}
-
-void EnemyManager::LoadAnimationFrames(const JsonImporter& jsonImporter)
-{
-	m_EnemyTypeTemplates[static_cast<int>(Enemy::EnemyType::grunt)].enemyAnimationFrameInfo = jsonImporter.ImportAnimationFrameObjects("json/enemy_Grunt_FrameInfo.json");
-	m_EnemyTypeTemplates[static_cast<int>(Enemy::EnemyType::gangster)].enemyAnimationFrameInfo = jsonImporter.ImportAnimationFrameObjects("json/enemy_Gangster_FrameInfo.json");
+	m_EnemyTypeTemplates[static_cast<int>(type)] = EnemyTypeTemplate{ pSpritesheet, animationFrameInfo };
 }

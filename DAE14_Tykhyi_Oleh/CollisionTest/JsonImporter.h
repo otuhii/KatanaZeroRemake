@@ -7,6 +7,7 @@
 #include "AnimationFrameInfo.h"
 #include "Map.h"
 #include "SpriteManager.h"
+#include "EnemyManager.h"
 
 using Json = nlohmann::json;
 void from_json(const Json& j, Rectf& rect);
@@ -16,7 +17,7 @@ EnvironmentActiveObject::EnvironmentObjectType StringToType(const std::string& t
 class JsonImporter
 {
 public:
-	void ImportEnvironmentObjects(const std::string& jsonPath, Map& gameMap, SpriteManager& spriteManager) const;
+	void ImportEnvironmentInfo(const std::string& jsonPath, Map& gameMap, SpriteManager& spriteManager, EnemyManager& enemyManager, float& playerSpeed) const;
 	std::vector<AnimationFrameInfo> ImportAnimationFrameObjects(const std::string& jsonPath) const;
 private:
 	Json ParseJsonFile(const std::string& jsonPath) const;

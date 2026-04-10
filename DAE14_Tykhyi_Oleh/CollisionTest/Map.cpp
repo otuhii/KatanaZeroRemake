@@ -45,4 +45,14 @@ void Map::SetEnvironmentCosmeticObjects(const std::vector<EnvironmentCosmeticObj
 	m_EnvironmentCosmeticObjects = cosmeticObjects;
 }
 
+void Map::SetRespawnPoint(const Vector2f& respawnPoint)
+{
+	m_RespawnPoint = respawnPoint;
+}
+
+const Vector2f& Map::GetRespawnPoint() const
+{
+	return m_RespawnPoint;
+}
+
 

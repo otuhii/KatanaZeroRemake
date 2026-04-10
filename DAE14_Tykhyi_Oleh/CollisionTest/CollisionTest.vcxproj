@@ -209,7 +209,7 @@ xcopy "$(ProjectDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
   <!-- Include the custom .targets file -->
   <ItemGroup>
     <None Include="Prog2Game.targets" />
-    <CopyFileToFolders Include="Resources\json\GameEnvironment.json">
+    <CopyFileToFolders Include="Resources\json\GameInfo.json">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </ExcludedFromBuild>
@@ -220,6 +220,14 @@ xcopy "$(ProjectDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
       <FileType>Document</FileType>
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)\Resources\json\</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\json\enemy_Gangster_FrameInfo.json">
+      <FileType>Document</FileType>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)\Resources\json</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Resources\json\enemy_Grunt_FrameInfo.json">
+      <FileType>Document</FileType>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)\Resources\json</DestinationFolders>
     </CopyFileToFolders>
   </ItemGroup>
 </Project>

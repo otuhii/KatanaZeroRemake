@@ -27,23 +27,36 @@ void Game::Initialize( )
 	const float
 		spriteScaleValue{ 2.f };
 
+	float
+		playerSpeed{};
+
 	m_pSpriteManager = new SpriteManager();
 	m_pCollisionManager = new CollisionManager();
+	
+	
+	m_pEnemyManager = new EnemyManager{};
+	m_pEnemyManager->InitializeEnemyType(
+		Enemy::EnemyType::grunt,
+		m_pSpriteManager->CreateSprite("img/grunt_spritesheet.png"),
+		m_JsonImporter.ImportAnimationFrameObjects("json/enemy_Grunt_FrameInfo.json")
+	);
 
-	m_pEnemyManager = new EnemyManager{ m_pSpriteManager, m_JsonImporter };
-	m_pEnemyManager->AddEnemy(Enemy::EnemyType::grunt, Vector2f{200.f, 350.f}, 100.f, spriteScaleValue);
-	m_pEnemyManager->AddEnemy(Enemy::EnemyType::gangster, Vector2f{ 500.f, 350.f }, 100.f, spriteScaleValue);
+	m_pEnemyManager->InitializeEnemyType(
+		Enemy::EnemyType::gangster,
+		m_pSpriteManager->CreateSprite("img/gangster_spritesheet.png"),
+		m_JsonImporter.ImportAnimationFrameObjects("json/enemy_Gangster_FrameInfo.json")
+	);
 
 	m_pMap = new Map{};
 
-	m_JsonImporter.ImportEnvironmentObjects("json/GameEnvironment.json", *m_pMap, *m_pSpriteManager);
+	m_JsonImporter.ImportEnvironmentInfo("json/GameInfo.json", *m_pMap, *m_pSpriteManager, *m_pEnemyManager, playerSpeed);
 
 	m_pPlayer = new Player(
 		m_pSpriteManager->CreateSprite("img/final_ProcessedPlayerSpriteSheet.png"),
 		m_pSpriteManager->CreateSprite("img/SplashAnimation.png"),
 		m_JsonImporter.ImportAnimationFrameObjects("json/PlayerAnimationFramesInfo.json"),
-		Vector2f{ 100.f, 100.f }, 
-		350.f,
+		m_pMap->GetRespawnPoint(),
+		playerSpeed,
 		spriteScaleValue
 	);
 }

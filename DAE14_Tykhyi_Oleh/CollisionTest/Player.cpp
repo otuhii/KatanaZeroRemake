@@ -302,10 +302,14 @@ void Player::AttackDash(const Vector2f& mousePos)
 		dashDirection{ (mousePos - playerPos).Normalized() };
 
 	float
-		decayFactor{ 0.2f },
-		dashForce{ std::powf(decayFactor, static_cast<float>(m_AirAttackCount-1)) * m_BaseDashForce };
+		decayFactor{ 0.2f };
 
-	SetVelocity(dashForce * dashDirection);
+	Vector2f
+		finalDashVelocity{ m_BaseDashForce * dashDirection };
+	finalDashVelocity.y += GetVelocityY();
+	finalDashVelocity.y *= std::powf(decayFactor, static_cast<float>(m_AirAttackCount - 1)); //decaying y velocity to prevent flying
+
+	SetVelocity(finalDashVelocity);
 }
 
 void Player::ProcessJumpThroughPlatform(bool downButton)

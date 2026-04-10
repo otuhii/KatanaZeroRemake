@@ -1,14 +1,13 @@
 #pragma once
 #include "Enemy.h"
 #include <vector>
-#include "JsonImporter.h"
 
 class SpriteManager;
 
 class EnemyManager final
 {
 public:
-	EnemyManager(SpriteManager* m_pSpriteManager, const JsonImporter& jsonImporter);
+	EnemyManager();
 	
 	~EnemyManager();
 
@@ -17,6 +16,12 @@ public:
 	void Update(float elapsedSec);
 
 	void AddEnemy(Enemy::EnemyType type, const Vector2f& position, float speed, float scale);
+	void InitializeEnemyType(
+		Enemy::EnemyType type,
+		Sprite* pSpritesheet,
+		const std::vector<AnimationFrameInfo>& animationFrameInfo
+	);
+
 private:
 	struct EnemyTypeTemplate {
 		Sprite* spriteSheet;
@@ -25,8 +30,5 @@ private:
 
 	std::vector<Enemy*>				 m_pEnemies{};
 	std::vector<EnemyTypeTemplate>   m_EnemyTypeTemplates{};
-
-	void LoadSpriteSheets(SpriteManager* m_pSpriteManager);
-	void LoadAnimationFrames(const JsonImporter& jsonImporter);
 };
 

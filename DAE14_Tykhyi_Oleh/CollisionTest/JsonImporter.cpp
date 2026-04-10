@@ -33,8 +33,7 @@ EnvironmentActiveObject::EnvironmentObjectType StringToType(const std::string& t
 	return EnvironmentActiveObject::EnvironmentObjectType::platform; 
 }
 
-
-void JsonImporter::ImportEnvironmentObjects(const std::string& jsonPath, Map& gameMap, SpriteManager& SpriteManager) const
+void JsonImporter::ImportEnvironmentInfo(const std::string& jsonPath, Map& gameMap, SpriteManager& SpriteManager, EnemyManager& enemyManager, float& playerSpeed) const
 {
 	Json data{ ParseJsonFile(jsonPath) };
 
@@ -62,40 +61,67 @@ void JsonImporter::ImportEnvironmentObjects(const std::string& jsonPath, Map& ga
 					x{ obj.at("xPosition").get<float>() },
 					y{ obj.at("yPosition").get<float>() };
 
-				std::string
-					texPath{ obj.value("texturePath", "default.png") };
+				std::string objectType{ obj.at("objectType").get<std::string>() };
 
-				Sprite* pTexture{ nullptr };
-				if (texPath != "default.png")
+				if (objectType == "playerinfo")
 				{
-					pTexture = SpriteManager.CreateSprite("img/" + texPath);
-					pTexture->SetScale(obj.at("scale").get<float>());
+					gameMap.SetRespawnPoint(Vector2f{ x, y });
+					playerSpeed = obj.at("speed").get<float>();
 				}
-
-				std::vector<Rectf> colliders;
-
-				if (obj.contains("colliders") && obj["colliders"].is_array())
+				else if (objectType == "enemygrunt")
 				{
-					colliders = obj.at("colliders").get<std::vector<Rectf>>();
-
-					activeObjects.push_back(EnvironmentActiveObject
-						{
-							x,
-							y,
-							colliders,
-							pTexture,
-							StringToType(obj.at("objectType").get<std::string>())
-						});
-
+					enemyManager.AddEnemy(
+						Enemy::EnemyType::grunt,
+						Vector2f{ x, y },
+						obj.at("speed").get<float>(),
+						2.f
+					);
+				}
+				else if (objectType == "enemygangster")
+				{
+					enemyManager.AddEnemy(
+						Enemy::EnemyType::gangster,
+						Vector2f{ x,y },
+						obj.at("speed").get<float>(),
+						2.f
+					);
 				}
 				else
 				{
-					cosmeticObjects.push_back(EnvironmentCosmeticObject
-						{
-							x,
-							y,
-							pTexture
-						});
+					std::string
+						texPath{ obj.value("texturePath", "default.png") };
+
+					Sprite* pTexture{ nullptr };
+					if (texPath != "default.png")
+					{
+						pTexture = SpriteManager.CreateSprite("img/" + texPath);
+						pTexture->SetScale(obj.at("scale").get<float>());
+					}
+
+					std::vector<Rectf> colliders;
+
+					if (obj.contains("colliders") && obj["colliders"].is_array())
+					{
+						colliders = obj.at("colliders").get<std::vector<Rectf>>();
+
+						activeObjects.push_back(EnvironmentActiveObject
+							{
+								x,
+								y,
+								colliders,
+								pTexture,
+								StringToType(objectType)
+							});
+					}
+					else
+					{
+						cosmeticObjects.push_back(EnvironmentCosmeticObject
+							{
+								x,
+								y,
+								pTexture
+							});
+					}
 				}
 			}
 		}
@@ -142,7 +168,7 @@ Json JsonImporter::ParseJsonFile(const std::string& jsonPath) const
 	std::ifstream inputFile{ jsonPath };
 	if (!inputFile.is_open())
 	{
-		std::cout << "Count not open the json file" << std::endl;
+		std::cout << "Count not open the json file: " << jsonPath << std::endl;
 		return Json::value_t::discarded;
 	}
 
