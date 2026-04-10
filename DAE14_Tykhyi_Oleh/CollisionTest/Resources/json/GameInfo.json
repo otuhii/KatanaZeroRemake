@@ -488,31 +488,29 @@
           "texturePath": "spr_gangstermask.png",
           "objectType": "enemygrunt",
           "renderLayer": 0,
-          "xPosition": 88.41687,
-          "yPosition": 350.4961,
+          "xPosition": 1125.0,
+          "yPosition": 351.0,
           "scale": 1.0,
           "colliders": [],
-          "speed": 0.0
+          "speed": 100.0
         },
         {
-          "texturePath": "spr_gangstermask_ghost.png",
-          "objectType": "enemygangster",
+          "texturePath": "ControlPoint.png",
+          "objectType": "controlpoint",
           "renderLayer": 0,
-          "xPosition": 504.458069,
-          "yPosition": 350.4961,
+          "xPosition": 626.2,
+          "yPosition": 393.0,
           "scale": 1.0,
-          "colliders": [],
-          "speed": 0.0
+          "colliders": []
         },
         {
-          "texturePath": "spr_gangstermask.png",
-          "objectType": "enemygrunt",
+          "texturePath": "ControlPoint.png",
+          "objectType": "controlpoint",
           "renderLayer": 0,
-          "xPosition": 1106.063,
-          "yPosition": 349.905151,
+          "xPosition": 1026.0,
+          "yPosition": 392.0,
           "scale": 1.0,
-          "colliders": [],
-          "speed": 0.0
+          "colliders": []
         }
       ]
     }

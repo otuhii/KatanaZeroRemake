@@ -2,6 +2,10 @@
 #include "EnemyManager.h"
 #include "SpriteManager.h"
 
+#include "Map.h"
+#include "CollisionManager.h"
+
+
 EnemyManager::EnemyManager()
 {
 	size_t typeOptionCount{
@@ -26,12 +30,16 @@ void EnemyManager::Draw() const
 	}
 }
 
-void EnemyManager::Update(float elapsedSec)
+void EnemyManager::Update(float elapsedSec, const Vector2f& playerPos, const Map* gameMap, const CollisionManager* collisionManager)
 {
 	for (Enemy* pEnemy : m_pEnemies)
 	{
-		pEnemy->Update(elapsedSec, Rectf{});
+		pEnemy->UpdatePath(gameMap->GetControlPoints());
+		pEnemy->Update(elapsedSec, playerPos, Rectf{});
+
+		collisionManager->HandleMovement(pEnemy, *gameMap, elapsedSec);
 	}
+
 }
 
 void EnemyManager::AddEnemy(Enemy::EnemyType type, const Vector2f& position, float speed, float scale)

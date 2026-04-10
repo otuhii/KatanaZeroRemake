@@ -37,9 +37,9 @@ void JsonImporter::ImportEnvironmentInfo(const std::string& jsonPath, Map& gameM
 {
 	Json data{ ParseJsonFile(jsonPath) };
 
-	std::vector<EnvironmentActiveObject> activeObjects{};
-	std::vector<EnvironmentCosmeticObject> cosmeticObjects{};
-
+	std::vector<EnvironmentActiveObject>	activeObjects{};
+	std::vector<EnvironmentCosmeticObject>	cosmeticObjects{};
+	std::vector<Vector2f>					controlPoints{};
 
 	if (data.is_discarded() ||
 		data.empty())
@@ -86,6 +86,10 @@ void JsonImporter::ImportEnvironmentInfo(const std::string& jsonPath, Map& gameM
 						2.f
 					);
 				}
+				else if (objectType == "controlpoint")
+				{
+					controlPoints.push_back(Vector2f{ x, y });
+				}
 				else
 				{
 					std::string
@@ -94,7 +98,7 @@ void JsonImporter::ImportEnvironmentInfo(const std::string& jsonPath, Map& gameM
 					Sprite* pTexture{ nullptr };
 					if (texPath != "default.png")
 					{
-						pTexture = SpriteManager.CreateSprite("img/" + texPath);
+						pTexture = SpriteManager.CreateSprite("img/env/" + texPath);
 						pTexture->SetScale(obj.at("scale").get<float>());
 					}
 
@@ -134,6 +138,7 @@ void JsonImporter::ImportEnvironmentInfo(const std::string& jsonPath, Map& gameM
 
 	gameMap.SetEnvironmentActiveObjects(activeObjects);
 	gameMap.SetEnvironmentCosmeticObjects(cosmeticObjects);
+	gameMap.SetControlPoints(controlPoints);
 }
 
 std::vector<AnimationFrameInfo> JsonImporter::ImportAnimationFrameObjects(const std::string& jsonPath) const

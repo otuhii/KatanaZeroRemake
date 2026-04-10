@@ -37,13 +37,13 @@ void Game::Initialize( )
 	m_pEnemyManager = new EnemyManager{};
 	m_pEnemyManager->InitializeEnemyType(
 		Enemy::EnemyType::grunt,
-		m_pSpriteManager->CreateSprite("img/grunt_spritesheet.png"),
+		m_pSpriteManager->CreateSprite("img/chr/grunt_spritesheet.png"),
 		m_JsonImporter.ImportAnimationFrameObjects("json/enemy_Grunt_FrameInfo.json")
 	);
 
 	m_pEnemyManager->InitializeEnemyType(
 		Enemy::EnemyType::gangster,
-		m_pSpriteManager->CreateSprite("img/gangster_spritesheet.png"),
+		m_pSpriteManager->CreateSprite("img/chr/gangster_spritesheet.png"),
 		m_JsonImporter.ImportAnimationFrameObjects("json/enemy_Gangster_FrameInfo.json")
 	);
 
@@ -52,8 +52,8 @@ void Game::Initialize( )
 	m_JsonImporter.ImportEnvironmentInfo("json/GameInfo.json", *m_pMap, *m_pSpriteManager, *m_pEnemyManager, playerSpeed);
 
 	m_pPlayer = new Player(
-		m_pSpriteManager->CreateSprite("img/final_ProcessedPlayerSpriteSheet.png"),
-		m_pSpriteManager->CreateSprite("img/SplashAnimation.png"),
+		m_pSpriteManager->CreateSprite("img/chr/zero_spritesheet.png"),
+		m_pSpriteManager->CreateSprite("img/chr/SplashAnimation.png"),
 		m_JsonImporter.ImportAnimationFrameObjects("json/PlayerAnimationFramesInfo.json"),
 		m_pMap->GetRespawnPoint(),
 		playerSpeed,
@@ -80,7 +80,7 @@ void Game::Update( float elapsedSec )
 
 	m_pCollisionManager->HandleMovement(m_pPlayer, *m_pMap, elapsedSec);
 
-	m_pEnemyManager->Update(elapsedSec);
+	m_pEnemyManager->Update(elapsedSec, m_pPlayer->GetPosition(), m_pMap, m_pCollisionManager);
 
 	m_pSpriteManager->Update(elapsedSec);
 }

@@ -17,8 +17,17 @@ void Map::Draw() const
 		utils::SetColor(Color4f{ 0.f, 1.f, 0.f, 1.f });
 		for (const Rectf& collider : obj.GetColliders())
 		{
-			utils::DrawRect(collider);
+			//utils::DrawRect(collider);
 		}
+	}
+
+	for (const Vector2f& point : m_ControlPoints)
+	{
+		const float
+			controlPointRadius{ 16.f };
+
+		utils::SetColor(Color4f{ 1.f, 0.f, 0.f, 1.f });
+		//utils::FillEllipse(point, controlPointRadius, controlPointRadius);
 	}
 
 	for (const EnvironmentCosmeticObject& obj : m_EnvironmentCosmeticObjects)
@@ -35,6 +44,11 @@ const std::vector<EnvironmentActiveObject>& Map::GetEnvironmentActiveObjects() c
 	return m_EnvironmentActiveObjects;
 }
 
+const std::vector<Vector2f>& Map::GetControlPoints() const
+{
+	return m_ControlPoints;
+}
+
 void Map::SetEnvironmentActiveObjects(const std::vector<EnvironmentActiveObject>& activeObjects)
 {
 	m_EnvironmentActiveObjects = activeObjects;
@@ -43,6 +57,11 @@ void Map::SetEnvironmentActiveObjects(const std::vector<EnvironmentActiveObject>
 void Map::SetEnvironmentCosmeticObjects(const std::vector<EnvironmentCosmeticObject>& cosmeticObjects) 
 {
 	m_EnvironmentCosmeticObjects = cosmeticObjects;
+}
+
+void Map::SetControlPoints(const std::vector<Vector2f>& controlPoints)
+{
+	m_ControlPoints = controlPoints;
 }
 
 void Map::SetRespawnPoint(const Vector2f& respawnPoint)
