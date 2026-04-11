@@ -1,5 +1,6 @@
 #pragma once
 #include "Entity.h"
+#include "ControlPoint.h"
 
 #include <vector>
 
@@ -21,23 +22,23 @@ public:
 		turn
 	};
 
-	Enemy(EnemyType type, Sprite* sprite, const std::vector<AnimationFrameInfo>& playerAnimation, const Vector2f& position, float speed, float scale);
+	Enemy(EnemyType type, Sprite* sprite, const std::vector<AnimationFrameInfo>& playerAnimation, const Vector2f& position, float speed, float scale, int floor);
 
 	void Draw() const override;
 
 	void Update(float elapsedSec, const Vector2f& playerPos, const Rectf& viewport);
 
-	void UpdatePath(const std::vector<Vector2f>& controlPoint);
+	void UpdatePath(const std::vector<ControlPoint>& controlPoint);
 private:
 	EnemyState m_State;
 	EnemyType  m_Type;
 
 	std::vector<AnimationFrameInfo> m_EnemySpriteFrames{};
-	std::vector<Vector2f>			m_Path{};
+	std::vector<ControlPoint>		m_Path{};
 
 	int 
 		m_CurrentTargetControlPoint{ 0 };
-
+	
 	void UpdateSprite();
 
 	void SetState(EnemyState state);
@@ -46,6 +47,14 @@ private:
 	void PlayerSensing(const Vector2f& playerPos);
 
 	void Patrol(float elapsedSec);
-	void Chase(float elapsedSec, const Vector2f& playerPos);
+	void HandleChase(float elapsedSec, const Vector2f& playerPos);
+	void ChasePlayer(float elapsedSec, const Vector2f& playerPos);
+
+	bool MoveTo(const ControlPoint& controlPoint, float speedMultiplier);
+
+	int FindStairs(int floor);
+	int FindNextLeadingPoint();
+
+
 };
 

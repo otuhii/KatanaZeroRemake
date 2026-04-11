@@ -35,6 +35,5 @@ private:
 	const Sprite* m_pTexture{};
 
 	EnvironmentObjectType m_Type{EnvironmentObjectType::none};
-	//int textureId
 };
 

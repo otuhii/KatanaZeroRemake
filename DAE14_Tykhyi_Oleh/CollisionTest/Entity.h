@@ -4,11 +4,13 @@
 class Entity
 {
 public:
-	Entity(Sprite* sprite, const Vector2f& position, const Vector2f& velocity, float speed);
+	Entity(Sprite* sprite, const Vector2f& position, const Vector2f& velocity, float speed, int floor);
 
 	virtual void Draw() const;
 
 	virtual void Update(const float elapsedSec, const Rectf& viewport);
+
+	void SetFloor(int floor);
 
 	void SetSpeed(float speed);
 	void SetVelocityX(float xVel);
@@ -26,6 +28,8 @@ public:
 
 	bool			IsOnGround()	const;
 
+	int				GetFloor()		const;
+
 	float			GetSpeed()		const;
 	float			GetVelocityX()	const;
 	float			GetVelocityY()	const;
@@ -40,13 +44,18 @@ public:
 
 	bool			IsSpriteAnimationFinished() const;
 	bool			CanJumpThroughPlatform() const;
+
 protected:
 	Sprite* GetSprite() const;
 
 private:
 	Sprite* m_pSprite;
 
-	float m_Speed{};
+	float
+		m_Speed{};
+
+	int
+		m_Floor{};
 
 	bool
 		m_IsOnGround{},

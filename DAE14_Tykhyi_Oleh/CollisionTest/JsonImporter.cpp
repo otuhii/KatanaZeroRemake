@@ -20,8 +20,6 @@ void from_json(const Json& j, AnimationFrameInfo& anFrame)
 	}
 }
 
-
-
 JsonImporter::GameData JsonImporter::ImportGameInfo(const std::string& jsonPath, SpriteManager& spriteManager) const
 {
 	Json data{ ParseJsonFile(jsonPath) };
@@ -143,6 +141,7 @@ void JsonImporter::AddPlayerInfo(const Json& object, GameData& dst) const
 	dst.respawnPoint.x = object.at("xPosition").get<float>();
 	dst.respawnPoint.y = object.at("yPosition").get<float>();
 	dst.playerScale = object.at("scale").get<float>();
+	dst.playerFloor = object.at("floor").get<int>();
 }
 
 void JsonImporter::AddEnemy(Enemy::EnemyType type, const Json& object, GameData& dst) const
@@ -158,19 +157,29 @@ void JsonImporter::AddEnemy(Enemy::EnemyType type, const Json& object, GameData&
 	float
 		scale{ object.at("scale").get<float>() };
 
+	int
+		floor{ object.at("floor").get<int>() };
+
 	dst.enemiesInfo.push_back(GameData::EnemyInfo{
 		type,
 		position,
 		speed,
-		scale
+		scale,
+		floor
 	});
 }
 
 void JsonImporter::AddControlPoint(const Json& object, GameData& dst) const
 {
-	dst.controlPoints.push_back(Vector2f{
+	Vector2f position{
 		object.at("xPosition").get<float>(),
 		object.at("yPosition").get<float>()
+	};
+
+	dst.controlPoints.push_back(ControlPoint{
+		position,
+		StringToControlPointType(object.at("controlPointType").get<std::string>()),
+		object.at("floor").get<int>()
 	});
 }
 
@@ -219,20 +228,43 @@ void JsonImporter::AddActiveObject(const Json& object, GameData& dst, SpriteMana
 			object.at("yPosition").get<float>(),
 			colliders,
 			pTexture,
-			StringToType(object.at("objectType").get<std::string>())
+			StringToObjectType(object.at("objectType").get<std::string>())
 		});
 	}
 }
 
-EnvironmentActiveObject::EnvironmentObjectType JsonImporter::StringToType(const std::string& typeStr) const
+EnvironmentActiveObject::EnvironmentObjectType JsonImporter::StringToObjectType(const std::string& typeStr) const
 {
 	if (typeStr == "stairs")
 	{
 		return EnvironmentActiveObject::EnvironmentObjectType::stairs;
 	}
-	if (typeStr == "jumpthroughplatform")
+	else if (typeStr == "jumpthroughplatform")
 	{
 		return EnvironmentActiveObject::EnvironmentObjectType::jumpThroughPlatform;
 	}
-	return EnvironmentActiveObject::EnvironmentObjectType::platform;
+	else if (typeStr == "platform")
+	{
+		return EnvironmentActiveObject::EnvironmentObjectType::platform;
+	}
+	else
+	{
+		return EnvironmentActiveObject::EnvironmentObjectType::none;
+	}
+}
+
+ControlPoint::ControlPointType JsonImporter::StringToControlPointType(const std::string& typeStr) const
+{
+	if (typeStr == "leadingpoint")
+	{
+		return ControlPoint::ControlPointType::leadingPoint;
+	}
+	else if (typeStr == "stairsignifier")
+	{
+		return ControlPoint::ControlPointType::stairSignifier;
+	}
+	else
+	{
+		return ControlPoint::ControlPointType::none;
+	}
 }

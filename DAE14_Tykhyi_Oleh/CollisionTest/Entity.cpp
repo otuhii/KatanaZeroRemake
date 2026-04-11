@@ -3,8 +3,8 @@
 
 #include "CollisionManager.h"
 
-Entity::Entity(Sprite* sprite, const Vector2f& position, const Vector2f& velocity, float speed)
-	: m_pSprite(sprite), m_Velocity(velocity), m_Speed(speed), m_IsOnGround(true), m_Position{position}
+Entity::Entity(Sprite* sprite, const Vector2f& position, const Vector2f& velocity, float speed, int floor)
+	: m_pSprite(sprite), m_Velocity(velocity), m_Speed(speed), m_IsOnGround(true), m_Position{position}, m_Floor{floor}
 {
 }
 
@@ -20,6 +20,11 @@ void Entity::Update(float elapsedSec, const Rectf& viewport)
 
 	m_Velocity.y += gravity * elapsedSec;
 
+}
+
+void Entity::SetFloor(int floor)
+{
+	m_Floor = floor;
 }
 
 void Entity::SetSpeed(float speed)
@@ -76,6 +81,11 @@ void Entity::UpdateHitbox()
 bool Entity::IsOnGround() const
 {
 	return m_IsOnGround;
+}
+
+int Entity::GetFloor() const
+{
+	return m_Floor;
 }
 
 void Entity::SetVelocityX(float xVel)

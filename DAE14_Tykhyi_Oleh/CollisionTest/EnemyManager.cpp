@@ -42,7 +42,7 @@ void EnemyManager::Update(float elapsedSec, const Vector2f& playerPos, const Map
 
 }
 
-void EnemyManager::AddEnemy(Enemy::EnemyType type, const Vector2f& position, float speed, float scale)
+void EnemyManager::AddEnemy(Enemy::EnemyType type, const Vector2f& position, float speed, float scale, int floor)
 {
 	m_pEnemies.push_back(new Enemy{
 		type, 
@@ -50,7 +50,8 @@ void EnemyManager::AddEnemy(Enemy::EnemyType type, const Vector2f& position, flo
 		m_EnemyTypeTemplates[static_cast<int>(type)].enemyAnimationFrameInfo,
 		position, 
 		speed, 
-		scale 
+		scale,
+		floor
 	});
 }
 

@@ -8,8 +8,8 @@
 #include "utils.h"
 
 
-Player::Player(Sprite* sprite, Sprite* splashSprite, const std::vector<AnimationFrameInfo>& playerAnimation, const Vector2f& position, float speed, float scale)
-	: Entity(sprite, position, Vector2f{}, speed),
+Player::Player(Sprite* sprite, Sprite* splashSprite, const std::vector<AnimationFrameInfo>& playerAnimation, const Vector2f& position, float speed, float scale, int floor)
+	: Entity(sprite, position, Vector2f{}, speed, floor),
 	m_SplashSprite(splashSprite),
 	m_State(PlayerState::staying),
 	m_PlayerSpriteFrames(playerAnimation)
@@ -30,7 +30,7 @@ void Player::Draw() const
 	Entity::Draw();
 	DrawSplash();
 	
-	//DrawHitboxes();
+	DrawHitboxes();
 }
 
 void Player::Update(float elapsedSec, const Uint8* pStates, const Rectf& viewport)

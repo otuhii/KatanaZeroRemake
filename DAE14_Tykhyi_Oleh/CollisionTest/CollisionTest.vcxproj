@@ -180,6 +180,7 @@ xcopy "$(ProjectDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
   <ItemGroup>
     <ClInclude Include="AnimationFrameInfo.h" />
     <ClInclude Include="CollisionManager.h" />
+    <ClInclude Include="ControlPoint.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="Entity.h" />

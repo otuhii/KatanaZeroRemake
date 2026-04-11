@@ -40,7 +40,8 @@ void Game::Initialize( )
 		m_JsonImporter.ImportAnimationFrameObjects("json/PlayerAnimationFramesInfo.json"),
 		importedGameInfo.respawnPoint,
 		importedGameInfo.playerSpeed,
-		importedGameInfo.playerScale
+		importedGameInfo.playerScale,
+		importedGameInfo.playerFloor
 	);
 	
 	MapSetup(importedGameInfo);
@@ -59,15 +60,15 @@ void Game::Cleanup( )
 
 void Game::Update( float elapsedSec )
 {
-	std::cout << 1 / elapsedSec << std::endl;
+	//std::cout << 1 / elapsedSec << std::endl;
 
 	const Uint8 *pStates = SDL_GetKeyboardState( nullptr );
 	
 	m_pPlayer->Update(elapsedSec, pStates, GetViewPort());
 
-	m_pCollisionManager->HandleMovement(m_pPlayer, *m_pMap, elapsedSec);
+	m_pCollisionManager->HandleMovement(m_pPlayer, *m_pMap,  elapsedSec);
 
-	m_pEnemyManager->Update(elapsedSec, m_pPlayer->GetPosition(), m_pMap, m_pCollisionManager);
+	m_pEnemyManager->Update( elapsedSec, m_pPlayer->GetPosition(), m_pMap, m_pCollisionManager);
 
 	m_pSpriteManager->Update(elapsedSec);
 }
@@ -149,7 +150,8 @@ void Game::CreateEnemies(const JsonImporter::GameData& gameData)
 			enemyInfo.type,
 			enemyInfo.position,
 			enemyInfo.speed,
-			enemyInfo.scale
+			enemyInfo.scale,
+			enemyInfo.floor
 		);
 	}
 }

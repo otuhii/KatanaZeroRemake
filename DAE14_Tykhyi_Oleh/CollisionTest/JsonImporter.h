@@ -6,6 +6,7 @@
 #include "EnvironmentActiveObject.h"
 #include "EnvironmentCosmeticObject.h"
 #include "AnimationFrameInfo.h"
+#include "ControlPoint.h"
 #include "SpriteManager.h"
 #include "Enemy.h"
 
@@ -19,13 +20,14 @@ public:
 	struct GameData {
 		std::vector<EnvironmentActiveObject> activeObjects;
 		std::vector<EnvironmentCosmeticObject> cosmeticObjects;
-		std::vector<Vector2f> controlPoints;
+		std::vector<ControlPoint> controlPoints;
 
 		struct EnemyInfo {
 			Enemy::EnemyType type{};
 			Vector2f position{};
 			float speed{};
 			float scale{};
+			int floor{};
 		};
 
 		std::vector<EnemyInfo> enemiesInfo;
@@ -33,6 +35,7 @@ public:
 		Vector2f respawnPoint{};
 		float playerSpeed{};
 		float playerScale{};
+		int playerFloor{};
 	};
 
 
@@ -48,6 +51,8 @@ private:
 	void AddCosmeticObject(const Json& object, GameData& dst, SpriteManager& spriteManager) const;
 	void AddActiveObject(const Json& object, GameData& dst, SpriteManager& spriteManager) const;
 
-	EnvironmentActiveObject::EnvironmentObjectType StringToType(const std::string& typeStr) const;
+	EnvironmentActiveObject::EnvironmentObjectType StringToObjectType(const std::string& typeStr) const;
+	ControlPoint::ControlPointType				   StringToControlPointType(const std::string& typeStr) const;
+
 };
 

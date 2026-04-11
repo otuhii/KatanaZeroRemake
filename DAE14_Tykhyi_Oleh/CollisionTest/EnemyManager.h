@@ -17,7 +17,8 @@ public:
 
 	void Update(float elapsedSec, const Vector2f& playerPos, const Map* gameMap, const CollisionManager* collisionManager);
 
-	void AddEnemy(Enemy::EnemyType type, const Vector2f& position, float speed, float scale);
+	void AddEnemy(Enemy::EnemyType type, const Vector2f& position, float speed, float scale, int floor);
+
 	void InitializeEnemyType(
 		Enemy::EnemyType type,
 		Sprite* pSpritesheet,
