@@ -24,9 +24,6 @@ Game::~Game( )
 
 void Game::Initialize( )
 {
-	const float
-		spriteScaleValue{ 2.f };
-
 	JsonImporter::GameData
 		importedGameInfo{};
 
@@ -43,12 +40,12 @@ void Game::Initialize( )
 		m_JsonImporter.ImportAnimationFrameObjects("json/PlayerAnimationFramesInfo.json"),
 		importedGameInfo.respawnPoint,
 		importedGameInfo.playerSpeed,
-		spriteScaleValue
+		importedGameInfo.playerScale
 	);
 	
 	MapSetup(importedGameInfo);
 	EnemyTypeInitialization();
-	CreateEnemies(importedGameInfo, spriteScaleValue);
+	CreateEnemies(importedGameInfo);
 }
 
 void Game::Cleanup( )
@@ -144,7 +141,7 @@ void Game::EnemyTypeInitialization()
 	);
 }
 
-void Game::CreateEnemies(const JsonImporter::GameData& gameData, float scale)
+void Game::CreateEnemies(const JsonImporter::GameData& gameData)
 {
 	for (const JsonImporter::GameData::EnemyInfo& enemyInfo : gameData.enemiesInfo)
 	{
@@ -152,7 +149,7 @@ void Game::CreateEnemies(const JsonImporter::GameData& gameData, float scale)
 			enemyInfo.type,
 			enemyInfo.position,
 			enemyInfo.speed,
-			scale
+			enemyInfo.scale
 		);
 	}
 }

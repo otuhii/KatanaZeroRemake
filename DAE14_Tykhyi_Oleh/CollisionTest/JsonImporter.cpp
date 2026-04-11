@@ -142,6 +142,7 @@ void JsonImporter::AddPlayerInfo(const Json& object, GameData& dst) const
 	dst.playerSpeed = object.at("speed").get<float>();
 	dst.respawnPoint.x = object.at("xPosition").get<float>();
 	dst.respawnPoint.y = object.at("yPosition").get<float>();
+	dst.playerScale = object.at("scale").get<float>();
 }
 
 void JsonImporter::AddEnemy(Enemy::EnemyType type, const Json& object, GameData& dst) const
@@ -154,10 +155,14 @@ void JsonImporter::AddEnemy(Enemy::EnemyType type, const Json& object, GameData&
 	float
 		speed{ object.at("speed").get<float>() };
 
+	float
+		scale{ object.at("scale").get<float>() };
+
 	dst.enemiesInfo.push_back(GameData::EnemyInfo{
 		type,
 		position,
-		speed
+		speed,
+		scale
 	});
 }
 

@@ -25,12 +25,14 @@ public:
 			Enemy::EnemyType type{};
 			Vector2f position{};
 			float speed{};
+			float scale{};
 		};
 
 		std::vector<EnemyInfo> enemiesInfo;
 
 		Vector2f respawnPoint{};
 		float playerSpeed{};
+		float playerScale{};
 	};
 
 
