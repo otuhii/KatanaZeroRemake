@@ -7,6 +7,7 @@
 #include "Matrix2x3.h"     
 #include "utils.h"
 
+#include <iostream>
 
 Player::Player(Sprite* sprite, Sprite* splashSprite, const std::vector<AnimationFrameInfo>& playerAnimation, const Vector2f& position, float speed, float scale, int floor)
 	: Entity(sprite, position, Vector2f{}, speed, floor),
@@ -31,7 +32,6 @@ void Player::Draw() const
 	DrawSplash();
 	
 	DrawHitboxes();
-
 }
 
 void Player::Update(float elapsedSec, const Uint8* pStates, const Rectf& viewport)

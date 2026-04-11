@@ -179,7 +179,9 @@ void JsonImporter::AddControlPoint(const Json& object, GameData& dst) const
 	dst.controlPoints.push_back(ControlPoint{
 		position,
 		StringToControlPointType(object.at("controlPointType").get<std::string>()),
-		object.at("floor").get<int>()
+		object.at("floor").get<int>(),
+		object.at("id").get<int>(),
+		object.at("neighborIds").get<std::vector<int>>()
 	});
 }
 

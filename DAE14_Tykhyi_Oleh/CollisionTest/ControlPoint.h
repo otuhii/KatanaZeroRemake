@@ -13,4 +13,7 @@ struct ControlPoint {
 
 	ControlPointType type{};
 	int floor{};
+	int pointId{};
+
+	std::vector<int> neightborIndices;
 };

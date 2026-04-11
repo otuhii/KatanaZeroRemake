@@ -30,14 +30,14 @@ void EnemyManager::Draw() const
 	}
 }
 
-void EnemyManager::Update(float elapsedSec, const Vector2f& playerPos, const Map* gameMap, const CollisionManager* collisionManager)
+void EnemyManager::Update(float elapsedSec, const Vector2f& playerPos, int playerFloor, const Map* gameMap, const CollisionManager* collisionManager)
 {
 	for (Enemy* pEnemy : m_pEnemies)
 	{
 		pEnemy->UpdatePath(gameMap->GetControlPoints());
-		pEnemy->Update(elapsedSec, playerPos, Rectf{});
+		pEnemy->Update(elapsedSec, playerPos, playerFloor, Rectf{});
 
-		collisionManager->HandleMovement(pEnemy, *gameMap, elapsedSec);
+		collisionManager->HandleMovement(pEnemy, *gameMap, elapsedSec, false);
 	}
 
 }

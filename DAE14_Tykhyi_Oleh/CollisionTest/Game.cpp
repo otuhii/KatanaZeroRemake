@@ -66,9 +66,9 @@ void Game::Update( float elapsedSec )
 	
 	m_pPlayer->Update(elapsedSec, pStates, GetViewPort());
 
-	m_pCollisionManager->HandleMovement(m_pPlayer, *m_pMap,  elapsedSec);
+	m_pCollisionManager->HandleMovement(m_pPlayer, *m_pMap,  elapsedSec, true);
 
-	m_pEnemyManager->Update( elapsedSec, m_pPlayer->GetPosition(), m_pMap, m_pCollisionManager);
+	m_pEnemyManager->Update( elapsedSec, m_pPlayer->GetPosition(), m_pPlayer->GetFloor(), m_pMap, m_pCollisionManager);
 
 	m_pSpriteManager->Update(elapsedSec);
 }

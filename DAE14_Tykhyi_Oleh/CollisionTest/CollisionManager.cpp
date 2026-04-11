@@ -3,7 +3,7 @@
 
 #include "utils.h"
 
-void CollisionManager::HandleMovement(Entity* pEntity, const Map& map, float elapsedSec) const
+void CollisionManager::HandleMovement(Entity* pEntity, const Map& map, float elapsedSec, bool updateFloorInfo) const
 {
 	Vector2f
 		entityVelocity{ pEntity->GetVelocity() },
@@ -11,26 +11,26 @@ void CollisionManager::HandleMovement(Entity* pEntity, const Map& map, float ela
 
 	entityPosition.x += entityVelocity.x * elapsedSec;
 	pEntity->SetPositionX(entityPosition.x);
-	CheckCollision(pEntity, map, true);
+	CheckCollision(pEntity, map, true, updateFloorInfo);
 
 	entityPosition.y += entityVelocity.y * elapsedSec;
 	pEntity->SetPositionY(entityPosition.y);
 	pEntity->SetIsOnGroundState(false); //assuming that player is in the air
-	CheckCollision(pEntity, map, false);
+	CheckCollision(pEntity, map, false, updateFloorInfo);
 }
 
-void CollisionManager::CheckCollision(Entity* pEntity, const Map& map, bool isHorizontalMovement) const
+void CollisionManager::CheckCollision(Entity* pEntity, const Map& map, bool isHorizontalMovement, bool updateFloorInfo) const
 {
 	for (const EnvironmentActiveObject& object : map.GetEnvironmentActiveObjects())
 	{
 		for (const Rectf& collider : object.GetColliders())
 		{
-			HandleAABB(pEntity, object.GetType(), collider, object.GetFloor(), isHorizontalMovement);
+			HandleAABB(pEntity, object.GetType(), collider, object.GetFloor(), isHorizontalMovement, updateFloorInfo);
 		}
 	}
 }
 
-void CollisionManager::HandleAABB(Entity* pEntity, EnvironmentActiveObject::EnvironmentObjectType type, const Rectf& objectCollider, int objectFloor, bool isHorizontalMovement) const
+void CollisionManager::HandleAABB(Entity* pEntity, EnvironmentActiveObject::EnvironmentObjectType type, const Rectf& objectCollider, int objectFloor, bool isHorizontalMovement, bool updateFloorInfo) const
 {
 	Rectf
 		entityHitbox{ pEntity->GetHitbox() };
@@ -59,7 +59,11 @@ void CollisionManager::HandleAABB(Entity* pEntity, EnvironmentActiveObject::Envi
 
 	if (utils::IsOverlapping(entityHitbox, objectCollider))
 	{
-		pEntity->SetFloor(objectFloor);
+		if (updateFloorInfo)
+		{
+			pEntity->SetFloor(objectFloor);
+		}
+
 
 		if (isHorizontalMovement && pEntity->IsOnGround())
 		{

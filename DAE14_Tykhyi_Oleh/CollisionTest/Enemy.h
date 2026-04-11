@@ -26,7 +26,7 @@ public:
 
 	void Draw() const override;
 
-	void Update(float elapsedSec, const Vector2f& playerPos, const Rectf& viewport);
+	void Update(float elapsedSec, const Vector2f& playerPos, int playerFloor, const Rectf& viewport);
 
 	void UpdatePath(const std::vector<ControlPoint>& controlPoint);
 private:
@@ -34,7 +34,8 @@ private:
 	EnemyType  m_Type;
 
 	std::vector<AnimationFrameInfo> m_EnemySpriteFrames{};
-	std::vector<ControlPoint>		m_Path{};
+	std::vector<ControlPoint>		m_ControlPoints{};
+	std::vector<int>				m_Path{};
 
 	int 
 		m_CurrentTargetControlPoint{ 0 };
@@ -43,16 +44,20 @@ private:
 
 	void SetState(EnemyState state);
 
-	void HandleCurrentState(float elapsedSec, const Vector2f& playerPos);
+	void HandleCurrentState(float elapsedSec, const Vector2f& playerPos, int playerFloor);
 	void PlayerSensing(const Vector2f& playerPos);
 
 	void Patrol(float elapsedSec);
-	void HandleChase(float elapsedSec, const Vector2f& playerPos);
+	void HandleChase(float elapsedSec, const Vector2f& playerPos, int playerFloor);
 	void ChasePlayer(float elapsedSec, const Vector2f& playerPos);
 
 	bool MoveTo(const ControlPoint& controlPoint, float speedMultiplier);
 
 	int FindStairs(int floor);
 	int FindNextLeadingPoint();
+	int GetIndexByPointId(int id);
+
+	int GetClosestControlPointIdx() const;
+	std::vector<int> CalculatePath(int targetFloor);
 };
 

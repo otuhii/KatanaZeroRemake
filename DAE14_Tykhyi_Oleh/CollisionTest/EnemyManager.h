@@ -15,7 +15,7 @@ public:
 
 	void Draw() const;
 
-	void Update(float elapsedSec, const Vector2f& playerPos, const Map* gameMap, const CollisionManager* collisionManager);
+	void Update(float elapsedSec, const Vector2f& playerPos, int playerFloor, const Map* gameMap, const CollisionManager* collisionManager);
 
 	void AddEnemy(Enemy::EnemyType type, const Vector2f& position, float speed, float scale, int floor);
 
