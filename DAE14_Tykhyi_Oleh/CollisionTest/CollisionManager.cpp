@@ -25,12 +25,12 @@ void CollisionManager::CheckCollision(Entity* pEntity, const Map& map, bool isHo
 	{
 		for (const Rectf& collider : object.GetColliders())
 		{
-			HandleAABB(pEntity, object.GetType(), collider, isHorizontalMovement);
+			HandleAABB(pEntity, object.GetType(), collider, object.GetFloor(), isHorizontalMovement);
 		}
 	}
 }
 
-void CollisionManager::HandleAABB(Entity* pEntity, EnvironmentActiveObject::EnvironmentObjectType type, const Rectf& objectCollider, bool isHorizontalMovement) const
+void CollisionManager::HandleAABB(Entity* pEntity, EnvironmentActiveObject::EnvironmentObjectType type, const Rectf& objectCollider, int objectFloor, bool isHorizontalMovement) const
 {
 	Rectf
 		entityHitbox{ pEntity->GetHitbox() };
@@ -43,6 +43,7 @@ void CollisionManager::HandleAABB(Entity* pEntity, EnvironmentActiveObject::Envi
 	{
 		if (CanMoveThroughPlatform(pEntity, objectCollider, isHorizontalMovement))
 		{
+
 			return;
 		}
 	}
@@ -58,6 +59,8 @@ void CollisionManager::HandleAABB(Entity* pEntity, EnvironmentActiveObject::Envi
 
 	if (utils::IsOverlapping(entityHitbox, objectCollider))
 	{
+		pEntity->SetFloor(objectFloor);
+
 		if (isHorizontalMovement && pEntity->IsOnGround())
 		{
 			float 

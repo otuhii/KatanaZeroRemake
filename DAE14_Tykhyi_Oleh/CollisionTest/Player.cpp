@@ -31,6 +31,7 @@ void Player::Draw() const
 	DrawSplash();
 	
 	DrawHitboxes();
+
 }
 
 void Player::Update(float elapsedSec, const Uint8* pStates, const Rectf& viewport)

@@ -228,7 +228,8 @@ void JsonImporter::AddActiveObject(const Json& object, GameData& dst, SpriteMana
 			object.at("yPosition").get<float>(),
 			colliders,
 			pTexture,
-			StringToObjectType(object.at("objectType").get<std::string>())
+			StringToObjectType(object.at("objectType").get<std::string>()),
+			object.at("floor").get<int>()
 		});
 	}
 }

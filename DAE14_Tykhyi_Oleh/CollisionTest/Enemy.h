@@ -54,7 +54,5 @@ private:
 
 	int FindStairs(int floor);
 	int FindNextLeadingPoint();
-
-
 };
 

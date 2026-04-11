@@ -9,7 +9,7 @@ public:
 
 private:
 	void CheckCollision(Entity* pEntity, const Map& map, bool isHorizontalMovement) const;
-	void HandleAABB(Entity* pEntity, EnvironmentActiveObject::EnvironmentObjectType type, const Rectf& objectCollider, bool isHorizontalMovement) const;
+	void HandleAABB(Entity* pEntity, EnvironmentActiveObject::EnvironmentObjectType type, const Rectf& objectCollider, int objectFloor, bool isHorizontalMovement) const;
 
 	bool CanMoveThroughPlatform(Entity* pEntity, const Rectf& objectCollider, bool isHorizontalMovement) const;
 };

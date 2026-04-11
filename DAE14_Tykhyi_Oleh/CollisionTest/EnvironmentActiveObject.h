@@ -18,7 +18,8 @@ public:
 		float positionY,
 		const std::vector<Rectf>& colliders,
 		const Sprite* pTexture,
-		EnvironmentObjectType type
+		EnvironmentObjectType type,
+		int floor
 	);
 
 	const std::vector<Rectf>& GetColliders() const;
@@ -27,10 +28,13 @@ public:
 	const Sprite*   GetTexture() const;
 
 	EnvironmentObjectType GetType() const;
+	int GetFloor() const;
 private:
 	Vector2f m_Position;
 
 	std::vector<Rectf> m_Colliders{};
+
+	int m_Floor{};
 
 	const Sprite* m_pTexture{};
 
