@@ -15,5 +15,5 @@ struct ControlPoint {
 	int floor{};
 	int pointId{};
 
-	std::vector<int> neightborIndices;
+	std::vector<int> neighborIds;
 };

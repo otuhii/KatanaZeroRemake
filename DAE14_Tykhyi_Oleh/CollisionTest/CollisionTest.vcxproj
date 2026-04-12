@@ -168,9 +168,12 @@ xcopy "$(ProjectDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClCompile Include="EnvironmentCosmeticObject.cpp" />
     <ClCompile Include="EnvironmentActiveObject.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Gangster.cpp" />
+    <ClCompile Include="Grunt.cpp" />
     <ClCompile Include="JsonImporter.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="PathFinder.cpp" />
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Sprite.cpp" />
@@ -187,8 +190,11 @@ xcopy "$(ProjectDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClInclude Include="EnvironmentCosmeticObject.h" />
     <ClInclude Include="EnvironmentActiveObject.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Gangster.h" />
+    <ClInclude Include="Grunt.h" />
     <ClInclude Include="JsonImporter.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="PathFinder.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Sprite.h" />

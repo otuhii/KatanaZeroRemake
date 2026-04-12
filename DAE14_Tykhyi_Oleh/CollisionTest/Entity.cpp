@@ -138,6 +138,18 @@ const Rectf& Entity::GetHitbox() const
 	return m_Hitbox;
 }
 
+int Entity::GetFacingDirection() const
+{
+	if (m_pSprite->IsFlippedHorizontally())
+	{
+		return -1;
+	}
+	else
+	{
+		return 1;
+	}
+}
+
 bool Entity::IsSpriteAnimationFinished() const
 {
 	return m_pSprite->IsFinished();

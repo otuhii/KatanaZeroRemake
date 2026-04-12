@@ -11,6 +11,9 @@ class EnemyManager final
 public:
 	EnemyManager();
 	
+	EnemyManager(const EnemyManager&) = delete;
+	EnemyManager& operator=(const EnemyManager&) = delete;
+
 	~EnemyManager();
 
 	void Draw() const;
@@ -25,6 +28,7 @@ public:
 		const std::vector<AnimationFrameInfo>& animationFrameInfo
 	);
 
+	void SetControlPoints(const std::vector<ControlPoint>& controlPoints);
 private:
 	struct EnemyTypeTemplate {
 		Sprite* spriteSheet{};
@@ -33,5 +37,6 @@ private:
 
 	std::vector<Enemy*>				 m_pEnemies{};
 	std::vector<EnemyTypeTemplate>   m_EnemyTypeTemplates{};
+	std::vector<ControlPoint>		 m_ControlPoints{};
 };
 

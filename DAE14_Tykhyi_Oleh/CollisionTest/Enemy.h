@@ -4,7 +4,7 @@
 
 #include <vector>
 
-class Enemy final : public Entity
+class Enemy : public Entity
 {
 public:
 	enum class EnemyType {
@@ -22,42 +22,60 @@ public:
 		turn
 	};
 
-	Enemy(EnemyType type, Sprite* sprite, const std::vector<AnimationFrameInfo>& playerAnimation, const Vector2f& position, float speed, float scale, int floor);
+	Enemy(EnemyType type, Sprite* sprite, const std::vector<AnimationFrameInfo>* playerAnimation, const Vector2f& position, float speed, float scale, int floor);
+
+	virtual ~Enemy() = default;
 
 	void Draw() const override;
 
 	void Update(float elapsedSec, const Vector2f& playerPos, int playerFloor, const Rectf& viewport);
 
-	void UpdatePath(const std::vector<ControlPoint>& controlPoint);
+	void UpdateControlPoints(const std::vector<ControlPoint>* controlPoint);
+
+protected:
+	const float
+		m_DetectionRange{ 400.f },
+		m_AttackRange{ 50.f },
+		m_AngleFieldOfDetection{ 90.f };
+
+	bool CanSeePlayer(const Vector2f& playerPos, int playerFloor);
+	bool IsPlayerInAttackRange(const Vector2f& playerPos);
+
+	//virtual void Attack() = 0;
 private:
 	EnemyState m_State;
 	EnemyType  m_Type;
 
-	std::vector<AnimationFrameInfo> m_EnemySpriteFrames{};
-	std::vector<ControlPoint>		m_ControlPoints{};
-	std::vector<int>				m_Path{};
+	const std::vector<AnimationFrameInfo>* m_EnemySpriteFrames{};
 
+	const std::vector<ControlPoint>*	   m_ControlPoints{};
+	std::vector<int>				       m_Path{};
+	
 	int 
 		m_CurrentTargetControlPoint{ 0 };
 	
+	const float
+		m_PatrolSpeedMultiplier{ 1.f },
+		m_RunningMultiplier{ 1.5f };
+
+
 	void UpdateSprite();
 
 	void SetState(EnemyState state);
 
-	void HandleCurrentState(float elapsedSec, const Vector2f& playerPos, int playerFloor);
-	void PlayerSensing(const Vector2f& playerPos);
+	void UpdateCurrentState(float elapsedSec, const Vector2f& playerPos, int playerFloor);
+
+	void UpdateIdle(float elapsedSec);
+	void UpdateWalk(float elapsedSec, const Vector2f& playerPos, int playerFloor);
+	void UpdateRun(float elapsedSec, const Vector2f& playerPos, int playerFloor);
+	void UpdateAttack(float elapsedSec, const Vector2f& playerPos);
+	void UpdateTurn(float elapsedSec);
+
+	void StateInitialization(EnemyState state);
 
 	void Patrol(float elapsedSec);
-	void HandleChase(float elapsedSec, const Vector2f& playerPos, int playerFloor);
-	void ChasePlayer(float elapsedSec, const Vector2f& playerPos);
-
+	void Chase(float elapsedSec, const Vector2f& playerPos, int playerFloor);
+	
 	bool MoveTo(const ControlPoint& controlPoint, float speedMultiplier);
-
-	int FindStairs(int floor);
-	int FindNextLeadingPoint();
-	int GetIndexByPointId(int id);
-
-	int GetClosestControlPointIdx() const;
-	std::vector<int> CalculatePath(int targetFloor);
 };
 

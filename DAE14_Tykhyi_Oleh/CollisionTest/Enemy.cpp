@@ -1,15 +1,17 @@
 #include "pch.h"
 #include "Enemy.h"
 
+#include "PathFinder.h"
+
 #include "utils.h"
 
-Enemy::Enemy(EnemyType type, Sprite* sprite, const std::vector<AnimationFrameInfo>& enemyAnimationFrames, const Vector2f& position, float speed, float scale, int floor)
+Enemy::Enemy(EnemyType type, Sprite* sprite, const std::vector<AnimationFrameInfo>* enemyAnimationFrames, const Vector2f& position, float speed, float scale, int floor)
 	:  Entity(sprite, position, Vector2f{0.f, 0.f}, speed, floor),
 	m_EnemySpriteFrames{ enemyAnimationFrames },
 	m_State{EnemyState::walk},
 	m_Type{type}
 {
-	GetSprite()->SetAnimationFrameInfo(m_EnemySpriteFrames[static_cast<int>(m_State)]);
+	GetSprite()->SetAnimationFrameInfo((*m_EnemySpriteFrames)[static_cast<int>(m_State)]);
 	GetSprite()->SetScale(scale);
 
 	UpdateHitbox();
@@ -23,7 +25,7 @@ void Enemy::Draw() const
 	utils::DrawRect(GetHitbox());
 }
 
-void Enemy::UpdatePath(const std::vector<ControlPoint>& controlPoints)
+void Enemy::UpdateControlPoints(const std::vector<ControlPoint>* controlPoints)
 {
 	m_ControlPoints = controlPoints;
 }
@@ -31,16 +33,37 @@ void Enemy::UpdatePath(const std::vector<ControlPoint>& controlPoints)
 void Enemy::Update(float elapsedSec, const Vector2f& playerPos, int playerFloor, const Rectf& viewport)
 {
 	Entity::Update(elapsedSec, viewport);
-	PlayerSensing(playerPos);
-	HandleCurrentState(elapsedSec, playerPos, playerFloor);
+	UpdateCurrentState(elapsedSec, playerPos, playerFloor);
 
 	UpdateSprite();
-
 }
 
+//all enemies will have flipped sprite, i should flip it on the rendering and i need each enemy to have variable that corresponds to that
 void Enemy::UpdateSprite()
 {
-	//all enemies will have flipped sprite, i should flip it on the rendering and i need each enemy to have variable that corresponds to that
+	if (m_State == EnemyState::turn)
+	{
+		float
+			positionX{ GetPositionX() };
+
+		if (m_CurrentTargetControlPoint == -1)
+		{
+			return;
+		}
+
+		//if turn is toggled, it means that new direction is opposite direction from previous direction, so we can just check in a opposite way
+		// (not controlPointposX < positionX but controlPointposX > positionX
+		if ((*m_ControlPoints)[m_CurrentTargetControlPoint].position.x > positionX)
+		{
+			GetSprite()->ResetHorizontalFlip();
+		}
+		else
+		{
+			GetSprite()->FlipHorizontally();
+		}
+		return;
+	}
+
 	if (GetVelocityX() > 0)
 	{
 		GetSprite()->ResetHorizontalFlip();
@@ -56,115 +79,204 @@ void Enemy::SetState(EnemyState state)
 	if (state == m_State) { return; }
 
 	m_State = state;
-
-	GetSprite()->SetAnimationFrameInfo(m_EnemySpriteFrames[static_cast<int>(m_State)]);
+	
+	StateInitialization(m_State);
+	
+	GetSprite()->SetAnimationFrameInfo((*m_EnemySpriteFrames)[static_cast<int>(m_State)]);
 	GetSprite()->ResetAnimation();
 }
 
-void Enemy::HandleCurrentState(float elapsedSec, const Vector2f& playerPos, int playerFloor)
+
+void Enemy::UpdateCurrentState(float elapsedSec, const Vector2f& playerPos, int playerFloor)
 {
 	switch (m_State)
 	{
-	case EnemyState::walk:
-	{
-		Patrol(elapsedSec);
-		break;
-	}
 	case EnemyState::idle:
 	{
-		SetVelocity(Vector2f{ 0.f, 0.f });
+		UpdateIdle(elapsedSec);
+		break;
+	}
+	case EnemyState::walk:
+	{
+		UpdateWalk(elapsedSec, playerPos, playerFloor);
 		break;
 	}
 	case EnemyState::run:
 	{
-		HandleChase(elapsedSec, playerPos, playerFloor);
+		UpdateRun(elapsedSec, playerPos, playerFloor);
 		break;
 	}
+	case EnemyState::attack:
+	{
+		UpdateAttack(elapsedSec, playerPos);
+		break;
+	}
+	case EnemyState::turn:
+	{
+		UpdateTurn(elapsedSec);
+		break;
+	}
+
 	}
 }
 
-void Enemy::PlayerSensing(const Vector2f& playerPos)
+void Enemy::UpdateIdle(float elapsedSec)
 {
-	const float
-		triggerDistance{ 500.f };
 
-	float
-		distance{ (playerPos - GetPosition()).Length() };
+}
 
-	if (distance < triggerDistance)
+void Enemy::UpdateWalk(float elapsedSec, const Vector2f& playerPos, int playerFloor)
+{
+	Patrol(elapsedSec);
+
+	if (CanSeePlayer(playerPos, playerFloor))
 	{
 		SetState(EnemyState::run);
 	}
 }
 
+void Enemy::UpdateRun(float elapsedSec, const Vector2f& playerPos, int playerFloor)
+{
+	Chase(elapsedSec, playerPos, playerFloor);
+}
+
+void Enemy::UpdateAttack(float elapsedSec, const Vector2f& playerPos)
+{
+	//Attack()
+	if (IsSpriteAnimationFinished())
+	{
+		SetState(EnemyState::walk);
+	}
+}
+
+void Enemy::UpdateTurn(float elapsedSec)
+{
+	SetVelocityX(0.f);
+	if (IsSpriteAnimationFinished())
+	{
+		SetState(EnemyState::walk); //have stored previous state or calculate depending on player position
+	}
+}
+
+void Enemy::StateInitialization(EnemyState state)
+{
+	switch (state)
+	{
+	case EnemyState::idle:
+	{
+		SetVelocityX(0.f);
+		break;
+	}
+	case EnemyState::attack:
+	{
+		SetVelocityX(0.f);
+	}
+	case EnemyState::run:
+	{
+		m_Path.clear();
+		break;
+	}
+	}
+}
+
 void Enemy::Patrol(float elapsedSec)
 {
-	if (m_ControlPoints.empty())
+	const float
+		deltaEps{ 1.f };
+
+	if ((*m_ControlPoints).empty())
 	{
 		return;
 	}
 
-	if (MoveTo(m_ControlPoints[m_CurrentTargetControlPoint], 1.f))
+	if ((*m_ControlPoints)[m_CurrentTargetControlPoint].type == ControlPoint::ControlPointType::stairSignifier)
 	{
-		m_CurrentTargetControlPoint = FindNextLeadingPoint();
+		m_CurrentTargetControlPoint = PathFinder::GetNextControlPointIdxByType(
+			m_CurrentTargetControlPoint,
+			GetFloor(),
+			ControlPoint::ControlPointType::leadingPoint,
+			(*m_ControlPoints)
+		);
+	}
+
+	if (MoveTo((*m_ControlPoints)[m_CurrentTargetControlPoint], m_PatrolSpeedMultiplier))
+	{
+		int nextTargetIndex{ PathFinder::GetNextControlPointIdxByType(
+			m_CurrentTargetControlPoint,
+			GetFloor(),
+			ControlPoint::ControlPointType::leadingPoint,
+			(*m_ControlPoints)
+		) };
+
+		if (nextTargetIndex == -1)
+		{
+			return;
+		}
+
+		float deltaXToNext{
+			(*m_ControlPoints)[nextTargetIndex].position.x - GetPositionX()
+		};
+
+		m_CurrentTargetControlPoint = nextTargetIndex;
+		
+		if (std::abs(deltaXToNext) > deltaEps)
+		{
+			int nextDirection{ 1 };
+			if (deltaXToNext < 0.f)
+			{
+				nextDirection = -1;
+			}
+
+			if (nextDirection != GetFacingDirection())
+			{
+				SetState(EnemyState::turn);
+			}
+		}
 	}
 }
 
-void Enemy::HandleChase(float elapsedSec, const Vector2f& playerPos, int playerFloor)
+void Enemy::Chase(float elapsedSec, const Vector2f& playerPos, int playerFloor)
 {
-	const float
-		runningMultiplier{ 1.5f };
-
-	const int floor{
-		GetFloor() 
-	};
+	int floor{ GetFloor() };
 
 	if (playerFloor != floor)
 	{
 		if (m_Path.empty())
 		{
-			m_Path = CalculatePath(playerFloor);
+			m_Path = PathFinder::CalculatePathToFloor(
+				m_CurrentTargetControlPoint,
+				playerFloor,
+				GetFloor(),
+				(*m_ControlPoints)
+			);
 		}
 
 		if (!m_Path.empty())
 		{
-			int targetIdx{ m_Path.back() };
+			int 
+				targetIndex{ m_Path.back() };
 
-			if (MoveTo(m_ControlPoints[targetIdx], runningMultiplier))
+			if (MoveTo((*m_ControlPoints)[targetIndex], m_RunningMultiplier))
 			{
-				if (m_ControlPoints[targetIdx].type == ControlPoint::ControlPointType::stairSignifier &&
-					CanJumpThroughPlatform())
+				if ((*m_ControlPoints)[targetIndex].type == ControlPoint::ControlPointType::stairSignifier)
 				{
-					SetCanJumpThroughPlatform(false);
-				}
-				else if (m_ControlPoints[targetIdx].type == ControlPoint::ControlPointType::stairSignifier &&
-					!CanJumpThroughPlatform())
-				{
-					SetCanJumpThroughPlatform(true);
-				}
+					SetCanJumpThroughPlatform(!CanJumpThroughPlatform());//flip canjump state
+						//TODO look more into it because it can cause issues with enemy movement
 
-				SetFloor(m_ControlPoints[targetIdx].floor);
-				m_CurrentTargetControlPoint = targetIdx;
-
-				m_Path.pop_back();
+					SetFloor((*m_ControlPoints)[targetIndex].floor);
+					m_CurrentTargetControlPoint = -1;
+					m_Path.pop_back();
+				}
 			}
+
 			return;
 		}
 	}
-	
 
 	if (!m_Path.empty())
 	{
 		m_Path.clear();
 	}
-
-	ChasePlayer(elapsedSec, playerPos);
-}
-
-void Enemy::ChasePlayer(float elapsedSec, const Vector2f& playerPos)
-{
-	const float
-		runningMultiplier{ 1.5f };
 
 	ControlPoint playerPoint{
 		playerPos,
@@ -172,26 +284,33 @@ void Enemy::ChasePlayer(float elapsedSec, const Vector2f& playerPos)
 		GetFloor()
 	};
 
-	MoveTo(playerPoint, runningMultiplier);
+	MoveTo(playerPoint, m_RunningMultiplier);
+
+	if (IsPlayerInAttackRange(playerPos))
+	{
+		SetState(EnemyState::attack);
+	}
 }
 
 bool Enemy::MoveTo(const ControlPoint& controlPoint, float speedMultiplier)
 {
+	//TODO check if different floors, if so i can search for path
+	//maybe i can move my path finding from chase to here
+	
 	const float
-		reachMinDistance{ 10.f };
+		reachDistance{ 10.f };
 
-	float
+	float 
 		deltaX{ controlPoint.position.x - GetPositionX() };
 
-	if (std::abs(deltaX) < reachMinDistance)
+	if (std::abs(deltaX) < reachDistance)
 	{
-		SetVelocityX(0.f);
-
 		return true;
 	}
+
 	else
 	{
-		float direction{ 1.f };
+		int direction{ 1 };
 		if (deltaX < 0)
 		{
 			direction = -1;
@@ -202,142 +321,31 @@ bool Enemy::MoveTo(const ControlPoint& controlPoint, float speedMultiplier)
 	}
 }
 
-int Enemy::FindNextLeadingPoint()
+bool Enemy::CanSeePlayer(const Vector2f& playerPos, int playerFloor)
 {
-	size_t startIndex = (m_CurrentTargetControlPoint + 1) % m_ControlPoints.size();
+	float
+		distance{ utils::GetDistance(GetPosition(), playerPos) };
 
-	for (size_t index{ 0 }; index < m_ControlPoints.size(); ++index)
+	if (distance > m_DetectionRange)
 	{
-		size_t searchIndex{ (startIndex + index) % m_ControlPoints.size() };
-
-		if (m_ControlPoints[searchIndex].floor == GetFloor() &&
-			m_ControlPoints[searchIndex].type == ControlPoint::ControlPointType::leadingPoint)
-		{
-			return static_cast<int>(searchIndex);
-		}
+		return false;
 	}
 
-	return -1;
+	float
+		directionToPlayer{ playerPos.x - GetPositionX() };
+
+	bool
+		isPlayerToRight{ directionToPlayer > 0 },
+		isLookingRight{ GetFacingDirection() == 1 };
+
+	return (isPlayerToRight == isLookingRight) &&
+			(playerFloor == GetFloor());
 }
 
-int Enemy::GetIndexByPointId(int id)
+bool Enemy::IsPlayerInAttackRange(const Vector2f& playerPos)
 {
-	//i could use map but fuck that, not that much points for O(n)
+	float
+		distance{ utils::GetDistance(GetPosition(), playerPos) };
 
-	for (size_t index{ 0 }; index < m_ControlPoints.size(); ++index)
-	{
-		if (m_ControlPoints[index].pointId == id)
-		{
-			return static_cast<int>(index);
-		}
-	}
-
-	return -1;
-}
-
-//BFS search for path to target floor
-std::vector<int> Enemy::CalculatePath(int targetFloor)
-{
-	if (m_ControlPoints.empty())
-	{
-		return {};
-	}
-
-	std::vector<int> parentIndices(m_ControlPoints.size(), -1);
-	std::vector<bool> visited(m_ControlPoints.size(), false);
-
-	std::vector<int> frontier;
-	int head{ 0 };
-
-	int startIdx{ GetClosestControlPointIdx() };
-	frontier.push_back(startIdx);
-	visited[startIdx] = true;
-
-	int reachedTargetIdx{ -1 };
-
-	while (head < static_cast<int>(frontier.size()))
-	{
-		int currentIdx{ frontier[head] };
-
-		head++;
-
-		if (m_ControlPoints[currentIdx].floor == targetFloor)
-		{
-			reachedTargetIdx = currentIdx;
-			break;
-		}
-
-		for (int neightborId : m_ControlPoints[currentIdx].neightborIndices)
-		{
-			int neighborIdx{ GetIndexByPointId(neightborId) };
-
-			if (neighborIdx != -1 && !visited[neighborIdx])
-			{
-				visited[neighborIdx] = true;
-				parentIndices[neighborIdx] = currentIdx;
-				frontier.push_back(neighborIdx);
-			}
-		
-		}
-	}
-
-	std::vector<int> path;
-
-	if (reachedTargetIdx != -1)
-	{
-		int currentIdx{ reachedTargetIdx };
-
-		while ( currentIdx != -1)
-		{
-			path.push_back(currentIdx);
-
-			if (currentIdx == startIdx)
-			{
-				break;
-			}
-
-			currentIdx = parentIndices[currentIdx];
-		}
-	}
-
-	return path;
-}
-
-int Enemy::FindStairs(int floor)
-{
-	size_t startIndex{ (m_CurrentTargetControlPoint + 1) % m_ControlPoints.size() };
-
-	for (size_t index{ 0 }; index < m_ControlPoints.size(); ++index)
-	{
-		size_t searchIndex{ (startIndex + index) % m_ControlPoints.size() };
-
-		if (m_ControlPoints[searchIndex].floor == GetFloor() &&
-			m_ControlPoints[searchIndex].type == ControlPoint::ControlPointType::stairSignifier)
-		{
-			return static_cast<int>(searchIndex);
-		}
-	}
-
-
-	return -1;
-}
-
-int Enemy::GetClosestControlPointIdx() const
-{
-	int closestIdx{ 0 };
-	float minDistance{ 999999.f };
-
-	for (int i{ 0 }; i < static_cast<int>(m_ControlPoints.size()); ++i)
-	{
-		if (m_ControlPoints[i].floor == GetFloor() && m_ControlPoints[i].type == ControlPoint::ControlPointType::stairSignifier)
-		{
-			float dist{ std::abs(m_ControlPoints[i].position.x - GetPositionX()) };
-			if (dist < minDistance)
-			{
-				minDistance = dist;
-				closestIdx = i;
-			}
-		}
-	}
-	return closestIdx;
+	return distance <= m_AttackRange;
 }

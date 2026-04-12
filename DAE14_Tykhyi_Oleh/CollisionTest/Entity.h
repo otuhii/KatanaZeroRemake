@@ -10,6 +10,8 @@ public:
 
 	virtual void Update(const float elapsedSec, const Rectf& viewport);
 
+	virtual ~Entity() = default;
+
 	void SetFloor(int floor);
 
 	void SetSpeed(float speed);
@@ -42,6 +44,7 @@ public:
 
 	const Rectf& GetHitbox()		const;
 
+	int				GetFacingDirection() const;
 	bool			IsSpriteAnimationFinished() const;
 	bool			CanJumpThroughPlatform() const;
 

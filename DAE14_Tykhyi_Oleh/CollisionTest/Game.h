@@ -38,9 +38,9 @@ private:
 	void Cleanup( );
 	void ClearBackground( ) const;
 
-	void EnemyTypeInitialization();
-	void CreateEnemies(const JsonImporter::GameData& gameData);
-	void MapSetup(const JsonImporter::GameData& gameData);
+	void EnemyTypeInitialization(const JsonImporter::GameData& gameData);
+	void CreateEnemies			(const JsonImporter::GameData& gameData);
+	void MapSetup				(const JsonImporter::GameData& gameData);
 
 	JsonImporter		m_JsonImporter{}; //TODO maybe change this to pointer later
 

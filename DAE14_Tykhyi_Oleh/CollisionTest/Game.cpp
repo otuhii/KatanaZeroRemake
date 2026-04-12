@@ -45,7 +45,7 @@ void Game::Initialize( )
 	);
 	
 	MapSetup(importedGameInfo);
-	EnemyTypeInitialization();
+	EnemyTypeInitialization(importedGameInfo);
 	CreateEnemies(importedGameInfo);
 }
 
@@ -64,13 +64,23 @@ void Game::Update( float elapsedSec )
 
 	const Uint8 *pStates = SDL_GetKeyboardState( nullptr );
 	
-	m_pPlayer->Update(elapsedSec, pStates, GetViewPort());
+	bool slowMo{ false };
 
-	m_pCollisionManager->HandleMovement(m_pPlayer, *m_pMap,  elapsedSec, true);
+	float
+		timeDivider{ 1.f };
 
-	m_pEnemyManager->Update( elapsedSec, m_pPlayer->GetPosition(), m_pPlayer->GetFloor(), m_pMap, m_pCollisionManager);
+	if (slowMo)
+	{
+		timeDivider = 0.1f;
+	}
 
-	m_pSpriteManager->Update(elapsedSec);
+	m_pPlayer->Update(timeDivider*elapsedSec, pStates, GetViewPort());
+
+	m_pCollisionManager->HandleMovement(m_pPlayer, *m_pMap, timeDivider*elapsedSec, true);
+
+	m_pEnemyManager->Update(timeDivider*elapsedSec, m_pPlayer->GetPosition(), m_pPlayer->GetFloor(), m_pMap, m_pCollisionManager);
+
+	m_pSpriteManager->Update(timeDivider*elapsedSec);
 }
 
 void Game::Draw( ) const
@@ -127,8 +137,10 @@ void Game::ClearBackground( ) const
 	glClear( GL_COLOR_BUFFER_BIT );
 }
 
-void Game::EnemyTypeInitialization()
+void Game::EnemyTypeInitialization(const JsonImporter::GameData& gameData)
 {
+	m_pEnemyManager->SetControlPoints(gameData.controlPoints);
+
 	m_pEnemyManager->InitializeEnemyType(
 		Enemy::EnemyType::grunt,
 		m_pSpriteManager->CreateSprite("img/chr/grunt_spritesheet.png"),
@@ -160,7 +172,6 @@ void Game::MapSetup(const JsonImporter::GameData& gameData)
 {
 	m_pMap->SetEnvironmentActiveObjects(gameData.activeObjects);
 	m_pMap->SetEnvironmentCosmeticObjects(gameData.cosmeticObjects);
-	m_pMap->SetControlPoints(gameData.controlPoints);
 }
 
 
