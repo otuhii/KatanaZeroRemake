@@ -60,7 +60,7 @@ void Game::Cleanup( )
 
 void Game::Update( float elapsedSec )
 {
-	//std::cout << 1 / elapsedSec << std::endl;
+	std::cout << 1 / elapsedSec << std::endl;
 
 	const Uint8 *pStates = SDL_GetKeyboardState( nullptr );
 	
@@ -139,18 +139,30 @@ void Game::ClearBackground( ) const
 
 void Game::EnemyTypeInitialization(const JsonImporter::GameData& gameData)
 {
+	const float
+		gruntAttackRange{ 50.f },
+		gruntDetectionRange{ 400.f };
+
+	const float
+		gangsterAttackRange{ 700.f },
+		gangsterDetectionRange{ 500.f };
+
 	m_pEnemyManager->SetControlPoints(gameData.controlPoints);
 
 	m_pEnemyManager->InitializeEnemyType(
 		Enemy::EnemyType::grunt,
 		m_pSpriteManager->CreateSprite("img/chr/grunt_spritesheet.png"),
-		m_JsonImporter.ImportAnimationFrameObjects("json/enemy_Grunt_FrameInfo.json")
+		m_JsonImporter.ImportAnimationFrameObjects("json/enemy_Grunt_FrameInfo.json"),
+		gruntDetectionRange,
+		gruntAttackRange
 	);
 
 	m_pEnemyManager->InitializeEnemyType(
 		Enemy::EnemyType::gangster,
 		m_pSpriteManager->CreateSprite("img/chr/gangster_spritesheet.png"),
-		m_JsonImporter.ImportAnimationFrameObjects("json/enemy_Gangster_FrameInfo.json")
+		m_JsonImporter.ImportAnimationFrameObjects("json/enemy_Gangster_FrameInfo.json"),
+		gangsterDetectionRange,
+		gangsterAttackRange
 	);
 }
 

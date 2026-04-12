@@ -1,5 +1,6 @@
 #pragma once
-#include "Enemy.h"
+#include "Grunt.h"
+#include "Gangster.h"
 #include <vector>
 
 class SpriteManager;
@@ -25,7 +26,9 @@ public:
 	void InitializeEnemyType(
 		Enemy::EnemyType type,
 		Sprite* pSpritesheet,
-		const std::vector<AnimationFrameInfo>& animationFrameInfo
+		const std::vector<AnimationFrameInfo>& animationFrameInfo,
+		float playerDetectionRange,
+		float attackRange
 	);
 
 	void SetControlPoints(const std::vector<ControlPoint>& controlPoints);
@@ -33,6 +36,8 @@ private:
 	struct EnemyTypeTemplate {
 		Sprite* spriteSheet{};
 		std::vector<AnimationFrameInfo> enemyAnimationFrameInfo{};
+		float playerDetectionRange{};
+		float attackRange{};
 	};
 
 	std::vector<Enemy*>				 m_pEnemies{};

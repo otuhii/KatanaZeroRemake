@@ -22,7 +22,17 @@ public:
 		turn
 	};
 
-	Enemy(EnemyType type, Sprite* sprite, const std::vector<AnimationFrameInfo>* playerAnimation, const Vector2f& position, float speed, float scale, int floor);
+	Enemy(
+		EnemyType type,
+		Sprite* pSprite, 
+		const std::vector<AnimationFrameInfo>* playerAnimation, 
+		const Vector2f& position, 
+		float speed,
+		float scale,
+		int floor,
+		float playerDetectionRange,
+		float attackRange
+	);
 
 	virtual ~Enemy() = default;
 
@@ -32,16 +42,12 @@ public:
 
 	void UpdateControlPoints(const std::vector<ControlPoint>* controlPoint);
 
+	EnemyType GetType() const;
 protected:
-	const float
-		m_DetectionRange{ 400.f },
-		m_AttackRange{ 50.f },
-		m_AngleFieldOfDetection{ 90.f };
-
 	bool CanSeePlayer(const Vector2f& playerPos, int playerFloor);
 	bool IsPlayerInAttackRange(const Vector2f& playerPos);
 
-	//virtual void Attack() = 0;
+	virtual void Attack() = 0;
 private:
 	EnemyState m_State;
 	EnemyType  m_Type;
@@ -58,6 +64,10 @@ private:
 		m_PatrolSpeedMultiplier{ 1.f },
 		m_RunningMultiplier{ 1.5f };
 
+	const float
+		m_DetectionRange{ 400.f },
+		m_AttackRange{ 50.f };
+		//m_AngleFieldOfDetection{ 90.f };
 
 	void UpdateSprite();
 

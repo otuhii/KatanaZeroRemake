@@ -54,20 +54,37 @@ void EnemyManager::Update(float elapsedSec, const Vector2f& playerPos, int playe
 
 void EnemyManager::AddEnemy(Enemy::EnemyType type, const Vector2f& position, float speed, float scale, int floor)
 {
-	m_pEnemies.push_back(new Enemy{
-		type, 
-		m_EnemyTypeTemplates[static_cast<int>(type)].spriteSheet,
-		&m_EnemyTypeTemplates[static_cast<int>(type)].enemyAnimationFrameInfo,
-		position, 
-		speed, 
-		scale,
-		floor
-	});
+	if (type == Enemy::EnemyType::grunt)
+	{
+		m_pEnemies.push_back(new Grunt{
+			m_EnemyTypeTemplates[static_cast<int>(type)].spriteSheet,
+			&m_EnemyTypeTemplates[static_cast<int>(type)].enemyAnimationFrameInfo,
+			position,
+			speed,
+			scale,
+			floor,
+			m_EnemyTypeTemplates[static_cast<int>(type)].playerDetectionRange,
+			m_EnemyTypeTemplates[static_cast<int>(type)].attackRange
+			});
+	}
+	else if (type == Enemy::EnemyType::gangster)
+	{
+		m_pEnemies.push_back(new Gangster{
+			m_EnemyTypeTemplates[static_cast<int>(type)].spriteSheet,
+			&m_EnemyTypeTemplates[static_cast<int>(type)].enemyAnimationFrameInfo,
+			position,
+			speed,
+			scale,
+			floor,
+			m_EnemyTypeTemplates[static_cast<int>(type)].playerDetectionRange,
+			m_EnemyTypeTemplates[static_cast<int>(type)].attackRange
+			});
+	}
 }
 
-void EnemyManager::InitializeEnemyType(Enemy::EnemyType type, Sprite* pSpritesheet, const std::vector<AnimationFrameInfo>& animationFrameInfo)
+void EnemyManager::InitializeEnemyType(Enemy::EnemyType type, Sprite* pSpritesheet, const std::vector<AnimationFrameInfo>& animationFrameInfo, float playerDetectionRange, float attackRange)
 {
-	m_EnemyTypeTemplates[static_cast<int>(type)] = EnemyTypeTemplate{ pSpritesheet, animationFrameInfo };
+	m_EnemyTypeTemplates[static_cast<int>(type)] = EnemyTypeTemplate{ pSpritesheet, animationFrameInfo, playerDetectionRange, attackRange };
 }
 
 void EnemyManager::SetControlPoints(const std::vector<ControlPoint>& controlPoints)

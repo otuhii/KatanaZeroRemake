@@ -5,11 +5,23 @@
 
 #include "utils.h"
 
-Enemy::Enemy(EnemyType type, Sprite* sprite, const std::vector<AnimationFrameInfo>* enemyAnimationFrames, const Vector2f& position, float speed, float scale, int floor)
-	:  Entity(sprite, position, Vector2f{0.f, 0.f}, speed, floor),
+Enemy::Enemy(
+	EnemyType type, 
+	Sprite* pSprite, 
+	const std::vector<AnimationFrameInfo>* enemyAnimationFrames,
+	const Vector2f& position,
+	float speed, 
+	float scale, 
+	int floor, 
+	float playerDetectionRange, 
+	float attackRange)
+	:  
+	Entity(pSprite, position, Vector2f{0.f, 0.f}, speed, floor),
 	m_EnemySpriteFrames{ enemyAnimationFrames },
 	m_State{EnemyState::walk},
-	m_Type{type}
+	m_Type{type},
+	m_AttackRange{attackRange},
+	m_DetectionRange{playerDetectionRange}
 {
 	GetSprite()->SetAnimationFrameInfo((*m_EnemySpriteFrames)[static_cast<int>(m_State)]);
 	GetSprite()->SetScale(scale);
@@ -28,6 +40,12 @@ void Enemy::Draw() const
 void Enemy::UpdateControlPoints(const std::vector<ControlPoint>* controlPoints)
 {
 	m_ControlPoints = controlPoints;
+}
+
+
+Enemy::EnemyType Enemy::GetType() const
+{
+	return m_Type;
 }
 
 void Enemy::Update(float elapsedSec, const Vector2f& playerPos, int playerFloor, const Rectf& viewport)
@@ -264,7 +282,6 @@ void Enemy::Chase(float elapsedSec, const Vector2f& playerPos, int playerFloor)
 						//TODO look more into it because it can cause issues with enemy movement
 
 					SetFloor((*m_ControlPoints)[targetIndex].floor);
-					m_CurrentTargetControlPoint = -1;
 					m_Path.pop_back();
 				}
 			}
