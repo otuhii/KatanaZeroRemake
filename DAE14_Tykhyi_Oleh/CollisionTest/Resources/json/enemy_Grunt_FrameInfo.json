@@ -1,0 +1,76 @@
+{
+  "frames": [
+    {
+      "_frameName": "idle",
+
+      "frameTime": 0.12,
+      "maxFrameCount": 8,
+      "dimensionRect": {
+        "left": 0.0,
+        "bottom": 42.0,
+        "width": 40.0,
+        "height": 40.0
+      }
+    },
+    {
+      "_frameName": "walk",
+
+      "frameTime": 0.1,
+      "maxFrameCount": 10,
+      "dimensionRect": {
+        "left": 406.0,
+        "bottom": 2.0,
+        "width": 40.0,
+        "height": 40.0
+      }
+    },
+    {
+      "_frameName": "run",
+
+      "frameTime": 0.06,
+      "maxFrameCount": 10,
+      "dimensionRect": {
+        "left": 0.0,
+        "bottom": 82.0,
+        "width": 40.0,
+        "height": 40.0
+      }
+    },
+    {
+      "_frameName": "attack",
+
+      "frameTime": 0.05,
+      "maxFrameCount": 8,
+      "dimensionRect": {
+        "left": 0.0,
+        "bottom": 0.0,
+        "width": 44.0,
+        "height": 42.0
+      }
+    },
+    {
+      "_frameName": "turn",
+
+      "frameTime": 0.05,
+      "maxFrameCount": 8,
+      "dimensionRect": {
+        "left": 406.0,
+        "bottom": 42.0,
+        "width": 40.0,
+        "height": 40.0
+      }
+    },
+    {
+      "_frameName": "dead",
+
+      "frameTime": 0.1,
+      "maxFrameCount": 16,
+      "dimensionRect": {
+        "left": 0.0,
+        "bottom": 122.0,
+        "width": 56.0,
+        "height": 41.0
+      }
+    }
+  ]
+}

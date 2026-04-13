@@ -550,6 +550,28 @@
             }
           ],
           "isTrigger": false
+        },
+        {
+          "texturePath": "spr_gangstermask.png",
+          "objectType": "enemygrunt",
+          "renderLayer": 0,
+          "xPosition": 349.093536,
+          "yPosition": 352.281555,
+          "scale": 2.0,
+          "floor": 1,
+          "colliders": [],
+          "speed": 150.0
+        },
+        {
+          "texturePath": "spr_gangstermask_ghost.png",
+          "objectType": "enemygangster",
+          "renderLayer": 0,
+          "xPosition": 1202.97754,
+          "yPosition": 349.9389,
+          "scale": 2.0,
+          "floor": 1,
+          "colliders": [],
+          "speed": 250.0
         }
       ]
     }
