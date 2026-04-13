@@ -85,6 +85,19 @@ void AttackParticle::Deactivate()
 	m_OwnerType = OwnerType::none;
 }
 
+void AttackParticle::Deflect()
+{
+	float
+		deflectMultiplier{ 1.5f };
+
+	if (m_AttackType == AttackType::bullet)
+	{
+		m_OwnerType = OwnerType::Player;
+		m_Velocity.x = -m_Velocity.x * deflectMultiplier;
+		m_Velocity.y = -m_Velocity.y * deflectMultiplier;
+	}
+}
+
 bool AttackParticle::IsActive() const
 {
 	return m_IsActive;

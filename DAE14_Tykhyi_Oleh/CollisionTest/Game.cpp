@@ -5,6 +5,7 @@
 #include "SpriteManager.h"
 #include "EnemyManager.h"
 #include "ParticleManager.h"
+#include "CombatManager.h"
 
 #include "Player.h"
 #include "Map.h"
@@ -33,6 +34,7 @@ void Game::Initialize( )
 	m_pEnemyManager = new EnemyManager{};
 	m_pMap = new Map{};
 	m_pParticleManager = new ParticleManager{100};
+	m_pCombatManager = new CombatManager{};
 
 	importedGameInfo = m_JsonImporter.ImportGameInfo("json/GameInfo.json", *m_pSpriteManager);
 
@@ -59,6 +61,7 @@ void Game::Cleanup( )
 	delete m_pPlayer;
 	delete m_pEnemyManager;
 	delete m_pParticleManager;
+	delete m_pCombatManager;
 }
 
 void Game::Update( float elapsedSec )
@@ -78,13 +81,16 @@ void Game::Update( float elapsedSec )
 
 	m_pPlayer->Update(timeDivider*elapsedSec, pStates, GetViewPort());
 
-	m_pCollisionManager->HandleMovement(m_pPlayer, *m_pMap, timeDivider*elapsedSec, true);
+	m_pCollisionManager->HandleMovement(m_pPlayer, m_pMap, timeDivider*elapsedSec, true);
 
 	m_pEnemyManager->Update(timeDivider*elapsedSec, m_pPlayer->GetPosition(), m_pPlayer->GetFloor(), m_pMap, m_pParticleManager, m_pCollisionManager);
+
+	m_pCombatManager->ResolveCombat(m_pPlayer, m_pEnemyManager, m_pParticleManager);
 
 	m_pSpriteManager->Update(timeDivider*elapsedSec);
 
 	m_pParticleManager->Update(timeDivider * elapsedSec);
+
 }
 
 void Game::Draw( ) const

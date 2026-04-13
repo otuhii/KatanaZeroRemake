@@ -7,6 +7,7 @@ class SpriteManager;
 class EnemyManager;
 class CollisionManager;
 class ParticleManager;
+class CombatManager;
 
 class Player;
 class Map;
@@ -48,6 +49,8 @@ private:
 
 	JsonImporter		m_JsonImporter{}; //TODO maybe change this to pointer later
 
+
+	CombatManager*		m_pCombatManager{};
 	EnemyManager*		m_pEnemyManager{};
 	SpriteManager*		m_pSpriteManager{};
 	CollisionManager*	m_pCollisionManager{};

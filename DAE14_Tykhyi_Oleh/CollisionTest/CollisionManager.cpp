@@ -1,9 +1,14 @@
 #include "pch.h"
 #include "CollisionManager.h"
+#include "ParticleManager.h"
+
 
 #include "utils.h"
 
-void CollisionManager::HandleMovement(Entity* pEntity, const Map& map, float elapsedSec, bool updateFloorInfo) const
+
+#include <iostream>
+
+void CollisionManager::HandleMovement(Entity* pEntity, const Map* pMap, float elapsedSec, bool updateFloorInfo) const
 {
 	Vector2f
 		entityVelocity{ pEntity->GetVelocity() },
@@ -11,26 +16,43 @@ void CollisionManager::HandleMovement(Entity* pEntity, const Map& map, float ela
 
 	entityPosition.x += entityVelocity.x * elapsedSec;
 	pEntity->SetPositionX(entityPosition.x);
-	CheckCollision(pEntity, map, true, updateFloorInfo);
+	CheckCollision(elapsedSec, pEntity, pMap, true, updateFloorInfo);
 
 	entityPosition.y += entityVelocity.y * elapsedSec;
 	pEntity->SetPositionY(entityPosition.y);
 	pEntity->SetIsOnGroundState(false); //assuming that player is in the air
-	CheckCollision(pEntity, map, false, updateFloorInfo);
+	CheckCollision(elapsedSec, pEntity, pMap, false, updateFloorInfo);
 }
 
-void CollisionManager::CheckCollision(Entity* pEntity, const Map& map, bool isHorizontalMovement, bool updateFloorInfo) const
+//void CollisionManager::HandleParticles(ParticleManager* pParticleManager, const Map* pMap)
+//{
+//	for (AttackParticle* pParticle : pParticleManager->GetParticles())
+//	{
+//		if (pParticle->IsActive())
+//		{
+//			if (pParticle->GetAttackType() == AttackParticle::AttackType::bullet)
+//			{
+//				if (IsOverlappingWithMap(pParticle->GetWorldCoordinates(), pMap))
+//				{
+//					pParticle->Deactivate();
+//				}
+//			}
+//		}
+//	}
+//}
+
+void CollisionManager::CheckCollision(float elapsedSec, Entity* pEntity, const Map* pMap, bool isHorizontalMovement, bool updateFloorInfo) const
 {
-	for (const EnvironmentActiveObject& object : map.GetEnvironmentActiveObjects())
+	for (const EnvironmentActiveObject& object : pMap->GetEnvironmentActiveObjects())
 	{
 		for (const Rectf& collider : object.GetColliders())
 		{
-			HandleAABB(pEntity, object.GetType(), collider, object.GetFloor(), isHorizontalMovement, updateFloorInfo);
+			HandleAABB(elapsedSec, pEntity, object.GetType(), collider, object.GetFloor(), isHorizontalMovement, updateFloorInfo);
 		}
 	}
 }
 
-void CollisionManager::HandleAABB(Entity* pEntity, EnvironmentActiveObject::EnvironmentObjectType type, const Rectf& objectCollider, int objectFloor, bool isHorizontalMovement, bool updateFloorInfo) const
+void CollisionManager::HandleAABB(float elapsedSec, Entity* pEntity, EnvironmentActiveObject::EnvironmentObjectType type, const Rectf& objectCollider, int objectFloor, bool isHorizontalMovement, bool updateFloorInfo) const
 {
 	Rectf
 		entityHitbox{ pEntity->GetHitbox() };
@@ -41,7 +63,7 @@ void CollisionManager::HandleAABB(Entity* pEntity, EnvironmentActiveObject::Envi
 
 	if (type == EnvironmentActiveObject::EnvironmentObjectType::jumpThroughPlatform)
 	{
-		if (CanMoveThroughPlatform(pEntity, objectCollider, isHorizontalMovement))
+		if (CanMoveThroughPlatform(elapsedSec, pEntity, objectCollider, isHorizontalMovement))
 		{
 
 			return;
@@ -49,7 +71,7 @@ void CollisionManager::HandleAABB(Entity* pEntity, EnvironmentActiveObject::Envi
 	}
 
 	if (isHorizontalMovement) //shrinking hitbox in the bottom part because otherwise collision 
-							  //is triggered when he is simply standing on the floor
+		//is triggered when he is simply standing on the floor
 	{
 		float shrinkValue{ 2.f };
 
@@ -61,11 +83,11 @@ void CollisionManager::HandleAABB(Entity* pEntity, EnvironmentActiveObject::Envi
 	{
 		if (isHorizontalMovement && pEntity->IsOnGround())
 		{
-			float 
+			float
 				overlapHeight{ (objectCollider.bottom + objectCollider.height) - entityHitbox.bottom };
 
 			if (overlapHeight <= maxStepHeight && overlapHeight > 0) //step-up logic which checks if current
-																	  //overlapped wall can be handled as a stair step
+				//overlapped wall can be handled as a stair step
 			{
 				pEntity->SetPositionY(objectCollider.bottom + objectCollider.height);
 				pEntity->SetVelocityY(0.f);
@@ -83,20 +105,22 @@ void CollisionManager::HandleAABB(Entity* pEntity, EnvironmentActiveObject::Envi
 			}
 			pEntity->SetVelocityX(0.f);
 		}
-		else 
+		else
 		{
 			if (pEntity->GetVelocityY() > velEps)
 			{
 				pEntity->SetPositionY(objectCollider.bottom - pEntity->GetHitbox().height);
 			}
-			else 
+			else
 			{
 				float platformTop{
 					objectCollider.bottom + objectCollider.height
 				};
-				float heightDif{ 5.f };
 
-				if ((entityHitbox.bottom >= platformTop - heightDif)&&
+				float
+					heightDif{ 5.f };
+
+				if ((entityHitbox.bottom >= platformTop - heightDif) &&
 					updateFloorInfo) // check if we actually landed on platform top
 				{
 					pEntity->SetFloor(objectFloor);
@@ -111,7 +135,7 @@ void CollisionManager::HandleAABB(Entity* pEntity, EnvironmentActiveObject::Envi
 	
 }
 
-bool CollisionManager::CanMoveThroughPlatform(Entity* pEntity, const Rectf& objectCollider, bool isHorizontalMovement) const
+bool CollisionManager::CanMoveThroughPlatform(float elapsedSec, Entity* pEntity, const Rectf& objectCollider, bool isHorizontalMovement) const
 {
 	const float
 		velEps{ 0.1f };
@@ -147,3 +171,16 @@ bool CollisionManager::CanMoveThroughPlatform(Entity* pEntity, const Rectf& obje
 
 	return false;
 }
+
+
+//TODO handle collision with SAT
+//bool CollisionManager::IsOverlappingWithMap(const std::vector<Vector2f>& poly, const Map& map) const
+//{
+//	for (const EnvironmentActiveObject& object : map.GetEnvironmentActiveObjects())
+//	{
+//		for (const Rectf& collider : object.GetColliders())
+//		{
+//
+//		}
+//	}
+//}

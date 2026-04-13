@@ -47,6 +47,9 @@ public:
 	void UpdateControlPoints(const std::vector<ControlPoint>* controlPoint);
 
 	EnemyType GetType() const;
+	void SetState(EnemyState state);
+
+	void Kill() override;
 protected:
 	bool CanSeePlayer(const Vector2f& playerPos, int playerFloor);
 	bool IsPlayerInAttackRange(const Vector2f& playerPos, int playerFloor);
@@ -70,7 +73,6 @@ protected:
 	void Chase(float elapsedSec, const Vector2f& playerPos, int playerFloor);
 
 	bool MoveTo(const ControlPoint& controlPoint, float speedMultiplier);
-	void SetState(EnemyState state);
 
 private:
 	EnemyState m_State;

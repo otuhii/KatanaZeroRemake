@@ -43,6 +43,8 @@ public:
 
 	void Deactivate();
 
+	void Deflect();
+
 	bool IsActive() const;
 	OwnerType GetOwnerType() const;
 	AttackType GetAttackType() const;

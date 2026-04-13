@@ -58,6 +58,7 @@ void Gangster::Attack(const Vector2f& playerPos, ParticleManager* particleManage
 	}
 }
 
+
 void Gangster::UpdateCurrentState(float elapsedSec, const Vector2f& playerPos, int playerFloor, ParticleManager* particleManager)
 {
 	switch (GetState())
@@ -78,6 +79,8 @@ void Gangster::UpdateCurrentState(float elapsedSec, const Vector2f& playerPos, i
 		{
 			SetState(EnemyState::run);
 		}
+		break;
+	case EnemyState::dead:
 		break;
 	}
 }

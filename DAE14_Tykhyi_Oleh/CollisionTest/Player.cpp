@@ -40,9 +40,6 @@ void Player::Update(float elapsedSec, const Uint8* pStates, const Rectf& viewpor
 	UpdateCurrentState(elapsedSec);
 	UpdateCooldowns(elapsedSec);
 	Entity::Update(elapsedSec, viewport);
-
-
-	std::cout << GetFloor() << std::endl;
 }
 
 void Player::SetState(PlayerState state)

@@ -41,11 +41,14 @@ public:
 
 	int GetCurrentFrameCount() const;
 	const Rectf& GetCurrentFrameDimensions() const;
+	int GetCurrentMaxFrameCount() const;
 
 	float GetScale() const;
 	float GetRotation() const;
 
 	void ResetAnimation();
+
+	void SetLooping(bool isLooping);
 private:
 	AnimationFrameInfo m_AnimationFrameInfo{};
 
@@ -53,10 +56,11 @@ private:
 	int m_FrameCount{};
 
 	bool
-		m_IsFlippedHorizontally{},
-		m_IsFlippedVertically{},
-		m_LastFrameReached{},
-		m_IsVisible{};
+		m_IsFlippedHorizontally{ false },
+		m_IsFlippedVertically{ false },
+		m_LastFrameReached{ false },
+		m_IsVisible{ false },
+		m_IsLooping{ true };
 
 	float
 		m_RotationAngle{},

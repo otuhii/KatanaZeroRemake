@@ -48,7 +48,7 @@ public:
 	bool			IsSpriteAnimationFinished() const;
 	bool			CanJumpThroughPlatform() const;
 
-	void			Kill();
+	virtual void	Kill();
 	bool			IsAlive() const;
 protected:
 	Sprite* GetSprite() const;

@@ -36,6 +36,7 @@ void Grunt::Attack(const Vector2f& playerPos, ParticleManager* particleManager)
 	SpawnAttackParticle(particleManager);
 }
 
+
 void Grunt::SpawnAttackParticle(ParticleManager* particleManager) const
 {
 	Rectf

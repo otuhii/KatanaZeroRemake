@@ -33,6 +33,8 @@ public:
 	);
 
 	void SetControlPoints(const std::vector<ControlPoint>& controlPoints);
+
+	const std::vector<Enemy*>& GetEnemies();
 private:
 	struct EnemyTypeTemplate {
 		Sprite* spriteSheet{};

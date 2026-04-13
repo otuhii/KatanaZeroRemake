@@ -47,9 +47,8 @@ void EnemyManager::Update(float elapsedSec, const Vector2f& playerPos, int playe
 		pEnemy->UpdateControlPoints(&m_ControlPoints);
 		pEnemy->Update(elapsedSec, playerPos, playerFloor, particleManager, Rectf{});
 
-		collisionManager->HandleMovement(pEnemy, *gameMap, elapsedSec, false);
+		collisionManager->HandleMovement(pEnemy, gameMap, elapsedSec, false);
 	}
-
 }
 
 void EnemyManager::AddEnemy(Enemy::EnemyType type, const Vector2f& position, float speed, float scale, int floor)
@@ -91,4 +90,9 @@ void EnemyManager::InitializeEnemyType(Enemy::EnemyType type, Sprite* pSpriteshe
 void EnemyManager::SetControlPoints(const std::vector<ControlPoint>& controlPoints)
 {
 	m_ControlPoints = controlPoints;
+}
+
+const std::vector<Enemy*>& EnemyManager::GetEnemies()
+{
+	return m_pEnemies;
 }

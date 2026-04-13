@@ -102,6 +102,11 @@ const Rectf& Sprite::GetCurrentFrameDimensions() const
 	return m_AnimationFrameInfo.frameDimension;
 }
 
+int Sprite::GetCurrentMaxFrameCount() const
+{
+	return m_AnimationFrameInfo.maxFrameCount;
+}
+
 float Sprite::GetScale() const
 {
 	return m_ScaleValue;
@@ -119,6 +124,13 @@ void Sprite::ResetAnimation()
 	m_LastFrameReached = false;
 	m_RotationAngle = 0.f;
 }
+
+void Sprite::SetLooping(bool isLooping)
+{
+	m_IsLooping = isLooping;
+}
+
+
 
 void Sprite::Draw(const Vector2f& drawPos, bool pivotX, bool pivotY) const
 {
@@ -168,6 +180,7 @@ void Sprite::Draw(const Vector2f& drawPos, bool pivotX, bool pivotY) const
 			glTranslatef(0.f, -halfHeight, 0.f);
 		}
 
+
 		Rectf srcRect{
 			m_AnimationFrameInfo.frameDimension.left+m_AnimationFrameInfo.frameDimension.width * m_FrameCount,
 			m_AnimationFrameInfo.frameDimension.bottom,
@@ -180,9 +193,13 @@ void Sprite::Draw(const Vector2f& drawPos, bool pivotX, bool pivotY) const
 	glPopMatrix();
 }
 
+
 void Sprite::Update(float elapsedSec)
 {
-	if (!m_IsVisible) { return; }
+	if (!m_IsVisible)
+	{
+		return; 
+	}
 
 	m_LastFrameReached = false;
 
@@ -195,6 +212,10 @@ void Sprite::Update(float elapsedSec)
 		if (m_FrameCount == m_AnimationFrameInfo.maxFrameCount - 1)
 		{
 			m_LastFrameReached = true;
+			if (!m_IsLooping)
+			{
+				return;
+			}
 		}
 
 		m_FrameCount = (m_FrameCount + 1) % m_AnimationFrameInfo.maxFrameCount;

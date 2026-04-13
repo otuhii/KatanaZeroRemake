@@ -33,8 +33,6 @@ Enemy::Enemy(
 void Enemy::Draw() const
 {
 	Entity::Draw();
-
-	
 }
 
 void Enemy::UpdateControlPoints(const std::vector<ControlPoint>* controlPoints)
@@ -50,11 +48,15 @@ Enemy::EnemyType Enemy::GetType() const
 
 void Enemy::Update(float elapsedSec, const Vector2f& playerPos, int playerFloor, ParticleManager* particleManager, const Rectf& viewport)
 {
-	UpdateCooldowns(elapsedSec);
 	Entity::Update(elapsedSec, viewport);
-	UpdateCurrentState(elapsedSec, playerPos, playerFloor, particleManager);
 
-	UpdateSprite();
+	if (IsAlive())
+	{
+		UpdateCooldowns(elapsedSec);
+		UpdateCurrentState(elapsedSec, playerPos, playerFloor, particleManager);
+
+		UpdateSprite();
+	}
 }
 
 //all enemies will have flipped sprite, i should flip it on the rendering and i need each enemy to have variable that corresponds to that
@@ -105,6 +107,14 @@ void Enemy::SetState(EnemyState state)
 	GetSprite()->ResetAnimation();
 }
 
+void Enemy::Kill()
+{
+	Entity::Kill();
+	SetVelocity(Vector2f{ 0.f, 0.f });
+	GetSprite()->SetLooping(false);
+	SetState(EnemyState::dead);
+}
+
 
 void Enemy::UpdateCurrentState(float elapsedSec, const Vector2f& playerPos, int playerFloor, ParticleManager* particleManager)
 {
@@ -133,6 +143,10 @@ void Enemy::UpdateCurrentState(float elapsedSec, const Vector2f& playerPos, int 
 	case EnemyState::turn:
 	{
 		UpdateTurn(elapsedSec);
+		break;
+	}
+	case EnemyState::dead:
+	{
 		break;
 	}
 
