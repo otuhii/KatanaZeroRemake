@@ -48,6 +48,8 @@ public:
 	bool			IsSpriteAnimationFinished() const;
 	bool			CanJumpThroughPlatform() const;
 
+	void			Kill();
+	bool			IsAlive() const;
 protected:
 	Sprite* GetSprite() const;
 
@@ -62,7 +64,8 @@ private:
 
 	bool
 		m_IsOnGround{},
-		m_CanJumpThroughPlatform{};
+		m_CanJumpThroughPlatform{},
+		m_IsAlive{ true };
 
 	Vector2f m_Velocity{};
 	Vector2f m_Position{};

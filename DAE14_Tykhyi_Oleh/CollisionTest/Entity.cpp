@@ -14,8 +14,8 @@ void Entity::Draw() const
 {
 	m_pSprite->Draw(m_Position, true, false);
 
-	/*utils::SetColor(Color4f{ 0.f, 1.f, 0.f, 1.f });
-	utils::DrawRect(GetHitbox());*/
+	utils::SetColor(Color4f{ 0.f, 1.f, 0.f, 1.f });
+	utils::DrawRect(GetHitbox());
 }
 
 void Entity::Update(float elapsedSec, const Rectf& viewport)
@@ -163,6 +163,16 @@ bool Entity::IsSpriteAnimationFinished() const
 bool Entity::CanJumpThroughPlatform() const
 {
 	return m_CanJumpThroughPlatform;
+}
+
+void Entity::Kill() 
+{
+	m_IsAlive = false;
+}
+
+bool Entity::IsAlive() const
+{
+	return m_IsAlive;
 }
 
 Sprite* Entity::GetSprite() const

@@ -21,7 +21,8 @@ public:
 		walk,
 		run,
 		attack,
-		turn
+		turn,
+		dead
 	};
 
 	Enemy(
@@ -91,7 +92,7 @@ private:
 
 	const float
 		m_PatrolSpeedMultiplier{ 1.f },
-		m_RunningMultiplier{ 1.5f };
+		m_RunningMultiplier{ 2.f };
 
 	const float
 		m_DetectionRange{ 400.f },

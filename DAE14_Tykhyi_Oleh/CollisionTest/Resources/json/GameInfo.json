@@ -494,8 +494,8 @@
           "texturePath": "spr_mask.png",
           "objectType": "playerinfo",
           "renderLayer": 0,
-          "xPosition": 188.0,
-          "yPosition": 180.0,
+          "xPosition": 186.0,
+          "yPosition": 65.0,
           "scale": 2.0,
           "floor": 0,
           "colliders": [],
@@ -566,7 +566,7 @@
           "scale": 2.0,
           "floor": 1,
           "colliders": [],
-          "speed": 100.0
+          "speed": 150.0
         },
         {
           "texturePath": "spr_gangstermask_ghost.png",
