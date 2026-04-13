@@ -10,11 +10,6 @@ ParticleManager::ParticleManager(int instanceCount)
 	{
 		m_pParticles.push_back(new AttackParticle());
 	}
-
-	m_StandartBulletShape.push_back(Vector2f{ -5.f, -2.f });
-	m_StandartBulletShape.push_back(Vector2f{ 5.f, -2.f });
-	m_StandartBulletShape.push_back(Vector2f{ 5.f, 2.f });
-	m_StandartBulletShape.push_back(Vector2f{ -5.f, 2.f });
 }
 
 ParticleManager::~ParticleManager()
@@ -47,7 +42,16 @@ void ParticleManager::Update(float elapsedSec)
 	}
 }
 
-void ParticleManager::SpawnBullet(AttackParticle::OwnerType owner, const Vector2f& position, const Vector2f& positionOffset, const Vector2f& velocity, float rotationAngle, bool isFlippedHorizontally, bool isFlippedVertically)
+void ParticleManager::SpawnBullet(
+	AttackParticle::OwnerType owner, 
+	const Vector2f& position, 
+	const Vector2f& positionOffset, 
+	const std::vector<Vector2f>& localHitbox,
+	const Vector2f& velocity,
+	float rotationAngle, 
+	bool isFlippedHorizontally, 
+	bool isFlippedVertically
+) const
 {
 	AttackParticle* pParticle{
 		GetFreeParticle()
@@ -61,7 +65,7 @@ void ParticleManager::SpawnBullet(AttackParticle::OwnerType owner, const Vector2
 			position,
 			positionOffset,
 			velocity,
-			m_StandartBulletShape,
+			localHitbox,
 			5.f,
 			rotationAngle,
 			isFlippedHorizontally,
@@ -71,7 +75,17 @@ void ParticleManager::SpawnBullet(AttackParticle::OwnerType owner, const Vector2
 	}
 }
 
-void ParticleManager::SpawnMelee(AttackParticle::OwnerType owner, Entity* pOwnerEntity, const Vector2f& position, const Vector2f& positionOffset, const std::vector<Vector2f>& localHitbox, float lifetime, float rotationAngle, bool isFlippedHorizontally, bool isFlippedVertically)
+void ParticleManager::SpawnMelee(
+	AttackParticle::OwnerType owner,
+	const Entity* pOwnerEntity,
+	const Vector2f& position, 
+	const Vector2f& positionOffset,
+	const std::vector<Vector2f>& localHitbox, 
+	float lifetime, 
+	float rotationAngle, 
+	bool isFlippedHorizontally, 
+	bool isFlippedVertically
+) const
 {
 	AttackParticle* pParticle{
 		GetFreeParticle()

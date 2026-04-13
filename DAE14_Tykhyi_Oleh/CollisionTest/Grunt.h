@@ -15,6 +15,16 @@ public:
         float attackRange
     );
 
-    void Attack() override;
+    void Attack(const Vector2f& playerPos, ParticleManager* particleManager) override;
+
+private:
+    const std::vector<Vector2f> m_BaseAttackHitbox{
+        Vector2f{-30.f, -20.f},
+        Vector2f{45.f, -20.f},
+        Vector2f{45.f, 20.f},
+        Vector2f{-30.f, 20.f}
+    };
+
+    void SpawnAttackParticle(ParticleManager* particleManager) const;
 };
 

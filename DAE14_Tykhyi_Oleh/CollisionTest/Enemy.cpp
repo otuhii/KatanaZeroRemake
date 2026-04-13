@@ -7,6 +7,7 @@
 
 Enemy::Enemy(
 	EnemyType type, 
+	EnemyState state,
 	Sprite* pSprite, 
 	const std::vector<AnimationFrameInfo>* enemyAnimationFrames,
 	const Vector2f& position,
@@ -18,7 +19,7 @@ Enemy::Enemy(
 	:  
 	Entity(pSprite, position, Vector2f{0.f, 0.f}, speed, floor),
 	m_EnemySpriteFrames{ enemyAnimationFrames },
-	m_State{EnemyState::walk},
+	m_State{state},
 	m_Type{type},
 	m_AttackRange{attackRange},
 	m_DetectionRange{playerDetectionRange}
@@ -48,10 +49,11 @@ Enemy::EnemyType Enemy::GetType() const
 	return m_Type;
 }
 
-void Enemy::Update(float elapsedSec, const Vector2f& playerPos, int playerFloor, const Rectf& viewport)
+void Enemy::Update(float elapsedSec, const Vector2f& playerPos, int playerFloor, ParticleManager* particleManager, const Rectf& viewport)
 {
+	UpdateCooldowns(elapsedSec);
 	Entity::Update(elapsedSec, viewport);
-	UpdateCurrentState(elapsedSec, playerPos, playerFloor);
+	UpdateCurrentState(elapsedSec, playerPos, playerFloor, particleManager);
 
 	UpdateSprite();
 }
@@ -105,13 +107,13 @@ void Enemy::SetState(EnemyState state)
 }
 
 
-void Enemy::UpdateCurrentState(float elapsedSec, const Vector2f& playerPos, int playerFloor)
+void Enemy::UpdateCurrentState(float elapsedSec, const Vector2f& playerPos, int playerFloor, ParticleManager* particleManager)
 {
 	switch (m_State)
 	{
 	case EnemyState::idle:
 	{
-		UpdateIdle(elapsedSec);
+		UpdateIdle(elapsedSec, playerPos, playerFloor);
 		break;
 	}
 	case EnemyState::walk:
@@ -126,7 +128,7 @@ void Enemy::UpdateCurrentState(float elapsedSec, const Vector2f& playerPos, int 
 	}
 	case EnemyState::attack:
 	{
-		UpdateAttack(elapsedSec, playerPos);
+		UpdateAttack(elapsedSec, playerPos, particleManager);
 		break;
 	}
 	case EnemyState::turn:
@@ -138,9 +140,15 @@ void Enemy::UpdateCurrentState(float elapsedSec, const Vector2f& playerPos, int 
 	}
 }
 
-void Enemy::UpdateIdle(float elapsedSec)
+void Enemy::UpdateIdle(float elapsedSec, const Vector2f& playerPos, int playerFloor)
 {
-
+	if (CanSeePlayer(playerPos, playerFloor))
+	{
+		if (IsPlayerInAttackRange(playerPos))
+		{
+			SetState(EnemyState::attack);
+		}
+	}
 }
 
 void Enemy::UpdateWalk(float elapsedSec, const Vector2f& playerPos, int playerFloor)
@@ -158,12 +166,17 @@ void Enemy::UpdateRun(float elapsedSec, const Vector2f& playerPos, int playerFlo
 	Chase(elapsedSec, playerPos, playerFloor);
 }
 
-void Enemy::UpdateAttack(float elapsedSec, const Vector2f& playerPos)
+void Enemy::UpdateAttack(float elapsedSec, const Vector2f& playerPos, ParticleManager* particleManager) 
 {
-	//Attack()
+	const int
+		attackTriggerFrame{ 3};
+	if (GetSprite()->GetCurrentFrameCount() == attackTriggerFrame)
+	{
+		Attack(playerPos, particleManager);
+	}
 	if (IsSpriteAnimationFinished())
 	{
-		SetState(EnemyState::walk);
+		SetState(EnemyState::run);
 	}
 }
 
@@ -187,6 +200,7 @@ void Enemy::StateInitialization(EnemyState state)
 	}
 	case EnemyState::attack:
 	{
+		m_AttackCooldownTimer = m_AttackCooldown;
 		SetVelocityX(0.f);
 	}
 	case EnemyState::run:
@@ -303,7 +317,7 @@ void Enemy::Chase(float elapsedSec, const Vector2f& playerPos, int playerFloor)
 
 	MoveTo(playerPoint, m_RunningMultiplier);
 
-	if (IsPlayerInAttackRange(playerPos))
+	if (IsPlayerInAttackRange(playerPos) && m_AttackCooldownTimer <= 0)
 	{
 		SetState(EnemyState::attack);
 	}
@@ -365,4 +379,28 @@ bool Enemy::IsPlayerInAttackRange(const Vector2f& playerPos)
 		distance{ utils::GetDistance(GetPosition(), playerPos) };
 
 	return distance <= m_AttackRange;
+}
+
+Enemy::EnemyState Enemy::GetState() const
+{
+	return m_State;
+}
+
+float Enemy::GetAttackCooldownTimer() const
+{
+	return m_AttackCooldownTimer;
+}
+
+void Enemy::ResetAttackCooldownTimer() 
+{
+	m_AttackCooldownTimer = m_AttackCooldown;
+}
+
+void Enemy::UpdateCooldowns(float elapsedSec)
+{
+	m_AttackCooldownTimer -= elapsedSec;
+	if (m_AttackCooldownTimer < 0)
+	{
+		m_AttackCooldownTimer = 0.f;
+	}
 }

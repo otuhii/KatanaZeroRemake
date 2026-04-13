@@ -58,6 +58,7 @@ void Game::Cleanup( )
 	delete m_pCollisionManager;
 	delete m_pPlayer;
 	delete m_pEnemyManager;
+	delete m_pParticleManager;
 }
 
 void Game::Update( float elapsedSec )
@@ -80,7 +81,7 @@ void Game::Update( float elapsedSec )
 
 	m_pCollisionManager->HandleMovement(m_pPlayer, *m_pMap, timeDivider*elapsedSec, true);
 
-	m_pEnemyManager->Update(timeDivider*elapsedSec, m_pPlayer->GetPosition(), m_pPlayer->GetFloor(), m_pMap, m_pCollisionManager);
+	m_pEnemyManager->Update(timeDivider*elapsedSec, m_pPlayer->GetPosition(), m_pPlayer->GetFloor(), m_pMap, m_pParticleManager, m_pCollisionManager);
 
 	m_pSpriteManager->Update(timeDivider*elapsedSec);
 
@@ -158,6 +159,7 @@ void Game::EnemyTypeInitialization(const JsonImporter::GameData& gameData)
 	m_pEnemyManager->InitializeEnemyType(
 		Enemy::EnemyType::grunt,
 		m_pSpriteManager->CreateSprite("img/chr/grunt_spritesheet.png"),
+		nullptr,
 		m_JsonImporter.ImportAnimationFrameObjects("json/enemy_Grunt_FrameInfo.json"),
 		gruntDetectionRange,
 		gruntAttackRange
@@ -166,6 +168,7 @@ void Game::EnemyTypeInitialization(const JsonImporter::GameData& gameData)
 	m_pEnemyManager->InitializeEnemyType(
 		Enemy::EnemyType::gangster,
 		m_pSpriteManager->CreateSprite("img/chr/gangster_spritesheet.png"),
+		m_pSpriteManager->CreateSprite("img/chr/gangster_gun_sprite.png"),
 		m_JsonImporter.ImportAnimationFrameObjects("json/enemy_Gangster_FrameInfo.json"),
 		gangsterDetectionRange,
 		gangsterAttackRange

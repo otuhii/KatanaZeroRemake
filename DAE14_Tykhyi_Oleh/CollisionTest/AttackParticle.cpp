@@ -5,7 +5,7 @@
 #include "Matrix2x3.h"
 #include "utils.h"
 
-void AttackParticle::Spawn(OwnerType ownerType, AttackType attackType, const Vector2f& position, const Vector2f& positionOffset, const Vector2f& velocity, const std::vector<Vector2f>& localPoints, float lifetime, float rotationAngle,  bool isFlippedHorizontally, bool isFlippedVertically, Entity* pOwnerEntity)
+void AttackParticle::Spawn(OwnerType ownerType, AttackType attackType, const Vector2f& position, const Vector2f& positionOffset, const Vector2f& velocity, const std::vector<Vector2f>& localPoints, float lifetime, float rotationAngle,  bool isFlippedHorizontally, bool isFlippedVertically, const Entity* pOwnerEntity)
 {
 	m_OwnerType = ownerType;
 	m_AttackType = attackType;

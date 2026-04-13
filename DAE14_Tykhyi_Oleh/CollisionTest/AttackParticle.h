@@ -34,7 +34,7 @@ public:
 		float rotationAngle,
 		bool isFlippedHorizontally,
 		bool isFlippedVertically, 
-		Entity* pOwnerEntity
+		const Entity* pOwnerEntity
 	);
 
 	void Draw() const;
@@ -65,7 +65,7 @@ private:
 		m_PositionOffset{}, // like alternative to archoring point
 		m_Velocity{};
 
-	Entity*
+	const Entity*
 		m_pOwnerEntity{};
 
 	std::vector<Vector2f> m_LocalHitbox{};

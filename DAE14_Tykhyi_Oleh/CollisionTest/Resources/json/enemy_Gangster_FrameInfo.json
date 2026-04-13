@@ -1,0 +1,76 @@
+{
+  "frames": [
+    {
+      "_frameName": "idle",
+
+      "frameTime": 0.1,
+      "maxFrameCount": 8,
+      "dimensionRect": {
+        "left": 0.0,
+        "bottom": 0.0,
+        "width": 45.0,
+        "height": 40.0
+      }
+    },
+    {
+      "_frameName": "walk",
+
+      "frameTime": 0.05,
+      "maxFrameCount": 10,
+      "dimensionRect": {
+        "left": 0.0,
+        "bottom": 0.0,
+        "width": 1.0,
+        "height": 1.0
+      }
+    },
+    {
+      "_frameName": "run",
+
+      "frameTime": 0.07,
+      "maxFrameCount": 10,
+      "dimensionRect": {
+        "left": 0.0,
+        "bottom": 40.0,
+        "width": 45.0,
+        "height": 40.0
+      }
+    },
+    {
+      "_frameName": "attack",
+
+      "frameTime": 0.07,
+      "maxFrameCount": 1,
+      "dimensionRect": {
+        "left": 405.0,
+        "bottom": 80.0,
+        "width": 45.0,
+        "height": 40.0
+      }
+    },
+    {
+      "_frameName": "turn",
+
+      "frameTime": 0.07,
+      "maxFrameCount": 8,
+      "dimensionRect": {
+        "left": 0.0,
+        "bottom": 80.0,
+        "width": 45.0,
+        "height": 40.0
+      }
+    },
+    {
+      "_frameName": "attackEffect",
+
+      "frameTime": 0.07,
+      "maxFrameCount": 1,
+      "dimensionRect": {
+        "left": 0.0,
+        "bottom": 80.0,
+        "width": 360.0,
+        "height": 80.0
+      }
+    }
+  ]
+}

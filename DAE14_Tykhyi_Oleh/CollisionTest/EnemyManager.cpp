@@ -40,12 +40,12 @@ void EnemyManager::Draw() const
 	}
 }
 
-void EnemyManager::Update(float elapsedSec, const Vector2f& playerPos, int playerFloor, const Map* gameMap, const CollisionManager* collisionManager)
+void EnemyManager::Update(float elapsedSec, const Vector2f& playerPos, int playerFloor, const Map* gameMap, ParticleManager* particleManager, const CollisionManager* collisionManager)
 {
 	for (Enemy* pEnemy : m_pEnemies)
 	{
 		pEnemy->UpdateControlPoints(&m_ControlPoints);
-		pEnemy->Update(elapsedSec, playerPos, playerFloor, Rectf{});
+		pEnemy->Update(elapsedSec, playerPos, playerFloor, particleManager, Rectf{});
 
 		collisionManager->HandleMovement(pEnemy, *gameMap, elapsedSec, false);
 	}
@@ -71,6 +71,7 @@ void EnemyManager::AddEnemy(Enemy::EnemyType type, const Vector2f& position, flo
 	{
 		m_pEnemies.push_back(new Gangster{
 			m_EnemyTypeTemplates[static_cast<int>(type)].spriteSheet,
+			m_EnemyTypeTemplates[static_cast<int>(type)].additionSprite,
 			&m_EnemyTypeTemplates[static_cast<int>(type)].enemyAnimationFrameInfo,
 			position,
 			speed,
@@ -82,9 +83,9 @@ void EnemyManager::AddEnemy(Enemy::EnemyType type, const Vector2f& position, flo
 	}
 }
 
-void EnemyManager::InitializeEnemyType(Enemy::EnemyType type, Sprite* pSpritesheet, const std::vector<AnimationFrameInfo>& animationFrameInfo, float playerDetectionRange, float attackRange)
+void EnemyManager::InitializeEnemyType(Enemy::EnemyType type, Sprite* pSpritesheet, Sprite* pAdditionalSprite, const std::vector<AnimationFrameInfo>& animationFrameInfo, float playerDetectionRange, float attackRange)
 {
-	m_EnemyTypeTemplates[static_cast<int>(type)] = EnemyTypeTemplate{ pSpritesheet, animationFrameInfo, playerDetectionRange, attackRange };
+	m_EnemyTypeTemplates[static_cast<int>(type)] = EnemyTypeTemplate{ pSpritesheet, pAdditionalSprite, animationFrameInfo, playerDetectionRange, attackRange };
 }
 
 void EnemyManager::SetControlPoints(const std::vector<ControlPoint>& controlPoints)

@@ -4,6 +4,8 @@
 
 #include <vector>
 
+class ParticleManager;
+
 class Enemy : public Entity
 {
 public:
@@ -24,6 +26,7 @@ public:
 
 	Enemy(
 		EnemyType type,
+		EnemyState state,
 		Sprite* pSprite, 
 		const std::vector<AnimationFrameInfo>* playerAnimation, 
 		const Vector2f& position, 
@@ -36,9 +39,9 @@ public:
 
 	virtual ~Enemy() = default;
 
-	void Draw() const override;
+	virtual void Draw() const override;
 
-	void Update(float elapsedSec, const Vector2f& playerPos, int playerFloor, const Rectf& viewport);
+	virtual void Update(float elapsedSec, const Vector2f& playerPos, int playerFloor, ParticleManager* particleManager, const Rectf& viewport);
 
 	void UpdateControlPoints(const std::vector<ControlPoint>* controlPoint);
 
@@ -47,7 +50,11 @@ protected:
 	bool CanSeePlayer(const Vector2f& playerPos, int playerFloor);
 	bool IsPlayerInAttackRange(const Vector2f& playerPos);
 
-	virtual void Attack() = 0;
+	virtual void Attack(const Vector2f& playerPos, ParticleManager* particleManager) = 0;
+
+	EnemyState GetState() const;
+	float GetAttackCooldownTimer() const;
+	void ResetAttackCooldownTimer();
 private:
 	EnemyState m_State;
 	EnemyType  m_Type;
@@ -59,7 +66,13 @@ private:
 	
 	int 
 		m_CurrentTargetControlPoint{ 0 };
+
+	const float
+		m_AttackCooldown{1.f};
 	
+	float
+		m_AttackCooldownTimer{};
+
 	const float
 		m_PatrolSpeedMultiplier{ 1.f },
 		m_RunningMultiplier{ 1.5f };
@@ -73,12 +86,12 @@ private:
 
 	void SetState(EnemyState state);
 
-	void UpdateCurrentState(float elapsedSec, const Vector2f& playerPos, int playerFloor);
+	void UpdateCurrentState(float elapsedSec, const Vector2f& playerPos, int playerFloor, ParticleManager* particleManager);
 
-	void UpdateIdle(float elapsedSec);
+	void UpdateIdle(float elapsedSec, const Vector2f& playerPos, int playerFloor);
 	void UpdateWalk(float elapsedSec, const Vector2f& playerPos, int playerFloor);
 	void UpdateRun(float elapsedSec, const Vector2f& playerPos, int playerFloor);
-	void UpdateAttack(float elapsedSec, const Vector2f& playerPos);
+	virtual void UpdateAttack(float elapsedSec, const Vector2f& playerPos, ParticleManager* particleManager);
 	void UpdateTurn(float elapsedSec);
 
 	void StateInitialization(EnemyState state);
@@ -87,5 +100,7 @@ private:
 	void Chase(float elapsedSec, const Vector2f& playerPos, int playerFloor);
 	
 	bool MoveTo(const ControlPoint& controlPoint, float speedMultiplier);
+
+	void UpdateCooldowns(float elapsedSec);
 };
 

@@ -81,7 +81,7 @@ private:
 	void HandleKeyboard(const Uint8* pStates, float elapsedSec);
 
 	void Attack(const Vector2f& mousePos, ParticleManager* particleManager);
-	void SpawnSplashParticle(ParticleManager* particleManager);
+	void SpawnAttackParticle(ParticleManager* particleManager) const;
 	void AttackDash(const Vector2f& mousePos);
 
 	void ProcessJumpThroughPlatform(bool downButton);

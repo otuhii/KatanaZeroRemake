@@ -283,10 +283,10 @@ void Player::Attack(const Vector2f& mousePos, ParticleManager* particleManager)
 		mousePos
 	));
 
-	SpawnSplashParticle(particleManager);
+	SpawnAttackParticle(particleManager);
 }
 
-void Player::SpawnSplashParticle(ParticleManager* particleManager)
+void Player::SpawnAttackParticle(ParticleManager* particleManager) const
 {
 	const float
 		rotationAngle{ m_SplashSprite->GetRotation() },
