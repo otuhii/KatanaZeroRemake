@@ -34,8 +34,7 @@ void Enemy::Draw() const
 {
 	Entity::Draw();
 
-	utils::SetColor(Color4f{ 0.f, 1.f, 0.f, 1.f });
-	utils::DrawRect(GetHitbox());
+	
 }
 
 void Enemy::UpdateControlPoints(const std::vector<ControlPoint>* controlPoints)
@@ -144,9 +143,14 @@ void Enemy::UpdateIdle(float elapsedSec, const Vector2f& playerPos, int playerFl
 {
 	if (CanSeePlayer(playerPos, playerFloor))
 	{
-		if (IsPlayerInAttackRange(playerPos))
+		if (IsPlayerInAttackRange(playerPos, playerFloor))
 		{
+
 			SetState(EnemyState::attack);
+		}
+		else
+		{
+			SetState(EnemyState::run);
 		}
 	}
 }
@@ -200,7 +204,6 @@ void Enemy::StateInitialization(EnemyState state)
 	}
 	case EnemyState::attack:
 	{
-		m_AttackCooldownTimer = m_AttackCooldown;
 		SetVelocityX(0.f);
 	}
 	case EnemyState::run:
@@ -225,6 +228,7 @@ void Enemy::Patrol(float elapsedSec)
 	{
 		m_CurrentTargetControlPoint = PathFinder::GetNextControlPointIdxByType(
 			m_CurrentTargetControlPoint,
+			false,
 			GetFloor(),
 			ControlPoint::ControlPointType::leadingPoint,
 			(*m_ControlPoints)
@@ -235,6 +239,7 @@ void Enemy::Patrol(float elapsedSec)
 	{
 		int nextTargetIndex{ PathFinder::GetNextControlPointIdxByType(
 			m_CurrentTargetControlPoint,
+			false,
 			GetFloor(),
 			ControlPoint::ControlPointType::leadingPoint,
 			(*m_ControlPoints)
@@ -296,6 +301,9 @@ void Enemy::Chase(float elapsedSec, const Vector2f& playerPos, int playerFloor)
 						//TODO look more into it because it can cause issues with enemy movement
 
 					SetFloor((*m_ControlPoints)[targetIndex].floor);
+
+					int floor{ GetFloor() };
+
 					m_Path.pop_back();
 				}
 			}
@@ -317,7 +325,7 @@ void Enemy::Chase(float elapsedSec, const Vector2f& playerPos, int playerFloor)
 
 	MoveTo(playerPoint, m_RunningMultiplier);
 
-	if (IsPlayerInAttackRange(playerPos) && m_AttackCooldownTimer <= 0)
+	if (IsPlayerInAttackRange(playerPos, playerFloor) && m_AttackCooldownTimer <= 0)
 	{
 		SetState(EnemyState::attack);
 	}
@@ -373,12 +381,13 @@ bool Enemy::CanSeePlayer(const Vector2f& playerPos, int playerFloor)
 			(playerFloor == GetFloor());
 }
 
-bool Enemy::IsPlayerInAttackRange(const Vector2f& playerPos)
+bool Enemy::IsPlayerInAttackRange(const Vector2f& playerPos, int playerFloor)
 {
 	float
 		distance{ utils::GetDistance(GetPosition(), playerPos) };
 
-	return distance <= m_AttackRange;
+	return (distance <= m_AttackRange) && 
+		   (playerFloor == GetFloor());
 }
 
 Enemy::EnemyState Enemy::GetState() const
@@ -386,12 +395,12 @@ Enemy::EnemyState Enemy::GetState() const
 	return m_State;
 }
 
-float Enemy::GetAttackCooldownTimer() const
+float Enemy::GetAttackCooldown() const
 {
 	return m_AttackCooldownTimer;
 }
 
-void Enemy::ResetAttackCooldownTimer() 
+void Enemy::ResetAttackCooldown() 
 {
 	m_AttackCooldownTimer = m_AttackCooldown;
 }

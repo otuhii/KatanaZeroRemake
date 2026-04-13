@@ -31,15 +31,17 @@ private:
     };
 
     const float
-        m_AimTime{};
+        m_AimTime{0.45f};
 
     float 
-        m_AimTimer{};
+        m_AimTimer{m_AimTime};
 
     const float
-        bulletSpeed{ 600.f };
+        bulletSpeed{ 1200.f };
 
     Sprite* m_GunSprite{};
+
+    void UpdateCurrentState(float elapsedSec, const Vector2f& playerPos, int playerFloor, ParticleManager* particleManager) override;
 
     void UpdateAttack(float elapsedSec, const Vector2f& playerPos, ParticleManager* particleManager) override;
     void UpdateGunSprite();

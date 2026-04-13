@@ -59,12 +59,6 @@ void CollisionManager::HandleAABB(Entity* pEntity, EnvironmentActiveObject::Envi
 
 	if (utils::IsOverlapping(entityHitbox, objectCollider))
 	{
-		if (updateFloorInfo)
-		{
-			pEntity->SetFloor(objectFloor);
-		}
-
-
 		if (isHorizontalMovement && pEntity->IsOnGround())
 		{
 			float 
@@ -97,7 +91,18 @@ void CollisionManager::HandleAABB(Entity* pEntity, EnvironmentActiveObject::Envi
 			}
 			else 
 			{
-				pEntity->SetPositionY(objectCollider.bottom + objectCollider.height);
+				float platformTop{
+					objectCollider.bottom + objectCollider.height
+				};
+				float heightDif{ 5.f };
+
+				if ((entityHitbox.bottom >= platformTop - heightDif)&&
+					updateFloorInfo) // check if we actually landed on platform top
+				{
+					pEntity->SetFloor(objectFloor);
+				}
+
+				pEntity->SetPositionY(platformTop);
 				pEntity->SetIsOnGroundState(true);
 			}
 			pEntity->SetVelocityY( 0.f );

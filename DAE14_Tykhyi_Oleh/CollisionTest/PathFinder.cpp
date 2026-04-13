@@ -19,6 +19,7 @@ std::vector<int> PathFinder::CalculatePathToFloor(int currentIndex, int targetFl
 
 	int startIndex{ GetNextControlPointIdxByType(
 		currentIndex,
+		true,
 		currentFloor,
 		ControlPoint::ControlPointType::stairSignifier,
 		controlPoints
@@ -81,9 +82,15 @@ std::vector<int> PathFinder::CalculatePathToFloor(int currentIndex, int targetFl
 	return path;
 }
 
-int PathFinder::GetNextControlPointIdxByType(int currentIndex, int currentFloor, ControlPoint::ControlPointType type, const std::vector<ControlPoint>& controlPoints)
+int PathFinder::GetNextControlPointIdxByType(int currentIndex, bool includeCurrentIndex, int currentFloor, ControlPoint::ControlPointType type, const std::vector<ControlPoint>& controlPoints)
 {
-	for (size_t index{ 1 }; index < controlPoints.size(); ++index)
+	size_t startIndex{ 1 };
+	if (includeCurrentIndex)
+	{
+		startIndex = 0;
+	}
+
+	for (size_t index{ startIndex }; index < controlPoints.size(); ++index)
 	{
 		size_t searchIndex{ (currentIndex + index) % controlPoints.size() };
 

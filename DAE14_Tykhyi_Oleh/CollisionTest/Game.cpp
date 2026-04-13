@@ -63,18 +63,17 @@ void Game::Cleanup( )
 
 void Game::Update( float elapsedSec )
 {
-	std::cout << 1 / elapsedSec << std::endl;
+	//std::cout << 1 / elapsedSec << std::endl;
 
 	const Uint8 *pStates = SDL_GetKeyboardState( nullptr );
-	
-	bool slowMo{ false };
+
 
 	float
 		timeDivider{ 1.f };
 
-	if (slowMo)
+	if (m_SlowMo)
 	{
-		timeDivider = 0.1f;
+		timeDivider = 0.2f;
 	}
 
 	m_pPlayer->Update(timeDivider*elapsedSec, pStates, GetViewPort());
@@ -85,7 +84,7 @@ void Game::Update( float elapsedSec )
 
 	m_pSpriteManager->Update(timeDivider*elapsedSec);
 
-	m_pParticleManager->Update(elapsedSec);
+	m_pParticleManager->Update(timeDivider * elapsedSec);
 }
 
 void Game::Draw( ) const
@@ -103,25 +102,22 @@ void Game::Draw( ) const
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 {
-	//std::cout << "KEYDOWN event: " << e.keysym.sym << std::endl;
+	switch (e.keysym.sym)
+	{
+	case SDLK_LSHIFT:
+		m_SlowMo = true;
+		break;
+	}
 }
 
 void Game::ProcessKeyUpEvent( const SDL_KeyboardEvent& e )
 {
-	//std::cout << "KEYUP event: " << e.keysym.sym << std::endl;
-	//switch ( e.keysym.sym )
-	//{
-	//case SDLK_LEFT:
-	//	//std::cout << "Left arrow key released\n";
-	//	break;
-	//case SDLK_RIGHT:
-	//	//std::cout << "`Right arrow key released\n";
-	//	break;
-	//case SDLK_1:
-	//case SDLK_KP_1:
-	//	//std::cout << "Key 1 released\n";
-	//	break;
-	//}
+	switch ( e.keysym.sym )
+	{
+	case SDLK_LSHIFT:
+		m_SlowMo = false;
+		break;
+	}
 }
 
 void Game::ProcessMouseMotionEvent( const SDL_MouseMotionEvent& e )

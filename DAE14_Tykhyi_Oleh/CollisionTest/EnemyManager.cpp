@@ -30,14 +30,14 @@ void EnemyManager::Draw() const
 		pEnemy->Draw();
 	}
 
-	for (const ControlPoint& point : m_ControlPoints)
+	/*for (const ControlPoint& point : m_ControlPoints)
 	{
 		const float
 			controlPointRadius{ 16.f };
 
 		utils::SetColor(Color4f{ 1.f, 0.f, 0.f, 1.f });
 		utils::FillEllipse(point.position, controlPointRadius, controlPointRadius);
-	}
+	}*/
 }
 
 void EnemyManager::Update(float elapsedSec, const Vector2f& playerPos, int playerFloor, const Map* gameMap, ParticleManager* particleManager, const CollisionManager* collisionManager)

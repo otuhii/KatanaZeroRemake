@@ -48,13 +48,29 @@ public:
 	EnemyType GetType() const;
 protected:
 	bool CanSeePlayer(const Vector2f& playerPos, int playerFloor);
-	bool IsPlayerInAttackRange(const Vector2f& playerPos);
+	bool IsPlayerInAttackRange(const Vector2f& playerPos, int playerFloor);
 
 	virtual void Attack(const Vector2f& playerPos, ParticleManager* particleManager) = 0;
 
 	EnemyState GetState() const;
-	float GetAttackCooldownTimer() const;
-	void ResetAttackCooldownTimer();
+	
+	float GetAttackCooldown() const;
+	void ResetAttackCooldown() ;
+
+	void UpdateIdle(float elapsedSec, const Vector2f& playerPos, int playerFloor);
+	void UpdateWalk(float elapsedSec, const Vector2f& playerPos, int playerFloor);
+	void UpdateRun(float elapsedSec, const Vector2f& playerPos, int playerFloor);
+	virtual void UpdateAttack(float elapsedSec, const Vector2f& playerPos, ParticleManager* particleManager);
+	void UpdateTurn(float elapsedSec);
+
+	void StateInitialization(EnemyState state);
+
+	void Patrol(float elapsedSec);
+	void Chase(float elapsedSec, const Vector2f& playerPos, int playerFloor);
+
+	bool MoveTo(const ControlPoint& controlPoint, float speedMultiplier);
+	void SetState(EnemyState state);
+
 private:
 	EnemyState m_State;
 	EnemyType  m_Type;
@@ -84,22 +100,7 @@ private:
 
 	void UpdateSprite();
 
-	void SetState(EnemyState state);
-
-	void UpdateCurrentState(float elapsedSec, const Vector2f& playerPos, int playerFloor, ParticleManager* particleManager);
-
-	void UpdateIdle(float elapsedSec, const Vector2f& playerPos, int playerFloor);
-	void UpdateWalk(float elapsedSec, const Vector2f& playerPos, int playerFloor);
-	void UpdateRun(float elapsedSec, const Vector2f& playerPos, int playerFloor);
-	virtual void UpdateAttack(float elapsedSec, const Vector2f& playerPos, ParticleManager* particleManager);
-	void UpdateTurn(float elapsedSec);
-
-	void StateInitialization(EnemyState state);
-
-	void Patrol(float elapsedSec);
-	void Chase(float elapsedSec, const Vector2f& playerPos, int playerFloor);
-	
-	bool MoveTo(const ControlPoint& controlPoint, float speedMultiplier);
+	virtual void UpdateCurrentState(float elapsedSec, const Vector2f& playerPos, int playerFloor, ParticleManager* particleManager);
 
 	void UpdateCooldowns(float elapsedSec);
 };

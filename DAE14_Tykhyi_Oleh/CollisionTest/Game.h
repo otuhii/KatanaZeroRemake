@@ -43,6 +43,9 @@ private:
 	void CreateEnemies			(const JsonImporter::GameData& gameData);
 	void MapSetup				(const JsonImporter::GameData& gameData);
 
+	bool 
+		m_SlowMo{ false };
+
 	JsonImporter		m_JsonImporter{}; //TODO maybe change this to pointer later
 
 	EnemyManager*		m_pEnemyManager{};

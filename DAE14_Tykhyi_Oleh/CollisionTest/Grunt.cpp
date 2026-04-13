@@ -29,6 +29,10 @@ Grunt::Grunt(
 
 void Grunt::Attack(const Vector2f& playerPos, ParticleManager* particleManager)
 {
+	if (GetAttackCooldown() <= 0.f)
+	{
+		ResetAttackCooldown();
+	}
 	SpawnAttackParticle(particleManager);
 }
 

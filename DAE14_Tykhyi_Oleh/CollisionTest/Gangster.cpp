@@ -28,7 +28,6 @@ Gangster::Gangster(
 {
 	m_GunSprite = pGunSprite;
 	m_GunSprite->SetScale(GetSprite()->GetScale());
-	GetSprite()->FlipHorizontally();//TODO remove later, dev purposes
 }
 
 void Gangster::Draw() const
@@ -53,20 +52,44 @@ void Gangster::Update(float elapsedSec, const Vector2f& playerPos, int playerFlo
 
 void Gangster::Attack(const Vector2f& playerPos, ParticleManager* particleManager)
 {
-	if (m_AimTimer <= 0.f && GetAttackCooldownTimer() <= 0)
+	if (m_AimTimer <= 0.f)
 	{
 		Shoot(particleManager);
+	}
+}
+
+void Gangster::UpdateCurrentState(float elapsedSec, const Vector2f& playerPos, int playerFloor, ParticleManager* particleManager)
+{
+	switch (GetState())
+	{
+	case EnemyState::idle:
+	{
+		UpdateIdle(elapsedSec, playerPos, playerFloor);
+		break;
+	}
+	case EnemyState::run:
+	{
+		UpdateRun(elapsedSec, playerPos, playerFloor);
+		break;
+	}
+	case EnemyState::attack:
+		UpdateAttack(elapsedSec, playerPos, particleManager);
+		if (!IsPlayerInAttackRange(playerPos, playerFloor))
+		{
+			SetState(EnemyState::run);
+		}
+		break;
 	}
 }
 
 void Gangster::UpdateAttack(float elapsedSec, const Vector2f& playerPos, ParticleManager* particleManager)
 {
 	Aim(playerPos);
-	if (GetAttackCooldownTimer() < 0.f)
+	if (GetAttackCooldown() <= 0.f)
 	{
 		UpdateAimTime(elapsedSec);
+		Attack(playerPos, particleManager);
 	}
-	Attack(playerPos, particleManager);
 }
 
 void Gangster::UpdateGunSprite()
@@ -109,7 +132,6 @@ void Gangster::Aim(const Vector2f& playerPos)
 	}
 
 
-
 	m_GunSprite->RotateBy(rotationAngle);
 }
 
@@ -144,7 +166,8 @@ void Gangster::Shoot(ParticleManager* particleManager)
 		false
 	);
 
-	ResetAttackCooldownTimer();
+	ResetAttackCooldown();
+
 	m_AimTimer = m_AimTime;
 }
 

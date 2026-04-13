@@ -97,6 +97,5 @@ private:
 
 	void UpdateCooldowns(float elapsedSec);
 
-	void DrawHitboxes() const;
 };
 

@@ -7,7 +7,6 @@
 #include "ParticleManager.h"
 
 #include "Matrix2x3.h"     
-#include "utils.h"
 
 #include <iostream>
 
@@ -33,10 +32,6 @@ void Player::Draw() const
 {
 	Entity::Draw();
 	DrawSplash();
-	
-	DrawHitboxes();
-
-
 }
 
 void Player::Update(float elapsedSec, const Uint8* pStates, const Rectf& viewport)
@@ -45,6 +40,9 @@ void Player::Update(float elapsedSec, const Uint8* pStates, const Rectf& viewpor
 	UpdateCurrentState(elapsedSec);
 	UpdateCooldowns(elapsedSec);
 	Entity::Update(elapsedSec, viewport);
+
+
+	std::cout << GetFloor() << std::endl;
 }
 
 void Player::SetState(PlayerState state)
@@ -475,10 +473,4 @@ void Player::UpdateCooldowns(float elapsedSec)
 	}
 }
 
-void Player::DrawHitboxes() const
-{
-	utils::SetColor(Color4f{ 0.f, 1.f, 0.f, 1.f });
-	utils::DrawRect(GetHitbox());
-
-}
 
