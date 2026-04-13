@@ -6,6 +6,7 @@
 class SpriteManager;
 class EnemyManager;
 class CollisionManager;
+class ParticleManager;
 
 class Player;
 class Map;
@@ -47,7 +48,8 @@ private:
 	EnemyManager*		m_pEnemyManager{};
 	SpriteManager*		m_pSpriteManager{};
 	CollisionManager*	m_pCollisionManager{};
-	
+	ParticleManager*	m_pParticleManager{};
+
 	Map*				m_pMap;
 	Player*				m_pPlayer{};
 };

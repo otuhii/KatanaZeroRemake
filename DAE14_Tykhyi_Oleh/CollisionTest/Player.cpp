@@ -4,10 +4,13 @@
 #include "AnimationFrameInfo.h"
 #include "UserUtils.h"
 
+#include "ParticleManager.h"
+
 #include "Matrix2x3.h"     
 #include "utils.h"
 
 #include <iostream>
+
 
 Player::Player(Sprite* sprite, Sprite* splashSprite, const std::vector<AnimationFrameInfo>& playerAnimation, const Vector2f& position, float speed, float scale, int floor)
 	: Entity(sprite, position, Vector2f{}, speed, floor),
@@ -66,7 +69,7 @@ void Player::SetState(PlayerState state)
 	m_SplashSprite->ResetAnimation();
 }
 
-void Player::ProcessMouseUpEvent(const SDL_MouseButtonEvent & e, const Rectf& viewport)
+void Player::ProcessMouseUpEvent(const SDL_MouseButtonEvent & e, ParticleManager* particleManager, const Rectf& viewport)
 {
 	Vector2f
 		mousePos{ static_cast<float>(e.x), static_cast<float>(e.y) };
@@ -77,20 +80,8 @@ void Player::ProcessMouseUpEvent(const SDL_MouseButtonEvent & e, const Rectf& vi
 			m_AttackCooldownTimer <= 0.f)
 		{
 			m_AttackCooldownTimer = m_AttackCooldown;
-			Attack(mousePos);
+			Attack(mousePos, particleManager);
 		}
-	}
-}
-
-std::vector<Vector2f> Player::GetSplashHitbox() const
-{
-	if (m_State == PlayerState::attack)
-	{
-		return m_SplashHitboxPoints;
-	}
-	else
-	{
-		return std::vector<Vector2f>{};
 	}
 }
 
@@ -273,7 +264,7 @@ void Player::HandleKeyboard(const Uint8* pStates, float elapsedSec)
 	}
 }
 
-void Player::Attack(const Vector2f& mousePos)
+void Player::Attack(const Vector2f& mousePos, ParticleManager* particleManager)
 {
 	SetState(PlayerState::attack);
 	AttackDash(mousePos);
@@ -291,6 +282,22 @@ void Player::Attack(const Vector2f& mousePos)
 	m_SplashSprite->RotateBy(CalculateSplashRotation(
 		mousePos
 	));
+
+	SpawnSplashParticle(particleManager);
+}
+
+void Player::SpawnSplashParticle(ParticleManager* particleManager)
+{
+	const float
+		rotationAngle{ m_SplashSprite->GetRotation() },
+		offset{ 30.f };
+
+	Vector2f positionOffset{
+		std::cosf(static_cast<float>(M_PI / 180.f) * rotationAngle)* offset,
+		(GetSprite()->GetCurrentFrameDimensions().height) * 0.75f + std::sinf(static_cast<float>(M_PI / 180.f) * rotationAngle) * offset
+	};
+
+	particleManager->SpawnMelee(AttackParticle::OwnerType::Player, this, GetPosition(), positionOffset, m_BaseSplashHitbox, 0.21f, rotationAngle, m_SplashSprite->IsFlippedHorizontally(), m_SplashSprite->IsFlippedVertically());
 }
 
 void Player::AttackDash(const Vector2f& mousePos)
@@ -441,50 +448,6 @@ float Player::CalculateSplashRotation(const Vector2f& mouseVec)
 	return angle;
 }
 
-
-void Player::UpdateSplashHitbox()
-{
-	const std::vector<Vector2f> baseSplashHitbox{
-		Vector2f{0.f, 10.f},
-		Vector2f{0.f, -10.f},
-		Vector2f{100.f, -20.f},
-		Vector2f{100.f, 20.f}
-	};
-
-	const float
-		rotationAngle{ m_SplashSprite->GetRotation() },
-		offset{ 30.f };
-
-	Vector2f
-		anchorPoint{ GetPosition() };
-
-	anchorPoint.y += (GetSprite()->GetCurrentFrameDimensions().height) * 0.75f;
-
-	anchorPoint.x += std::cosf(static_cast<float>(M_PI / 180.f) * rotationAngle) * offset;
-	anchorPoint.y += std::sinf(static_cast<float>(M_PI / 180.f) * rotationAngle) * offset;
-
-	Matrix2x3
-		hitboxRotation{},
-		hitboxTranslation{},
-		hitboxVerticalFlip{},
-		transformation{};
-
-	hitboxRotation.SetAsRotate(rotationAngle);
-	hitboxVerticalFlip.SetAsScale(1, -1);
-	hitboxTranslation.SetAsTranslate(anchorPoint);
-
-	if (m_SplashSprite->IsFlippedVertically())
-	{
-		transformation = hitboxTranslation * hitboxRotation * hitboxVerticalFlip;
-	}
-	else
-	{
-		transformation = hitboxTranslation * hitboxRotation;
-	}
-
-	m_SplashHitboxPoints = transformation.Transform(baseSplashHitbox);
-}
-
 void Player::UpdateAttackState(float elapsedSec)
 {
 	int
@@ -493,7 +456,7 @@ void Player::UpdateAttackState(float elapsedSec)
 	{
 		m_SplashSprite->SetVisible(true);
 	}
-	UpdateSplashHitbox();
+	//UpdateSplashHitbox();
 	ApplyAirResistance(elapsedSec);
 }
 
@@ -517,10 +480,5 @@ void Player::DrawHitboxes() const
 	utils::SetColor(Color4f{ 0.f, 1.f, 0.f, 1.f });
 	utils::DrawRect(GetHitbox());
 
-	if (m_SplashSprite->IsVisible())
-	{
-		utils::SetColor(Color4f{ 0.f, 1.f, 0.f, 1.f });
-		utils::DrawPolygon(m_SplashHitboxPoints);
-	}
 }
 

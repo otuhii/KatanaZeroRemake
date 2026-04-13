@@ -1,6 +1,8 @@
 #pragma once
 #include "Entity.h"
 
+class ParticleManager;
+
 #include <vector>
 
 class Player final : public Entity
@@ -32,14 +34,18 @@ public:
 
 	void SetState(PlayerState state);
 
-	void ProcessMouseUpEvent(const SDL_MouseButtonEvent& e, const Rectf& viewport);
+	void ProcessMouseUpEvent(const SDL_MouseButtonEvent& e, ParticleManager* particleManager, const Rectf& viewport);
 
-	std::vector<Vector2f> GetSplashHitbox() const;
 private:
 	PlayerState m_State;
 	
 	std::vector<AnimationFrameInfo> m_PlayerSpriteFrames{};
-	std::vector<Vector2f>			m_SplashHitboxPoints{};
+	const std::vector<Vector2f> m_BaseSplashHitbox{
+		Vector2f{0.f, 10.f},
+		Vector2f{0.f, -10.f},
+		Vector2f{100.f, -20.f},
+		Vector2f{100.f, 20.f}
+	};
 
 	Sprite* m_SplashSprite;
 
@@ -74,7 +80,8 @@ private:
 
 	void HandleKeyboard(const Uint8* pStates, float elapsedSec);
 
-	void Attack(const Vector2f& mousePos);
+	void Attack(const Vector2f& mousePos, ParticleManager* particleManager);
+	void SpawnSplashParticle(ParticleManager* particleManager);
 	void AttackDash(const Vector2f& mousePos);
 
 	void ProcessJumpThroughPlatform(bool downButton);
@@ -86,7 +93,6 @@ private:
 
 	float CalculateSplashRotation(const Vector2f& mouseVec);
 
-	void UpdateSplashHitbox();
 	void UpdateAttackState(float elapsedSec);
 
 	void UpdateCooldowns(float elapsedSec);
