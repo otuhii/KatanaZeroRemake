@@ -5,15 +5,21 @@
 #include "EnemyManager.h"
 #include "ParticleManager.h"
 #include "AttackParticle.h"
+#include "Map.h"
 
-#include <iostream>
 
 void CombatManager::ResolveCombat(
 	Player* pPlayer,
 	EnemyManager* enemyManager,
-	ParticleManager* particleManager
+	ParticleManager* particleManager,
+	Map* map
 )
 {	
+	Vector2f
+		playerPos{ pPlayer->GetPosition() };
+	playerPos.y += pPlayer->GetHitbox().height * 0.5f;
+
+
 	for (AttackParticle* pAttackParticle : particleManager->GetParticles())
 	{
 		if (pAttackParticle->IsActive())
@@ -22,12 +28,24 @@ void CombatManager::ResolveCombat(
 			{
 				for (Enemy* pEnemy : enemyManager->GetEnemies())
 				{
+					Vector2f
+						enemyPosition{ pEnemy->GetPosition() };
+					enemyPosition.y += pEnemy->GetHitbox().height * 0.5f;
+
+
 					if (pEnemy->IsAlive())
 					{
-						if (UserUtils::IsPolyInRectRaycast(pAttackParticle->GetWorldCoordinates(), pEnemy->GetHitbox()))
+						if (!map->AreSeparatedByActiveObject(playerPos, enemyPosition))
 						{
-							pEnemy->Kill();
-							pAttackParticle->Deactivate();
+							if (UserUtils::IsPolyInRectRaycast(pAttackParticle->GetWorldCoordinates(), pEnemy->GetHitbox()))
+							{
+								pEnemy->Kill();
+
+								if (pAttackParticle->GetAttackType() == AttackParticle::AttackType::bullet)
+								{
+									pAttackParticle->Deactivate(); // deactivating only bullet particle for player because i want to allow multiple kills per one slash
+								}
+							}
 						}
 					}
 				}

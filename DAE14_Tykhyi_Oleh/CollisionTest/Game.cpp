@@ -85,7 +85,7 @@ void Game::Update( float elapsedSec )
 
 	m_pEnemyManager->Update(timeDivider*elapsedSec, m_pPlayer->GetPosition(), m_pPlayer->GetFloor(), m_pMap, m_pParticleManager, m_pCollisionManager);
 
-	m_pCombatManager->ResolveCombat(m_pPlayer, m_pEnemyManager, m_pParticleManager);
+	m_pCombatManager->ResolveCombat(m_pPlayer, m_pEnemyManager, m_pParticleManager, m_pMap);
 
 	m_pSpriteManager->Update(timeDivider*elapsedSec);
 

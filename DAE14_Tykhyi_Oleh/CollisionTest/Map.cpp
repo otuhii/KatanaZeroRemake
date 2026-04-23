@@ -45,3 +45,24 @@ void Map::SetEnvironmentCosmeticObjects(const std::vector<EnvironmentCosmeticObj
 	m_EnvironmentCosmeticObjects = cosmeticObjects;
 }
 
+bool Map::AreSeparatedByActiveObject(const Vector2f& entityPosition1, const Vector2f& entityPosition2)
+{
+	for (const EnvironmentActiveObject& envObject : m_EnvironmentActiveObjects)
+	{
+		if (envObject.GetType() == EnvironmentActiveObject::EnvironmentObjectType::jumpThroughPlatform)
+		{
+			continue;
+		}
+
+		for (const Rectf& collider : envObject.GetColliders())
+		{
+			if (utils::IsOverlapping(entityPosition1, entityPosition2, collider))
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
