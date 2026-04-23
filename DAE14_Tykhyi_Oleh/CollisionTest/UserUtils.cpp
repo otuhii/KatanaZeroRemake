@@ -3,7 +3,7 @@
 
 #include "utils.h"
 
-bool UserUtils::IsPolyInRect(const std::vector<Vector2f>& poly, const Rectf& rect)
+bool UserUtils::IsPolyInRectRaycast(const std::vector<Vector2f>& poly, const Rectf& rect)
 {
 	utils::HitInfo hitInfo{};
 
@@ -47,6 +47,19 @@ bool UserUtils::IsPolyInRect(const std::vector<Vector2f>& poly, const Rectf& rec
 		return true;
 	}
 
+
+	return false;
+}
+
+bool UserUtils::IsPolyInRectAABB(const std::vector<Vector2f>& poly, const Rectf& rect)
+{
+	for (const Vector2f& vertex : poly)
+	{
+		if (utils::IsPointInRect(vertex, rect))
+		{
+			return true;
+		}
+	}
 
 	return false;
 }

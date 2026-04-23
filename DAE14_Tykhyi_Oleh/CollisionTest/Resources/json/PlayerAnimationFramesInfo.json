@@ -133,6 +133,32 @@
         "width": 100.0,
         "height": 26.0
       }
+    },
+    {
+      "_frameName": "hurtFly",
+
+
+      "frameTime": 0.1,
+      "maxFrameCount": 6,
+      "dimensionRect": {
+        "left": 0.0,
+        "bottom": 285.0,
+        "width": 50.0,
+        "height": 43.0
+      }
+    },
+    {
+      "_frameName": "hurnOnGround",
+
+
+      "frameTime": 0.1,
+      "maxFrameCount": 6,
+      "dimensionRect": {
+        "left": 0.0,
+        "bottom": 328.0,
+        "width": 57.0,
+        "height": 25.0
+      }
     }
   ]
 }

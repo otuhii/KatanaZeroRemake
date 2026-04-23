@@ -24,7 +24,7 @@ void CombatManager::ResolveCombat(
 				{
 					if (pEnemy->IsAlive())
 					{
-						if (UserUtils::IsPolyInRect(pAttackParticle->GetWorldCoordinates(), pEnemy->GetHitbox()))
+						if (UserUtils::IsPolyInRectRaycast(pAttackParticle->GetWorldCoordinates(), pEnemy->GetHitbox()))
 						{
 							pEnemy->Kill();
 							pAttackParticle->Deactivate();
@@ -34,7 +34,7 @@ void CombatManager::ResolveCombat(
 			}
 			else if (pAttackParticle->GetOwnerType() == AttackParticle::OwnerType::Enemy)
 			{
-				if (UserUtils::IsPolyInRect(pAttackParticle->GetWorldCoordinates(), pPlayer->GetHitbox()))
+				if (UserUtils::IsPolyInRectRaycast(pAttackParticle->GetWorldCoordinates(), pPlayer->GetHitbox()))
 				{
 					pAttackParticle->Deactivate();
 				}

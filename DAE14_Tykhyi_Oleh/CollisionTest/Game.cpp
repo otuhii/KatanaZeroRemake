@@ -91,6 +91,7 @@ void Game::Update( float elapsedSec )
 
 	m_pParticleManager->Update(timeDivider * elapsedSec);
 
+	m_pCollisionManager->HandleParticles(m_pParticleManager, m_pMap);
 }
 
 void Game::Draw( ) const

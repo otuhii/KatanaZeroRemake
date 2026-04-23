@@ -4,9 +4,7 @@
 
 
 #include "utils.h"
-
-
-#include <iostream>
+#include "UserUtils.h"
 
 void CollisionManager::HandleMovement(Entity* pEntity, const Map* pMap, float elapsedSec, bool updateFloorInfo) const
 {
@@ -24,22 +22,22 @@ void CollisionManager::HandleMovement(Entity* pEntity, const Map* pMap, float el
 	CheckCollision(elapsedSec, pEntity, pMap, false, updateFloorInfo);
 }
 
-//void CollisionManager::HandleParticles(ParticleManager* pParticleManager, const Map* pMap)
-//{
-//	for (AttackParticle* pParticle : pParticleManager->GetParticles())
-//	{
-//		if (pParticle->IsActive())
-//		{
-//			if (pParticle->GetAttackType() == AttackParticle::AttackType::bullet)
-//			{
-//				if (IsOverlappingWithMap(pParticle->GetWorldCoordinates(), pMap))
-//				{
-//					pParticle->Deactivate();
-//				}
-//			}
-//		}
-//	}
-//}
+void CollisionManager::HandleParticles(ParticleManager* pParticleManager, const Map* pMap)
+{
+	for (AttackParticle* pParticle : pParticleManager->GetParticles())
+	{
+		if (pParticle->IsActive())
+		{
+			if (pParticle->GetAttackType() == AttackParticle::AttackType::bullet)
+			{
+				if (IsOverlappingWithMap(pParticle->GetWorldCoordinates(), pMap))
+				{
+					pParticle->Deactivate();
+				}
+			}
+		}
+	}
+}
 
 void CollisionManager::CheckCollision(float elapsedSec, Entity* pEntity, const Map* pMap, bool isHorizontalMovement, bool updateFloorInfo) const
 {
@@ -173,14 +171,23 @@ bool CollisionManager::CanMoveThroughPlatform(float elapsedSec, Entity* pEntity,
 }
 
 
-//TODO handle collision with SAT
-//bool CollisionManager::IsOverlappingWithMap(const std::vector<Vector2f>& poly, const Map& map) const
-//{
-//	for (const EnvironmentActiveObject& object : map.GetEnvironmentActiveObjects())
-//	{
-//		for (const Rectf& collider : object.GetColliders())
-//		{
-//
-//		}
-//	}
-//}
+bool CollisionManager::IsOverlappingWithMap(const std::vector<Vector2f>& poly, const Map* map) const
+{
+	for (const EnvironmentActiveObject& object : map->GetEnvironmentActiveObjects())
+	{
+		if (object.GetType() == EnvironmentActiveObject::EnvironmentObjectType::jumpThroughPlatform)
+		{
+			continue; // can shoot through jumpThroughPlatform
+		}
+
+		for (const Rectf& collider : object.GetColliders())
+		{
+			if (UserUtils::IsPolyInRectAABB(poly, collider))
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
