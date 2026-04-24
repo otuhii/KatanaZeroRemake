@@ -7,6 +7,8 @@
 #include "ParticleManager.h"
 #include "CombatManager.h"
 
+#include "Camera.h"
+
 #include "Player.h"
 #include "Map.h"
 
@@ -31,12 +33,11 @@ void Game::Initialize( )
 	m_pMap = new Map{};
 	m_pParticleManager = new ParticleManager{100};
 	m_pCombatManager = new CombatManager{};
-
+	m_pCamera = new Camera{ GetViewPort().width, GetViewPort().height };
 	
 	JsonImporter::GameData
 		importedGameInfo{};
 	importedGameInfo = m_JsonImporter.ImportGameInfo("json/GameInfo.json", *m_pSpriteManager);
-
 
 
 	m_pPlayer = new Player(
@@ -50,7 +51,6 @@ void Game::Initialize( )
 	);
 	m_pEnemyManager = new EnemyManager{m_pPlayer};
 
-	
 
 
 	MapSetup(importedGameInfo);
@@ -67,6 +67,7 @@ void Game::Cleanup( )
 	delete m_pEnemyManager;
 	delete m_pParticleManager;
 	delete m_pCombatManager;
+	delete m_pCamera;
 }
 
 void Game::Update( float elapsedSec )
@@ -103,6 +104,8 @@ void Game::Draw( ) const
 {
 	ClearBackground( );
 
+	m_pCamera->Aim(2000.f, 1000.f, m_pPlayer->GetPosition());
+
 	m_pMap->Draw();
 
 	m_pPlayer->Draw();
@@ -110,6 +113,8 @@ void Game::Draw( ) const
 	m_pEnemyManager->Draw();
 
 	m_pParticleManager->Draw();
+
+	m_pCamera->Reset();
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
@@ -143,7 +148,7 @@ void Game::ProcessMouseDownEvent( const SDL_MouseButtonEvent& e )
 
 void Game::ProcessMouseUpEvent( const SDL_MouseButtonEvent& e )
 {
-	m_pPlayer->ProcessMouseUpEvent(e, m_pParticleManager, GetViewPort());
+	m_pPlayer->ProcessMouseUpEvent(e, m_pCamera->GetBasePoint(), m_pParticleManager, GetViewPort());
 }
 
 void Game::ClearBackground( ) const

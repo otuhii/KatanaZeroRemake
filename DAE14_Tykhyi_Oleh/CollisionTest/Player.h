@@ -36,7 +36,7 @@ public:
 
 	void SetState(PlayerState state);
 
-	void ProcessMouseUpEvent(const SDL_MouseButtonEvent& e, ParticleManager* particleManager, const Rectf& viewport);
+	void ProcessMouseUpEvent(const SDL_MouseButtonEvent& e, const Vector2f& offset, ParticleManager* particleManager, const Rectf& viewport);
 
 	void Kill(const Vector2f& impulse) override;
 

@@ -61,12 +61,12 @@ void Player::SetState(PlayerState state)
 	m_SplashSprite->ResetAnimation();
 }
 
-void Player::ProcessMouseUpEvent(const SDL_MouseButtonEvent & e, ParticleManager* particleManager, const Rectf& viewport)
+void Player::ProcessMouseUpEvent(const SDL_MouseButtonEvent & e, const Vector2f& offset, ParticleManager* particleManager, const Rectf& viewport)
 {
 	if (IsAlive())
 	{
 		Vector2f
-			mousePos{ static_cast<float>(e.x), static_cast<float>(e.y) };
+			mousePos{ static_cast<float>(e.x) + offset.x, static_cast<float>(e.y)+offset.y };
 
 		if (e.button == SDL_BUTTON_LEFT)
 		{
