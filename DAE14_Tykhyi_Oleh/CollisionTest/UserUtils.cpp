@@ -63,3 +63,23 @@ bool UserUtils::IsPolyInRectAABB(const std::vector<Vector2f>& poly, const Rectf&
 
 	return false;
 }
+
+bool UserUtils::ArePolygonsOverlapping(const std::vector<Vector2f>& poly1, const std::vector<Vector2f>& poly2)
+{
+	utils::HitInfo hitinfo{};
+
+
+	for (size_t index{ 0 }; index < poly1.size(); ++index)
+	{
+		Vector2f
+			point1{ poly1[index] },
+			point2{ poly1[(index + 1) % poly1.size()] };
+
+		if (utils::Raycast(poly2, point1, point2, hitinfo))
+		{
+			return true;
+		}
+	}
+
+	return false;
+}

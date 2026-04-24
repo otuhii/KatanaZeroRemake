@@ -6,6 +6,7 @@
 #include "ParticleManager.h"
 #include "Map.h"
 
+#include <iostream>
 
 void CombatManager::ResolveCombat(
 	Player* pPlayer,
@@ -25,6 +26,30 @@ void CombatManager::ResolveCombat(
 		{
 			if (pAttackParticle->GetOwnerType() == AttackParticle::OwnerType::Player)
 			{
+				//deflection
+				if (pAttackParticle->GetAttackType() == AttackParticle::AttackType::melee)
+				{
+					for (AttackParticle* pOtherParticle : particleManager->GetParticles())
+					{
+						if (pOtherParticle->IsActive() &&
+							pOtherParticle->GetAttackType() == AttackParticle::AttackType::bullet &&
+							pOtherParticle->GetOwnerType() == AttackParticle::OwnerType::Enemy)
+						{
+							if (UserUtils::ArePolygonsOverlapping(
+								pAttackParticle->GetWorldCoordinates(),
+								pOtherParticle->GetWorldCoordinates())
+								)
+							{
+								pOtherParticle->Deflect();
+								std::cout << "Deflect" << std::endl;
+							}
+						}
+					}
+				}
+
+
+
+				//regulat slash
 				for (Enemy* pEnemy : enemyManager->GetEnemies())
 				{
 					Vector2f
