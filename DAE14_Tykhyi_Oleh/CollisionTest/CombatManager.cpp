@@ -51,7 +51,7 @@ void CombatManager::ResolveCombat(
 			}
 			else if (pAttackParticle->GetOwnerType() == AttackParticle::OwnerType::Enemy)
 			{
-				if (UserUtils::IsPolyInRectRaycast(pAttackParticle->GetWorldCoordinates(), pPlayer->GetHitbox()))
+				if (UserUtils::IsPolyInRectAABB(pAttackParticle->GetWorldCoordinates(), pPlayer->GetHitbox()))
 				{
 					pPlayer->Kill();
 					pAttackParticle->Deactivate();

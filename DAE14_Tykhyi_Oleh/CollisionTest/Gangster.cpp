@@ -117,13 +117,16 @@ void Gangster::UpdateGunSprite()
 void Gangster::Aim()
 {
 	Vector2f
-		currentPosition{ GetPosition() };
+		currentPosition{ GetPosition() },
+		targetPosition{ GetTarget()->GetPosition() };
 
 	currentPosition.x += GetHitbox().width * 0.5f;
 	currentPosition.y += GetHitbox().height * 0.5f;
 	
+	targetPosition.y += GetTarget()->GetHitbox().height * 0.5f;
+
 	Vector2f
-		direction{ GetTarget()->GetPosition() - currentPosition};
+		direction{ targetPosition - currentPosition};
 
 	float
 		rotationAngle{ (180 / static_cast<float>(M_PI)) * std::atan2(direction.y, direction.x) };
@@ -180,6 +183,4 @@ void Gangster::Shoot(ParticleManager* particleManager)
 
 	m_AimTimer = m_AimTime;
 }
-
-
 
