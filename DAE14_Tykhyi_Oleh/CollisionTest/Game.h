@@ -36,7 +36,6 @@ public:
 	void ProcessMouseUpEvent( const SDL_MouseButtonEvent& e ) override;
 
 private:
-
 	// FUNCTIONS
 	void Initialize();
 	void Cleanup( );
@@ -45,6 +44,17 @@ private:
 	void EnemyTypeInitialization(const JsonImporter::GameData& gameData);
 	void CreateEnemies			(const JsonImporter::GameData& gameData, SpriteManager* pSpriteManager);
 	void MapSetup				(const JsonImporter::GameData& gameData);
+
+
+#pragma region FPS
+	float
+		m_FPSAccumulatedTime{ 0.f };
+	int
+		m_FPSFrames{ 0 },
+		m_CurrentAverageFPS{ 0 };
+	void FPS(float elapsedSec);
+#pragma endregion FPS
+
 
 	bool 
 		m_SlowMo{ false };

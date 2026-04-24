@@ -74,6 +74,7 @@ void Game::Update( float elapsedSec )
 
 	const Uint8 *pStates = SDL_GetKeyboardState( nullptr );
 
+	FPS(elapsedSec);
 
 	float
 		timeDivider{ 1.f };
@@ -207,6 +208,25 @@ void Game::MapSetup(const JsonImporter::GameData& gameData)
 {
 	m_pMap->SetEnvironmentActiveObjects(gameData.activeObjects);
 	m_pMap->SetEnvironmentCosmeticObjects(gameData.cosmeticObjects);
+}
+
+
+
+
+void Game::FPS(float elapsedSec)
+{
+	m_FPSAccumulatedTime += elapsedSec;
+	m_FPSFrames++;
+
+	if (m_FPSAccumulatedTime >= 1.0f) // Update every second
+	{
+		m_CurrentAverageFPS = m_FPSFrames;
+		m_FPSFrames = 0;
+		m_FPSAccumulatedTime -= 1.0f;
+
+		// Optional: Print to console to verify
+		std::cout << "FPS: " << m_CurrentAverageFPS << std::endl;
+	}
 }
 
 

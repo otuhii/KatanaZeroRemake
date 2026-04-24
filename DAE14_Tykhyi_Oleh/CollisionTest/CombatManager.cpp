@@ -44,7 +44,7 @@ void CombatManager::ResolveCombat(
 					}
 				}
 
-				//regulat slash
+				//regular slash
 				for (Enemy* pEnemy : enemyManager->GetEnemies())
 				{
 					Vector2f
@@ -55,7 +55,7 @@ void CombatManager::ResolveCombat(
 					{
 						if (!map->AreSeparatedByActiveObject(playerPos, enemyPosition))
 						{
-							if (UserUtils::IsPolyInRectRaycast(pAttackParticle->GetWorldCoordinates(), pEnemy->GetHitbox()))
+							if (UserUtils::IsPolyInRectAABB(pAttackParticle->GetWorldCoordinates(), pEnemy->GetHitbox()))
 							{
 								pEnemy->Kill(CalculateHitImpulse(pPlayer, pEnemy, pAttackParticle));
 
