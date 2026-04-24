@@ -51,11 +51,9 @@ void Game::Initialize( )
 	);
 	m_pEnemyManager = new EnemyManager{m_pPlayer};
 
-
-
 	MapSetup(importedGameInfo);
 	EnemyTypeInitialization(importedGameInfo);
-	CreateEnemies(importedGameInfo);
+	CreateEnemies(importedGameInfo, m_pSpriteManager);
 }
 
 void Game::Cleanup( )
@@ -190,7 +188,7 @@ void Game::EnemyTypeInitialization(const JsonImporter::GameData& gameData)
 	);
 }
 
-void Game::CreateEnemies(const JsonImporter::GameData& gameData)
+void Game::CreateEnemies(const JsonImporter::GameData& gameData, SpriteManager* pSpriteManager)
 {
 	for (const JsonImporter::GameData::EnemyInfo& enemyInfo : gameData.enemiesInfo)
 	{
@@ -199,7 +197,8 @@ void Game::CreateEnemies(const JsonImporter::GameData& gameData)
 			enemyInfo.position,
 			enemyInfo.speed,
 			enemyInfo.scale,
-			enemyInfo.floor
+			enemyInfo.floor,
+			pSpriteManager
 		);
 	}
 }

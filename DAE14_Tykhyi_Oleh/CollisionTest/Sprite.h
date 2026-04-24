@@ -8,10 +8,10 @@ class Sprite final
 {
 public:
 	Sprite(const std::string& spritesheetTexturePath);
+	Sprite(const Sprite& other);
 
-	Sprite(const Sprite&) = delete;
-	Sprite& operator=(const Sprite&) = delete;
-
+	/*Sprite(const Sprite&) = delete;
+	Sprite& operator=(const Sprite&) = delete;*/
 	~Sprite();
 
 	void Draw(const Vector2f& drawPos, bool pivotX, bool pivotY) const;
@@ -68,5 +68,8 @@ private:
 
 	Texture* m_pSpritesheet;
 
+
+	bool
+		m_OwnsTexture{ true };
 };
 

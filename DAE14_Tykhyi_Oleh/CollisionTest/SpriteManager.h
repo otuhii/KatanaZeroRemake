@@ -15,6 +15,8 @@ public:
 
 	Sprite* CreateSprite(const std::string& path);
 
+	Sprite* CloneSprite(const Sprite* pOriginal);
+
 	void RemoveSprite(int index);
 
 private:

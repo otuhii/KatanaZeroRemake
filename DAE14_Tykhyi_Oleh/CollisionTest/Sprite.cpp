@@ -15,9 +15,26 @@ Sprite::Sprite(const std::string& spritesheetTexturePath)
 	m_AnimationFrameInfo.frameTime = 1.f;
 }
 
+Sprite::Sprite(const Sprite& other)
+	: m_AccumulatedTime{ other.m_AccumulatedTime },
+	m_FrameCount{ other.m_FrameCount },
+	m_IsVisible{ other.m_IsVisible },
+	m_ScaleValue{ other.m_ScaleValue },
+	m_pSpritesheet{ other.m_pSpritesheet },
+	m_AnimationFrameInfo{ other.m_AnimationFrameInfo },
+	m_IsFlippedHorizontally{ other.m_IsFlippedHorizontally },
+	m_IsFlippedVertically{ other.m_IsFlippedVertically },
+	m_RotationAngle{ other.m_RotationAngle },
+	m_OwnsTexture{ false }
+{
+}
+
 Sprite::~Sprite()
 {
-	delete m_pSpritesheet;
+	if (m_OwnsTexture)
+	{
+		delete m_pSpritesheet;
+	}
 }
 
 void Sprite::SetAnimationFrameInfo(const Rectf& frameDimension, float frameTime, int maxFrameCount)

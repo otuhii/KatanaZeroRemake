@@ -52,12 +52,12 @@ void EnemyManager::Update(float elapsedSec, const Map* gameMap, ParticleManager*
 	}
 }
 
-void EnemyManager::AddEnemy(Enemy::EnemyType type, const Vector2f& position, float speed, float scale, int floor)
+void EnemyManager::AddEnemy(Enemy::EnemyType type, const Vector2f& position, float speed, float scale, int floor, SpriteManager* pSpriteManager)
 {
 	if (type == Enemy::EnemyType::grunt)
 	{
 		m_pEnemies.push_back(new Grunt{
-			m_EnemyTypeTemplates[static_cast<int>(type)].spriteSheet,
+			pSpriteManager->CloneSprite(m_EnemyTypeTemplates[static_cast<int>(type)].spriteSheet),
 			m_pTarget,
 			&m_EnemyTypeTemplates[static_cast<int>(type)].enemyAnimationFrameInfo,
 			position,
@@ -71,8 +71,8 @@ void EnemyManager::AddEnemy(Enemy::EnemyType type, const Vector2f& position, flo
 	else if (type == Enemy::EnemyType::gangster)
 	{
 		m_pEnemies.push_back(new Gangster{
-			m_EnemyTypeTemplates[static_cast<int>(type)].spriteSheet,
-			m_EnemyTypeTemplates[static_cast<int>(type)].additionSprite,
+			pSpriteManager->CloneSprite(m_EnemyTypeTemplates[static_cast<int>(type)].spriteSheet),
+			pSpriteManager->CloneSprite(m_EnemyTypeTemplates[static_cast<int>(type)].additionSprite),
 			m_pTarget,
 			&m_EnemyTypeTemplates[static_cast<int>(type)].enemyAnimationFrameInfo,
 			position,

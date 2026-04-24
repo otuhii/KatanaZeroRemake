@@ -43,7 +43,7 @@ private:
 	void ClearBackground( ) const;
 
 	void EnemyTypeInitialization(const JsonImporter::GameData& gameData);
-	void CreateEnemies			(const JsonImporter::GameData& gameData);
+	void CreateEnemies			(const JsonImporter::GameData& gameData, SpriteManager* pSpriteManager);
 	void MapSetup				(const JsonImporter::GameData& gameData);
 
 	bool 

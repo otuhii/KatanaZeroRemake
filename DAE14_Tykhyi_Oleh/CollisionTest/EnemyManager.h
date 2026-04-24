@@ -6,6 +6,7 @@
 class SpriteManager;
 class Map;
 class CollisionManager;
+class SpriteManager;
 
 class EnemyManager final
 {
@@ -21,7 +22,7 @@ public:
 
 	void Update(float elapsedSec, const Map* gameMap, ParticleManager* particleManager, const CollisionManager* collisionManager);
 
-	void AddEnemy(Enemy::EnemyType type, const Vector2f& position, float speed, float scale, int floor);
+	void AddEnemy(Enemy::EnemyType type, const Vector2f& position, float speed, float scale, int floor, SpriteManager* pSpriteManager);
 
 	void InitializeEnemyType(
 		Enemy::EnemyType type,
