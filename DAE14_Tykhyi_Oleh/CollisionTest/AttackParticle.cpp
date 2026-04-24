@@ -118,6 +118,16 @@ const std::vector<Vector2f>& AttackParticle::GetWorldCoordinates() const
 	return m_GlobalHitbox;
 }
 
+const Vector2f& AttackParticle::GetVelocity() const
+{
+	return m_Velocity;
+}
+
+const Entity* AttackParticle::GetOwnerEntity() const
+{
+	return m_pOwnerEntity;
+}
+
 void AttackParticle::UpdateHitboxGeometry()
 {
 	if (m_LocalHitbox.empty())

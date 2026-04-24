@@ -108,10 +108,9 @@ void Enemy::SetState(EnemyState state)
 	GetSprite()->ResetAnimation();
 }
 
-void Enemy::Kill()
+void Enemy::Kill(const Vector2f& impulse)
 {
-	Entity::Kill();
-	SetVelocity(Vector2f{ 0.f, 0.f });
+	Entity::Kill(impulse);
 	SetState(EnemyState::dead);
 }
 

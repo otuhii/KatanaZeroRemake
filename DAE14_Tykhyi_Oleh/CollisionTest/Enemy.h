@@ -52,7 +52,7 @@ public:
 
 	void SetState(EnemyState state);
 
-	void Kill() override;
+	void Kill(const Vector2f& impulse) override;
 
 protected:
 	bool CanSeeTarget();

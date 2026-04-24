@@ -80,11 +80,10 @@ void Player::ProcessMouseUpEvent(const SDL_MouseButtonEvent & e, ParticleManager
 	}
 }
 
-void Player::Kill()
+void Player::Kill(const Vector2f& impulse)
 {
-	Entity::Kill();
+	Entity::Kill(impulse);
 
-	SetVelocity(Vector2f{ 0.f, 0.f });
 	SetState(PlayerState::hurtFly);
 }
 

@@ -46,9 +46,15 @@ public:
 	void Deflect();
 
 	bool IsActive() const;
-	OwnerType GetOwnerType() const;
-	AttackType GetAttackType() const;
-	const std::vector<Vector2f>& GetWorldCoordinates() const;
+
+
+
+	OwnerType						GetOwnerType()			const;
+	AttackType						GetAttackType()			const;
+	const std::vector<Vector2f>&	GetWorldCoordinates()	const;
+	const Vector2f&					GetVelocity()			const;
+	const Entity*					GetOwnerEntity()		const;
+
 private:
 	OwnerType m_OwnerType{ OwnerType::none };
 	AttackType m_AttackType{ AttackType::none };

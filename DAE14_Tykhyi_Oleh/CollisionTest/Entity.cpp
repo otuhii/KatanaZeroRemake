@@ -4,6 +4,7 @@
 #include "CollisionManager.h"
 
 #include "utils.h"
+#include "AttackParticle.h"
 
 Entity::Entity(Sprite* sprite, const Vector2f& position, const Vector2f& velocity, float speed, int floor)
 	: m_pSprite(sprite), m_Velocity(velocity), m_Speed(speed), m_IsOnGround(true), m_Position{position}, m_Floor{floor}
@@ -20,11 +21,16 @@ void Entity::Draw() const
 
 void Entity::Update(float elapsedSec, const Rectf& viewport)
 {
-	float 
-		gravity{ -981.f };
+	float
+		gravity{ -981.f },
+		frictionMultiplier{ 0.95f };
 
 	m_Velocity.y += gravity * elapsedSec;
 
+	if (!IsAlive())
+	{
+		m_Velocity.x *= frictionMultiplier;
+	}
 }
 
 void Entity::SetFloor(int floor)
@@ -165,10 +171,11 @@ bool Entity::CanJumpThroughPlatform() const
 	return m_CanJumpThroughPlatform;
 }
 
-void Entity::Kill() 
+void Entity::Kill(const Vector2f& impulse) 
 {
 	m_IsAlive = false;
 	GetSprite()->SetLooping(false);
+	SetVelocity(impulse);
 }
 
 bool Entity::IsAlive() const

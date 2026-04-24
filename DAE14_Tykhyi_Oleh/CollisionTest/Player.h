@@ -38,7 +38,7 @@ public:
 
 	void ProcessMouseUpEvent(const SDL_MouseButtonEvent& e, ParticleManager* particleManager, const Rectf& viewport);
 
-	void Kill() override;
+	void Kill(const Vector2f& impulse) override;
 
 private:
 	PlayerState m_State;

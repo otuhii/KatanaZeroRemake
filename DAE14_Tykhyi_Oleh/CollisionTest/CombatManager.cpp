@@ -4,7 +4,6 @@
 #include "Player.h"
 #include "EnemyManager.h"
 #include "ParticleManager.h"
-#include "AttackParticle.h"
 #include "Map.h"
 
 
@@ -38,7 +37,7 @@ void CombatManager::ResolveCombat(
 						{
 							if (UserUtils::IsPolyInRectRaycast(pAttackParticle->GetWorldCoordinates(), pEnemy->GetHitbox()))
 							{
-								pEnemy->Kill();
+								pEnemy->Kill(CalculateHitImpulse(pPlayer, pEnemy, pAttackParticle));
 
 								if (pAttackParticle->GetAttackType() == AttackParticle::AttackType::bullet)
 								{
@@ -53,13 +52,36 @@ void CombatManager::ResolveCombat(
 			{
 				if (UserUtils::IsPolyInRectAABB(pAttackParticle->GetWorldCoordinates(), pPlayer->GetHitbox()))
 				{
-					pPlayer->Kill();
+					pPlayer->Kill(CalculateHitImpulse(pAttackParticle->GetOwnerEntity(), pPlayer, pAttackParticle));
 					pAttackParticle->Deactivate();
 				}
 			}
 
 		}
 	}
+}
+
+Vector2f CombatManager::CalculateHitImpulse(const Entity* pHitter,  const Entity* pReceiver, const AttackParticle* pParticle)
+{
+	Vector2f
+		impulse{};
+
+	float
+		pushMagnitude{ 800.f };
+
+	if (pParticle->GetAttackType() == AttackParticle::AttackType::bullet)
+	{
+		impulse = pParticle->GetVelocity().Normalized() * pushMagnitude;
+		return impulse;
+	}
+	else if (pParticle->GetAttackType() == AttackParticle::AttackType::melee)
+	{
+		impulse = (pReceiver->GetPosition() - pHitter->GetPosition()).Normalized() * pushMagnitude;
+		impulse.y *= 0.6f;
+		return impulse;
+	}
+
+	return Vector2f{ 0.f, 0.f };
 }
 
 
