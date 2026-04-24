@@ -6,8 +6,6 @@
 #include "ParticleManager.h"
 #include "Map.h"
 
-#include <iostream>
-
 void CombatManager::ResolveCombat(
 	Player* pPlayer,
 	EnemyManager* enemyManager,
@@ -41,13 +39,10 @@ void CombatManager::ResolveCombat(
 								)
 							{
 								pOtherParticle->Deflect();
-								std::cout << "Deflect" << std::endl;
 							}
 						}
 					}
 				}
-
-
 
 				//regulat slash
 				for (Enemy* pEnemy : enemyManager->GetEnemies())
