@@ -98,13 +98,15 @@ void Game::Update( float elapsedSec )
 	m_pParticleManager->Update(timeDivider * elapsedSec);
 
 	m_pCollisionManager->HandleParticles(m_pParticleManager, m_pMap);
+
+	m_pCamera->Update(elapsedSec, m_pPlayer->GetPosition(), 2000.f, 1000.f);
 }
 
 void Game::Draw( ) const
 {
 	ClearBackground( );
 
-	m_pCamera->Aim(2000.f, 1000.f, m_pPlayer->GetPosition());
+	m_pCamera->Aim();
 
 	m_pMap->Draw();
 
