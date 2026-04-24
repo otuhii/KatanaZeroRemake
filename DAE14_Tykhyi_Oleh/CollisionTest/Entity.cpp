@@ -16,7 +16,7 @@ void Entity::Draw() const
 	m_pSprite->Draw(m_Position, true, false);
 
 	utils::SetColor(Color4f{ 0.f, 1.f, 0.f, 1.f });
-	utils::DrawRect(GetHitbox());
+	//utils::DrawRect(GetHitbox());
 }
 
 void Entity::Update(float elapsedSec, const Rectf& viewport)

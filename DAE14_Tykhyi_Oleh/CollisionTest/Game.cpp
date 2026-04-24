@@ -218,13 +218,13 @@ void Game::FPS(float elapsedSec)
 	m_FPSAccumulatedTime += elapsedSec;
 	m_FPSFrames++;
 
-	if (m_FPSAccumulatedTime >= 1.0f) // Update every second
+	if (m_FPSAccumulatedTime >= 1.0f) 
 	{
 		m_CurrentAverageFPS = m_FPSFrames;
 		m_FPSFrames = 0;
 		m_FPSAccumulatedTime -= 1.0f;
 
-		// Optional: Print to console to verify
+		system("CLS");
 		std::cout << "FPS: " << m_CurrentAverageFPS << std::endl;
 	}
 }
