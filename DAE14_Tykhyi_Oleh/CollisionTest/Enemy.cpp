@@ -9,6 +9,7 @@ Enemy::Enemy(
 	EnemyType type, 
 	EnemyState state,
 	Sprite* pSprite, 
+	const Entity* pTarget,
 	const std::vector<AnimationFrameInfo>* enemyAnimationFrames,
 	const Vector2f& position,
 	float speed, 
@@ -22,7 +23,8 @@ Enemy::Enemy(
 	m_State{state},
 	m_Type{type},
 	m_AttackRange{attackRange},
-	m_DetectionRange{playerDetectionRange}
+	m_DetectionRange{playerDetectionRange},
+	m_pTarget{pTarget}
 {
 	GetSprite()->SetAnimationFrameInfo((*m_EnemySpriteFrames)[static_cast<int>(m_State)]);
 	GetSprite()->SetScale(scale);
@@ -40,20 +42,19 @@ void Enemy::UpdateControlPoints(const std::vector<ControlPoint>* controlPoints)
 	m_ControlPoints = controlPoints;
 }
 
-
 Enemy::EnemyType Enemy::GetType() const
 {
 	return m_Type;
 }
 
-void Enemy::Update(float elapsedSec, const Vector2f& playerPos, int playerFloor, ParticleManager* particleManager, const Rectf& viewport)
+void Enemy::Update(float elapsedSec, ParticleManager* particleManager, const Rectf& viewport)
 {
 	Entity::Update(elapsedSec, viewport);
 
 	if (IsAlive())
 	{
 		UpdateCooldowns(elapsedSec);
-		UpdateCurrentState(elapsedSec, playerPos, playerFloor, particleManager);
+		UpdateCurrentState(elapsedSec, particleManager);
 
 		UpdateSprite();
 	}
@@ -115,29 +116,33 @@ void Enemy::Kill()
 	SetState(EnemyState::dead);
 }
 
+const Entity* Enemy::GetTarget()
+{
+	return m_pTarget;
+}
 
-void Enemy::UpdateCurrentState(float elapsedSec, const Vector2f& playerPos, int playerFloor, ParticleManager* particleManager)
+void Enemy::UpdateCurrentState(float elapsedSec, ParticleManager* particleManager)
 {
 	switch (m_State)
 	{
 	case EnemyState::idle:
 	{
-		UpdateIdle(elapsedSec, playerPos, playerFloor);
+		UpdateIdle(elapsedSec);
 		break;
 	}
 	case EnemyState::walk:
 	{
-		UpdateWalk(elapsedSec, playerPos, playerFloor);
+		UpdateWalk(elapsedSec);
 		break;
 	}
 	case EnemyState::run:
 	{
-		UpdateRun(elapsedSec, playerPos, playerFloor);
+		UpdateRun(elapsedSec);
 		break;
 	}
 	case EnemyState::attack:
 	{
-		UpdateAttack(elapsedSec, playerPos, particleManager);
+		UpdateAttack(elapsedSec, particleManager);
 		break;
 	}
 	case EnemyState::turn:
@@ -153,44 +158,50 @@ void Enemy::UpdateCurrentState(float elapsedSec, const Vector2f& playerPos, int 
 	}
 }
 
-void Enemy::UpdateIdle(float elapsedSec, const Vector2f& playerPos, int playerFloor)
+void Enemy::UpdateIdle(float elapsedSec)
 {
-	if (CanSeePlayer(playerPos, playerFloor))
+	if (m_pTarget != nullptr)
 	{
-		if (IsPlayerInAttackRange(playerPos, playerFloor))
+		if (CanSeeTarget())
 		{
-
-			SetState(EnemyState::attack);
+			if (IsTargetInAttackRange())
+			{
+				SetState(EnemyState::attack);
+			}
+			else
+			{
+				SetState(EnemyState::run);
+			}
 		}
-		else
+	}
+}
+
+void Enemy::UpdateWalk(float elapsedSec)
+{
+	Patrol(elapsedSec);
+
+	if (m_pTarget != nullptr)
+	{
+		if (CanSeeTarget())
 		{
 			SetState(EnemyState::run);
 		}
 	}
+	
 }
 
-void Enemy::UpdateWalk(float elapsedSec, const Vector2f& playerPos, int playerFloor)
+void Enemy::UpdateRun(float elapsedSec)
 {
-	Patrol(elapsedSec);
-
-	if (CanSeePlayer(playerPos, playerFloor))
-	{
-		SetState(EnemyState::run);
-	}
+	Chase(elapsedSec);
 }
 
-void Enemy::UpdateRun(float elapsedSec, const Vector2f& playerPos, int playerFloor)
-{
-	Chase(elapsedSec, playerPos, playerFloor);
-}
-
-void Enemy::UpdateAttack(float elapsedSec, const Vector2f& playerPos, ParticleManager* particleManager) 
+void Enemy::UpdateAttack(float elapsedSec, ParticleManager* particleManager) 
 {
 	const int
 		attackTriggerFrame{ 3};
 	if (GetSprite()->GetCurrentFrameCount() == attackTriggerFrame)
 	{
-		Attack(playerPos, particleManager);
+		Attack(particleManager);
 	}
 	if (IsSpriteAnimationFinished())
 	{
@@ -286,17 +297,23 @@ void Enemy::Patrol(float elapsedSec)
 	}
 }
 
-void Enemy::Chase(float elapsedSec, const Vector2f& playerPos, int playerFloor)
+void Enemy::Chase(float elapsedSec)
 {
 	int floor{ GetFloor() };
 
-	if (playerFloor != floor)
+	if (m_pTarget == nullptr)
+	{
+		SetState(EnemyState::walk);
+		return;
+	}
+
+	if (m_pTarget->GetFloor() != floor)
 	{
 		if (m_Path.empty())
 		{
 			m_Path = PathFinder::CalculatePathToFloor(
 				m_CurrentTargetControlPoint,
-				playerFloor,
+				m_pTarget->GetFloor(),
 				GetFloor(),
 				(*m_ControlPoints)
 			);
@@ -332,14 +349,14 @@ void Enemy::Chase(float elapsedSec, const Vector2f& playerPos, int playerFloor)
 	}
 
 	ControlPoint playerPoint{
-		playerPos,
+		m_pTarget->GetPosition(),
 		ControlPoint::ControlPointType::none,
 		GetFloor()
 	};
 
 	MoveTo(playerPoint, m_RunningMultiplier);
 
-	if (IsPlayerInAttackRange(playerPos, playerFloor) && m_AttackCooldownTimer <= 0)
+	if (IsTargetInAttackRange() && m_AttackCooldownTimer <= 0)
 	{
 		SetState(EnemyState::attack);
 	}
@@ -374,34 +391,51 @@ bool Enemy::MoveTo(const ControlPoint& controlPoint, float speedMultiplier)
 	}
 }
 
-bool Enemy::CanSeePlayer(const Vector2f& playerPos, int playerFloor)
+bool Enemy::CanSeeTarget()
 {
-	float
-		distance{ utils::GetDistance(GetPosition(), playerPos) };
+	if (m_pTarget != nullptr)
+	{
+		const Vector2f
+			targetPosition{ m_pTarget->GetPosition() };
 
-	if (distance > m_DetectionRange)
+		float
+			distance{ utils::GetDistance(GetPosition(), targetPosition) };
+
+		if (distance > m_DetectionRange)
+		{
+			return false;
+		}
+
+		float
+			directionToPlayer{ targetPosition.x - GetPositionX() };
+
+		bool
+			isPlayerToRight{ directionToPlayer > 0 },
+			isLookingRight{ GetFacingDirection() == 1 };
+
+		return (isPlayerToRight == isLookingRight) &&
+			(m_pTarget->GetFloor() == GetFloor());
+	}
+	else
 	{
 		return false;
 	}
-
-	float
-		directionToPlayer{ playerPos.x - GetPositionX() };
-
-	bool
-		isPlayerToRight{ directionToPlayer > 0 },
-		isLookingRight{ GetFacingDirection() == 1 };
-
-	return (isPlayerToRight == isLookingRight) &&
-			(playerFloor == GetFloor());
 }
 
-bool Enemy::IsPlayerInAttackRange(const Vector2f& playerPos, int playerFloor)
+bool Enemy::IsTargetInAttackRange()
 {
-	float
-		distance{ utils::GetDistance(GetPosition(), playerPos) };
+	if (m_pTarget != nullptr)
+	{
+		float
+			distance{ utils::GetDistance(GetPosition(), m_pTarget->GetPosition()) };
 
-	return (distance <= m_AttackRange) && 
-		   (playerFloor == GetFloor());
+		return (distance <= m_AttackRange) &&
+			(m_pTarget->GetFloor() == GetFloor());
+	}
+	else
+	{
+		return false;
+	}
 }
 
 Enemy::EnemyState Enemy::GetState() const

@@ -10,7 +10,7 @@ class CollisionManager;
 class EnemyManager final
 {
 public:
-	EnemyManager();
+	EnemyManager(const Entity* pTarget);
 	
 	EnemyManager(const EnemyManager&) = delete;
 	EnemyManager& operator=(const EnemyManager&) = delete;
@@ -19,7 +19,7 @@ public:
 
 	void Draw() const;
 
-	void Update(float elapsedSec, const Vector2f& playerPos, int playerFloor, const Map* gameMap, ParticleManager* particleManager, const CollisionManager* collisionManager);
+	void Update(float elapsedSec, const Map* gameMap, ParticleManager* particleManager, const CollisionManager* collisionManager);
 
 	void AddEnemy(Enemy::EnemyType type, const Vector2f& position, float speed, float scale, int floor);
 
@@ -43,6 +43,8 @@ private:
 		float playerDetectionRange{};
 		float attackRange{};
 	};
+
+	const Entity* m_pTarget{};
 
 	std::vector<Enemy*>				 m_pEnemies{};
 	std::vector<EnemyTypeTemplate>   m_EnemyTypeTemplates{};

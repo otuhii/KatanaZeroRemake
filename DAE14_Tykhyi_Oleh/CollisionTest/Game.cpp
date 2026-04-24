@@ -26,17 +26,18 @@ Game::~Game( )
 
 void Game::Initialize( )
 {
-	JsonImporter::GameData
-		importedGameInfo{};
-
 	m_pSpriteManager = new SpriteManager{};
 	m_pCollisionManager = new CollisionManager{};
-	m_pEnemyManager = new EnemyManager{};
 	m_pMap = new Map{};
 	m_pParticleManager = new ParticleManager{100};
 	m_pCombatManager = new CombatManager{};
 
+	
+	JsonImporter::GameData
+		importedGameInfo{};
 	importedGameInfo = m_JsonImporter.ImportGameInfo("json/GameInfo.json", *m_pSpriteManager);
+
+
 
 	m_pPlayer = new Player(
 		m_pSpriteManager->CreateSprite("img/chr/zero_spritesheet.png"),
@@ -47,7 +48,11 @@ void Game::Initialize( )
 		importedGameInfo.playerScale,
 		importedGameInfo.playerFloor
 	);
+	m_pEnemyManager = new EnemyManager{m_pPlayer};
+
 	
+
+
 	MapSetup(importedGameInfo);
 	EnemyTypeInitialization(importedGameInfo);
 	CreateEnemies(importedGameInfo);
@@ -83,7 +88,7 @@ void Game::Update( float elapsedSec )
 
 	m_pCollisionManager->HandleMovement(m_pPlayer, m_pMap, timeDivider*elapsedSec, true);
 
-	m_pEnemyManager->Update(timeDivider*elapsedSec, m_pPlayer->GetPosition(), m_pPlayer->GetFloor(), m_pMap, m_pParticleManager, m_pCollisionManager);
+	m_pEnemyManager->Update(timeDivider*elapsedSec, m_pMap, m_pParticleManager, m_pCollisionManager);
 
 	m_pCombatManager->ResolveCombat(m_pPlayer, m_pEnemyManager, m_pParticleManager, m_pMap);
 

@@ -6,6 +6,7 @@ class Grunt final:
 public:
     Grunt(
         Sprite* pSprite,
+        const Entity* pTarget,
         const std::vector<AnimationFrameInfo>* enemyAnimationFrames,
         const Vector2f& position,
         float speed,
@@ -15,7 +16,7 @@ public:
         float attackRange
     );
 
-    void Attack(const Vector2f& playerPos, ParticleManager* particleManager) override;
+    void Attack(ParticleManager* particleManager) override;
 
 private:
     const std::vector<Vector2f> m_BaseAttackHitbox{

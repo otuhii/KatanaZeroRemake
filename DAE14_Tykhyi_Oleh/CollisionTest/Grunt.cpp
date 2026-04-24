@@ -5,6 +5,7 @@
 
 Grunt::Grunt(
 	Sprite* pSprite,
+	const Entity* pTarget,
 	const std::vector<AnimationFrameInfo>* enemyAnimationFrames,
 	const Vector2f& position,
 	float speed,
@@ -16,6 +17,7 @@ Grunt::Grunt(
 		EnemyType::grunt,
 		EnemyState::walk,
 		pSprite,
+		pTarget,
 		enemyAnimationFrames,
 		position,
 		speed,
@@ -27,7 +29,7 @@ Grunt::Grunt(
 {
 }
 
-void Grunt::Attack(const Vector2f& playerPos, ParticleManager* particleManager)
+void Grunt::Attack(ParticleManager* particleManager)
 {
 	if (GetAttackCooldown() <= 0.f)
 	{

@@ -7,6 +7,7 @@ public:
     Gangster(
         Sprite* pSprite,
         Sprite* pGunsprite,
+        const Entity* pTarget,
         const std::vector<AnimationFrameInfo>* enemyAnimationFrames,
         const Vector2f& position,
         float speed,
@@ -18,9 +19,9 @@ public:
 
     void Draw() const override;
 
-    void Update(float elapsedSec, const Vector2f& playerPos, int playerFloor, ParticleManager* particleManager, const Rectf& viewport) override;
+    void Update(float elapsedSec, ParticleManager* particleManager, const Rectf& viewport) override;
 
-    void Attack(const Vector2f& playerPos, ParticleManager* particleManager) override;
+    void Attack(ParticleManager* particleManager) override;
 
 private:
     const std::vector<Vector2f> m_BulletHitbox{
@@ -41,12 +42,12 @@ private:
 
     Sprite* m_GunSprite{};
 
-    void UpdateCurrentState(float elapsedSec, const Vector2f& playerPos, int playerFloor, ParticleManager* particleManager) override;
+    void UpdateCurrentState(float elapsedSec, ParticleManager* particleManager) override;
 
-    void UpdateAttack(float elapsedSec, const Vector2f& playerPos, ParticleManager* particleManager) override;
+    void UpdateAttack(float elapsedSec, ParticleManager* particleManager) override;
     void UpdateGunSprite();
 
-    void Aim(const Vector2f& playerPos);
+    void Aim();
     void UpdateAimTime(float elapsedSec);
     
     void Shoot(ParticleManager* particleManager);

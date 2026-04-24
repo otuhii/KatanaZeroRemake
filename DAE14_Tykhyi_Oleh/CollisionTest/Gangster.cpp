@@ -6,6 +6,7 @@
 Gangster::Gangster(
 	Sprite* pSprite,
 	Sprite* pGunSprite,
+	const Entity* pTarget,
 	const std::vector<AnimationFrameInfo>* enemyAnimationFrames, 
 	const Vector2f& position,
 	float speed, 
@@ -17,6 +18,7 @@ Gangster::Gangster(
 		EnemyType::gangster,
 		EnemyState::idle,
 		pSprite,
+		pTarget,
 		enemyAnimationFrames,
 		position,
 		speed,
@@ -28,6 +30,7 @@ Gangster::Gangster(
 {
 	m_GunSprite = pGunSprite;
 	m_GunSprite->SetScale(GetSprite()->GetScale());
+
 }
 
 void Gangster::Draw() const
@@ -44,13 +47,13 @@ void Gangster::Draw() const
 	
 }
 
-void Gangster::Update(float elapsedSec, const Vector2f& playerPos, int playerFloor, ParticleManager* particleManager, const Rectf& viewport)
+void Gangster::Update(float elapsedSec, ParticleManager* particleManager, const Rectf& viewport)
 {
-	Enemy::Update(elapsedSec, playerPos, playerFloor, particleManager, viewport);
+	Enemy::Update(elapsedSec, particleManager, viewport);
 }
 
 
-void Gangster::Attack(const Vector2f& playerPos, ParticleManager* particleManager)
+void Gangster::Attack(ParticleManager* particleManager)
 {
 	if (m_AimTimer <= 0.f)
 	{
@@ -59,23 +62,23 @@ void Gangster::Attack(const Vector2f& playerPos, ParticleManager* particleManage
 }
 
 
-void Gangster::UpdateCurrentState(float elapsedSec, const Vector2f& playerPos, int playerFloor, ParticleManager* particleManager)
+void Gangster::UpdateCurrentState(float elapsedSec, ParticleManager* particleManager)
 {
 	switch (GetState())
 	{
 	case EnemyState::idle:
 	{
-		UpdateIdle(elapsedSec, playerPos, playerFloor);
+		UpdateIdle(elapsedSec);
 		break;
 	}
 	case EnemyState::run:
 	{
-		UpdateRun(elapsedSec, playerPos, playerFloor);
+		UpdateRun(elapsedSec);
 		break;
 	}
 	case EnemyState::attack:
-		UpdateAttack(elapsedSec, playerPos, particleManager);
-		if (!IsPlayerInAttackRange(playerPos, playerFloor))
+		UpdateAttack(elapsedSec, particleManager);
+		if (!IsTargetInAttackRange())
 		{
 			SetState(EnemyState::run);
 		}
@@ -85,13 +88,13 @@ void Gangster::UpdateCurrentState(float elapsedSec, const Vector2f& playerPos, i
 	}
 }
 
-void Gangster::UpdateAttack(float elapsedSec, const Vector2f& playerPos, ParticleManager* particleManager)
+void Gangster::UpdateAttack(float elapsedSec, ParticleManager* particleManager)
 {
-	Aim(playerPos);
+	Aim();
 	if (GetAttackCooldown() <= 0.f)
 	{
 		UpdateAimTime(elapsedSec);
-		Attack(playerPos, particleManager);
+		Attack(particleManager);
 	}
 }
 
@@ -107,7 +110,7 @@ void Gangster::UpdateGunSprite()
 	}
 }
 
-void Gangster::Aim(const Vector2f& playerPos)
+void Gangster::Aim()
 {
 	Vector2f
 		currentPosition{ GetPosition() };
@@ -116,7 +119,7 @@ void Gangster::Aim(const Vector2f& playerPos)
 	currentPosition.y += GetHitbox().height * 0.5f;
 	
 	Vector2f
-		direction{ playerPos - currentPosition };
+		direction{ GetTarget()->GetPosition() - currentPosition};
 
 	float
 		rotationAngle{ (180 / static_cast<float>(M_PI)) * std::atan2(direction.y, direction.x) };

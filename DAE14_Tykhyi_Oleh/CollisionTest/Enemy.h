@@ -29,6 +29,7 @@ public:
 		EnemyType type,
 		EnemyState state,
 		Sprite* pSprite, 
+		const Entity* pTarget,
 		const std::vector<AnimationFrameInfo>* playerAnimation, 
 		const Vector2f& position, 
 		float speed,
@@ -42,41 +43,45 @@ public:
 
 	virtual void Draw() const override;
 
-	virtual void Update(float elapsedSec, const Vector2f& playerPos, int playerFloor, ParticleManager* particleManager, const Rectf& viewport);
+	virtual void Update(float elapsedSec, ParticleManager* particleManager, const Rectf& viewport);
 
 	void UpdateControlPoints(const std::vector<ControlPoint>* controlPoint);
 
-	EnemyType GetType() const;
+	EnemyType		GetType() const;
+	const Entity*	GetTarget();
+
 	void SetState(EnemyState state);
 
 	void Kill() override;
-protected:
-	bool CanSeePlayer(const Vector2f& playerPos, int playerFloor);
-	bool IsPlayerInAttackRange(const Vector2f& playerPos, int playerFloor);
 
-	virtual void Attack(const Vector2f& playerPos, ParticleManager* particleManager) = 0;
+protected:
+	bool CanSeeTarget();
+	bool IsTargetInAttackRange();
+
+	virtual void Attack( ParticleManager* particleManager) = 0;
 
 	EnemyState GetState() const;
 	
 	float GetAttackCooldown() const;
 	void ResetAttackCooldown() ;
 
-	void UpdateIdle(float elapsedSec, const Vector2f& playerPos, int playerFloor);
-	void UpdateWalk(float elapsedSec, const Vector2f& playerPos, int playerFloor);
-	void UpdateRun(float elapsedSec, const Vector2f& playerPos, int playerFloor);
-	virtual void UpdateAttack(float elapsedSec, const Vector2f& playerPos, ParticleManager* particleManager);
-	void UpdateTurn(float elapsedSec);
+	void			UpdateIdle(float elapsedSec);
+	void			UpdateWalk(float elapsedSec);
+	void			UpdateRun(float elapsedSec);
+	virtual void	UpdateAttack(float elapsedSec, ParticleManager* particleManager);
+	void			UpdateTurn(float elapsedSec);
 
 	void StateInitialization(EnemyState state);
 
 	void Patrol(float elapsedSec);
-	void Chase(float elapsedSec, const Vector2f& playerPos, int playerFloor);
+	void Chase(float elapsedSec);
 
 	bool MoveTo(const ControlPoint& controlPoint, float speedMultiplier);
-
 private:
 	EnemyState m_State;
 	EnemyType  m_Type;
+
+	const Entity* m_pTarget{};
 
 	const std::vector<AnimationFrameInfo>* m_EnemySpriteFrames{};
 
@@ -99,12 +104,11 @@ private:
 	const float
 		m_DetectionRange{ 400.f },
 		m_AttackRange{ 50.f };
-		//m_AngleFieldOfDetection{ 90.f };
 
-	void UpdateSprite();
+	void			UpdateSprite();
 
-	virtual void UpdateCurrentState(float elapsedSec, const Vector2f& playerPos, int playerFloor, ParticleManager* particleManager);
+	virtual void	UpdateCurrentState(float elapsedSec, ParticleManager* particleManager);
 
-	void UpdateCooldowns(float elapsedSec);
+	void			UpdateCooldowns(float elapsedSec);
 };
 
