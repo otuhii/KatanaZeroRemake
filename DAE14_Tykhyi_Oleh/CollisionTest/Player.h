@@ -22,6 +22,8 @@ public:
 		fall,
 		attack,
 		attackSplash,
+		hurtFly,
+		hurtOnGround,
 
 		count
 	};
@@ -35,6 +37,8 @@ public:
 	void SetState(PlayerState state);
 
 	void ProcessMouseUpEvent(const SDL_MouseButtonEvent& e, ParticleManager* particleManager, const Rectf& viewport);
+
+	void Kill() override;
 
 private:
 	PlayerState m_State;

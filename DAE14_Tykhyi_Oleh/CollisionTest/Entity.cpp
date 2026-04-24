@@ -168,6 +168,7 @@ bool Entity::CanJumpThroughPlatform() const
 void Entity::Kill() 
 {
 	m_IsAlive = false;
+	GetSprite()->SetLooping(false);
 }
 
 bool Entity::IsAlive() const

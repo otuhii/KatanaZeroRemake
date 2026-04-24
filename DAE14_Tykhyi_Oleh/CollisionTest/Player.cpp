@@ -8,9 +8,6 @@
 
 #include "Matrix2x3.h"     
 
-#include <iostream>
-
-
 Player::Player(Sprite* sprite, Sprite* splashSprite, const std::vector<AnimationFrameInfo>& playerAnimation, const Vector2f& position, float speed, float scale, int floor)
 	: Entity(sprite, position, Vector2f{}, speed, floor),
 	m_SplashSprite(splashSprite),
@@ -66,18 +63,29 @@ void Player::SetState(PlayerState state)
 
 void Player::ProcessMouseUpEvent(const SDL_MouseButtonEvent & e, ParticleManager* particleManager, const Rectf& viewport)
 {
-	Vector2f
-		mousePos{ static_cast<float>(e.x), static_cast<float>(e.y) };
-
-	if (e.button == SDL_BUTTON_LEFT)
+	if (IsAlive())
 	{
-		if (m_State != PlayerState::attack && 
-			m_AttackCooldownTimer <= 0.f)
+		Vector2f
+			mousePos{ static_cast<float>(e.x), static_cast<float>(e.y) };
+
+		if (e.button == SDL_BUTTON_LEFT)
 		{
-			m_AttackCooldownTimer = m_AttackCooldown;
-			Attack(mousePos, particleManager);
+			if (m_State != PlayerState::attack &&
+				m_AttackCooldownTimer <= 0.f)
+			{
+				m_AttackCooldownTimer = m_AttackCooldown;
+				Attack(mousePos, particleManager);
+			}
 		}
 	}
+}
+
+void Player::Kill()
+{
+	Entity::Kill();
+
+	SetVelocity(Vector2f{ 0.f, 0.f });
+	SetState(PlayerState::hurtFly);
 }
 
 void Player::DrawSplash() const
@@ -126,6 +134,21 @@ void Player::UpdateCurrentState(float elapsedSec)
 
 Player::PlayerState Player::GetNextState(bool isMoving, bool roll, bool crouch)
 {
+	if (m_State == PlayerState::hurtFly)
+	{
+		if (IsSpriteAnimationFinished())
+		{
+			SetState(PlayerState::hurtOnGround);
+		}
+		return m_State;
+	}
+
+	if (m_State == PlayerState::hurtOnGround)
+	{
+		return m_State;
+	}
+
+
 	if (m_State == PlayerState::attack || m_State == PlayerState::roll)
 	{
 		if (IsSpriteAnimationFinished())
@@ -241,7 +264,10 @@ void Player::HandleKeyboard(const Uint8* pStates, float elapsedSec)
 		m_AirAttackCount = 0;
 	}
 
-	if (m_State != PlayerState::roll)
+	if (m_State != PlayerState::roll &&
+		m_State != PlayerState::hurtFly && 
+		m_State != PlayerState::hurtOnGround
+		)
 	{
 		HandleVerticalMovement(downButton, jumpButton, elapsedSec);
 		HandleHorizontalMovement(moveLeft, moveRight, downButton, elapsedSec);

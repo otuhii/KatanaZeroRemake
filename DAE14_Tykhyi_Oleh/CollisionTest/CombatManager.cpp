@@ -32,7 +32,6 @@ void CombatManager::ResolveCombat(
 						enemyPosition{ pEnemy->GetPosition() };
 					enemyPosition.y += pEnemy->GetHitbox().height * 0.5f;
 
-
 					if (pEnemy->IsAlive())
 					{
 						if (!map->AreSeparatedByActiveObject(playerPos, enemyPosition))
@@ -54,6 +53,7 @@ void CombatManager::ResolveCombat(
 			{
 				if (UserUtils::IsPolyInRectRaycast(pAttackParticle->GetWorldCoordinates(), pPlayer->GetHitbox()))
 				{
+					pPlayer->Kill();
 					pAttackParticle->Deactivate();
 				}
 			}

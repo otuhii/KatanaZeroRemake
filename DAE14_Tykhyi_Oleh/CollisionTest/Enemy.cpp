@@ -112,7 +112,6 @@ void Enemy::Kill()
 {
 	Entity::Kill();
 	SetVelocity(Vector2f{ 0.f, 0.f });
-	GetSprite()->SetLooping(false);
 	SetState(EnemyState::dead);
 }
 
@@ -356,7 +355,7 @@ void Enemy::Chase(float elapsedSec)
 
 	MoveTo(playerPoint, m_RunningMultiplier);
 
-	if (IsTargetInAttackRange() && m_AttackCooldownTimer <= 0)
+	if (IsTargetInAttackRange() && m_AttackCooldownTimer <= 0 && m_pTarget->IsAlive())
 	{
 		SetState(EnemyState::attack);
 	}

@@ -49,6 +49,10 @@ void Gangster::Draw() const
 
 void Gangster::Update(float elapsedSec, ParticleManager* particleManager, const Rectf& viewport)
 {
+	if (!GetTarget()->IsAlive())
+	{
+		SetState(EnemyState::idle);
+	}
 	Enemy::Update(elapsedSec, particleManager, viewport);
 }
 
