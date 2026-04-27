@@ -8,6 +8,7 @@
 #include "CombatManager.h"
 
 #include "Camera.h"
+#include "Cursor.h"
 
 #include "Player.h"
 #include "Map.h"
@@ -33,8 +34,10 @@ void Game::Initialize( )
 	m_pMap = new Map{};
 	m_pParticleManager = new ParticleManager{100};
 	m_pCombatManager = new CombatManager{};
+
 	m_pCamera = new Camera{ GetViewPort().width, GetViewPort().height };
-	
+	m_pCursor = new Cursor{ m_pSpriteManager->CreateSprite("img/spr_cursor.png") };
+
 	JsonImporter::GameData
 		importedGameInfo{};
 	importedGameInfo = m_JsonImporter.ImportGameInfo("json/GameInfo.json", *m_pSpriteManager);
@@ -66,6 +69,7 @@ void Game::Cleanup( )
 	delete m_pParticleManager;
 	delete m_pCombatManager;
 	delete m_pCamera;
+	delete m_pCursor;
 }
 
 void Game::Update( float elapsedSec )
@@ -114,6 +118,8 @@ void Game::Draw( ) const
 	m_pParticleManager->Draw();
 
 	m_pCamera->Reset();
+
+	m_pCursor->Draw();
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
@@ -138,7 +144,7 @@ void Game::ProcessKeyUpEvent( const SDL_KeyboardEvent& e )
 
 void Game::ProcessMouseMotionEvent( const SDL_MouseMotionEvent& e )
 {
-	//std::cout << "MOUSEMOTION event: " << e.x << ", " << e.y << std::endl;
+	m_pCursor->Update(e);
 }
 
 void Game::ProcessMouseDownEvent( const SDL_MouseButtonEvent& e )
