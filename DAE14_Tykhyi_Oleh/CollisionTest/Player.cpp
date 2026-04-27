@@ -11,7 +11,7 @@
 Player::Player(Sprite* sprite, Sprite* splashSprite, const std::vector<AnimationFrameInfo>& playerAnimation, const Vector2f& position, float speed, float scale, int floor)
 	: Entity(sprite, position, Vector2f{}, speed, floor),
 	m_SplashSprite(splashSprite),
-	m_State(PlayerState::staying),
+	m_State(PlayerState::catPet),
 	m_PlayerSpriteFrames(playerAnimation)
 {
 	GetSprite()->SetAnimationFrameInfo(m_PlayerSpriteFrames[static_cast<int>(m_State)]);

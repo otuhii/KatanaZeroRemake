@@ -24,6 +24,7 @@ public:
 		attackSplash,
 		hurtFly,
 		hurtOnGround,
+		catPet,
 
 		count
 	};

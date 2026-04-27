@@ -70,8 +70,6 @@ void Game::Cleanup( )
 
 void Game::Update( float elapsedSec )
 {
-	//std::cout << 1 / elapsedSec << std::endl;
-
 	const Uint8 *pStates = SDL_GetKeyboardState( nullptr );
 
 	FPS(elapsedSec);
@@ -209,9 +207,6 @@ void Game::MapSetup(const JsonImporter::GameData& gameData)
 	m_pMap->SetEnvironmentActiveObjects(gameData.activeObjects);
 	m_pMap->SetEnvironmentCosmeticObjects(gameData.cosmeticObjects);
 }
-
-
-
 
 void Game::FPS(float elapsedSec)
 {
