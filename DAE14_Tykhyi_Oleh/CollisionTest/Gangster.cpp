@@ -47,13 +47,13 @@ void Gangster::Draw() const
 	
 }
 
-void Gangster::Update(float elapsedSec, ParticleManager* particleManager, const Rectf& viewport)
+void Gangster::Update(float elapsedSec, ParticleManager* particleManager, const Map* pMap, const Rectf& viewport)
 {
 	if (!GetTarget()->IsAlive())
 	{
 		SetState(EnemyState::idle);
 	}
-	Enemy::Update(elapsedSec, particleManager, viewport);
+	Enemy::Update(elapsedSec, particleManager, pMap, viewport);
 }
 
 
@@ -66,13 +66,13 @@ void Gangster::Attack(ParticleManager* particleManager)
 }
 
 
-void Gangster::UpdateCurrentState(float elapsedSec, ParticleManager* particleManager)
+void Gangster::UpdateCurrentState(float elapsedSec, ParticleManager* particleManager, const Map* pMap)
 {
 	switch (GetState())
 	{
 	case EnemyState::idle:
 	{
-		UpdateIdle(elapsedSec);
+		UpdateIdle(elapsedSec, pMap);
 		break;
 	}
 	case EnemyState::run:

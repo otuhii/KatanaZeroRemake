@@ -21,7 +21,7 @@ public:
 	void SetEnvironmentCosmeticObjects(const std::vector<EnvironmentCosmeticObject>& cosmeticObjects);
 	void SetInteractableObjects(const std::vector<InteractableObject*> pInteractableObjects);
 
-	bool AreSeparatedByActiveObject(const Vector2f& entityPosition1, const Vector2f& entityPosition2);
+	bool AreSeparatedByActiveObject(const Vector2f& entityPosition1, const Vector2f& entityPosition2) const;
 
 	InteractableObject* GetClosestInteractableObject(const Vector2f& playerPos, int playerFloor) const;
 private:

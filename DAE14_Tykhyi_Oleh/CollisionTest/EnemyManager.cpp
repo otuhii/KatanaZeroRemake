@@ -37,7 +37,7 @@ void EnemyManager::Draw() const
 			controlPointRadius{ 16.f };
 
 		utils::SetColor(Color4f{ 1.f, 0.f, 0.f, 1.f });
-		//utils::FillEllipse(point.position, controlPointRadius, controlPointRadius);
+		utils::FillEllipse(point.position, controlPointRadius, controlPointRadius);
 	}
 }
 
@@ -46,7 +46,7 @@ void EnemyManager::Update(float elapsedSec, const Map* gameMap, ParticleManager*
 	for (Enemy* pEnemy : m_pEnemies)
 	{
 		pEnemy->UpdateControlPoints(&m_ControlPoints);
-		pEnemy->Update(elapsedSec, particleManager, Rectf{});
+		pEnemy->Update(elapsedSec, particleManager, gameMap, Rectf{});
 
 		collisionManager->HandleMovement(pEnemy, gameMap, elapsedSec, false);
 	}

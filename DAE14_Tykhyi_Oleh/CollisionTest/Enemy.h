@@ -5,6 +5,7 @@
 #include <vector>
 
 class ParticleManager;
+class Map;
 
 class Enemy : public Entity
 {
@@ -43,7 +44,7 @@ public:
 
 	virtual void Draw() const override;
 
-	virtual void Update(float elapsedSec, ParticleManager* particleManager, const Rectf& viewport);
+	virtual void Update(float elapsedSec, ParticleManager* particleManager,const Map* pMap, const Rectf& viewport);
 
 	void UpdateControlPoints(const std::vector<ControlPoint>* controlPoint);
 
@@ -55,7 +56,7 @@ public:
 	void Kill(const Vector2f& impulse) override;
 
 protected:
-	bool CanSeeTarget();
+	bool CanSeeTarget(const Map* pMap);
 	bool IsTargetInAttackRange();
 
 	virtual void Attack( ParticleManager* particleManager) = 0;
@@ -65,8 +66,8 @@ protected:
 	float GetAttackCooldown() const;
 	void ResetAttackCooldown() ;
 
-	void			UpdateIdle(float elapsedSec);
-	void			UpdateWalk(float elapsedSec);
+	void			UpdateIdle(float elapsedSec, const Map* pMap);
+	void			UpdateWalk(float elapsedSec, const Map* pMap);
 	void			UpdateRun(float elapsedSec);
 	virtual void	UpdateAttack(float elapsedSec, ParticleManager* particleManager);
 	void			UpdateTurn(float elapsedSec);
@@ -81,7 +82,8 @@ private:
 	EnemyState m_State;
 	EnemyType  m_Type;
 
-	const Entity* m_pTarget{};
+	const Entity* 
+		m_pTarget{};
 
 	const std::vector<AnimationFrameInfo>* m_EnemySpriteFrames{};
 
@@ -107,7 +109,7 @@ private:
 
 	void			UpdateSprite();
 
-	virtual void	UpdateCurrentState(float elapsedSec, ParticleManager* particleManager);
+	virtual void	UpdateCurrentState(float elapsedSec, ParticleManager* particleManager,const Map* pMap);
 
 	void			UpdateCooldowns(float elapsedSec);
 };

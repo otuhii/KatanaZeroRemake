@@ -19,7 +19,7 @@ public:
 
     void Draw() const override;
 
-    void Update(float elapsedSec, ParticleManager* particleManager, const Rectf& viewport) override;
+    void Update(float elapsedSec, ParticleManager* particleManager, const Map* pMap, const Rectf& viewport) override;
 
     void Attack(ParticleManager* particleManager) override;
 
@@ -42,7 +42,7 @@ private:
 
     Sprite* m_GunSprite{};
 
-    void UpdateCurrentState(float elapsedSec, ParticleManager* particleManager) override;
+    void UpdateCurrentState(float elapsedSec, ParticleManager* particleManager, const Map* pMap) override;
 
     void UpdateAttack(float elapsedSec, ParticleManager* particleManager) override;
     void UpdateGunSprite();

@@ -2,7 +2,6 @@
 
 class Sprite;
 
-
 class Cursor final
 {
 public:

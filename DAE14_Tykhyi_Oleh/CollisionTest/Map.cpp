@@ -75,7 +75,7 @@ void Map::SetInteractableObjects(const std::vector<InteractableObject*> pInterac
 	m_pInteractableObjects = pInteractableObjects;
 }
 
-bool Map::AreSeparatedByActiveObject(const Vector2f& entityPosition1, const Vector2f& entityPosition2)
+bool Map::AreSeparatedByActiveObject(const Vector2f& entityPosition1, const Vector2f& entityPosition2) const
 {
 	for (const EnvironmentActiveObject& envObject : m_EnvironmentActiveObjects)
 	{

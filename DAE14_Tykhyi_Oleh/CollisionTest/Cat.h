@@ -2,7 +2,7 @@
 #include "InteractableObject.h"
 #include "Sprite.h"
 
-class Cat :
+class Cat final:
     public InteractableObject
 {
 public:

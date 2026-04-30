@@ -2,6 +2,7 @@
 #include "Enemy.h"
 
 #include "PathFinder.h"
+#include "Map.h"
 
 #include "utils.h"
 
@@ -47,14 +48,14 @@ Enemy::EnemyType Enemy::GetType() const
 	return m_Type;
 }
 
-void Enemy::Update(float elapsedSec, ParticleManager* particleManager, const Rectf& viewport)
+void Enemy::Update(float elapsedSec, ParticleManager* particleManager, const Map* pMap, const Rectf& viewport)
 {
 	Entity::Update(elapsedSec, viewport);
 
 	if (IsAlive())
 	{
 		UpdateCooldowns(elapsedSec);
-		UpdateCurrentState(elapsedSec, particleManager);
+		UpdateCurrentState(elapsedSec, particleManager, pMap);
 
 		UpdateSprite();
 	}
@@ -119,18 +120,18 @@ const Entity* Enemy::GetTarget()
 	return m_pTarget;
 }
 
-void Enemy::UpdateCurrentState(float elapsedSec, ParticleManager* particleManager)
+void Enemy::UpdateCurrentState(float elapsedSec, ParticleManager* particleManager, const Map* pMap )
 {
 	switch (m_State)
 	{
 	case EnemyState::idle:
 	{
-		UpdateIdle(elapsedSec);
+		UpdateIdle(elapsedSec, pMap);
 		break;
 	}
 	case EnemyState::walk:
 	{
-		UpdateWalk(elapsedSec);
+		UpdateWalk(elapsedSec, pMap);
 		break;
 	}
 	case EnemyState::run:
@@ -156,11 +157,11 @@ void Enemy::UpdateCurrentState(float elapsedSec, ParticleManager* particleManage
 	}
 }
 
-void Enemy::UpdateIdle(float elapsedSec)
+void Enemy::UpdateIdle(float elapsedSec, const Map* pMap)
 {
 	if (m_pTarget != nullptr)
 	{
-		if (CanSeeTarget())
+		if (CanSeeTarget(pMap))
 		{
 			if (IsTargetInAttackRange())
 			{
@@ -174,13 +175,13 @@ void Enemy::UpdateIdle(float elapsedSec)
 	}
 }
 
-void Enemy::UpdateWalk(float elapsedSec)
+void Enemy::UpdateWalk(float elapsedSec, const Map* pMap)
 {
 	Patrol(elapsedSec);
 
 	if (m_pTarget != nullptr)
 	{
-		if (CanSeeTarget())
+		if (CanSeeTarget(pMap))
 		{
 			SetState(EnemyState::run);
 		}
@@ -389,7 +390,7 @@ bool Enemy::MoveTo(const ControlPoint& controlPoint, float speedMultiplier)
 	}
 }
 
-bool Enemy::CanSeeTarget()
+bool Enemy::CanSeeTarget(const Map* pMap)
 {
 	if (m_pTarget != nullptr)
 	{
@@ -411,8 +412,13 @@ bool Enemy::CanSeeTarget()
 			isPlayerToRight{ directionToPlayer > 0 },
 			isLookingRight{ GetFacingDirection() == 1 };
 
+		Vector2f
+			positionCorrection{ 0.f, 5.f };
+
 		return (isPlayerToRight == isLookingRight) &&
-			(m_pTarget->GetFloor() == GetFloor());
+			(m_pTarget->GetFloor() == GetFloor()) && 
+			!pMap->AreSeparatedByActiveObject(GetPosition() + positionCorrection, targetPosition + positionCorrection);
+		//TODO apply position correction on check like this in more robust way
 	}
 	else
 	{
