@@ -86,7 +86,7 @@ void Game::Update( float elapsedSec )
 		timeDivider = 0.2f;
 	}
 
-	m_pPlayer->Update(timeDivider*elapsedSec, pStates, GetViewPort());
+	m_pPlayer->Update(timeDivider*elapsedSec, m_pMap, pStates, GetViewPort());
 
 	m_pCollisionManager->HandleMovement(m_pPlayer, m_pMap, timeDivider*elapsedSec, true);
 
@@ -212,6 +212,7 @@ void Game::MapSetup(const JsonImporter::GameData& gameData)
 {
 	m_pMap->SetEnvironmentActiveObjects(gameData.activeObjects);
 	m_pMap->SetEnvironmentCosmeticObjects(gameData.cosmeticObjects);
+	m_pMap->SetInteractableObjects(gameData.interactableObjects);
 }
 
 void Game::FPS(float elapsedSec)

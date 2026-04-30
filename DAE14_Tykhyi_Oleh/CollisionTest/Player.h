@@ -2,6 +2,8 @@
 #include "Entity.h"
 
 class ParticleManager;
+class InteractableObject;
+class Map;
 
 #include <vector>
 
@@ -33,7 +35,7 @@ public:
 
 	void Draw() const override;
 
-	void Update(float elapsedSec, const Uint8* pStates, const Rectf& viewport);
+	void Update(float elapsedSec, Map* pMap, const Uint8* pStates, const Rectf& viewport);
 
 	void SetState(PlayerState state);
 
@@ -74,6 +76,20 @@ private:
 	int
 		m_AirAttackCount{};
 
+
+#pragma region interaction
+	bool
+		m_IsAutoWalking{ false };
+
+	InteractableObject*
+		m_pTargetObject{};
+
+	const float
+		m_ArrivalThreshold{ 5.f };
+#pragma endregion interaction
+
+
+
 	void DrawSplash() const;
 	
 	void UpdateCurrentState(float elapsedSec);
@@ -83,8 +99,11 @@ private:
 	PlayerState GetNextAirState();
 	PlayerState GetNextGroundState(bool isMoving, bool roll, bool crouch);
 
-	void HandleKeyboard(const Uint8* pStates, float elapsedSec);
+	void HandleKeyboard(Map* pMap, const Uint8* pStates, float elapsedSec);
 
+	void HandleAutowalk();
+
+	void Interact(Map* pMap);
 	void Attack(const Vector2f& mousePos, ParticleManager* particleManager);
 	void SpawnAttackParticle(ParticleManager* particleManager) const;
 	void AttackDash(const Vector2f& mousePos);

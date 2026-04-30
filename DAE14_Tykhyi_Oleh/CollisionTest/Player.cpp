@@ -3,10 +3,10 @@
 #include "Player.h"
 #include "AnimationFrameInfo.h"
 #include "UserUtils.h"
-
 #include "ParticleManager.h"
+#include "Map.h"
+#include "InteractableObject.h"
 
-#include "Matrix2x3.h"     
 
 Player::Player(Sprite* sprite, Sprite* splashSprite, const std::vector<AnimationFrameInfo>& playerAnimation, const Vector2f& position, float speed, float scale, int floor)
 	: Entity(sprite, position, Vector2f{}, speed, floor),
@@ -31,9 +31,14 @@ void Player::Draw() const
 	DrawSplash();
 }
 
-void Player::Update(float elapsedSec, const Uint8* pStates, const Rectf& viewport)
+void Player::Update(float elapsedSec, Map* pMap, const Uint8* pStates, const Rectf& viewport)
 {
-	HandleKeyboard(pStates, elapsedSec);
+	if (m_IsAutoWalking)
+	{
+		HandleAutowalk();
+		return;
+	}
+	HandleKeyboard(pMap, pStates, elapsedSec);
 	UpdateCurrentState(elapsedSec);
 	UpdateCooldowns(elapsedSec);
 	Entity::Update(elapsedSec, viewport);
@@ -71,7 +76,9 @@ void Player::ProcessMouseUpEvent(const SDL_MouseButtonEvent & e, const Vector2f&
 		if (e.button == SDL_BUTTON_LEFT)
 		{
 			if (m_State != PlayerState::attack &&
-				m_AttackCooldownTimer <= 0.f)
+				m_State != PlayerState::catPet && 
+				m_AttackCooldownTimer <= 0.f &&
+				!m_IsAutoWalking)
 			{
 				m_AttackCooldownTimer = m_AttackCooldown;
 				Attack(mousePos, particleManager);
@@ -147,6 +154,13 @@ Player::PlayerState Player::GetNextState(bool isMoving, bool roll, bool crouch)
 		return m_State;
 	}
 
+	if (m_State == PlayerState::catPet)
+	{
+		if (IsSpriteAnimationFinished())
+		{
+			SetState(PlayerState::staying);
+		}
+	}
 
 	if (m_State == PlayerState::attack || m_State == PlayerState::roll)
 	{
@@ -244,14 +258,21 @@ void Player::ProcessStateChange(bool isMoving, bool roll, bool crouch)
 	SetState(nextState);
 }
 
-void Player::HandleKeyboard(const Uint8* pStates, float elapsedSec)
+void Player::HandleKeyboard(Map* pMap, const Uint8* pStates, float elapsedSec)
 {
 	bool
 		moveRight	{ static_cast<bool>(pStates[SDL_SCANCODE_D]) },
 		moveLeft	{ static_cast<bool>(pStates[SDL_SCANCODE_A]) },
 		isMoving	{ static_cast<bool>(moveRight || moveLeft) },
 		downButton	{ static_cast<bool>(pStates[SDL_SCANCODE_S]) },
-		jumpButton	{ static_cast<bool>(pStates[SDL_SCANCODE_W]) };
+		jumpButton	{ static_cast<bool>(pStates[SDL_SCANCODE_W]) },
+		interactionButton{ static_cast<bool>(pStates[SDL_SCANCODE_SPACE]) };
+
+	if (interactionButton && IsOnGround())
+	{
+		Interact(pMap);
+		return;
+	}
 
 	ProcessJumpThroughPlatform(downButton);
 
@@ -265,7 +286,8 @@ void Player::HandleKeyboard(const Uint8* pStates, float elapsedSec)
 
 	if (m_State != PlayerState::roll &&
 		m_State != PlayerState::hurtFly && 
-		m_State != PlayerState::hurtOnGround
+		m_State != PlayerState::hurtOnGround &&
+		m_State != PlayerState::catPet
 		)
 	{
 		HandleVerticalMovement(downButton, jumpButton, elapsedSec);
@@ -281,6 +303,74 @@ void Player::HandleKeyboard(const Uint8* pStates, float elapsedSec)
 	if (rollIntent)
 	{
 		m_RollCooldownTimer = m_RollCooldown;
+	}
+}
+
+void Player::HandleAutowalk()
+{
+	const float
+		targetOffset{ 50.f };
+
+	float
+		targetX{m_pTargetObject->GetPosition().x - targetOffset };
+
+	if ((targetX - GetPositionX()) < 0)
+	{
+		GetSprite()->FlipHorizontally();
+	}
+	else
+	{
+		GetSprite()->ResetHorizontalFlip();
+	}
+
+	float
+		dx{ targetX - GetPositionX()};
+
+	if (std::abs(dx) < m_ArrivalThreshold)
+	{
+		SetVelocityX(0.f);
+		SetPositionX(targetX);
+		m_IsAutoWalking = false;
+
+		SetState(PlayerState::catPet);//TODO hardcoding this because i probably wont use it much for anything else but i can review it later
+		GetSprite()->ResetHorizontalFlip();
+		if (m_pTargetObject)
+		{
+			m_pTargetObject->Interact();
+		}
+	}
+	else
+	{
+		int
+			moveDirection{ 1 };
+		if (dx < 0)
+		{
+			moveDirection = -1;
+		}
+		SetVelocityX(moveDirection * GetSpeed());
+	}
+
+	
+}
+
+void Player::Interact(Map* pMap)
+{
+	if (m_State == PlayerState::catPet || m_IsAutoWalking)
+	{
+		return;
+	}
+
+	InteractableObject*
+		pInteractableObject{ pMap->GetClosestInteractableObject(GetPosition(), GetFloor()) };
+
+	if (pInteractableObject != nullptr)
+	{
+		if (pInteractableObject->GetType() == InteractableObject::InteractableType::cat)
+		{
+			m_pTargetObject = pInteractableObject;
+			m_IsAutoWalking = true;
+			SetState(PlayerState::run);
+		}
 	}
 }
 

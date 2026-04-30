@@ -163,6 +163,7 @@ xcopy "$(ProjectDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
   <ItemGroup>
     <ClCompile Include="AttackParticle.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Cat.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="CombatManager.cpp" />
     <ClCompile Include="Cursor.cpp" />
@@ -174,6 +175,7 @@ xcopy "$(ProjectDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Gangster.cpp" />
     <ClCompile Include="Grunt.cpp" />
+    <ClCompile Include="InteractableObject.cpp" />
     <ClCompile Include="JsonImporter.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
@@ -189,6 +191,7 @@ xcopy "$(ProjectDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClInclude Include="AnimationFrameInfo.h" />
     <ClInclude Include="AttackParticle.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Cat.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="CombatManager.h" />
     <ClInclude Include="ControlPoint.h" />
@@ -201,6 +204,7 @@ xcopy "$(ProjectDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClInclude Include="Game.h" />
     <ClInclude Include="Gangster.h" />
     <ClInclude Include="Grunt.h" />
+    <ClInclude Include="InteractableObject.h" />
     <ClInclude Include="JsonImporter.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="ParticleManager.h" />

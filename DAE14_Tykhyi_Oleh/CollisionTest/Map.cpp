@@ -3,6 +3,16 @@
 
 #include "utils.h"
 
+#include "InteractableObject.h"
+
+Map::~Map()
+{
+	for (InteractableObject* pObj : m_pInteractableObjects)
+	{
+		delete pObj;
+	}
+}
+
 void Map::Draw() const
 {
 	utils::SetColor(Color4f{ 1.f, 1.f, 0.f, 1.f });
@@ -28,6 +38,21 @@ void Map::Draw() const
 			obj.GetTexture()->Draw(obj.GetPosition(), false, false);
 		}
 	}
+
+
+	for (const InteractableObject* pObj : m_pInteractableObjects)
+	{
+		pObj->Draw();
+	}
+
+}
+
+void Map::Update(float elapsedSec)
+{
+	for (InteractableObject* pObj : m_pInteractableObjects)
+	{
+		pObj->Update(elapsedSec);
+	}
 }
 
 const std::vector<EnvironmentActiveObject>& Map::GetEnvironmentActiveObjects() const
@@ -43,6 +68,11 @@ void Map::SetEnvironmentActiveObjects(const std::vector<EnvironmentActiveObject>
 void Map::SetEnvironmentCosmeticObjects(const std::vector<EnvironmentCosmeticObject>& cosmeticObjects) 
 {
 	m_EnvironmentCosmeticObjects = cosmeticObjects;
+}
+
+void Map::SetInteractableObjects(const std::vector<InteractableObject*> pInteractableObjects)
+{
+	m_pInteractableObjects = pInteractableObjects;
 }
 
 bool Map::AreSeparatedByActiveObject(const Vector2f& entityPosition1, const Vector2f& entityPosition2)
@@ -64,5 +94,17 @@ bool Map::AreSeparatedByActiveObject(const Vector2f& entityPosition1, const Vect
 	}
 
 	return false;
+}
+
+InteractableObject* Map::GetClosestInteractableObject(const Vector2f& playerPos, int playerFloor) const
+{
+	for (InteractableObject* pObj : m_pInteractableObjects)
+	{
+		if (pObj->IsPlayerInRange(playerPos, playerFloor))
+		{
+			return pObj;
+		}
+	}
+	return nullptr;
 }
 

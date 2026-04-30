@@ -4,6 +4,7 @@
 #include "Entity.h"
 #include "Matrix2x3.h"
 #include "utils.h"
+#include "InteractableObject.h"
 
 void AttackParticle::Spawn(OwnerType ownerType, AttackType attackType, const Vector2f& position, const Vector2f& positionOffset, const Vector2f& velocity, const std::vector<Vector2f>& localPoints, float lifetime, float rotationAngle,  bool isFlippedHorizontally, bool isFlippedVertically, const Entity* pOwnerEntity)
 {

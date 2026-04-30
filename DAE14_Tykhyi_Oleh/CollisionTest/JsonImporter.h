@@ -10,6 +10,8 @@
 #include "SpriteManager.h"
 #include "Enemy.h"
 
+class InteractableObject;
+
 using Json = nlohmann::json;
 void from_json(const Json& j, Rectf& rect);
 void from_json(const Json& j, AnimationFrameInfo& anFrame);
@@ -20,6 +22,7 @@ public:
 	struct GameData {
 		std::vector<EnvironmentActiveObject> activeObjects;
 		std::vector<EnvironmentCosmeticObject> cosmeticObjects;
+		std::vector<InteractableObject*> interactableObjects;
 		std::vector<ControlPoint> controlPoints;
 
 		struct EnemyInfo {
@@ -50,6 +53,7 @@ private:
 	void AddControlPoint(const Json& object, GameData& dst) const;
 	void AddCosmeticObject(const Json& object, GameData& dst, SpriteManager& spriteManager) const;
 	void AddActiveObject(const Json& object, GameData& dst, SpriteManager& spriteManager) const;
+	void AddInteractableObject(const Json& object, GameData& dst, SpriteManager& spriteManager) const;
 
 	EnvironmentActiveObject::EnvironmentObjectType StringToObjectType(const std::string& typeStr) const;
 	ControlPoint::ControlPointType				   StringToControlPointType(const std::string& typeStr) const;

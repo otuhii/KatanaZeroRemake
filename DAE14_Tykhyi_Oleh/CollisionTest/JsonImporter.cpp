@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "JsonImporter.h"
 
+#include "Cat.h"
+
 void from_json(const Json& j, Rectf& rect)
 {
 	rect.left = j.at("left").get<float>();
@@ -133,6 +135,10 @@ void JsonImporter::ProcessJsonObject(const Json& object, GameData& dst, SpriteMa
 	{
 		AddCosmeticObject(object, dst, spriteManager);
 	}
+	else if (objectType == "interactable")
+	{
+		AddInteractableObject(object, dst, spriteManager);
+	}
 }
 
 void JsonImporter::AddPlayerInfo(const Json& object, GameData& dst) const
@@ -233,6 +239,22 @@ void JsonImporter::AddActiveObject(const Json& object, GameData& dst, SpriteMana
 			StringToObjectType(object.at("objectType").get<std::string>()),
 			object.at("floor").get<int>()
 		});
+	}
+}
+
+void JsonImporter::AddInteractableObject(const Json& object, GameData& dst, SpriteManager& spriteManager) const
+{
+	if (object.at("type").get<std::string>() == "cat")
+	{
+		dst.interactableObjects.push_back(new Cat{
+			spriteManager.CreateSprite("img/env/" + object.value("texturePath", "default.png")),
+			ImportAnimationFrameObjects("json/CatAnimationFramesInfo.json"), //TODO less hardcoded frame animation info for that
+			Vector2f{object.at("xPosition").get<float>(), object.at("yPosition").get<float>()},
+			object.at("floor").get<int>(),
+			object.at("interactionRange").get<float>(),
+			object.at("scale").get<float>()
+			}
+		);
 	}
 }
 
