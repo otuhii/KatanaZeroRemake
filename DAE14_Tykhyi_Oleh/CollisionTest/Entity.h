@@ -42,7 +42,9 @@ public:
 	float			GetPositionY()	const;
 	const Vector2f& GetPosition()	const;
 
-	const Rectf& GetHitbox()		const;
+
+	const Rectf& GetCurrentHitbox()		const;
+	const Rectf& GetPreviousHitbox() const;
 
 	int				GetFacingDirection() const;
 	bool			IsSpriteAnimationFinished() const;
@@ -70,6 +72,10 @@ private:
 	Vector2f m_Velocity{};
 	Vector2f m_Position{};
 
-	Rectf m_Hitbox{};
+	Rectf
+		m_CurrentHitbox{},
+		m_PreviousHitbox{};
+
+	void StoreHitbox();
 };
 

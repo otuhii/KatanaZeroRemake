@@ -15,7 +15,7 @@ void CombatManager::ResolveCombat(
 {	
 	Vector2f
 		playerPos{ pPlayer->GetPosition() };
-	playerPos.y += pPlayer->GetHitbox().height * 0.5f;
+	playerPos.y += pPlayer->GetCurrentHitbox().height * 0.5f;
 
 
 	for (AttackParticle* pAttackParticle : particleManager->GetParticles())
@@ -49,13 +49,13 @@ void CombatManager::ResolveCombat(
 				{
 					Vector2f
 						enemyPosition{ pEnemy->GetPosition() };
-					enemyPosition.y += pEnemy->GetHitbox().height * 0.5f;
+					enemyPosition.y += pEnemy->GetCurrentHitbox().height * 0.5f;
 
 					if (pEnemy->IsAlive())
 					{
 						if (!map->AreSeparatedByActiveObject(playerPos, enemyPosition))
 						{
-							if (UserUtils::IsPolyInRectAABB(pAttackParticle->GetWorldCoordinates(), pEnemy->GetHitbox()))
+							if (UserUtils::IsPolyInRectAABB(pAttackParticle->GetWorldCoordinates(), pEnemy->GetCurrentHitbox()))
 							{
 								pEnemy->Kill(CalculateHitImpulse(pPlayer, pEnemy, pAttackParticle));
 
@@ -70,7 +70,7 @@ void CombatManager::ResolveCombat(
 			}
 			else if (pAttackParticle->GetOwnerType() == AttackParticle::OwnerType::Enemy)
 			{
-				if (UserUtils::IsPolyInRectAABB(pAttackParticle->GetWorldCoordinates(), pPlayer->GetHitbox()))
+				if (UserUtils::IsPolyInRectAABB(pAttackParticle->GetWorldCoordinates(), pPlayer->GetCurrentHitbox()))
 				{
 					pPlayer->Kill(CalculateHitImpulse(pAttackParticle->GetOwnerEntity(), pPlayer, pAttackParticle));
 					pAttackParticle->Deactivate();

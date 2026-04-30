@@ -42,7 +42,7 @@ void Grunt::Attack(ParticleManager* particleManager)
 void Grunt::SpawnAttackParticle(ParticleManager* particleManager) const
 {
 	Rectf
-		gruntDims{ GetHitbox()};
+		gruntDims{ GetCurrentHitbox()};
 
 	Vector2f
 		positionOffset{ 0.f, gruntDims.height};

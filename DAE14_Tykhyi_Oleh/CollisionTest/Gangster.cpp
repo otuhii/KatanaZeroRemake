@@ -40,7 +40,7 @@ void Gangster::Draw() const
 	if (GetState() == EnemyState::attack)
 	{
 		Vector2f gunPosition{ GetPosition() };
-		gunPosition.y += GetHitbox().height * 0.6f;
+		gunPosition.y += GetCurrentHitbox().height * 0.6f;
 
 		m_GunSprite->Draw(gunPosition, true, true);
 	}
@@ -120,10 +120,10 @@ void Gangster::Aim()
 		currentPosition{ GetPosition() },
 		targetPosition{ GetTarget()->GetPosition() };
 
-	currentPosition.x += GetHitbox().width * 0.5f;
-	currentPosition.y += GetHitbox().height * 0.5f;
+	currentPosition.x += GetCurrentHitbox().width * 0.5f;
+	currentPosition.y += GetCurrentHitbox().height * 0.5f;
 	
-	targetPosition.y += GetTarget()->GetHitbox().height * 0.5f;
+	targetPosition.y += GetTarget()->GetCurrentHitbox().height * 0.5f;
 
 	Vector2f
 		direction{ targetPosition - currentPosition};
@@ -171,7 +171,7 @@ void Gangster::Shoot(ParticleManager* particleManager)
 	particleManager->SpawnBullet(
 		AttackParticle::OwnerType::Enemy,
 		GetPosition(),
-		Vector2f{ 0, GetHitbox().height * 0.6f },
+		Vector2f{ 0, GetCurrentHitbox().height * 0.6f },
 		m_BulletHitbox,
 		bulletVelocity,
 		m_GunSprite->GetRotation(),

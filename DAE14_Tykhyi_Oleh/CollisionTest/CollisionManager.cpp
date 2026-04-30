@@ -53,17 +53,16 @@ void CollisionManager::CheckCollision(float elapsedSec, Entity* pEntity, const M
 void CollisionManager::HandleAABB(float elapsedSec, Entity* pEntity, EnvironmentActiveObject::EnvironmentObjectType type, const Rectf& objectCollider, int objectFloor, bool isHorizontalMovement, bool updateFloorInfo) const
 {
 	Rectf
-		entityHitbox{ pEntity->GetHitbox() };
+		entityCurrentHitbox{ pEntity->GetCurrentHitbox() },
+		entityPreviousHitbox{ pEntity->GetPreviousHitbox() };
 
 	const float
-		velEps{ 0.1f },
 		maxStepHeight{ 7.f };
 
 	if (type == EnvironmentActiveObject::EnvironmentObjectType::jumpThroughPlatform)
 	{
 		if (CanMoveThroughPlatform(elapsedSec, pEntity, objectCollider, isHorizontalMovement))
 		{
-
 			return;
 		}
 	}
@@ -73,18 +72,21 @@ void CollisionManager::HandleAABB(float elapsedSec, Entity* pEntity, Environment
 	{
 		float shrinkValue{ 2.f };
 
-		entityHitbox.bottom += shrinkValue;
-		entityHitbox.height -= shrinkValue;
+		entityCurrentHitbox.bottom += shrinkValue;
+		entityCurrentHitbox.height -= shrinkValue;
 	}
 
-	if (utils::IsOverlapping(entityHitbox, objectCollider))
+	if (utils::IsOverlapping(entityCurrentHitbox, objectCollider))
 	{
-		if (isHorizontalMovement && pEntity->IsOnGround())
+		if (isHorizontalMovement)
 		{
 			float
-				overlapHeight{ (objectCollider.bottom + objectCollider.height) - entityHitbox.bottom };
+				overlapHeight{ (objectCollider.bottom + objectCollider.height) - entityCurrentHitbox.bottom };
 
-			if (overlapHeight <= maxStepHeight && overlapHeight > 0) //step-up logic which checks if current
+			if (overlapHeight <= maxStepHeight && 
+				overlapHeight > 0 && 
+				pEntity->IsOnGround()) 
+				//step-up logic which checks if current
 				//overlapped wall can be handled as a stair step
 			{
 				pEntity->SetPositionY(objectCollider.bottom + objectCollider.height);
@@ -93,32 +95,31 @@ void CollisionManager::HandleAABB(float elapsedSec, Entity* pEntity, Environment
 				return;
 			}
 
-			if (pEntity->GetVelocityX() > velEps)
+
+
+			if (entityPreviousHitbox.left + entityPreviousHitbox.width <= objectCollider.left)
 			{
-				pEntity->SetPositionX(objectCollider.left - entityHitbox.width);
+				pEntity->SetPositionX(objectCollider.left - entityCurrentHitbox.width*0.5f);
 			}
-			else if (pEntity->GetVelocityX() < -velEps)
+			else if (entityPreviousHitbox.left >= objectCollider.left + objectCollider.width)
 			{
-				pEntity->SetPositionX(objectCollider.left + objectCollider.width);
+				pEntity->SetPositionX(objectCollider.left + objectCollider.width + entityCurrentHitbox.width*0.5f );
 			}
 			pEntity->SetVelocityX(0.f);
 		}
-		else
+		else if (!isHorizontalMovement)
 		{
-			if (pEntity->GetVelocityY() > velEps)
+			if (entityPreviousHitbox.bottom + entityPreviousHitbox.height <= objectCollider.bottom)
 			{
-				pEntity->SetPositionY(objectCollider.bottom - pEntity->GetHitbox().height);
+				pEntity->SetPositionY(objectCollider.bottom - entityCurrentHitbox.height);
 			}
-			else
+			else 
 			{
-				float platformTop{
-					objectCollider.bottom + objectCollider.height
-				};
+				float 
+					platformTop{objectCollider.bottom + objectCollider.height},
+					heightDifference{ 5.f };
 
-				float
-					heightDif{ 5.f };
-
-				if ((entityHitbox.bottom >= platformTop - heightDif) &&
+				if ((entityCurrentHitbox.bottom > platformTop - heightDifference) &&
 					updateFloorInfo) // check if we actually landed on platform top
 				{
 					pEntity->SetFloor(objectFloor);
@@ -141,7 +142,7 @@ bool CollisionManager::CanMoveThroughPlatform(float elapsedSec, Entity* pEntity,
 	Vector2f
 		entityVelocity{ pEntity->GetVelocity() };
 	Rectf
-		entityHitbox{ pEntity->GetHitbox() };
+		entityHitbox{ pEntity->GetCurrentHitbox() };
 
 	if (isHorizontalMovement)
 	{

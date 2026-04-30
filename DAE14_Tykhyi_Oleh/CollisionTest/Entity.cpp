@@ -16,7 +16,7 @@ void Entity::Draw() const
 	m_pSprite->Draw(m_Position, true, false);
 
 	utils::SetColor(Color4f{ 0.f, 1.f, 0.f, 1.f });
-	//utils::DrawRect(GetHitbox());
+	//utils::DrawRect(GetCurrentHitbox());
 }
 
 void Entity::Update(float elapsedSec, const Rectf& viewport)
@@ -78,15 +78,17 @@ void Entity::SetCanJumpThroughPlatform(bool canJump)
 
 void Entity::UpdateHitbox()
 {
+	StoreHitbox();
+
 	const float
 		hitboxWidth{ 20.f },
 		hitboxHeight{ 30.f };
 
-	m_Hitbox.width = hitboxWidth * GetSprite()->GetScale();
-	m_Hitbox.height = hitboxHeight * GetSprite()->GetScale();
+	m_CurrentHitbox.width = hitboxWidth * GetSprite()->GetScale();
+	m_CurrentHitbox.height = hitboxHeight * GetSprite()->GetScale();
 
-	m_Hitbox.left = m_Position.x - (m_Hitbox.width * 0.5f);
-	m_Hitbox.bottom = m_Position.y;
+	m_CurrentHitbox.left = m_Position.x - (m_CurrentHitbox.width * 0.5f);
+	m_CurrentHitbox.bottom = m_Position.y;
 }
 
 bool Entity::IsOnGround() const
@@ -144,9 +146,19 @@ const Vector2f& Entity::GetPosition() const
 	return m_Position;
 }
 
-const Rectf& Entity::GetHitbox() const
+void Entity::StoreHitbox() 
 {
-	return m_Hitbox;
+	m_PreviousHitbox = m_CurrentHitbox;
+}
+
+const Rectf& Entity::GetCurrentHitbox() const
+{
+	return m_CurrentHitbox;
+}
+
+const Rectf& Entity::GetPreviousHitbox() const
+{
+	return m_PreviousHitbox;
 }
 
 int Entity::GetFacingDirection() const
