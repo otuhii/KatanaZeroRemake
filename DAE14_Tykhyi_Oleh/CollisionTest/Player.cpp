@@ -11,7 +11,7 @@
 Player::Player(Sprite* sprite, Sprite* splashSprite, const std::vector<AnimationFrameInfo>& playerAnimation, const Vector2f& position, float speed, float scale, int floor)
 	: Entity(sprite, position, Vector2f{}, speed, floor),
 	m_SplashSprite(splashSprite),
-	m_State(PlayerState::catPet),
+	m_State(PlayerState::staying),
 	m_PlayerSpriteFrames(playerAnimation)
 {
 	GetSprite()->SetAnimationFrameInfo(m_PlayerSpriteFrames[static_cast<int>(m_State)]);
@@ -144,7 +144,7 @@ Player::PlayerState Player::GetNextState(bool isMoving, bool roll, bool crouch)
 	{
 		if (IsSpriteAnimationFinished())
 		{
-			SetState(PlayerState::hurtOnGround);
+			return PlayerState::hurtOnGround;
 		}
 		return m_State;
 	}
@@ -158,8 +158,10 @@ Player::PlayerState Player::GetNextState(bool isMoving, bool roll, bool crouch)
 	{
 		if (IsSpriteAnimationFinished())
 		{
-			SetState(PlayerState::staying);
+			return PlayerState::staying;
 		}
+
+		return m_State;
 	}
 
 	if (m_State == PlayerState::attack || m_State == PlayerState::roll)
