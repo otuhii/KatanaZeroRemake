@@ -49,6 +49,7 @@ public:
 	void ResetAnimation();
 
 	void SetLooping(bool isLooping);
+	void SetStatic(bool isStatic);
 private:
 	AnimationFrameInfo m_AnimationFrameInfo{};
 
@@ -60,7 +61,8 @@ private:
 		m_IsFlippedVertically{ false },
 		m_LastFrameReached{ false },
 		m_IsVisible{ false },
-		m_IsLooping{ true };
+		m_IsLooping{ true },
+		m_IsStatic{ false };
 
 	float
 		m_RotationAngle{},

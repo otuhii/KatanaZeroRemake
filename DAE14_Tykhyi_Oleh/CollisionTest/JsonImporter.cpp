@@ -2,6 +2,7 @@
 #include "JsonImporter.h"
 
 #include "Cat.h"
+#include "Door.h"
 
 void from_json(const Json& j, Rectf& rect)
 {
@@ -244,7 +245,10 @@ void JsonImporter::AddActiveObject(const Json& object, GameData& dst, SpriteMana
 
 void JsonImporter::AddInteractableObject(const Json& object, GameData& dst, SpriteManager& spriteManager) const
 {
-	if (object.at("type").get<std::string>() == "cat")
+	std::string
+		type{ object.at("type").get<std::string>() };
+
+	if (type == "cat")
 	{
 		dst.interactableObjects.push_back(new Cat{
 			spriteManager.CreateSprite("img/env/" + object.value("texturePath", "default.png")),
@@ -255,6 +259,25 @@ void JsonImporter::AddInteractableObject(const Json& object, GameData& dst, Spri
 			object.at("scale").get<float>()
 			}
 		);
+	}
+	else if (type == "door")
+	{
+		std::vector<Rectf>
+			colliders{ object.at("colliders").get <std::vector<Rectf>>() };
+
+		if (colliders.size() == 2)
+		{
+			dst.interactableObjects.push_back(new Door{
+			spriteManager.CreateSprite("img/env/" + object.value("texturePath", "default.png")),
+			ImportAnimationFrameObjects("json/DoorAnimationFramesInfo.json"),
+			Vector2f{object.at("xPosition").get<float>(), object.at("yPosition").get<float>()},
+			object.at("floor").get<int>(),
+			colliders[1],
+			colliders[0],
+			object.at("scale").get<float>()
+				}
+			);
+		}
 	}
 }
 

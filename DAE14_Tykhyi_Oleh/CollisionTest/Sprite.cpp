@@ -147,7 +147,10 @@ void Sprite::SetLooping(bool isLooping)
 	m_IsLooping = isLooping;
 }
 
-
+void Sprite::SetStatic(bool isStatic)
+{
+	m_IsStatic = isStatic;
+}
 
 void Sprite::Draw(const Vector2f& drawPos, bool pivotX, bool pivotY) const
 {
@@ -213,7 +216,7 @@ void Sprite::Draw(const Vector2f& drawPos, bool pivotX, bool pivotY) const
 
 void Sprite::Update(float elapsedSec)
 {
-	if (!m_IsVisible)
+	if (!m_IsVisible || m_IsStatic)
 	{
 		return; 
 	}
