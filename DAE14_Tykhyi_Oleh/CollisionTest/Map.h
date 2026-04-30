@@ -23,6 +23,7 @@ public:
 
 	bool AreSeparatedByActiveObject(const Vector2f& entityPosition1, const Vector2f& entityPosition2) const;
 
+	const std::vector<InteractableObject*>& GetInteractableObjects() const;
 	InteractableObject* GetClosestInteractableObject(const Vector2f& playerPos, int playerFloor) const;
 private:
 	std::vector<EnvironmentActiveObject>	m_EnvironmentActiveObjects{};

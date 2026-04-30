@@ -6,11 +6,14 @@
 #include "ParticleManager.h"
 #include "Map.h"
 
+#include "InteractableObject.h"
+#include "Door.h"
+
 void CombatManager::ResolveCombat(
 	Player* pPlayer,
 	EnemyManager* enemyManager,
 	ParticleManager* particleManager,
-	Map* map
+	Map* pMap
 )
 {	
 	Vector2f
@@ -53,7 +56,7 @@ void CombatManager::ResolveCombat(
 
 					if (pEnemy->IsAlive())
 					{
-						if (!map->AreSeparatedByActiveObject(playerPos, enemyPosition))
+						if (!pMap->AreSeparatedByActiveObject(playerPos, enemyPosition))
 						{
 							if (UserUtils::IsPolyInRectAABB(pAttackParticle->GetWorldCoordinates(), pEnemy->GetCurrentHitbox()))
 							{
@@ -63,6 +66,24 @@ void CombatManager::ResolveCombat(
 								{
 									pAttackParticle->Deactivate(); // deactivating only bullet particle for player because i want to allow multiple kills per one slash
 								}
+							}
+						}
+					}
+				}
+
+
+				//door opening and other interactions maybe
+				for (InteractableObject* pObject : pMap->GetInteractableObjects())
+				{
+					if (pObject->GetType() == InteractableObject::InteractableType::door)
+					{
+						Door* pDoor{ static_cast<Door*>(pObject) };
+
+						if (!pDoor->IsOpened() || !pDoor->IsOpening())
+						{
+							if (UserUtils::IsPolyInRectRaycast(pAttackParticle->GetWorldCoordinates(), pDoor->GetCurrentCollider()))
+							{
+								pDoor->Interact();
 							}
 						}
 					}

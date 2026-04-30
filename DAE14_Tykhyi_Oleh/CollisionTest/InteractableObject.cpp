@@ -35,3 +35,9 @@ InteractableObject::InteractableType InteractableObject::GetType() const
 {
     return m_Type;
 }
+
+
+int InteractableObject::GetFloor() const
+{
+    return m_Floor;
+}

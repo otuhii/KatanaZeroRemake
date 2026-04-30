@@ -24,8 +24,9 @@ public:
 
 	bool IsPlayerInRange(const Vector2f& playerPos, int playerFloor) const;
 
-	const Vector2f& GetPosition() const;
-	InteractableType GetType() const;
+	const Vector2f&		GetPosition() const;
+	InteractableType	GetType() const;
+	int					GetFloor() const;
 
 	void SetInactive();
 	bool IsActive() const;

@@ -2,6 +2,8 @@
 #include "CollisionManager.h"
 #include "ParticleManager.h"
 
+#include "InteractableObject.h"
+#include "Door.h"
 
 #include "utils.h"
 #include "UserUtils.h"
@@ -48,6 +50,33 @@ void CollisionManager::CheckCollision(float elapsedSec, Entity* pEntity, const M
 			HandleAABB(elapsedSec, pEntity, object.GetType(), collider, object.GetFloor(), isHorizontalMovement, updateFloorInfo);
 		}
 	}
+
+
+	for (const InteractableObject* pObject : pMap->GetInteractableObjects())
+	{
+		if (pObject->GetType() == InteractableObject::InteractableType::door)
+		{
+			const Door* pDoor{ static_cast<const Door*>(pObject) };
+
+			if (pEntity->GetType() == Entity::EntityType::player)
+			{
+				if (!pDoor->IsOpened() && !pDoor->IsOpening())
+				{
+					HandleAABB(elapsedSec, pEntity, EnvironmentActiveObject::EnvironmentObjectType::none, pDoor->GetCurrentCollider(), pDoor->GetFloor(), isHorizontalMovement, updateFloorInfo);
+				}
+			}
+			else if (pEntity->GetType() == Entity::EntityType::enemy)
+			{
+				if (pDoor->IsOpening())
+				{
+					if (utils::IsOverlapping(pEntity->GetCurrentHitbox(), pDoor->GetCurrentCollider()))
+					{
+						pEntity->Kill(Vector2f{ 0.f, 0.f }); //TODO calculate impulse for that
+					}
+				}
+			}
+		}
+	}
 }
 
 void CollisionManager::HandleAABB(float elapsedSec, Entity* pEntity, EnvironmentActiveObject::EnvironmentObjectType type, const Rectf& objectCollider, int objectFloor, bool isHorizontalMovement, bool updateFloorInfo) const
@@ -57,6 +86,7 @@ void CollisionManager::HandleAABB(float elapsedSec, Entity* pEntity, Environment
 		entityPreviousHitbox{ pEntity->GetPreviousHitbox() };
 
 	const float
+		eps{ 0.1f },
 		maxStepHeight{ 7.f };
 
 	if (type == EnvironmentActiveObject::EnvironmentObjectType::jumpThroughPlatform)
@@ -70,7 +100,8 @@ void CollisionManager::HandleAABB(float elapsedSec, Entity* pEntity, Environment
 	if (isHorizontalMovement) //shrinking hitbox in the bottom part because otherwise collision 
 		//is triggered when he is simply standing on the floor
 	{
-		float shrinkValue{ 2.f };
+		float
+			shrinkValue{ 2.f };
 
 		entityCurrentHitbox.bottom += shrinkValue;
 		entityCurrentHitbox.height -= shrinkValue;
@@ -95,15 +126,13 @@ void CollisionManager::HandleAABB(float elapsedSec, Entity* pEntity, Environment
 				return;
 			}
 
-
-
 			if (entityPreviousHitbox.left + entityPreviousHitbox.width <= objectCollider.left)
 			{
-				pEntity->SetPositionX(objectCollider.left - entityCurrentHitbox.width*0.5f);
+				pEntity->SetPositionX(objectCollider.left - entityCurrentHitbox.width*0.5f - eps);
 			}
 			else if (entityPreviousHitbox.left >= objectCollider.left + objectCollider.width)
 			{
-				pEntity->SetPositionX(objectCollider.left + objectCollider.width + entityCurrentHitbox.width*0.5f );
+				pEntity->SetPositionX(objectCollider.left + objectCollider.width + entityCurrentHitbox.width*0.5f + eps );
 			}
 			pEntity->SetVelocityX(0.f);
 		}
@@ -184,6 +213,18 @@ bool CollisionManager::IsOverlappingWithMap(const std::vector<Vector2f>& poly, c
 		for (const Rectf& collider : object.GetColliders())
 		{
 			if (UserUtils::IsPolyInRectAABB(poly, collider))
+			{
+				return true;
+			}
+		}
+	}
+
+	for (const InteractableObject* pObject : map->GetInteractableObjects())
+	{
+		if (pObject->GetType() == InteractableObject::InteractableType::door)
+		{
+			const Door* pDoor{ static_cast<const Door*>(pObject) };
+			if (UserUtils::IsPolyInRectAABB(poly, pDoor->GetCurrentCollider()))
 			{
 				return true;
 			}

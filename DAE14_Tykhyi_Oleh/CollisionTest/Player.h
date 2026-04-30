@@ -87,9 +87,6 @@ private:
 	const float
 		m_ArrivalThreshold{ 5.f };
 #pragma endregion interaction
-
-
-
 	void DrawSplash() const;
 	
 	void UpdateCurrentState(float elapsedSec);
