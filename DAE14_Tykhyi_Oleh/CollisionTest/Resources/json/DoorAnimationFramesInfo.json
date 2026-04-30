@@ -1,0 +1,16 @@
+{
+  "frames": [
+    {
+      "_frameName": "opening",
+
+      "frameTime": 0.1,
+      "maxFrameCount": 20,
+      "dimensionRect": {
+        "left": 0.0,
+        "bottom": 0.0,
+        "width": 80.0,
+        "height": 64.0
+      }
+    }
+  ]
+}

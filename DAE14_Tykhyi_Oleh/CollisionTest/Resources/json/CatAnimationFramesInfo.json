@@ -3,73 +3,73 @@
     {
       "_frameName": "toLick",
 
-      "frameTime": 0.05,
+      "frameTime": 0.1,
       "maxFrameCount": 2,
       "dimensionRect": {
         "left": 0.0,
-        "bottom": 20.0,
-        "width": 19.0,
-        "height": 21.0
+        "bottom": 24.0,
+        "width": 24.0,
+        "height": 24.0
       }
     },
     {
       "_frameName": "petting",
 
-      "frameTime": 0.07,
+      "frameTime": 0.1,
       "maxFrameCount": 18,
       "dimensionRect": {
         "left": 0.0,
         "bottom": 0.0,
-        "width": 19.0,
-        "height": 20.0
+        "width": 24.0,
+        "height": 24.0
       }
     },
     {
       "_frameName": "licking",
 
-      "frameTime": 0.07,
+      "frameTime": 0.1,
       "maxFrameCount": 7,
       "dimensionRect": {
-        "left": 38.0,
-        "bottom": 20.0,
-        "width": 19.0,
-        "height": 21.0
+        "left": 48.0,
+        "bottom": 24.0,
+        "width": 24.0,
+        "height": 24.0
       }
     },
     {
       "_frameName": "idle",
 
-      "frameTime": 0.07,
-      "maxFrameCount": 7,
+      "frameTime": 0.15,
+      "maxFrameCount": 11,
       "dimensionRect": {
         "left": 0.0,
-        "bottom": 42.0,
-        "width": 19.0,
-        "height": 20.0
+        "bottom": 48.0,
+        "width": 24.0,
+        "height": 24.0
       }
     },
     {
       "_frameName": "fromLick",
 
-      "frameTime": 0.08,
-      "maxFrameCount": 4,
+      "frameTime": 0.1,
+      "maxFrameCount": 2,
       "dimensionRect": {
-        "left": 209.0,
-        "bottom": 42.0,
-        "width": 19.0,
-        "height": 20.0
+        "left": 264.0,
+        "bottom": 48.0,
+        "width": 24.0,
+        "height": 24.0
       }
     },
     {
       "_frameName": "lookBack",
 
-      "frameTime": 0.08,
+      "frameTime": 0.12,
       "maxFrameCount": 4,
       "dimensionRect": {
-        "left": 171.0,
-        "bottom": 20.0,
-        "width": 19.0,
-        "height": 22.0
+        "left": 216.0,
+        "bottom": 24.0,
+        "width": 24.0,
+        "height": 24.0
       }
     }
   ]
