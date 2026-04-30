@@ -119,9 +119,9 @@ void Game::Draw( ) const
 
 	m_pParticleManager->Draw();
 
-	m_pCamera->Reset();
-
 	m_pCursor->Draw();
+
+	m_pCamera->Reset();
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )

@@ -8,8 +8,16 @@
 #include "InteractableObject.h"
 
 
-Player::Player(Sprite* sprite, Sprite* splashSprite, const std::vector<AnimationFrameInfo>& playerAnimation, const Vector2f& position, float speed, float scale, int floor)
-	: Entity(sprite, position, Vector2f{}, speed, floor),
+Player::Player(
+	Sprite* sprite, 
+	Sprite* splashSprite, 
+	const std::vector<AnimationFrameInfo>& playerAnimation, 
+	const Vector2f& position, 
+	float speed, 
+	float scale, 
+	int floor
+)
+	: Entity(sprite, EntityType::player, position, Vector2f{}, speed, floor),
 	m_SplashSprite(splashSprite),
 	m_State(PlayerState::staying),
 	m_PlayerSpriteFrames(playerAnimation)

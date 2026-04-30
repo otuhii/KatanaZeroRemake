@@ -17,9 +17,10 @@ Enemy::Enemy(
 	float scale, 
 	int floor, 
 	float playerDetectionRange, 
-	float attackRange)
+	float attackRange
+)
 	:  
-	Entity(pSprite, position, Vector2f{0.f, 0.f}, speed, floor),
+	Entity(pSprite, EntityType::enemy, position, Vector2f{0.f, 0.f}, speed, floor),
 	m_EnemySpriteFrames{ enemyAnimationFrames },
 	m_State{state},
 	m_Type{type},

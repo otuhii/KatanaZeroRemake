@@ -4,7 +4,12 @@
 class Entity
 {
 public:
-	Entity(Sprite* sprite, const Vector2f& position, const Vector2f& velocity, float speed, int floor);
+	enum class EntityType {
+		player,
+		enemy
+	};
+
+	Entity(Sprite* sprite, EntityType type, const Vector2f& position, const Vector2f& velocity, float speed, int floor);
 
 	virtual void Draw() const;
 
@@ -42,6 +47,7 @@ public:
 	float			GetPositionY()	const;
 	const Vector2f& GetPosition()	const;
 
+	EntityType		GetType()		const;
 
 	const Rectf& GetCurrentHitbox()		const;
 	const Rectf& GetPreviousHitbox() const;
@@ -57,6 +63,9 @@ protected:
 
 private:
 	Sprite* m_pSprite;
+
+	EntityType 
+		m_Type{};
 
 	float
 		m_Speed{};

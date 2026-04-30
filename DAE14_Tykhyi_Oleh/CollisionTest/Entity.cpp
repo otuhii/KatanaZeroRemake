@@ -6,8 +6,8 @@
 #include "utils.h"
 #include "AttackParticle.h"
 
-Entity::Entity(Sprite* sprite, const Vector2f& position, const Vector2f& velocity, float speed, int floor)
-	: m_pSprite(sprite), m_Velocity(velocity), m_Speed(speed), m_IsOnGround(true), m_Position{position}, m_Floor{floor}
+Entity::Entity(Sprite* sprite, EntityType type, const Vector2f& position, const Vector2f& velocity, float speed, int floor)
+	: m_pSprite(sprite), m_Velocity(velocity), m_Speed(speed), m_IsOnGround(true), m_Position{position}, m_Floor{floor}, m_Type{type}
 {
 }
 
@@ -16,7 +16,7 @@ void Entity::Draw() const
 	m_pSprite->Draw(m_Position, true, false);
 
 	utils::SetColor(Color4f{ 0.f, 1.f, 0.f, 1.f });
-	//utils::DrawRect(GetCurrentHitbox());
+	utils::DrawRect(GetCurrentHitbox());
 }
 
 void Entity::Update(float elapsedSec, const Rectf& viewport)
@@ -144,6 +144,11 @@ float Entity::GetPositionY() const
 const Vector2f& Entity::GetPosition() const
 {
 	return m_Position;
+}
+
+Entity::EntityType Entity::GetType() const
+{
+	return m_Type;
 }
 
 void Entity::StoreHitbox() 
