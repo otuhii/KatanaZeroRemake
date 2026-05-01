@@ -3,6 +3,7 @@
 
 #include "Cat.h"
 #include "Door.h"
+#include "ThrowableObject.h"
 
 void from_json(const Json& j, Rectf& rect)
 {
@@ -278,6 +279,16 @@ void JsonImporter::AddInteractableObject(const Json& object, GameData& dst, Spri
 				}
 			);
 		}
+	} 
+	else if (type == "throwableobject")
+	{
+		dst.interactableObjects.push_back(new ThrowableObject{
+			spriteManager.CreateSprite("img/env/" + object.value("texturePath", "default.png")),
+			Vector2f{object.at("xPosition").get<float>(), object.at("yPosition").get<float>()},
+			object.at("interactionRange").get<float>(),
+			object.at("scale").get<float>(),
+			object.at("floor").get<int>()
+			});
 	}
 }
 
