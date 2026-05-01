@@ -107,7 +107,7 @@ void Enemy::SetState(EnemyState state)
 	StateInitialization(m_State);
 	
 	GetSprite()->SetAnimationFrameInfo((*m_EnemySpriteFrames)[static_cast<int>(m_State)]);
-	GetSprite()->ResetAnimation();
+	ResetAnimation();
 }
 
 void Enemy::Kill(const Vector2f& impulse)
@@ -389,6 +389,12 @@ bool Enemy::MoveTo(const ControlPoint& controlPoint, float speedMultiplier)
 		SetVelocityX(GetSpeed() * speedMultiplier * direction);
 		return false;
 	}
+}
+
+
+void Enemy::ResetAnimation() const
+{
+	GetSprite()->ResetAnimation();
 }
 
 bool Enemy::CanSeeTarget(const Map* pMap)

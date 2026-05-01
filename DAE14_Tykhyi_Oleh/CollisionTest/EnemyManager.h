@@ -30,6 +30,7 @@ public:
 		Sprite* pAdditionalSprite, 
 		Sprite* pProjectileSprite,
 		const std::vector<AnimationFrameInfo>& animationFrameInfo,
+		const std::vector<AnimationFrameInfo>& additionSpriteFrameInfo,
 		float playerDetectionRange,
 		float attackRange
 	);
@@ -43,6 +44,7 @@ private:
 		Sprite* additionSprite{};//attack, gun etc
 		Sprite* projectileSprite{};
 		std::vector<AnimationFrameInfo> enemyAnimationFrameInfo{};
+		std::vector<AnimationFrameInfo> additionalSpriteFrameInfo{};
 		float playerDetectionRange{};
 		float attackRange{};
 	};

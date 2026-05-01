@@ -78,6 +78,8 @@ protected:
 	void Chase(float elapsedSec);
 
 	bool MoveTo(const ControlPoint& controlPoint, float speedMultiplier);
+
+	virtual void ResetAnimation() const;
 private:
 	EnemyState m_State;
 	EnemyType  m_Type;
