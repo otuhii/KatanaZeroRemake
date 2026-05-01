@@ -6,6 +6,7 @@
 Gangster::Gangster(
 	Sprite* pSprite,
 	Sprite* pGunSprite,
+	Sprite* pBulletProjectile,
 	const Entity* pTarget,
 	const std::vector<AnimationFrameInfo>* enemyAnimationFrames, 
 	const Vector2f& position,
@@ -26,10 +27,11 @@ Gangster::Gangster(
 		floor,
 		playerDetectionRange,
 		attackRange
-	}
+	},
+	m_pGunSprite{pGunSprite},
+	m_pBulletProjectileSprite{pBulletProjectile}
 {
-	m_GunSprite = pGunSprite;
-	m_GunSprite->SetScale(GetSprite()->GetScale());
+	m_pGunSprite->SetScale(GetSprite()->GetScale());
 
 }
 
@@ -42,7 +44,7 @@ void Gangster::Draw() const
 		Vector2f gunPosition{ GetPosition() };
 		gunPosition.y += GetCurrentHitbox().height * 0.6f;
 
-		m_GunSprite->Draw(gunPosition, true, true);
+		m_pGunSprite->Draw(gunPosition, true, true);
 	}
 	
 }
@@ -106,11 +108,11 @@ void Gangster::UpdateGunSprite()
 {
 	if (GetSprite()->IsFlippedHorizontally())
 	{
-		m_GunSprite->FlipHorizontally();
+		m_pGunSprite->FlipHorizontally();
 	} 
 	else 
 	{
-		m_GunSprite->ResetHorizontalFlip();
+		m_pGunSprite->ResetHorizontalFlip();
 	}
 }
 
@@ -135,17 +137,17 @@ void Gangster::Aim()
 	if (rotationAngle > 90 || rotationAngle < -90)
 	{
 		rotationAngle -= 180.f;
-		m_GunSprite->FlipHorizontally();
+		m_pGunSprite->FlipHorizontally();
 		GetSprite()->FlipHorizontally();
 	}
 	else
 	{
-		m_GunSprite->ResetHorizontalFlip();
+		m_pGunSprite->ResetHorizontalFlip();
 		GetSprite()->ResetHorizontalFlip();
 	}
 
 
-	m_GunSprite->RotateBy(rotationAngle);
+	m_pGunSprite->RotateBy(rotationAngle);
 }
 
 void Gangster::UpdateAimTime(float elapsedSec)
@@ -160,7 +162,7 @@ void Gangster::UpdateAimTime(float elapsedSec)
 void Gangster::Shoot(ParticleManager* particleManager)
 {
 	float angleRad{
-		m_GunSprite->GetRotation() * (static_cast<float>(M_PI) / 180.f)
+		m_pGunSprite->GetRotation() * (static_cast<float>(M_PI) / 180.f)
 	};
 
 	Vector2f bulletVelocity{
@@ -174,9 +176,10 @@ void Gangster::Shoot(ParticleManager* particleManager)
 		Vector2f{ 0, GetCurrentHitbox().height * 0.6f },
 		m_BulletHitbox,
 		bulletVelocity,
-		m_GunSprite->GetRotation(),
-		m_GunSprite->IsFlippedHorizontally(),
-		false
+		m_pGunSprite->GetRotation(),
+		m_pGunSprite->IsFlippedHorizontally(),
+		false,
+		m_pBulletProjectileSprite
 	);
 
 	ResetAttackCooldown();

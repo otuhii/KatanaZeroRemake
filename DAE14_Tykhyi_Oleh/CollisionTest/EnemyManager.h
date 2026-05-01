@@ -27,7 +27,8 @@ public:
 	void InitializeEnemyType(
 		Enemy::EnemyType type,
 		Sprite* pSpritesheet,
-		Sprite* pAdditionalSprite,
+		Sprite* pAdditionalSprite, 
+		Sprite* pProjectileSprite,
 		const std::vector<AnimationFrameInfo>& animationFrameInfo,
 		float playerDetectionRange,
 		float attackRange
@@ -40,6 +41,7 @@ private:
 	struct EnemyTypeTemplate {
 		Sprite* spriteSheet{};
 		Sprite* additionSprite{};//attack, gun etc
+		Sprite* projectileSprite{};
 		std::vector<AnimationFrameInfo> enemyAnimationFrameInfo{};
 		float playerDetectionRange{};
 		float attackRange{};

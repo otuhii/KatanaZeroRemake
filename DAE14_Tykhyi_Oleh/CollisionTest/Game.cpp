@@ -181,6 +181,7 @@ void Game::EnemyTypeInitialization(const JsonImporter::GameData& gameData)
 		Enemy::EnemyType::grunt,
 		m_pSpriteManager->CreateSprite("img/chr/grunt_spritesheet.png"),
 		nullptr,
+		nullptr,
 		m_JsonImporter.ImportAnimationFrameObjects("json/enemy_Grunt_FrameInfo.json"),
 		gruntDetectionRange,
 		gruntAttackRange
@@ -190,6 +191,7 @@ void Game::EnemyTypeInitialization(const JsonImporter::GameData& gameData)
 		Enemy::EnemyType::gangster,
 		m_pSpriteManager->CreateSprite("img/chr/gangster_spritesheet.png"),
 		m_pSpriteManager->CreateSprite("img/chr/gangster_gun_sprite.png"),
+		m_pSpriteManager->CreateSprite("img/chr/gangster_bulletprojectile_sprite.png"),
 		m_JsonImporter.ImportAnimationFrameObjects("json/enemy_Gangster_FrameInfo.json"),
 		gangsterDetectionRange,
 		gangsterAttackRange

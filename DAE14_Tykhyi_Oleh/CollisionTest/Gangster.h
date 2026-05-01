@@ -7,6 +7,7 @@ public:
     Gangster(
         Sprite* pSprite,
         Sprite* pGunsprite,
+        Sprite* pBulletProjectile,
         const Entity* pTarget,
         const std::vector<AnimationFrameInfo>* enemyAnimationFrames,
         const Vector2f& position,
@@ -40,7 +41,11 @@ private:
     const float
         bulletSpeed{ 1200.f };
 
-    Sprite* m_GunSprite{};
+    Sprite*
+        m_pGunSprite{};
+
+    Sprite*
+        m_pBulletProjectileSprite{};
 
     void UpdateCurrentState(float elapsedSec, ParticleManager* particleManager, const Map* pMap) override;
 

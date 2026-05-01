@@ -62,9 +62,17 @@ void AttackParticle::Draw() const
 
 	utils::DrawPolygon(m_GlobalHitbox);
 
-	if (m_AttackType == AttackType::thrownObject && m_pSprite)
+
+	if (m_pSprite)
 	{
-		m_pSprite->Draw(m_Position, true, true);
+		if (m_AttackType == AttackType::thrownObject)
+		{
+			m_pSprite->Draw(m_Position, true, true);
+		}
+		else
+		{
+			m_pSprite->Draw(m_GlobalHitbox[0], false, false);
+		}
 	}
 }
 
@@ -101,6 +109,11 @@ void AttackParticle::Update(float elapsedSec)
 		m_RotationAngle += elapsedSec * angleIncrement;
 	}
 
+	if (m_AttackType == AttackType::thrownObject ||
+		m_AttackType == AttackType::bullet)
+	{
+		m_pSprite->RotateBy(m_RotationAngle);
+	}
 
 	UpdateHitboxGeometry();
 }

@@ -50,7 +50,8 @@ void ParticleManager::SpawnBullet(
 	const Vector2f& velocity,
 	float rotationAngle, 
 	bool isFlippedHorizontally, 
-	bool isFlippedVertically
+	bool isFlippedVertically,
+	Sprite* pSprite
 ) const
 {
 	AttackParticle* pParticle{
@@ -71,7 +72,7 @@ void ParticleManager::SpawnBullet(
 			isFlippedHorizontally,
 			isFlippedVertically,
 			nullptr,
-			nullptr
+			pSprite
 		);
 	}
 }

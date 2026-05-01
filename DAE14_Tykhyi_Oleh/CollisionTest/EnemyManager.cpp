@@ -73,6 +73,7 @@ void EnemyManager::AddEnemy(Enemy::EnemyType type, const Vector2f& position, flo
 		m_pEnemies.push_back(new Gangster{
 			pSpriteManager->CloneSprite(m_EnemyTypeTemplates[static_cast<int>(type)].spriteSheet),
 			pSpriteManager->CloneSprite(m_EnemyTypeTemplates[static_cast<int>(type)].additionSprite),
+			pSpriteManager->CloneSprite(m_EnemyTypeTemplates[static_cast<int>(type)].projectileSprite),
 			m_pTarget,
 			&m_EnemyTypeTemplates[static_cast<int>(type)].enemyAnimationFrameInfo,
 			position,
@@ -86,9 +87,9 @@ void EnemyManager::AddEnemy(Enemy::EnemyType type, const Vector2f& position, flo
 	
 }
 
-void EnemyManager::InitializeEnemyType(Enemy::EnemyType type, Sprite* pSpritesheet, Sprite* pAdditionalSprite, const std::vector<AnimationFrameInfo>& animationFrameInfo, float playerDetectionRange, float attackRange)
+void EnemyManager::InitializeEnemyType(Enemy::EnemyType type, Sprite* pSpritesheet, Sprite* pAdditionalSprite, Sprite* pProjectileSprite, const std::vector<AnimationFrameInfo>& animationFrameInfo, float playerDetectionRange, float attackRange)
 {
-	m_EnemyTypeTemplates[static_cast<int>(type)] = EnemyTypeTemplate{ pSpritesheet, pAdditionalSprite, animationFrameInfo, playerDetectionRange, attackRange };
+	m_EnemyTypeTemplates[static_cast<int>(type)] = EnemyTypeTemplate{ pSpritesheet, pAdditionalSprite, pProjectileSprite, animationFrameInfo, playerDetectionRange, attackRange };
 }
 
 void EnemyManager::SetControlPoints(const std::vector<ControlPoint>& controlPoints)
