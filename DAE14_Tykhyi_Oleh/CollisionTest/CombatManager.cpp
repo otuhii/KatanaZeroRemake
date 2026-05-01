@@ -62,7 +62,8 @@ void CombatManager::ResolveCombat(
 							{
 								pEnemy->Kill(CalculateHitImpulse(pPlayer, pEnemy, pAttackParticle));
 
-								if (pAttackParticle->GetAttackType() == AttackParticle::AttackType::bullet)
+								if (pAttackParticle->GetAttackType() == AttackParticle::AttackType::bullet ||
+									pAttackParticle->GetAttackType() == AttackParticle::AttackType::thrownObject)
 								{
 									pAttackParticle->Deactivate(); // deactivating only bullet particle for player because i want to allow multiple kills per one slash
 								}

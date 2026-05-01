@@ -43,12 +43,15 @@ void Map::Draw() const
 
 	for (const InteractableObject* pObj : m_pInteractableObjects)
 	{
-		pObj->Draw();
-		if (pObj->GetType() == InteractableObject::InteractableType::door)
+		if (pObj->IsActive())
 		{
-			const Door* pDoor = static_cast<const Door*>(pObj);
-			utils::SetColor(Color4f{ 0.f, 1.f, 0.f, 1.f });
-			utils::DrawRect(pDoor->GetCurrentCollider());
+			pObj->Draw();
+			if (pObj->GetType() == InteractableObject::InteractableType::door)
+			{
+				const Door* pDoor = static_cast<const Door*>(pObj);
+				utils::SetColor(Color4f{ 0.f, 1.f, 0.f, 1.f });
+				utils::DrawRect(pDoor->GetCurrentCollider());
+			}
 		}
 	}
 
@@ -105,7 +108,7 @@ bool Map::AreSeparatedByActiveObject(const Vector2f& entityPosition1, const Vect
 		if (pInteractableObject->GetType() == InteractableObject::InteractableType::door)
 		{
 			const Door* pDoor = static_cast<const Door*>(pInteractableObject);
-			if (!pDoor->IsOpened() || !pDoor->IsOpening())
+			if (!pDoor->IsOpened() && !pDoor->IsOpening())
 			{
 				if (utils::IsOverlapping(entityPosition1, entityPosition2, pDoor->GetCurrentCollider()))
 				{
@@ -125,11 +128,11 @@ const std::vector<InteractableObject*>& Map::GetInteractableObjects() const
 
 InteractableObject* Map::GetClosestInteractableObject(const Vector2f& playerPos, int playerFloor) const
 {
-	for (InteractableObject* pObj : m_pInteractableObjects)
+	for (InteractableObject* pObject : m_pInteractableObjects)
 	{
-		if (pObj->IsPlayerInRange(playerPos, playerFloor))
+		if (pObject->IsPlayerInRange(playerPos, playerFloor) && pObject->IsActive())
 		{
-			return pObj;
+			return pObject;
 		}
 	}
 	return nullptr;

@@ -3,6 +3,7 @@
 #include <vector>
 
 class Entity;
+class Sprite;
 
 class AttackParticle final
 {
@@ -18,7 +19,8 @@ public:
 		none = -1,
 
 		bullet,
-		melee
+		melee,
+		thrownObject
 	};
 
 	AttackParticle() = default;
@@ -34,7 +36,8 @@ public:
 		float rotationAngle,
 		bool isFlippedHorizontally,
 		bool isFlippedVertically, 
-		const Entity* pOwnerEntity
+		const Entity* pOwnerEntity,
+		Sprite* pSprite
 	);
 
 	void Draw() const;
@@ -58,6 +61,9 @@ public:
 private:
 	OwnerType m_OwnerType{ OwnerType::none };
 	AttackType m_AttackType{ AttackType::none };
+
+	Sprite*
+		m_pSprite{};
 
 	bool
 		m_IsActive{ false },

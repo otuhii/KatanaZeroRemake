@@ -6,7 +6,20 @@
 #include "utils.h"
 #include "InteractableObject.h"
 
-void AttackParticle::Spawn(OwnerType ownerType, AttackType attackType, const Vector2f& position, const Vector2f& positionOffset, const Vector2f& velocity, const std::vector<Vector2f>& localPoints, float lifetime, float rotationAngle,  bool isFlippedHorizontally, bool isFlippedVertically, const Entity* pOwnerEntity)
+void AttackParticle::Spawn(
+	OwnerType ownerType, 
+	AttackType attackType, 
+	const Vector2f& position, 
+	const Vector2f& positionOffset, 
+	const Vector2f& velocity, 
+	const std::vector<Vector2f>& localPoints, 
+	float lifetime, 
+	float rotationAngle,  
+	bool isFlippedHorizontally, 
+	bool isFlippedVertically, 
+	const Entity* pOwnerEntity,
+	Sprite* pSprite
+)
 {
 	m_OwnerType = ownerType;
 	m_AttackType = attackType;
@@ -20,6 +33,8 @@ void AttackParticle::Spawn(OwnerType ownerType, AttackType attackType, const Vec
 	m_RotationAngle = rotationAngle;
 
 	m_LocalHitbox = localPoints;
+
+	m_pSprite = pSprite;
 
 	m_Lifetime = lifetime;
 	m_pOwnerEntity = pOwnerEntity;
@@ -46,6 +61,11 @@ void AttackParticle::Draw() const
 	}
 
 	utils::DrawPolygon(m_GlobalHitbox);
+
+	if (m_AttackType == AttackType::thrownObject && m_pSprite)
+	{
+		m_pSprite->Draw(m_Position, true, true);
+	}
 }
 
 void AttackParticle::Update(float elapsedSec)
@@ -73,6 +93,15 @@ void AttackParticle::Update(float elapsedSec)
 		m_Position.y += m_Velocity.y * elapsedSec;
 	}
 
+	if (m_AttackType == AttackType::thrownObject)
+	{
+		float
+			angleIncrement{ 10.f * (180.f / static_cast<float>(M_PI)) };
+
+		m_RotationAngle += elapsedSec * angleIncrement;
+	}
+
+
 	UpdateHitboxGeometry();
 }
 
@@ -84,6 +113,7 @@ void AttackParticle::Deactivate()
 	m_GlobalHitbox.clear();
 	m_AttackType = AttackType::none;
 	m_OwnerType = OwnerType::none;
+	m_pSprite = nullptr;
 }
 
 void AttackParticle::Deflect()

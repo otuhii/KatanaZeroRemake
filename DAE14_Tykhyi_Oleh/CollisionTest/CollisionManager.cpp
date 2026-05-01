@@ -30,7 +30,8 @@ void CollisionManager::HandleParticles(ParticleManager* pParticleManager, const 
 	{
 		if (pParticle->IsActive())
 		{
-			if (pParticle->GetAttackType() == AttackParticle::AttackType::bullet)
+			if (pParticle->GetAttackType() == AttackParticle::AttackType::bullet ||
+				pParticle->GetAttackType() == AttackParticle::AttackType::thrownObject)
 			{
 				if (IsOverlappingWithMap(pParticle->GetWorldCoordinates(), pMap))
 				{
@@ -224,9 +225,13 @@ bool CollisionManager::IsOverlappingWithMap(const std::vector<Vector2f>& poly, c
 		if (pObject->GetType() == InteractableObject::InteractableType::door)
 		{
 			const Door* pDoor{ static_cast<const Door*>(pObject) };
-			if (UserUtils::IsPolyInRectAABB(poly, pDoor->GetCurrentCollider()))
+			
+			if (!pDoor->IsOpened() && !pDoor->IsOpening())
 			{
-				return true;
+				if (UserUtils::IsPolyInRectAABB(poly, pDoor->GetCurrentCollider()))
+				{
+					return true;
+				}
 			}
 		}
 	}

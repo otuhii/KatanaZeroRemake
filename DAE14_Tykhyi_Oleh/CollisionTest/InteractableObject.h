@@ -35,7 +35,7 @@ private:
 		m_Type{};
 
 	bool 
-		m_IsActive{};
+		m_IsActive{true};
 
 	float
 		m_InteractionRange{};

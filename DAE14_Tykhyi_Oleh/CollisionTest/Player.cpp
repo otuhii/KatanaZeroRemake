@@ -5,7 +5,9 @@
 #include "UserUtils.h"
 #include "ParticleManager.h"
 #include "Map.h"
+
 #include "InteractableObject.h"
+#include "ThrowableObject.h"
 
 
 Player::Player(
@@ -88,6 +90,12 @@ void Player::ProcessMouseUpEvent(const SDL_MouseButtonEvent & e, const Vector2f&
 				m_AttackCooldownTimer <= 0.f &&
 				!m_IsAutoWalking)
 			{
+				if (m_pHeldObject)
+				{
+					SpawnThrownObject(particleManager, mousePos);
+					m_pHeldObject = nullptr;
+					return;
+				}
 				m_AttackCooldownTimer = m_AttackCooldown;
 				Attack(mousePos, particleManager);
 			}
@@ -375,11 +383,19 @@ void Player::Interact(Map* pMap)
 
 	if (pInteractableObject != nullptr)
 	{
-		if (pInteractableObject->GetType() == InteractableObject::InteractableType::cat)
+		InteractableObject::InteractableType
+			type{ pInteractableObject->GetType() };
+
+		if (type == InteractableObject::InteractableType::cat)
 		{
 			m_pTargetObject = pInteractableObject;
 			m_IsAutoWalking = true;
 			SetState(PlayerState::run);
+		}
+		else if (type == InteractableObject::InteractableType::throwableObject)
+		{
+			pInteractableObject->Interact();
+			m_pHeldObject = static_cast<ThrowableObject*>(pInteractableObject);
 		}
 	}
 }
@@ -418,6 +434,30 @@ void Player::SpawnAttackParticle(ParticleManager* particleManager) const
 	};
 
 	particleManager->SpawnMelee(AttackParticle::OwnerType::Player, this, GetPosition(), positionOffset, m_BaseSplashHitbox, 0.21f, rotationAngle, m_SplashSprite->IsFlippedHorizontally(), m_SplashSprite->IsFlippedVertically());
+}
+
+void Player::SpawnThrownObject(ParticleManager* particleManager, const Vector2f& mousePos) const
+{
+	const float
+		rotationAngle{ static_cast<float>(M_PI / 180.f) * CalculateSplashRotation(mousePos) };
+
+	const float
+		throwSpeed{ 1200.f };
+
+	Vector2f objectVelocity{ 
+		std::cosf(rotationAngle) * throwSpeed ,
+		std::sinf(rotationAngle) * throwSpeed
+	};
+
+	Vector2f
+		positionCorrection{ 0.f, GetCurrentHitbox().height * 0.5f };
+	// TODO globally fix all position so i dont need to write this in similar cases
+
+	particleManager->SpawnThrownObject(
+		GetPosition() + positionCorrection,
+		objectVelocity,
+		m_pHeldObject->GetSprite()
+	);
 }
 
 void Player::AttackDash(const Vector2f& mousePos)
@@ -552,7 +592,7 @@ void Player::ApplyAirResistance(float elapsedSec)
 	}
 }
 
-float Player::CalculateSplashRotation(const Vector2f& mouseVec)
+float Player::CalculateSplashRotation(const Vector2f& mouseVec) const
 {
 	Vector2f
 		splashOrigin{ GetPosition() };

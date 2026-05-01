@@ -1,6 +1,8 @@
 #pragma once
 #include "AttackParticle.h"
 
+class Sprite;
+
 class ParticleManager final
 {
 public:
@@ -37,10 +39,20 @@ public:
 		bool isFlippedVertically
 	) const;
 
+	void SpawnThrownObject(
+		const Vector2f& position,
+		const Vector2f& velocity,
+		Sprite* pSprite
+	) const;
+
 	const std::vector<AttackParticle*>& GetParticles() const;
 
 	AttackParticle* GetFreeParticle() const;
 private:
 	std::vector<AttackParticle*> m_pParticles{};
+
+
+	const float
+		m_FlyingParticleLifeTime{ 5.f };
 };
 

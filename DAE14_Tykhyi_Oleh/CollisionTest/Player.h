@@ -1,9 +1,11 @@
 #pragma once
 #include "Entity.h"
 
-class ParticleManager;
-class InteractableObject;
 class Map;
+class ParticleManager;
+
+class InteractableObject;
+class ThrowableObject;
 
 #include <vector>
 
@@ -83,6 +85,8 @@ private:
 
 	InteractableObject*
 		m_pTargetObject{};
+	ThrowableObject*
+		m_pHeldObject{};
 
 	const float
 		m_ArrivalThreshold{ 5.f };
@@ -102,7 +106,10 @@ private:
 
 	void Interact(Map* pMap);
 	void Attack(const Vector2f& mousePos, ParticleManager* particleManager);
+
 	void SpawnAttackParticle(ParticleManager* particleManager) const;
+	void SpawnThrownObject(ParticleManager* particleManager, const Vector2f& mousePos) const;
+
 	void AttackDash(const Vector2f& mousePos);
 
 	void ProcessJumpThroughPlatform(bool downButton);
@@ -112,7 +119,7 @@ private:
 	void ApplyFriction(float elapsedSec);
 	void ApplyAirResistance(float elapsedSec);
 
-	float CalculateSplashRotation(const Vector2f& mouseVec);
+	float CalculateSplashRotation(const Vector2f& mouseVec) const;
 
 	void UpdateAttackState(float elapsedSec);
 

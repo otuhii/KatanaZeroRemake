@@ -66,10 +66,11 @@ void ParticleManager::SpawnBullet(
 			positionOffset,
 			velocity,
 			localHitbox,
-			5.f,
+			m_FlyingParticleLifeTime,
 			rotationAngle,
 			isFlippedHorizontally,
 			isFlippedVertically,
+			nullptr,
 			nullptr
 		);
 	}
@@ -104,7 +105,53 @@ void ParticleManager::SpawnMelee(
 			rotationAngle,
 			isFlippedHorizontally,
 			isFlippedVertically,
-			pOwnerEntity
+			pOwnerEntity,
+			nullptr
+		);
+	}
+}
+
+void ParticleManager::SpawnThrownObject(
+	const Vector2f& position, 
+	const Vector2f& velocity,
+	Sprite* pSprite
+) const
+{
+	AttackParticle* pParticle{
+		GetFreeParticle()
+	};
+
+	if (pParticle != nullptr)
+	{
+		//TODO maybe calculate this hitbox differently
+		const Rectf& 
+			frameDim{ pSprite->GetCurrentFrameDimensions() };
+
+		float
+			halfWidth{ frameDim.width * 0.5f },
+			halfHeight{ frameDim.height * 0.5f };
+
+		std::vector<Vector2f> localHitbox;
+		localHitbox.reserve(4);
+
+		localHitbox.push_back(Vector2f{ -halfWidth, -halfHeight });
+		localHitbox.push_back(Vector2f{ halfWidth, -halfHeight });
+		localHitbox.push_back(Vector2f{ halfWidth,  halfHeight });
+		localHitbox.push_back(Vector2f{ -halfWidth,  halfHeight });
+
+		pParticle->Spawn(
+			AttackParticle::OwnerType::Player,
+			AttackParticle::AttackType::thrownObject,
+			position,
+			Vector2f{0.f, 0.f},
+			velocity,
+			localHitbox,
+			m_FlyingParticleLifeTime,
+			0.f,
+			false,
+			false,
+			nullptr,
+			pSprite
 		);
 	}
 }
