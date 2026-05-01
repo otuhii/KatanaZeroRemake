@@ -13,7 +13,9 @@
 Player::Player(
 	Sprite* sprite, 
 	Sprite* splashSprite, 
+	Sprite* rangeProjectileSprite,
 	const std::vector<AnimationFrameInfo>& playerAnimation, 
+	const std::vector<AnimationFrameInfo>& rangeProjectileSpriteFrameInfo,
 	const Vector2f& position, 
 	float speed, 
 	float scale, 
@@ -22,7 +24,8 @@ Player::Player(
 	: Entity(sprite, EntityType::player, position, Vector2f{}, speed, floor),
 	m_SplashSprite(splashSprite),
 	m_State(PlayerState::staying),
-	m_PlayerSpriteFrames(playerAnimation)
+	m_PlayerSpriteFrames(playerAnimation),
+	m_RangeProjectileSprite{rangeProjectileSprite}
 {
 	GetSprite()->SetAnimationFrameInfo(m_PlayerSpriteFrames[static_cast<int>(m_State)]);
 
@@ -31,6 +34,8 @@ Player::Player(
 
 	GetSprite()->SetScale(scale);
 	m_SplashSprite->SetScale(scale);
+
+	m_RangeProjectileSprite->SetAnimationFrameInfo(rangeProjectileSpriteFrameInfo[0]);
 
 	UpdateHitbox();
 }
@@ -420,6 +425,12 @@ void Player::Attack(const Vector2f& mousePos, ParticleManager* particleManager)
 	));
 
 	SpawnAttackParticle(particleManager);
+
+	if (m_RangeAttackCooldownTimer <= 0.f)
+	{
+		SpawnRangeAttackParticle(particleManager);
+		m_RangeAttackCooldownTimer = m_RangeAttackCooldown;
+	}
 }
 
 void Player::SpawnAttackParticle(ParticleManager* particleManager) const
@@ -434,6 +445,37 @@ void Player::SpawnAttackParticle(ParticleManager* particleManager) const
 	};
 
 	particleManager->SpawnMelee(AttackParticle::OwnerType::Player, this, GetPosition(), positionOffset, m_BaseSplashHitbox, 0.21f, rotationAngle, m_SplashSprite->IsFlippedHorizontally(), m_SplashSprite->IsFlippedVertically());
+}
+
+void Player::SpawnRangeAttackParticle(ParticleManager* particleManager) const
+{
+	const float
+		rotationAngle{ m_SplashSprite->GetRotation() },
+		offset{ 30.f };
+
+	Vector2f
+		positionCorrection{ 0.f, GetCurrentHitbox().height * 0.5f };
+
+	float angleRad{
+		m_SplashSprite->GetRotation() * (static_cast<float>(M_PI) / 180.f)
+	};
+
+	Vector2f projectileVelocity{
+		std::cosf(angleRad) * m_RangeProjectileSpeed ,
+		std::sinf(angleRad) * m_RangeProjectileSpeed
+	};
+
+	particleManager->SpawnBullet(
+		AttackParticle::OwnerType::Player,
+		GetPosition() + positionCorrection,
+		Vector2f{ 0.f, 0.f },
+		m_BaseRangeRangeProjectileHitbox,
+		projectileVelocity,
+		angleRad,
+		m_SplashSprite->IsFlippedHorizontally(),
+		m_SplashSprite->IsFlippedVertically(),
+		m_RangeProjectileSprite
+	);
 }
 
 void Player::SpawnThrownObject(ParticleManager* particleManager, const Vector2f& mousePos) const
@@ -632,6 +674,12 @@ void Player::UpdateCooldowns(float elapsedSec)
 	if (m_RollCooldownTimer < 0.f)
 	{
 		m_RollCooldownTimer = 0.f;
+	}
+
+	m_RangeAttackCooldownTimer -= elapsedSec;
+	if (m_RangeAttackCooldownTimer < 0.f)
+	{
+		m_RangeAttackCooldownTimer = 0.f;
 	}
 }
 

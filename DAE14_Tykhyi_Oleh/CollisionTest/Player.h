@@ -33,7 +33,7 @@ public:
 		count
 	};
 
-	Player(Sprite* sprite, Sprite* splashSprite, const std::vector<AnimationFrameInfo>& playerAnimation, const Vector2f& position, float speed, float scale, int floor);
+	Player(Sprite* sprite, Sprite* splashSprite, Sprite* rangeProjectileSprite, const std::vector<AnimationFrameInfo>& playerAnimation, const std::vector<AnimationFrameInfo>& rangeProjectileSpriteFrameInfo, const Vector2f& position, float speed, float scale, int floor);
 
 	void Draw() const override;
 
@@ -55,25 +55,38 @@ private:
 		Vector2f{100.f, -20.f},
 		Vector2f{100.f, 20.f}
 	};
+	const std::vector<Vector2f> m_BaseRangeRangeProjectileHitbox{
+		Vector2f{ -20.0f, -10.0f }, 
+		Vector2f{  20.0f, -10.0f }, 
+		Vector2f{  20.0f,  10.0f }, 
+		Vector2f{ -20.0f,  10.0f }
+	};
 
-	Sprite* m_SplashSprite;
+	Sprite*
+		m_SplashSprite;
+
+	Sprite*
+		m_RangeProjectileSprite{};
 
 	const float
-		m_FallSpeedUp	{ 2000.f },
-		m_RollSpeed		{ 500.f },
-		m_JumpImpulse	{ 450.f },
-		m_FrictionForce	{ 1200.f },
-		m_AirResistance	{ 2000.f },
-		m_VelEps		{ 0.1f },
-		m_BaseDashForce	{950.f};
+		m_FallSpeedUp{ 2000.f },
+		m_RollSpeed{ 500.f },
+		m_JumpImpulse{ 450.f },
+		m_FrictionForce{ 1200.f },
+		m_AirResistance{ 2000.f },
+		m_VelEps{ 0.1f },
+		m_BaseDashForce{ 950.f },
+		m_RangeProjectileSpeed{ 1200.f };
 
 	const float
 		m_RollCooldown{ 0.4f },
-		m_AttackCooldown{ 0.25f };
+		m_AttackCooldown{ 0.25f },
+		m_RangeAttackCooldown{ 1.f };
 
 	float
-		m_RollCooldownTimer{0.f},
-		m_AttackCooldownTimer{0.f};
+		m_RollCooldownTimer{ 0.f },
+		m_AttackCooldownTimer{ 0.f },
+		m_RangeAttackCooldownTimer{ 0.f };
 
 	int
 		m_AirAttackCount{};
@@ -108,6 +121,8 @@ private:
 	void Attack(const Vector2f& mousePos, ParticleManager* particleManager);
 
 	void SpawnAttackParticle(ParticleManager* particleManager) const;
+	void SpawnRangeAttackParticle(ParticleManager* particleManager) const;
+
 	void SpawnThrownObject(ParticleManager* particleManager, const Vector2f& mousePos) const;
 
 	void AttackDash(const Vector2f& mousePos);

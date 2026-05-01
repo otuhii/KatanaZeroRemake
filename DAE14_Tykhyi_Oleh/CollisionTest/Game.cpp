@@ -46,7 +46,9 @@ void Game::Initialize( )
 	m_pPlayer = new Player(
 		m_pSpriteManager->CreateSprite("img/chr/zero_spritesheet.png"),
 		m_pSpriteManager->CreateSprite("img/chr/SplashAnimation.png"),
+		m_pSpriteManager->CreateSprite("img/chr/spr_swordprojectile.png"),
 		m_JsonImporter.ImportAnimationFrameObjects("json/PlayerAnimationFramesInfo.json"),
+		m_JsonImporter.ImportAnimationFrameObjects("json/PlayerRangeProjectileAnimatFrameInfo.json"),
 		importedGameInfo.respawnPoint,
 		importedGameInfo.playerSpeed,
 		importedGameInfo.playerScale,
