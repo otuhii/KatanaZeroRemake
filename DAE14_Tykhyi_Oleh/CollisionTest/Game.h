@@ -46,6 +46,7 @@ private:
 	void CreateEnemies			(const JsonImporter::GameData& gameData, SpriteManager* pSpriteManager);
 	void MapSetup				(const JsonImporter::GameData& gameData);
 
+	void PaintBlackBackground() const;
 
 #pragma region FPS
 	float

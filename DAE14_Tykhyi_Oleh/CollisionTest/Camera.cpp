@@ -14,6 +14,9 @@ void Camera::Update(
 	float levelHeight
 )
 {
+	float
+		yLimit{ -50.f };
+
 	//current = current + (target - current) * elapsedSec * speed
 	if (!m_IsInitialized)
 	{
@@ -39,9 +42,9 @@ void Camera::Update(
 	{
 		m_BasePoint.y = levelHeight - m_ScreenHeight;
 	}
-	else if (m_BasePoint.y < 0.f)
+	else if (m_BasePoint.y < yLimit)
 	{
-		m_BasePoint.y = 0.f;
+		m_BasePoint.y = yLimit;
 	}
 }
 

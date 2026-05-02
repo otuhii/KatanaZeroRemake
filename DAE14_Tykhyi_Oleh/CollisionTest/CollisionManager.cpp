@@ -88,7 +88,7 @@ void CollisionManager::HandleAABB(float elapsedSec, Entity* pEntity, Environment
 
 	const float
 		eps{ 0.1f },
-		maxStepHeight{ 7.f };
+		maxStepHeight{ 10.f };
 
 	if (type == EnvironmentActiveObject::EnvironmentObjectType::jumpThroughPlatform)
 	{

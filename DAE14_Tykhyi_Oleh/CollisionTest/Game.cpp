@@ -104,12 +104,13 @@ void Game::Update( float elapsedSec )
 
 	m_pMap->Update(timeDivider * elapsedSec);
 
-	m_pCamera->Update(timeDivider * elapsedSec, m_pPlayer->GetPosition(), 2000.f, 1000.f);
+	m_pCamera->Update(timeDivider * elapsedSec, m_pPlayer->GetPosition(), 1756.f, 750.f);
 }
 
 void Game::Draw( ) const
 {
 	ClearBackground( );
+	PaintBlackBackground();
 
 	m_pCamera->Aim();
 
@@ -222,6 +223,12 @@ void Game::MapSetup(const JsonImporter::GameData& gameData)
 	m_pMap->SetEnvironmentActiveObjects(gameData.activeObjects);
 	m_pMap->SetEnvironmentCosmeticObjects(gameData.cosmeticObjects);
 	m_pMap->SetInteractableObjects(gameData.interactableObjects);
+}
+
+void Game::PaintBlackBackground() const
+{
+	utils::SetColor(Color4f{ 0.f, 0.f, 0.f, 1.f });
+	utils::FillRect(GetViewPort());
 }
 
 void Game::FPS(float elapsedSec)

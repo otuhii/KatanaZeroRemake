@@ -3,17 +3,57 @@
     {
       "prog2GameObjects": [
         {
-          "texturePath": "end_jumpthrough_platform.png",
-          "objectType": "jumpthroughplatform",
+          "texturePath": "office_ceiling.png",
+          "objectType": "platform",
           "renderLayer": 0,
-          "xPosition": 579.5824,
-          "yPosition": 278.3,
+          "xPosition": -28.3,
+          "yPosition": 603.5742,
           "scale": 1.0,
           "floor": 1,
           "colliders": [
             {
-              "left": 579.0,
-              "bottom": 346.0,
+              "left": -29.0,
+              "bottom": 603.0,
+              "width": 648.0,
+              "height": 108.0
+            }
+          ],
+          "isTrigger": false,
+          "objectName": "Pfb_Env_OfficeCeiling",
+          "layerName": "Default"
+        },
+        {
+          "texturePath": "roomSeparation.png",
+          "objectType": "platform",
+          "renderLayer": 0,
+          "xPosition": 596.2,
+          "yPosition": 484.1,
+          "scale": 1.0,
+          "floor": 1,
+          "colliders": [
+            {
+              "left": 596.0,
+              "bottom": 484.0,
+              "width": 72.0,
+              "height": 287.0
+            }
+          ],
+          "isTrigger": false,
+          "objectName": "Pfb_Env_RoomSeparation",
+          "layerName": "Default"
+        },
+        {
+          "texturePath": "end_jumpthrough_platform.png",
+          "objectType": "jumpthroughplatform",
+          "renderLayer": 0,
+          "xPosition": 646.8824,
+          "yPosition": 283.8,
+          "scale": 1.0,
+          "floor": 1,
+          "colliders": [
+            {
+              "left": 646.0,
+              "bottom": 351.0,
               "width": 540.0,
               "height": 4.0
             }
@@ -23,89 +63,17 @@
           "layerName": "Default"
         },
         {
-          "texturePath": "env_stair_tile.png",
-          "objectType": "stairs",
-          "renderLayer": 0,
-          "xPosition": 897.7,
-          "yPosition": 157.299988,
-          "scale": 1.0,
-          "floor": 0,
-          "colliders": [
-            {
-              "left": 897.0,
-              "bottom": 157.0,
-              "width": 7.0,
-              "height": 7.0
-            },
-            {
-              "left": 905.0,
-              "bottom": 165.0,
-              "width": 8.0,
-              "height": 8.0
-            },
-            {
-              "left": 913.0,
-              "bottom": 173.0,
-              "width": 8.0,
-              "height": 8.0
-            },
-            {
-              "left": 921.0,
-              "bottom": 181.0,
-              "width": 8.0,
-              "height": 7.0
-            }
-          ],
-          "isTrigger": false
-        },
-        {
-          "texturePath": "env_stair_tile.png",
-          "objectType": "stairs",
-          "renderLayer": 0,
-          "xPosition": 833.2,
-          "yPosition": 95.1,
-          "scale": 1.0,
-          "floor": 0,
-          "colliders": [
-            {
-              "left": 833.0,
-              "bottom": 95.0,
-              "width": 7.0,
-              "height": 7.0
-            },
-            {
-              "left": 841.0,
-              "bottom": 103.0,
-              "width": 8.0,
-              "height": 8.0
-            },
-            {
-              "left": 849.0,
-              "bottom": 111.0,
-              "width": 8.0,
-              "height": 8.0
-            },
-            {
-              "left": 857.0,
-              "bottom": 119.0,
-              "width": 8.0,
-              "height": 7.0
-            }
-          ],
-          "isTrigger": false
-        },
-        {
           "texturePath": "env_ground.png",
           "objectType": "platform",
           "renderLayer": 0,
-          "xPosition": 0.0,
-          "yPosition": 0.0,
+          "xPosition": 32.0000153,
+          "yPosition": -30.1,
           "scale": 1.0,
           "floor": 0,
           "colliders": [
             {
-              "left": 0.0,
-              "bottom": 0.0,
+              "left": 32.0,
+              "bottom": -31.0,
               "width": 800.0,
               "height": 64.0
             }
@@ -115,269 +83,37 @@
           "layerName": "Default"
         },
         {
-          "texturePath": "env_stair_tile.png",
-          "objectType": "stairs",
+          "texturePath": "env_ground.png",
+          "objectType": "platform",
           "renderLayer": 0,
-          "xPosition": 800.4,
-          "yPosition": 63.5,
-          "scale": 1.0,
-          "floor": 0,
-          "colliders": [
-            {
-              "left": 800.0,
-              "bottom": 63.0,
-              "width": 7.0,
-              "height": 7.0
-            },
-            {
-              "left": 808.0,
-              "bottom": 71.0,
-              "width": 8.0,
-              "height": 8.0
-            },
-            {
-              "left": 816.0,
-              "bottom": 79.0,
-              "width": 8.0,
-              "height": 8.0
-            },
-            {
-              "left": 824.0,
-              "bottom": 87.0,
-              "width": 8.0,
-              "height": 7.0
-            }
-          ],
-          "isTrigger": false
-        },
-        {
-          "texturePath": "env_stair_tile.png",
-          "objectType": "stairs",
-          "renderLayer": 0,
-          "xPosition": 865.5,
-          "yPosition": 125.799995,
-          "scale": 1.0,
-          "floor": 0,
-          "colliders": [
-            {
-              "left": 865.0,
-              "bottom": 125.0,
-              "width": 7.0,
-              "height": 7.0
-            },
-            {
-              "left": 873.0,
-              "bottom": 133.0,
-              "width": 8.0,
-              "height": 8.0
-            },
-            {
-              "left": 881.0,
-              "bottom": 141.0,
-              "width": 8.0,
-              "height": 8.0
-            },
-            {
-              "left": 889.0,
-              "bottom": 149.0,
-              "width": 8.0,
-              "height": 7.0
-            }
-          ],
-          "isTrigger": false
-        },
-        {
-          "texturePath": "env_stair_tile.png",
-          "objectType": "stairs",
-          "renderLayer": 0,
-          "xPosition": 930.0,
-          "yPosition": 189.200012,
-          "scale": 1.0,
-          "floor": 0,
-          "colliders": [
-            {
-              "left": 929.0,
-              "bottom": 189.0,
-              "width": 7.0,
-              "height": 7.0
-            },
-            {
-              "left": 937.0,
-              "bottom": 197.0,
-              "width": 8.0,
-              "height": 8.0
-            },
-            {
-              "left": 945.0,
-              "bottom": 205.0,
-              "width": 8.0,
-              "height": 8.0
-            },
-            {
-              "left": 953.0,
-              "bottom": 213.0,
-              "width": 8.0,
-              "height": 7.0
-            }
-          ],
-          "isTrigger": false
-        },
-        {
-          "texturePath": "env_stair_tile.png",
-          "objectType": "stairs",
-          "renderLayer": 0,
-          "xPosition": 962.4562,
-          "yPosition": 221.249725,
-          "scale": 1.0,
-          "floor": 0,
-          "colliders": [
-            {
-              "left": 962.0,
-              "bottom": 221.0,
-              "width": 7.0,
-              "height": 7.0
-            },
-            {
-              "left": 970.0,
-              "bottom": 229.0,
-              "width": 8.0,
-              "height": 8.0
-            },
-            {
-              "left": 978.0,
-              "bottom": 237.0,
-              "width": 8.0,
-              "height": 8.0
-            },
-            {
-              "left": 986.0,
-              "bottom": 245.0,
-              "width": 8.0,
-              "height": 7.0
-            }
-          ],
-          "isTrigger": false
-        },
-        {
-          "texturePath": "env_stair_tile.png",
-          "objectType": "stairs",
-          "renderLayer": 0,
-          "xPosition": 994.678955,
-          "yPosition": 253.069733,
-          "scale": 1.0,
-          "floor": 0,
-          "colliders": [
-            {
-              "left": 994.0,
-              "bottom": 253.0,
-              "width": 7.0,
-              "height": 7.0
-            },
-            {
-              "left": 1002.0,
-              "bottom": 261.0,
-              "width": 8.0,
-              "height": 8.0
-            },
-            {
-              "left": 1010.0,
-              "bottom": 269.0,
-              "width": 8.0,
-              "height": 8.0
-            },
-            {
-              "left": 1018.0,
-              "bottom": 277.0,
-              "width": 8.0,
-              "height": 7.0
-            }
-          ],
-          "isTrigger": false
-        },
-        {
-          "texturePath": "env_stair_tile.png",
-          "objectType": "stairs",
-          "renderLayer": 0,
-          "xPosition": 1026.90186,
-          "yPosition": 284.889832,
-          "scale": 1.0,
-          "floor": 0,
-          "colliders": [
-            {
-              "left": 1026.0,
-              "bottom": 284.0,
-              "width": 7.0,
-              "height": 7.0
-            },
-            {
-              "left": 1034.0,
-              "bottom": 292.0,
-              "width": 8.0,
-              "height": 8.0
-            },
-            {
-              "left": 1042.0,
-              "bottom": 300.0,
-              "width": 8.0,
-              "height": 8.0
-            },
-            {
-              "left": 1050.0,
-              "bottom": 308.0,
-              "width": 8.0,
-              "height": 7.0
-            }
-          ],
-          "isTrigger": false
-        },
-        {
-          "texturePath": "env_stair_tile.png",
-          "objectType": "stairs",
-          "renderLayer": 0,
-          "xPosition": 1058.9,
-          "yPosition": 316.5,
+          "xPosition": -768.0,
+          "yPosition": -30.1,
           "scale": 1.0,
           "floor": 1,
           "colliders": [
             {
-              "left": 1058.0,
-              "bottom": 316.0,
-              "width": 7.0,
-              "height": 7.0
-            },
-            {
-              "left": 1066.0,
-              "bottom": 324.0,
-              "width": 8.0,
-              "height": 8.0
-            },
-            {
-              "left": 1074.0,
-              "bottom": 332.0,
-              "width": 8.0,
-              "height": 8.0
-            },
-            {
-              "left": 1082.0,
-              "bottom": 340.0,
-              "width": 8.0,
-              "height": 7.0
+              "left": -768.0,
+              "bottom": -31.0,
+              "width": 800.0,
+              "height": 64.0
             }
           ],
-          "isTrigger": false
+          "isTrigger": false,
+          "objectName": "Pfb_Env_BigGroundTile (2)",
+          "layerName": "Default"
         },
         {
           "texturePath": "env_ground.png",
           "objectType": "platform",
           "renderLayer": 0,
-          "xPosition": 1090.2,
-          "yPosition": 286.2,
+          "xPosition": 1156.4,
+          "yPosition": 291.7,
           "scale": 1.0,
           "floor": 1,
           "colliders": [
             {
-              "left": 1090.0,
-              "bottom": 286.0,
+              "left": 1156.0,
+              "bottom": 291.0,
               "width": 800.0,
               "height": 64.0
             }
@@ -390,14 +126,14 @@
           "texturePath": "env_top_platform.png",
           "objectType": "platform",
           "renderLayer": 0,
-          "xPosition": -68.03,
-          "yPosition": 278.3,
+          "xPosition": -0.7299957,
+          "yPosition": 283.8,
           "scale": 1.0,
           "floor": 1,
           "colliders": [
             {
-              "left": -69.0,
-              "bottom": 295.0,
+              "left": -1.0,
+              "bottom": 300.0,
               "width": 648.0,
               "height": 55.0
             }
@@ -410,18 +146,8 @@
           "texturePath": "spr_set_plant.png",
           "objectType": "cosmetic",
           "renderLayer": 0,
-          "xPosition": 397.9,
-          "yPosition": 350.1,
-          "scale": 2.0,
-          "floor": 0,
-          "colliders": []
-        },
-        {
-          "texturePath": "env_table.png",
-          "objectType": "cosmetic",
-          "renderLayer": 0,
-          "xPosition": 19.2224121,
-          "yPosition": 307.1,
+          "xPosition": 427.900024,
+          "yPosition": 356.8,
           "scale": 2.0,
           "floor": 0,
           "colliders": []
@@ -430,8 +156,8 @@
           "texturePath": "spr_mask.png",
           "objectType": "playerinfo",
           "renderLayer": 0,
-          "xPosition": 186.0,
-          "yPosition": 65.0,
+          "xPosition": 204.3,
+          "yPosition": 33.3,
           "scale": 2.0,
           "floor": 0,
           "colliders": [],
@@ -441,13 +167,13 @@
           "texturePath": "ControlPoint.png",
           "objectType": "controlpoint",
           "renderLayer": 0,
-          "xPosition": 762.0,
-          "yPosition": 98.0,
+          "xPosition": 829.3,
+          "yPosition": 103.5,
           "scale": 1.0,
           "floor": 0,
           "colliders": [],
           "controlPointType": "stairsignifier",
-          "id": 2,
+          "id": 1,
           "neighborIds": [
             3
           ]
@@ -456,8 +182,8 @@
           "texturePath": "ControlPoint.png",
           "objectType": "controlpoint",
           "renderLayer": 0,
-          "xPosition": 630.1,
-          "yPosition": 389.7,
+          "xPosition": 697.399963,
+          "yPosition": 395.2,
           "scale": 1.0,
           "floor": 1,
           "colliders": [],
@@ -469,82 +195,82 @@
           "texturePath": "ControlPoint.png",
           "objectType": "controlpoint",
           "renderLayer": 0,
-          "xPosition": 1096.0,
-          "yPosition": 395.0,
+          "xPosition": 1163.3,
+          "yPosition": 400.5,
           "scale": 1.0,
           "floor": 1,
           "colliders": [],
           "controlPointType": "stairsignifier",
           "id": 3,
           "neighborIds": [
-            2
+            1
           ]
         },
         {
           "texturePath": "ControlPoint.png",
           "objectType": "controlpoint",
           "renderLayer": 0,
-          "xPosition": 1831.5,
-          "yPosition": 389.2,
+          "xPosition": 1708.0,
+          "yPosition": 397.0,
           "scale": 1.0,
           "floor": 1,
           "colliders": [],
           "controlPointType": "leadingpoint",
-          "id": 1,
+          "id": 2,
           "neighborIds": []
         },
         {
           "objectType": "stairs",
-          "xPosition": 609.9,
-          "yPosition": 310.0,
+          "xPosition": 684.0,
+          "yPosition": 314.0,
           "scale": 1.0,
           "floor": 1,
           "colliders": [
             {
-              "left": 581.0,
-              "bottom": 332.0,
+              "left": 655.0,
+              "bottom": 336.0,
               "width": 7.0,
               "height": 7.0
             },
             {
-              "left": 588.0,
-              "bottom": 325.0,
+              "left": 662.0,
+              "bottom": 329.0,
               "width": 7.0,
               "height": 7.0
             },
             {
-              "left": 595.0,
-              "bottom": 318.0,
+              "left": 669.0,
+              "bottom": 322.0,
               "width": 7.0,
               "height": 7.0
             },
             {
-              "left": 602.0,
-              "bottom": 311.0,
+              "left": 676.0,
+              "bottom": 315.0,
               "width": 7.0,
               "height": 7.0
             },
             {
-              "left": 609.0,
-              "bottom": 304.0,
+              "left": 683.0,
+              "bottom": 308.0,
               "width": 7.0,
               "height": 7.0
             },
             {
-              "left": 574.0,
-              "bottom": 339.0,
+              "left": 648.0,
+              "bottom": 343.0,
               "width": 7.0,
               "height": 7.0
             },
             {
-              "left": 616.0,
-              "bottom": 297.0,
+              "left": 690.0,
+              "bottom": 301.0,
               "width": 7.0,
               "height": 7.0
             },
             {
-              "left": 623.0,
-              "bottom": 290.0,
+              "left": 697.0,
+              "bottom": 294.0,
               "width": 7.0,
               "height": 6.0
             }
@@ -553,14 +279,14 @@
         },
         {
           "objectType": "platform",
-          "xPosition": 614.0,
-          "yPosition": 308.0,
+          "xPosition": 682.6,
+          "yPosition": 317.5,
           "scale": 1.0,
           "floor": 1,
           "colliders": [
             {
-              "left": -105.0,
-              "bottom": 277.0,
+              "left": -37.0,
+              "bottom": 287.0,
               "width": 746.0,
               "height": 19.0
             }
@@ -571,8 +297,8 @@
           "texturePath": "spr_gangstermask_ghost.png",
           "objectType": "enemygangster",
           "renderLayer": 0,
-          "xPosition": 387.0,
-          "yPosition": 352.0,
+          "xPosition": 51.0,
+          "yPosition": 356.0,
           "scale": 2.0,
           "floor": 1,
           "colliders": [],
@@ -582,8 +308,8 @@
           "texturePath": "spr_gangstermask.png",
           "objectType": "enemygrunt",
           "renderLayer": 0,
-          "xPosition": 1208.80139,
-          "yPosition": 349.181976,
+          "xPosition": 1276.10144,
+          "yPosition": 354.681976,
           "scale": 2.0,
           "floor": 1,
           "colliders": [],
@@ -593,8 +319,8 @@
           "texturePath": "spr_gangstermask.png",
           "objectType": "enemygrunt",
           "renderLayer": 0,
-          "xPosition": 719.0,
-          "yPosition": 351.0,
+          "xPosition": 786.3,
+          "yPosition": 356.5,
           "scale": 2.0,
           "floor": 1,
           "colliders": [],
@@ -604,8 +330,8 @@
           "texturePath": "cat_spritesheet.png",
           "objectType": "interactable",
           "renderLayer": 0,
-          "xPosition": 229.3,
-          "yPosition": 393.9,
+          "xPosition": 158.3,
+          "yPosition": 401.6,
           "scale": 2.0,
           "floor": 1,
           "colliders": [],
@@ -616,22 +342,22 @@
           "texturePath": "spr_door.png",
           "objectType": "interactable",
           "renderLayer": 0,
-          "xPosition": 558.7894,
-          "yPosition": 350.429,
+          "xPosition": 595.7,
+          "yPosition": 355.5,
           "scale": 2.0,
           "floor": 1,
           "colliders": [
             {
-              "left": 579.0,
-              "bottom": 350.0,
+              "left": 616.0,
+              "bottom": 355.0,
               "width": 30.0,
-              "height": 127.0
+              "height": 128.0
             },
             {
-              "left": 515.0,
-              "bottom": 350.0,
+              "left": 552.0,
+              "bottom": 355.0,
               "width": 82.0,
-              "height": 127.0
+              "height": 128.0
             }
           ],
           "isTrigger": false,
@@ -642,14 +368,14 @@
           "texturePath": "spr_potted_plant_0.png",
           "objectType": "interactable",
           "renderLayer": 0,
-          "xPosition": 677.0,
-          "yPosition": 101.0,
+          "xPosition": 711.0,
+          "yPosition": 63.1,
           "scale": 1.0,
           "floor": 0,
           "colliders": [
             {
-              "left": 669.0,
-              "bottom": 101.0,
+              "left": 703.0,
+              "bottom": 63.0,
               "width": 15.0,
               "height": 64.0
             }
@@ -659,84 +385,398 @@
           "type": "throwableobject"
         },
         {
-          "texturePath": "spr_potted_plant_0.png",
-          "objectType": "interactable",
+          "texturePath": "office_background.png",
+          "objectType": "cosmetic",
           "renderLayer": 0,
-          "xPosition": 824.056152,
-          "yPosition": 151.3031,
+          "xPosition": -36.6999969,
+          "yPosition": 357.5,
+          "scale": 1.0,
+          "floor": 0,
+          "colliders": []
+        },
+        {
+          "texturePath": "secondFloorBackgroundTexture.png",
+          "objectType": "cosmetic",
+          "renderLayer": 0,
+          "xPosition": 624.0,
+          "yPosition": 359.0,
+          "scale": 1.0,
+          "floor": 0,
+          "colliders": []
+        },
+        {
+          "texturePath": "firstFloorBackground.png",
+          "objectType": "cosmetic",
+          "renderLayer": 0,
+          "xPosition": -38.1,
+          "yPosition": 33.2,
+          "scale": 1.0,
+          "floor": 0,
+          "colliders": []
+        },
+        {
+          "texturePath": "env_table.png",
+          "objectType": "cosmetic",
+          "renderLayer": 0,
+          "xPosition": -18.5,
+          "yPosition": 313.1,
+          "scale": 2.0,
+          "floor": 0,
+          "colliders": []
+        },
+        {
+          "texturePath": "spr_mansion_pokertable_0.png",
+          "objectType": "cosmetic",
+          "renderLayer": 0,
+          "xPosition": 687.3,
+          "yPosition": 29.8,
+          "scale": 2.0,
+          "floor": 0,
+          "colliders": []
+        },
+        {
+          "texturePath": "BigRoom_Ceiling.png",
+          "objectType": "platform",
+          "renderLayer": 0,
+          "xPosition": 668.0,
+          "yPosition": 604.0,
           "scale": 1.0,
           "floor": 0,
           "colliders": [
             {
-              "left": 816.0,
-              "bottom": 151.0,
-              "width": 15.0,
-              "height": 64.0
+              "left": 668.0,
+              "bottom": 604.0,
+              "width": 1152.0,
+              "height": 72.0
             }
           ],
           "isTrigger": false,
-          "interactionRange": 50.0,
-          "type": "throwableobject"
+          "objectName": "Pfb_Env_BigRoomCeiling",
+          "layerName": "Default"
         },
         {
-          "texturePath": "spr_potted_plant_0.png",
-          "objectType": "interactable",
+          "texturePath": "env_stair_tile.png",
+          "objectType": "stairs",
           "renderLayer": 0,
-          "xPosition": 1405.77258,
-          "yPosition": 373.592255,
+          "xPosition": 867.3,
+          "yPosition": 33.2,
           "scale": 1.0,
-          "floor": 1,
+          "floor": 0,
           "colliders": [
             {
-              "left": 1398.0,
-              "bottom": 373.0,
-              "width": 15.0,
-              "height": 64.0
+              "left": 867.0,
+              "bottom": 69.0,
+              "width": 9.0,
+              "height": 8.0
+            },
+            {
+              "left": 876.0,
+              "bottom": 77.0,
+              "width": 8.0,
+              "height": 9.0
+            },
+            {
+              "left": 884.0,
+              "bottom": 87.0,
+              "width": 9.0,
+              "height": 9.0
+            },
+            {
+              "left": 894.0,
+              "bottom": 97.0,
+              "width": 8.0,
+              "height": 8.0
             }
           ],
-          "isTrigger": false,
-          "interactionRange": 50.0,
-          "type": "throwableobject"
+          "isTrigger": false
         },
         {
-          "texturePath": "spr_lamp_0.png",
-          "objectType": "interactable",
+          "texturePath": "env_stair_tile.png",
+          "objectType": "stairs",
           "renderLayer": 0,
-          "xPosition": 562.3287,
-          "yPosition": 111.8647,
+          "xPosition": 903.5377,
+          "yPosition": 68.8069839,
           "scale": 1.0,
-          "floor": 1,
+          "floor": 0,
           "colliders": [
             {
-              "left": 554.0,
-              "bottom": 111.0,
-              "width": 15.0,
-              "height": 64.0
+              "left": 903.0,
+              "bottom": 104.0,
+              "width": 9.0,
+              "height": 8.0
+            },
+            {
+              "left": 913.0,
+              "bottom": 113.0,
+              "width": 8.0,
+              "height": 9.0
+            },
+            {
+              "left": 921.0,
+              "bottom": 122.0,
+              "width": 9.0,
+              "height": 9.0
+            },
+            {
+              "left": 930.0,
+              "bottom": 132.0,
+              "width": 8.0,
+              "height": 8.0
             }
           ],
-          "isTrigger": false,
-          "interactionRange": 50.0,
-          "type": "throwableobject"
+          "isTrigger": false
         },
         {
-          "texturePath": "spr_lamp_0.png",
-          "objectType": "interactable",
+          "texturePath": "env_stair_tile.png",
+          "objectType": "stairs",
           "renderLayer": 0,
-          "xPosition": 876.9396,
-          "yPosition": 383.451874,
+          "xPosition": 939.7,
+          "yPosition": 104.4,
           "scale": 1.0,
-          "floor": 1,
+          "floor": 0,
           "colliders": [
             {
-              "left": 869.0,
-              "bottom": 383.0,
-              "width": 15.0,
-              "height": 64.0
+              "left": 939.0,
+              "bottom": 140.0,
+              "width": 9.0,
+              "height": 8.0
+            },
+            {
+              "left": 949.0,
+              "bottom": 149.0,
+              "width": 8.0,
+              "height": 9.0
+            },
+            {
+              "left": 957.0,
+              "bottom": 158.0,
+              "width": 9.0,
+              "height": 9.0
+            },
+            {
+              "left": 967.0,
+              "bottom": 168.0,
+              "width": 8.0,
+              "height": 8.0
             }
           ],
-          "isTrigger": false,
-          "interactionRange": 50.0,
-          "type": "throwableobject"
+          "isTrigger": false
+        },
+        {
+          "texturePath": "env_stair_tile.png",
+          "objectType": "stairs",
+          "renderLayer": 0,
+          "xPosition": 975.816345,
+          "yPosition": 140.3177,
+          "scale": 1.0,
+          "floor": 0,
+          "colliders": [
+            {
+              "left": 975.0,
+              "bottom": 176.0,
+              "width": 9.0,
+              "height": 8.0
+            },
+            {
+              "left": 985.0,
+              "bottom": 184.0,
+              "width": 8.0,
+              "height": 9.0
+            },
+            {
+              "left": 993.0,
+              "bottom": 194.0,
+              "width": 9.0,
+              "height": 9.0
+            },
+            {
+              "left": 1003.0,
+              "bottom": 204.0,
+              "width": 8.0,
+              "height": 8.0
+            }
+          ],
+          "isTrigger": false
+        },
+        {
+          "texturePath": "env_stair_tile.png",
+          "objectType": "stairs",
+          "renderLayer": 0,
+          "xPosition": 1011.95508,
+          "yPosition": 176.099854,
+          "scale": 1.0,
+          "floor": 0,
+          "colliders": [
+            {
+              "left": 1011.0,
+              "bottom": 212.0,
+              "width": 9.0,
+              "height": 8.0
+            },
+            {
+              "left": 1021.0,
+              "bottom": 220.0,
+              "width": 8.0,
+              "height": 9.0
+            },
+            {
+              "left": 1029.0,
+              "bottom": 230.0,
+              "width": 9.0,
+              "height": 9.0
+            },
+            {
+              "left": 1039.0,
+              "bottom": 239.0,
+              "width": 8.0,
+              "height": 8.0
+            }
+          ],
+          "isTrigger": false
+        },
+        {
+          "texturePath": "env_stair_tile.png",
+          "objectType": "stairs",
+          "renderLayer": 0,
+          "xPosition": 1048.1,
+          "yPosition": 211.9,
+          "scale": 1.0,
+          "floor": 0,
+          "colliders": [
+            {
+              "left": 1048.0,
+              "bottom": 248.0,
+              "width": 9.0,
+              "height": 8.0
+            },
+            {
+              "left": 1057.0,
+              "bottom": 256.0,
+              "width": 8.0,
+              "height": 9.0
+            },
+            {
+              "left": 1065.0,
+              "bottom": 266.0,
+              "width": 9.0,
+              "height": 9.0
+            },
+            {
+              "left": 1075.0,
+              "bottom": 275.0,
+              "width": 8.0,
+              "height": 8.0
+            }
+          ],
+          "isTrigger": false
+        },
+        {
+          "texturePath": "env_stair_tile.png",
+          "objectType": "stairs",
+          "renderLayer": 0,
+          "xPosition": 1084.6,
+          "yPosition": 247.4,
+          "scale": 1.0,
+          "floor": 0,
+          "colliders": [
+            {
+              "left": 1084.0,
+              "bottom": 283.0,
+              "width": 9.0,
+              "height": 8.0
+            },
+            {
+              "left": 1094.0,
+              "bottom": 292.0,
+              "width": 8.0,
+              "height": 9.0
+            },
+            {
+              "left": 1102.0,
+              "bottom": 301.0,
+              "width": 9.0,
+              "height": 9.0
+            },
+            {
+              "left": 1111.0,
+              "bottom": 311.0,
+              "width": 8.0,
+              "height": 8.0
+            }
+          ],
+          "isTrigger": false
+        },
+        {
+          "texturePath": "env_stair_tile.png",
+          "objectType": "stairs",
+          "renderLayer": 0,
+          "xPosition": 1120.4,
+          "yPosition": 283.6,
+          "scale": 1.0,
+          "floor": 0,
+          "colliders": [
+            {
+              "left": 1120.0,
+              "bottom": 319.0,
+              "width": 9.0,
+              "height": 8.0
+            },
+            {
+              "left": 1129.0,
+              "bottom": 328.0,
+              "width": 8.0,
+              "height": 9.0
+            },
+            {
+              "left": 1138.0,
+              "bottom": 337.0,
+              "width": 9.0,
+              "height": 9.0
+            },
+            {
+              "left": 1147.0,
+              "bottom": 347.0,
+              "width": 8.0,
+              "height": 8.0
+            }
+          ],
+          "isTrigger": false
+        },
+        {
+          "texturePath": "env_stair_tile.png",
+          "objectType": "stairs",
+          "renderLayer": 0,
+          "xPosition": 831.0,
+          "yPosition": -4.0,
+          "scale": 1.0,
+          "floor": 0,
+          "colliders": [
+            {
+              "left": 831.0,
+              "bottom": 32.0,
+              "width": 9.0,
+              "height": 8.0
+            },
+            {
+              "left": 840.0,
+              "bottom": 40.0,
+              "width": 8.0,
+              "height": 9.0
+            },
+            {
+              "left": 848.0,
+              "bottom": 50.0,
+              "width": 9.0,
+              "height": 9.0
+            },
+            {
+              "left": 858.0,
+              "bottom": 59.0,
+              "width": 8.0,
+              "height": 8.0
+            }
+          ],
+          "isTrigger": false
         }
       ]
     }

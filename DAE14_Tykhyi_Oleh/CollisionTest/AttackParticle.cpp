@@ -51,7 +51,7 @@ void AttackParticle::Draw() const
 		return;
 	}
 
-	if (m_OwnerType == OwnerType::Player)
+	/*if (m_OwnerType == OwnerType::Player)
 	{
 		utils::SetColor(Color4f{ 0.f, 1.f, 0.f, 1.f });
 	}
@@ -60,7 +60,7 @@ void AttackParticle::Draw() const
 		utils::SetColor(Color4f{ 1.f, 0.f, 0.f, 1.f });
 	}
 
-	utils::DrawPolygon(m_GlobalHitbox);
+	utils::DrawPolygon(m_GlobalHitbox);*/
 
 
 	if (m_pSprite)

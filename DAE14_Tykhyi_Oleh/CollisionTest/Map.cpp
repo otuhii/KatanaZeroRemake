@@ -17,6 +17,14 @@ Map::~Map()
 void Map::Draw() const
 {
 	utils::SetColor(Color4f{ 1.f, 1.f, 0.f, 1.f });
+	
+	for (const EnvironmentCosmeticObject& obj : m_EnvironmentCosmeticObjects)
+	{
+		if (obj.GetTexture() != nullptr)
+		{
+			obj.GetTexture()->Draw(obj.GetPosition(), false, false);
+		}
+	}
 
 	for (const EnvironmentActiveObject& obj : m_EnvironmentActiveObjects)
 	{
@@ -28,30 +36,21 @@ void Map::Draw() const
 		utils::SetColor(Color4f{ 0.f, 1.f, 0.f, 1.f });
 		for (const Rectf& collider : obj.GetColliders())
 		{
-			utils::DrawRect(collider);
+			//utils::DrawRect(collider);
 		}
 	}
-
-	for (const EnvironmentCosmeticObject& obj : m_EnvironmentCosmeticObjects)
-	{
-		if (obj.GetTexture() != nullptr)
-		{
-			obj.GetTexture()->Draw(obj.GetPosition(), false, false);
-		}
-	}
-
 
 	for (const InteractableObject* pObj : m_pInteractableObjects)
 	{
 		if (pObj->IsActive())
 		{
 			pObj->Draw();
-			if (pObj->GetType() == InteractableObject::InteractableType::door)
+			/*if (pObj->GetType() == InteractableObject::InteractableType::door)
 			{
 				const Door* pDoor = static_cast<const Door*>(pObj);
 				utils::SetColor(Color4f{ 0.f, 1.f, 0.f, 1.f });
 				utils::DrawRect(pDoor->GetCurrentCollider());
-			}
+			}*/
 		}
 	}
 
