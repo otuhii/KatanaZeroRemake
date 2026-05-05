@@ -24,7 +24,7 @@ void from_json(const Json& j, AnimationFrameInfo& anFrame)
 	}
 }
 
-JsonImporter::GameData JsonImporter::ImportGameInfo(const std::string& jsonPath, SpriteManager& spriteManager) const
+JsonImporter::GameData JsonImporter::ImportGameInfo(const std::string& jsonPath, SpriteManager& spriteManager) 
 {
 	Json data{ ParseJsonFile(jsonPath) };
 
@@ -56,7 +56,7 @@ JsonImporter::GameData JsonImporter::ImportGameInfo(const std::string& jsonPath,
 	return processedData;
 }
 
-std::vector<AnimationFrameInfo> JsonImporter::ImportAnimationFrameObjects(const std::string& jsonPath) const
+std::vector<AnimationFrameInfo> JsonImporter::ImportAnimationFrameObjects(const std::string& jsonPath) 
 {
 	Json data{ ParseJsonFile(jsonPath) };
 
@@ -83,7 +83,7 @@ std::vector<AnimationFrameInfo> JsonImporter::ImportAnimationFrameObjects(const 
 	return {};
 }
 
-Json JsonImporter::ParseJsonFile(const std::string& jsonPath) const
+Json JsonImporter::ParseJsonFile(const std::string& jsonPath) 
 {
 	std::ifstream inputFile{ jsonPath };
 	if (!inputFile.is_open())
@@ -108,7 +108,7 @@ Json JsonImporter::ParseJsonFile(const std::string& jsonPath) const
 	return parsedData;
 }
 
-void JsonImporter::ProcessJsonObject(const Json& object, GameData& dst, SpriteManager& spriteManager) const
+void JsonImporter::ProcessJsonObject(const Json& object, GameData& dst, SpriteManager& spriteManager) 
 {
 	std::string
 		objectType{ object.at("objectType").get<std::string>() };
@@ -143,7 +143,7 @@ void JsonImporter::ProcessJsonObject(const Json& object, GameData& dst, SpriteMa
 	}
 }
 
-void JsonImporter::AddPlayerInfo(const Json& object, GameData& dst) const
+void JsonImporter::AddPlayerInfo(const Json& object, GameData& dst) 
 {
 	dst.playerSpeed = object.at("speed").get<float>();
 	dst.respawnPoint.x = object.at("xPosition").get<float>();
@@ -152,7 +152,7 @@ void JsonImporter::AddPlayerInfo(const Json& object, GameData& dst) const
 	dst.playerFloor = object.at("floor").get<int>();
 }
 
-void JsonImporter::AddEnemy(Enemy::EnemyType type, const Json& object, GameData& dst) const
+void JsonImporter::AddEnemy(Enemy::EnemyType type, const Json& object, GameData& dst) 
 {
 	Vector2f position{
 		object.at("xPosition").get<float>(),
@@ -177,7 +177,7 @@ void JsonImporter::AddEnemy(Enemy::EnemyType type, const Json& object, GameData&
 	});
 }
 
-void JsonImporter::AddControlPoint(const Json& object, GameData& dst) const
+void JsonImporter::AddControlPoint(const Json& object, GameData& dst) 
 {
 	Vector2f position{
 		object.at("xPosition").get<float>(),
@@ -193,7 +193,7 @@ void JsonImporter::AddControlPoint(const Json& object, GameData& dst) const
 	});
 }
 
-void JsonImporter::AddCosmeticObject(const Json& object, GameData& dst, SpriteManager& spriteManager ) const
+void JsonImporter::AddCosmeticObject(const Json& object, GameData& dst, SpriteManager& spriteManager ) 
 {
 	std::string
 		texPath{ object.value("texturePath", "default.png") };
@@ -214,7 +214,7 @@ void JsonImporter::AddCosmeticObject(const Json& object, GameData& dst, SpriteMa
 	});
 }
 
-void JsonImporter::AddActiveObject(const Json& object, GameData& dst, SpriteManager& spriteManager) const
+void JsonImporter::AddActiveObject(const Json& object, GameData& dst, SpriteManager& spriteManager) 
 {
 	if (object.contains("colliders") && object["colliders"].is_array())
 	{
@@ -244,7 +244,7 @@ void JsonImporter::AddActiveObject(const Json& object, GameData& dst, SpriteMana
 	}
 }
 
-void JsonImporter::AddInteractableObject(const Json& object, GameData& dst, SpriteManager& spriteManager) const
+void JsonImporter::AddInteractableObject(const Json& object, GameData& dst, SpriteManager& spriteManager) 
 {
 	std::string
 		type{ object.at("type").get<std::string>() };
@@ -292,7 +292,7 @@ void JsonImporter::AddInteractableObject(const Json& object, GameData& dst, Spri
 	}
 }
 
-EnvironmentActiveObject::EnvironmentObjectType JsonImporter::StringToObjectType(const std::string& typeStr) const
+EnvironmentActiveObject::EnvironmentObjectType JsonImporter::StringToObjectType(const std::string& typeStr) 
 {
 	if (typeStr == "stairs")
 	{
@@ -312,7 +312,7 @@ EnvironmentActiveObject::EnvironmentObjectType JsonImporter::StringToObjectType(
 	}
 }
 
-ControlPoint::ControlPointType JsonImporter::StringToControlPointType(const std::string& typeStr) const
+ControlPoint::ControlPointType JsonImporter::StringToControlPointType(const std::string& typeStr) 
 {
 	if (typeStr == "leadingpoint")
 	{

@@ -32,7 +32,7 @@ void Game::Initialize( )
 	m_pSpriteManager = new SpriteManager{};
 	m_pCollisionManager = new CollisionManager{};
 	m_pMap = new Map{};
-	m_pParticleManager = new ParticleManager{100};
+	m_pParticleManager = new ParticleManager{100, 300, m_pSpriteManager};
 	m_pCombatManager = new CombatManager{};
 
 	m_pCamera = new Camera{ GetViewPort().width, GetViewPort().height };
@@ -40,15 +40,14 @@ void Game::Initialize( )
 
 	JsonImporter::GameData
 		importedGameInfo{};
-	importedGameInfo = m_JsonImporter.ImportGameInfo("json/GameInfo.json", *m_pSpriteManager);
-
+	importedGameInfo = JsonImporter::ImportGameInfo("json/GameInfo.json", *m_pSpriteManager);
 
 	m_pPlayer = new Player(
 		m_pSpriteManager->CreateSprite("img/chr/zero_spritesheet.png"),
 		m_pSpriteManager->CreateSprite("img/chr/SplashAnimation.png"),
 		m_pSpriteManager->CreateSprite("img/chr/spr_swordprojectile.png"),
-		m_JsonImporter.ImportAnimationFrameObjects("json/PlayerAnimationFramesInfo.json"),
-		m_JsonImporter.ImportAnimationFrameObjects("json/PlayerRangeProjectileAnimatFrameInfo.json"),
+		JsonImporter::ImportAnimationFrameObjects("json/PlayerAnimationFramesInfo.json"),
+		JsonImporter::ImportAnimationFrameObjects("json/PlayerRangeProjectileAnimatFrameInfo.json"),
 		importedGameInfo.respawnPoint,
 		importedGameInfo.playerSpeed,
 		importedGameInfo.playerScale,
@@ -88,7 +87,7 @@ void Game::Update( float elapsedSec )
 		timeDivider = 0.2f;
 	}
 
-	m_pPlayer->Update(timeDivider*elapsedSec, m_pMap, pStates, GetViewPort());
+	m_pPlayer->Update(timeDivider*elapsedSec, m_pMap, pStates, GetViewPort(), m_pParticleManager);
 
 	m_pCollisionManager->HandleMovement(m_pPlayer, m_pMap, timeDivider*elapsedSec, true);
 
@@ -185,8 +184,8 @@ void Game::EnemyTypeInitialization(const JsonImporter::GameData& gameData)
 		m_pSpriteManager->CreateSprite("img/chr/grunt_spritesheet.png"),
 		m_pSpriteManager->CreateSprite("img/chr/spr_grunt_slash.png"),
 		nullptr,
-		m_JsonImporter.ImportAnimationFrameObjects("json/enemy_Grunt_FrameInfo.json"),
-		m_JsonImporter.ImportAnimationFrameObjects("json/GruntSlashAnimationFramesInfo.json"),
+		JsonImporter::ImportAnimationFrameObjects("json/enemy_Grunt_FrameInfo.json"),
+		JsonImporter::ImportAnimationFrameObjects("json/GruntSlashAnimationFramesInfo.json"),
 		gruntDetectionRange,
 		gruntAttackRange
 	);
@@ -196,7 +195,7 @@ void Game::EnemyTypeInitialization(const JsonImporter::GameData& gameData)
 		m_pSpriteManager->CreateSprite("img/chr/gangster_spritesheet.png"),
 		m_pSpriteManager->CreateSprite("img/chr/gangster_gun_sprite.png"),
 		m_pSpriteManager->CreateSprite("img/chr/gangster_bulletprojectile_sprite.png"),
-		m_JsonImporter.ImportAnimationFrameObjects("json/enemy_Gangster_FrameInfo.json"),
+		JsonImporter::ImportAnimationFrameObjects("json/enemy_Gangster_FrameInfo.json"),
 		std::vector<AnimationFrameInfo>{},
 		gangsterDetectionRange,
 		gangsterAttackRange

@@ -1,12 +1,23 @@
 #pragma once
 #include "AttackParticle.h"
 
+class CosmeticParticle;
+class SpriteManager;
 class Sprite;
 
 class ParticleManager final
 {
 public:
-	ParticleManager(int instanceCount);
+	enum class CosmeticParticleType {
+		none,
+
+		dust,
+		blood,
+
+		count
+	};
+
+	ParticleManager(int attackInstanceCount, int cosmeticInstanceCount, SpriteManager* pSpriteManager);
 
 	~ParticleManager();
 
@@ -46,12 +57,22 @@ public:
 		Sprite* pSprite
 	) const;
 
-	const std::vector<AttackParticle*>& GetParticles() const;
+	void SpawnCosmeticParticle(
+		CosmeticParticleType type,
+		const Vector2f& position,
+		const Vector2f& velocity,
+		float lifeTime
+	) const;
 
-	AttackParticle* GetFreeParticle() const;
+	const std::vector<AttackParticle*>& GetAttackParticles() const;
+
+	AttackParticle* GetFreeAttackParticle() const;
+	CosmeticParticle* GetFreeCosmeticParticle() const;
 private:
-	std::vector<AttackParticle*> m_pParticles{};
+	std::vector<AttackParticle*> m_pAttackParticles{};
+	std::vector<CosmeticParticle*> m_pCosmeticParticles{};
 
+	std::vector<Sprite*> m_pSpriteTemplates{};
 
 	const float
 		m_FlyingParticleLifeTime{ 5.f };

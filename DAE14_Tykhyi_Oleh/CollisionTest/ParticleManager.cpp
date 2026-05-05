@@ -2,19 +2,42 @@
 #include "ParticleManager.h"
 #include "Entity.h"
 
-ParticleManager::ParticleManager(int instanceCount)
-{
-	m_pParticles.reserve(instanceCount);
+#include "CosmeticParticle.h"
+#include "SpriteManager.h"
+#include "JsonImporter.h"
 
-	for (int index{ 0 }; index < instanceCount; ++index)
+ParticleManager::ParticleManager(int attackInstanceCount, int cosmeticInstanceCount, SpriteManager* pSpriteManager)
+{
+	m_pSpriteTemplates.resize(static_cast<size_t>(CosmeticParticleType::count));
+	m_pSpriteTemplates[static_cast<int>(CosmeticParticleType::dust)] = pSpriteManager->CreateSprite("img/vfx/dustParticleSprites.png");
+	m_pSpriteTemplates[static_cast<int>(CosmeticParticleType::dust)]->SetAnimationFrameInfo(JsonImporter::ImportAnimationFrameObjects("json/dustParticleAnimationInfo.json")[0]);
+	//m_pSpriteTemplates[static_cast<int>(CosmeticParticleType::blood)] = pSpriteManager->CreateSprite("img/vfx/bloodParticleSprites.png");
+	//m_pSpriteTemplates[static_cast<int>(CosmeticParticleType::blood)]->SetAnimationFrameInfo(JsonImporter::ImportAnimationFrameObjects("json/blooParticleAnimationInfo.json")[0]);
+
+
+	m_pAttackParticles.reserve(attackInstanceCount);
+
+	for (int index{ 0 }; index < attackInstanceCount; ++index)
 	{
-		m_pParticles.push_back(new AttackParticle());
+		m_pAttackParticles.push_back(new AttackParticle{});
+	}
+
+	m_pCosmeticParticles.reserve(cosmeticInstanceCount);
+	
+	for (int index{ 0 }; index < cosmeticInstanceCount; ++index)
+	{
+		m_pCosmeticParticles.push_back(new CosmeticParticle{ pSpriteManager });
 	}
 }
 
 ParticleManager::~ParticleManager()
 {
-	for (AttackParticle* pParticle : m_pParticles)
+	for (AttackParticle* pParticle : m_pAttackParticles)
+	{
+		delete pParticle;
+	}
+
+	for (CosmeticParticle* pParticle : m_pCosmeticParticles)
 	{
 		delete pParticle;
 	}
@@ -22,7 +45,15 @@ ParticleManager::~ParticleManager()
 
 void ParticleManager::Draw() const
 {
-	for (const AttackParticle* pParticle : m_pParticles)
+	for (const AttackParticle* pParticle : m_pAttackParticles)
+	{
+		if (pParticle->IsActive())
+		{
+			pParticle->Draw();
+		}
+	}
+
+	for (const CosmeticParticle* pParticle : m_pCosmeticParticles)
 	{
 		if (pParticle->IsActive())
 		{
@@ -33,7 +64,16 @@ void ParticleManager::Draw() const
 
 void ParticleManager::Update(float elapsedSec)
 {
-	for (AttackParticle* pParticle : m_pParticles)
+	for (AttackParticle* pParticle : m_pAttackParticles)
+	{
+		if (pParticle->IsActive())
+		{
+			pParticle->Update(elapsedSec);
+		}
+	}
+
+
+	for (CosmeticParticle* pParticle : m_pCosmeticParticles)
 	{
 		if (pParticle->IsActive())
 		{
@@ -55,7 +95,7 @@ void ParticleManager::SpawnBullet(
 ) const
 {
 	AttackParticle* pParticle{
-		GetFreeParticle()
+		GetFreeAttackParticle()
 	};
 
 	if (pParticle != nullptr)
@@ -90,7 +130,7 @@ void ParticleManager::SpawnMelee(
 ) const
 {
 	AttackParticle* pParticle{
-		GetFreeParticle()
+		GetFreeAttackParticle()
 	};
 
 	if (pParticle != nullptr)
@@ -119,7 +159,7 @@ void ParticleManager::SpawnThrownObject(
 ) const
 {
 	AttackParticle* pParticle{
-		GetFreeParticle()
+		GetFreeAttackParticle()
 	};
 
 	if (pParticle != nullptr)
@@ -157,14 +197,38 @@ void ParticleManager::SpawnThrownObject(
 	}
 }
 
-const std::vector<AttackParticle*>& ParticleManager::GetParticles() const
+void ParticleManager::SpawnCosmeticParticle(CosmeticParticleType type, const Vector2f& position, const Vector2f& velocity, float lifeTime) const
 {
-	return m_pParticles;
+	CosmeticParticle* pParticle{
+		GetFreeCosmeticParticle()
+	};
+
+	if (pParticle != nullptr)
+	{
+		pParticle->Spawn(position, velocity, lifeTime, false, m_pSpriteTemplates[static_cast<int>(type)]);
+	}
 }
 
-AttackParticle* ParticleManager::GetFreeParticle() const
+const std::vector<AttackParticle*>& ParticleManager::GetAttackParticles() const
 {
-	for (AttackParticle* pParticle : m_pParticles)
+	return m_pAttackParticles;
+}
+
+AttackParticle* ParticleManager::GetFreeAttackParticle() const
+{
+	for (AttackParticle* pParticle : m_pAttackParticles)
+	{
+		if (!pParticle->IsActive())
+		{
+			return pParticle;
+		}
+	}
+	return nullptr;
+}
+
+CosmeticParticle* ParticleManager::GetFreeCosmeticParticle() const
+{
+	for (CosmeticParticle* pParticle : m_pCosmeticParticles)
 	{
 		if (!pParticle->IsActive())
 		{

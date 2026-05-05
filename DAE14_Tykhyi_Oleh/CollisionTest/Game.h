@@ -1,7 +1,7 @@
 #pragma once
 #include "BaseGame.h"
-
 #include "JsonImporter.h"
+
 
 class SpriteManager;
 class EnemyManager;
@@ -60,8 +60,6 @@ private:
 
 	bool 
 		m_SlowMo{ false };
-
-	JsonImporter		m_JsonImporter{}; //TODO maybe change this to pointer later
 
 	Camera*				m_pCamera{};
 	Cursor*				m_pCursor{};

@@ -5,6 +5,7 @@
 #include "Matrix2x3.h"
 #include "utils.h"
 #include "InteractableObject.h"
+#include "CosmeticParticle.h"
 
 void AttackParticle::Spawn(
 	OwnerType ownerType, 
@@ -117,6 +118,8 @@ void AttackParticle::Update(float elapsedSec)
 
 	UpdateHitboxGeometry();
 }
+
+
 
 void AttackParticle::Deactivate()
 {

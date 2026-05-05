@@ -1,23 +1,19 @@
 #pragma once
 
+class SpriteManager;
+class Sprite;
 
 class CosmeticParticle final
 { 
 public:
-	enum class CosmeticParticleType {
-		none = -1,
-
-		dust,
-		blood,
-
-		count
-	};
+	CosmeticParticle(SpriteManager* pSpriteManager);
 
 	void Spawn(
 		const Vector2f& position,
 		const Vector2f& velocity,
 		float lifetime,
-		bool applyGravity
+		bool applyGravity,
+		Sprite* pTemplateSprite
 	);
 
 	void Draw() const;
@@ -29,7 +25,8 @@ public:
 	bool IsActive() const;
 
 private:
-	
+	Sprite*
+		m_pSprite;
 
 	Vector2f
 		m_Position{},

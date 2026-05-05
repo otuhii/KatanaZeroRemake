@@ -9,6 +9,8 @@
 #include "InteractableObject.h"
 #include "ThrowableObject.h"
 
+#include "VFX.h"
+
 
 Player::Player(
 	Sprite* sprite, 
@@ -46,20 +48,20 @@ void Player::Draw() const
 	DrawSplash();
 }
 
-void Player::Update(float elapsedSec, Map* pMap, const Uint8* pStates, const Rectf& viewport)
+void Player::Update(float elapsedSec, Map* pMap, const Uint8* pStates, const Rectf& viewport, ParticleManager* pParticleManager)
 {
 	if (m_IsAutoWalking)
 	{
 		HandleAutowalk();
 		return;
 	}
-	HandleKeyboard(pMap, pStates, elapsedSec);
+	HandleKeyboard(pMap, pStates, elapsedSec, pParticleManager);
 	UpdateCurrentState(elapsedSec);
 	UpdateCooldowns(elapsedSec);
 	Entity::Update(elapsedSec, viewport);
 }
 
-void Player::SetState(PlayerState state)
+void Player::SetState(PlayerState state, ParticleManager* pParticleManager)
 {
 	if (m_State == state) { return; } // no animation flickering
 
@@ -75,6 +77,11 @@ void Player::SetState(PlayerState state)
 	}
 
 	m_State = state;
+
+	if (m_State == PlayerState::run)
+	{
+		VFX::SpawnDust(20, GetPosition(), pParticleManager);
+	}
 
 	GetSprite()->SetAnimationFrameInfo(m_PlayerSpriteFrames[static_cast<int>(m_State)]);
 	GetSprite()->ResetAnimation();
@@ -112,7 +119,7 @@ void Player::Kill(const Vector2f& impulse)
 {
 	Entity::Kill(impulse);
 
-	SetState(PlayerState::hurtFly);
+	SetState(PlayerState::hurtFly, nullptr);
 }
 
 void Player::DrawSplash() const
@@ -273,15 +280,15 @@ Player::PlayerState Player::GetNextGroundState(bool isMoving, bool roll, bool cr
 	return m_State;
 }
 
-void Player::ProcessStateChange(bool isMoving, bool roll, bool crouch)
+void Player::ProcessStateChange(bool isMoving, bool roll, bool crouch, ParticleManager* pParticleManager)
 {
 	PlayerState
 		nextState{ GetNextState(isMoving, roll, crouch) };
 
-	SetState(nextState);
+	SetState(nextState, pParticleManager);
 }
 
-void Player::HandleKeyboard(Map* pMap, const Uint8* pStates, float elapsedSec)
+void Player::HandleKeyboard(Map* pMap, const Uint8* pStates, float elapsedSec, ParticleManager* pParticleManager)
 {
 	bool
 		moveRight	{ static_cast<bool>(pStates[SDL_SCANCODE_D]) },
@@ -293,7 +300,7 @@ void Player::HandleKeyboard(Map* pMap, const Uint8* pStates, float elapsedSec)
 
 	if (interactionButton && IsOnGround())
 	{
-		Interact(pMap);
+		Interact(pMap, pParticleManager);
 		return;
 	}
 
@@ -320,7 +327,8 @@ void Player::HandleKeyboard(Map* pMap, const Uint8* pStates, float elapsedSec)
 	ProcessStateChange(
 		isMoving,
 		rollIntent,
-		downButton && !isMoving
+		downButton && !isMoving,
+		pParticleManager
 	);
 
 	if (rollIntent)
@@ -355,7 +363,7 @@ void Player::HandleAutowalk()
 		SetPositionX(targetX);
 		m_IsAutoWalking = false;
 
-		SetState(PlayerState::catPet);//TODO hardcoding this because i probably wont use it much for anything else but i can review it later
+		SetState(PlayerState::catPet, nullptr);//TODO hardcoding this because i probably wont use it much for anything else but i can review it later
 		GetSprite()->ResetHorizontalFlip();
 		if (m_pTargetObject)
 		{
@@ -376,7 +384,7 @@ void Player::HandleAutowalk()
 	
 }
 
-void Player::Interact(Map* pMap)
+void Player::Interact(Map* pMap, ParticleManager* pParticleManager)
 {
 	if (m_State == PlayerState::catPet || m_IsAutoWalking)
 	{
@@ -395,7 +403,7 @@ void Player::Interact(Map* pMap)
 		{
 			m_pTargetObject = pInteractableObject;
 			m_IsAutoWalking = true;
-			SetState(PlayerState::run);
+			SetState(PlayerState::run, pParticleManager);
 		}
 		else if (type == InteractableObject::InteractableType::throwableObject)
 		{
@@ -407,7 +415,7 @@ void Player::Interact(Map* pMap)
 
 void Player::Attack(const Vector2f& mousePos, ParticleManager* particleManager)
 {
-	SetState(PlayerState::attack);
+	SetState(PlayerState::attack, nullptr);
 	AttackDash(mousePos);
 	SetCanJumpThroughPlatform(true);
 

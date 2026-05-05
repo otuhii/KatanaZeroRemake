@@ -26,7 +26,7 @@ void CollisionManager::HandleMovement(Entity* pEntity, const Map* pMap, float el
 
 void CollisionManager::HandleParticles(ParticleManager* pParticleManager, const Map* pMap)
 {
-	for (AttackParticle* pParticle : pParticleManager->GetParticles())
+	for (AttackParticle* pParticle : pParticleManager->GetAttackParticles())
 	{
 		if (pParticle->IsActive())
 		{

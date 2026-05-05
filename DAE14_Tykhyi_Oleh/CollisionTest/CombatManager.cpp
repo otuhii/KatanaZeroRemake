@@ -21,7 +21,7 @@ void CombatManager::ResolveCombat(
 	playerPos.y += pPlayer->GetCurrentHitbox().height * 0.5f;
 
 
-	for (AttackParticle* pAttackParticle : particleManager->GetParticles())
+	for (AttackParticle* pAttackParticle : particleManager->GetAttackParticles())
 	{
 		if (pAttackParticle->IsActive())
 		{
@@ -30,7 +30,7 @@ void CombatManager::ResolveCombat(
 				//deflection
 				if (pAttackParticle->GetAttackType() == AttackParticle::AttackType::melee)
 				{
-					for (AttackParticle* pOtherParticle : particleManager->GetParticles())
+					for (AttackParticle* pOtherParticle : particleManager->GetAttackParticles())
 					{
 						if (pOtherParticle->IsActive() &&
 							pOtherParticle->GetAttackType() == AttackParticle::AttackType::bullet &&

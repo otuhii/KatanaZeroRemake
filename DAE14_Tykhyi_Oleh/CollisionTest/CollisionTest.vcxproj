@@ -189,6 +189,7 @@ xcopy "$(ProjectDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClCompile Include="SpriteManager.cpp" />
     <ClCompile Include="ThrowableObject.cpp" />
     <ClCompile Include="UserUtils.cpp" />
+    <ClCompile Include="VFX.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimationFrameInfo.h" />
@@ -220,6 +221,7 @@ xcopy "$(ProjectDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClInclude Include="SpriteManager.h" />
     <ClInclude Include="ThrowableObject.h" />
     <ClInclude Include="UserUtils.h" />
+    <ClInclude Include="VFX.h" />
   </ItemGroup>
   <!-- Import the custom .targets file -->
   <Import Project="Prog2Game.targets" />
