@@ -7,11 +7,12 @@ class Texture;
 class Sprite final
 {
 public:
+	Sprite() = default;
 	Sprite(const std::string& spritesheetTexturePath);
-	Sprite(const Sprite& other);
 
-	/*Sprite(const Sprite&) = delete;
-	Sprite& operator=(const Sprite&) = delete;*/
+	Sprite(const Sprite&) = delete;
+	Sprite& operator=(const Sprite&) = delete;
+
 	~Sprite();
 
 	void Draw(const Vector2f& drawPos, bool pivotX, bool pivotY) const;
@@ -50,6 +51,8 @@ public:
 
 	void SetLooping(bool isLooping);
 	void SetStatic(bool isStatic);
+
+	void CopyFrom(const Sprite* pOther);
 private:
 	AnimationFrameInfo m_AnimationFrameInfo{};
 
@@ -68,8 +71,10 @@ private:
 		m_RotationAngle{},
 		m_ScaleValue{};
 
-	Texture* m_pSpritesheet;
+	Texture* m_pSpritesheet{};
 
+	int
+		m_Index{};
 
 	bool
 		m_OwnsTexture{ true };

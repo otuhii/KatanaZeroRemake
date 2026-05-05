@@ -14,8 +14,10 @@ public:
 	Sprite* GetSprite(int index) const;
 
 	Sprite* CreateSprite(const std::string& path);
-
-	Sprite* CloneSprite(const Sprite* pOriginal);
+	Sprite* CreateEmptySprite();
+	Sprite* CreateCopySprite(const Sprite* pOriginal);
+	
+	//void CloneSprite(Sprite* pDestination, Sprite* pSource);
 
 	void RemoveSprite(int index);
 

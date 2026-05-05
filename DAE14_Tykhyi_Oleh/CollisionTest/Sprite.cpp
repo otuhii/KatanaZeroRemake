@@ -15,20 +15,6 @@ Sprite::Sprite(const std::string& spritesheetTexturePath)
 	m_AnimationFrameInfo.frameTime = 1.f;
 }
 
-Sprite::Sprite(const Sprite& other)
-	: m_AccumulatedTime{ other.m_AccumulatedTime },
-	m_FrameCount{ other.m_FrameCount },
-	m_IsVisible{ other.m_IsVisible },
-	m_ScaleValue{ other.m_ScaleValue },
-	m_pSpritesheet{ other.m_pSpritesheet },
-	m_AnimationFrameInfo{ other.m_AnimationFrameInfo },
-	m_IsFlippedHorizontally{ other.m_IsFlippedHorizontally },
-	m_IsFlippedVertically{ other.m_IsFlippedVertically },
-	m_RotationAngle{ other.m_RotationAngle },
-	m_OwnsTexture{ false }
-{
-}
-
 Sprite::~Sprite()
 {
 	if (m_OwnsTexture)
@@ -150,6 +136,26 @@ void Sprite::SetLooping(bool isLooping)
 void Sprite::SetStatic(bool isStatic)
 {
 	m_IsStatic = isStatic;
+}
+
+void Sprite::CopyFrom(const Sprite* pOther)
+{
+	if (!pOther)
+	{
+		return;
+	}
+
+	m_pSpritesheet = pOther->m_pSpritesheet;
+	m_AnimationFrameInfo = pOther->m_AnimationFrameInfo;
+	m_OwnsTexture = false;
+
+	m_AccumulatedTime = 0.f;
+	m_FrameCount = 0;
+	m_IsVisible = true;
+	m_ScaleValue = pOther->m_ScaleValue;
+	m_RotationAngle = pOther->m_RotationAngle;
+	m_IsFlippedHorizontally = pOther->m_IsFlippedHorizontally;
+	m_IsFlippedVertically = pOther->m_IsFlippedVertically;
 }
 
 void Sprite::Draw(const Vector2f& drawPos, bool pivotX, bool pivotY) const

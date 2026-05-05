@@ -57,8 +57,8 @@ void EnemyManager::AddEnemy(Enemy::EnemyType type, const Vector2f& position, flo
 	if (type == Enemy::EnemyType::grunt)
 	{
 		m_pEnemies.push_back(new Grunt{
-			pSpriteManager->CloneSprite(m_EnemyTypeTemplates[static_cast<int>(type)].spriteSheet),
-			pSpriteManager->CloneSprite(m_EnemyTypeTemplates[static_cast<int>(type)].additionSprite),
+			pSpriteManager->CreateCopySprite(m_EnemyTypeTemplates[static_cast<int>(type)].spriteSheet),
+			pSpriteManager->CreateCopySprite(m_EnemyTypeTemplates[static_cast<int>(type)].additionSprite),
 			m_pTarget,
 			&m_EnemyTypeTemplates[static_cast<int>(type)].enemyAnimationFrameInfo,
 			&m_EnemyTypeTemplates[static_cast<int>(type)].additionalSpriteFrameInfo,
@@ -73,9 +73,9 @@ void EnemyManager::AddEnemy(Enemy::EnemyType type, const Vector2f& position, flo
 	else if (type == Enemy::EnemyType::gangster)
 	{
 		m_pEnemies.push_back(new Gangster{
-			pSpriteManager->CloneSprite(m_EnemyTypeTemplates[static_cast<int>(type)].spriteSheet),
-			pSpriteManager->CloneSprite(m_EnemyTypeTemplates[static_cast<int>(type)].additionSprite),
-			pSpriteManager->CloneSprite(m_EnemyTypeTemplates[static_cast<int>(type)].projectileSprite),
+			pSpriteManager->CreateCopySprite(m_EnemyTypeTemplates[static_cast<int>(type)].spriteSheet),
+			pSpriteManager->CreateCopySprite(m_EnemyTypeTemplates[static_cast<int>(type)].additionSprite),
+			pSpriteManager->CreateCopySprite(m_EnemyTypeTemplates[static_cast<int>(type)].projectileSprite),
 			m_pTarget,
 			&m_EnemyTypeTemplates[static_cast<int>(type)].enemyAnimationFrameInfo,
 			position,

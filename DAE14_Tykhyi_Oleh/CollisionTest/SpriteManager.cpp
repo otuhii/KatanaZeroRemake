@@ -25,27 +25,52 @@ Sprite* SpriteManager::GetSprite(int index) const
 
 Sprite* SpriteManager::CreateSprite(const std::string& path) 
 {
-	Sprite* pNewSprite = new Sprite{ path };
+	Sprite* 
+		pNewSprite{ new Sprite{ path } };
 
 	m_pSprites.push_back(pNewSprite);
 
 	return pNewSprite;
 }
 
-Sprite* SpriteManager::CloneSprite(const Sprite* pOriginal)
+Sprite* SpriteManager::CreateEmptySprite()
+{
+	Sprite* 
+		pNewSprite{ new Sprite{} };
+
+	m_pSprites.push_back(pNewSprite);
+
+	return pNewSprite;
+}
+
+Sprite* SpriteManager::CreateCopySprite(const Sprite* pOriginal)
 {
 	if (pOriginal == nullptr)
 	{
 		return nullptr;
 	}
 
-	Sprite* 
-		pNewSprite{ new Sprite{*pOriginal} };
+	Sprite*
+		pNewSprite{ new Sprite{} };
+
+	pNewSprite->CopyFrom(pOriginal);
 
 	m_pSprites.push_back(pNewSprite);
 
 	return pNewSprite;
 }
+
+//void SpriteManager::CloneSprite(Sprite* pDestination, Sprite* pSource)
+//{
+//	if (pSource == nullptr || pDestination == nullptr)
+//	{
+//		return;
+//	}
+//	
+//	pDestination->CopyFrom(pSource);
+//}
+
+
 
 //TODO consider that after deletion of the sprite, my player or enemy instance still have that address, maybe i should consider adding some check when it calls
 void SpriteManager::RemoveSprite(int itemIndex) 
