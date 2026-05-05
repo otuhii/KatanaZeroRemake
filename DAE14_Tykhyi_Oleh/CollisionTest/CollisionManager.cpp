@@ -75,6 +75,10 @@ void CollisionManager::CheckCollision(float elapsedSec, Entity* pEntity, const M
 						pEntity->Kill(Vector2f{ 0.f, 0.f }); //TODO calculate impulse for that
 					}
 				}
+				else
+				{
+					HandleAABB(elapsedSec, pEntity, EnvironmentActiveObject::EnvironmentObjectType::none, pDoor->GetCurrentCollider(), pDoor->GetFloor(), isHorizontalMovement, updateFloorInfo);
+				}
 			}
 		}
 	}
