@@ -138,6 +138,11 @@ void Sprite::SetStatic(bool isStatic)
 	m_IsStatic = isStatic;
 }
 
+void Sprite::SetCurrentFrame(int frame)
+{
+	m_FrameCount = frame;
+}
+
 void Sprite::CopyFrom(const Sprite* pOther)
 {
 	if (!pOther)
@@ -152,6 +157,7 @@ void Sprite::CopyFrom(const Sprite* pOther)
 	m_AccumulatedTime = 0.f;
 	m_FrameCount = 0;
 	m_IsVisible = true;
+	m_IsStatic = pOther->m_IsStatic;
 	m_ScaleValue = pOther->m_ScaleValue;
 	m_RotationAngle = pOther->m_RotationAngle;
 	m_IsFlippedHorizontally = pOther->m_IsFlippedHorizontally;
@@ -225,6 +231,11 @@ void Sprite::Update(float elapsedSec)
 	if (!m_IsVisible || m_IsStatic)
 	{
 		return; 
+	}
+
+	if (m_LastFrameReached && !m_IsLooping)
+	{
+		return;
 	}
 
 	m_LastFrameReached = false;

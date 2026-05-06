@@ -80,7 +80,7 @@ void Player::SetState(PlayerState state, ParticleManager* pParticleManager)
 
 	if (m_State == PlayerState::run)
 	{
-		VFX::SpawnDust(20, GetPosition(), pParticleManager);
+		VFX::SpawnDust(10, GetPosition(), GetVelocity(), pParticleManager);
 	}
 
 	GetSprite()->SetAnimationFrameInfo(m_PlayerSpriteFrames[static_cast<int>(m_State)]);

@@ -52,6 +52,8 @@ public:
 	void SetLooping(bool isLooping);
 	void SetStatic(bool isStatic);
 
+	void SetCurrentFrame(int frame);
+
 	void CopyFrom(const Sprite* pOther);
 private:
 	AnimationFrameInfo m_AnimationFrameInfo{};

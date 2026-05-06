@@ -24,6 +24,7 @@ public:
 
 	bool IsActive() const;
 
+	void SetRandomFrame();
 private:
 	Sprite*
 		m_pSprite;

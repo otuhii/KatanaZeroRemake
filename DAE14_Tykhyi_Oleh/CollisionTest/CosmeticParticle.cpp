@@ -17,6 +17,9 @@ void CosmeticParticle::Spawn(
 )
 {
 	m_pSprite->CopyFrom(pTemplateSprite);
+
+	m_pSprite->SetScale(2.f);
+
 	m_Lifetime = lifetime;
 	m_Position = position;
 	m_Velocity = velocity;
@@ -58,4 +61,15 @@ void CosmeticParticle::Deactivate()
 bool CosmeticParticle::IsActive() const
 {
 	return m_IsActive;
+}
+
+void CosmeticParticle::SetRandomFrame()
+{
+	int
+		maxFrame{ m_pSprite->GetCurrentMaxFrameCount() };
+
+	int 
+		randFrame{ rand() % maxFrame };
+
+	m_pSprite->SetCurrentFrame(randFrame);
 }

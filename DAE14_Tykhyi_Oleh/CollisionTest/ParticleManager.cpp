@@ -11,9 +11,9 @@ ParticleManager::ParticleManager(int attackInstanceCount, int cosmeticInstanceCo
 	m_pSpriteTemplates.resize(static_cast<size_t>(CosmeticParticleType::count));
 	m_pSpriteTemplates[static_cast<int>(CosmeticParticleType::dust)] = pSpriteManager->CreateSprite("img/vfx/dustParticleSprites.png");
 	m_pSpriteTemplates[static_cast<int>(CosmeticParticleType::dust)]->SetAnimationFrameInfo(JsonImporter::ImportAnimationFrameObjects("json/dustParticleAnimationInfo.json")[0]);
-	//m_pSpriteTemplates[static_cast<int>(CosmeticParticleType::blood)] = pSpriteManager->CreateSprite("img/vfx/bloodParticleSprites.png");
-	//m_pSpriteTemplates[static_cast<int>(CosmeticParticleType::blood)]->SetAnimationFrameInfo(JsonImporter::ImportAnimationFrameObjects("json/blooParticleAnimationInfo.json")[0]);
-
+	m_pSpriteTemplates[static_cast<int>(CosmeticParticleType::blood)] = pSpriteManager->CreateSprite("img/vfx/bloodParticleSprites.png");
+	m_pSpriteTemplates[static_cast<int>(CosmeticParticleType::blood)]->SetAnimationFrameInfo(JsonImporter::ImportAnimationFrameObjects("json/bloodParticleAnimationInfo.json")[0]);
+	m_pSpriteTemplates[static_cast<int>(CosmeticParticleType::blood)]->SetStatic(true);
 
 	m_pAttackParticles.reserve(attackInstanceCount);
 
@@ -205,7 +205,15 @@ void ParticleManager::SpawnCosmeticParticle(CosmeticParticleType type, const Vec
 
 	if (pParticle != nullptr)
 	{
-		pParticle->Spawn(position, velocity, lifeTime, false, m_pSpriteTemplates[static_cast<int>(type)]);
+		if (type == CosmeticParticleType::dust)
+		{
+			pParticle->Spawn(position, velocity, lifeTime, false, m_pSpriteTemplates[static_cast<int>(type)]);
+		}
+		else if (type == CosmeticParticleType::blood)
+		{
+			pParticle->Spawn(position, velocity, lifeTime, true, m_pSpriteTemplates[static_cast<int>(type)]);
+			pParticle->SetRandomFrame();
+		}
 	}
 }
 

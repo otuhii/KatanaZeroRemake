@@ -6,6 +6,8 @@
 
 #include "utils.h"
 
+#include "VFX.h"
+
 Enemy::Enemy(
 	EnemyType type, 
 	EnemyState state,
@@ -59,6 +61,10 @@ void Enemy::Update(float elapsedSec, ParticleManager* particleManager, const Map
 		UpdateCurrentState(elapsedSec, particleManager, pMap);
 
 		UpdateSprite();
+	}
+	else if (!IsAlive() && !IsSpriteAnimationFinished())
+	{
+		VFX::SpawnBloodFountain(GetPosition(), particleManager);
 	}
 }
 
