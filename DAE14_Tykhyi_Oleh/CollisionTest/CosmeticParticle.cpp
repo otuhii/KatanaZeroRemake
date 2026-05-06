@@ -9,16 +9,18 @@ CosmeticParticle::CosmeticParticle(SpriteManager* pSpriteManager)
 }
 
 void CosmeticParticle::Spawn(
+	CosmeticParticleType type,
 	const Vector2f& position,
 	const Vector2f& velocity, 
 	float lifetime, 
 	bool applyGravity,
+	float spriteRotation,
 	Sprite* pTemplateSprite
 )
 {
 	m_pSprite->CopyFrom(pTemplateSprite);
-
 	m_pSprite->SetScale(2.f);
+	m_pSprite->RotateBy(spriteRotation);
 
 	m_Lifetime = lifetime;
 	m_Position = position;

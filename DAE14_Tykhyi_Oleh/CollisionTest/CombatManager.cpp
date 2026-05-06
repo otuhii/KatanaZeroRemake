@@ -9,6 +9,8 @@
 #include "InteractableObject.h"
 #include "Door.h"
 
+#include "VFX.h"
+
 void CombatManager::ResolveCombat(
 	Player* pPlayer,
 	EnemyManager* enemyManager,
@@ -60,7 +62,12 @@ void CombatManager::ResolveCombat(
 						{
 							if (UserUtils::IsPolyInRectAABB(pAttackParticle->GetWorldCoordinates(), pEnemy->GetCurrentHitbox()))
 							{
-								pEnemy->Kill(CalculateHitImpulse(pPlayer, pEnemy, pAttackParticle));
+								Vector2f
+									impulse{ CalculateHitImpulse(pPlayer, pEnemy, pAttackParticle) };
+
+								pEnemy->Kill(impulse);
+
+								VFX::SpawnBloodSlash(pEnemy->GetPosition(), impulse, particleManager);
 
 								if (pAttackParticle->GetAttackType() == AttackParticle::AttackType::bullet ||
 									pAttackParticle->GetAttackType() == AttackParticle::AttackType::thrownObject)

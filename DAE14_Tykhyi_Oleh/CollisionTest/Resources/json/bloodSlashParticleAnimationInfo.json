@@ -1,0 +1,16 @@
+{
+  "frames": [
+    {
+      "_frameName": "toLick",
+
+      "frameTime": 0.00,
+      "maxFrameCount": 6,
+      "dimensionRect": {
+        "left": 0.0,
+        "bottom": 0.0,
+        "width": 32.0,
+        "height": 32.0
+      }
+    }
+  ]
+}

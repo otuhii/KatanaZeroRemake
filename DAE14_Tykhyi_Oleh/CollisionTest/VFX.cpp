@@ -3,6 +3,8 @@
 
 #include "ParticleManager.h"
 
+#include <iostream>
+
 void VFX::SpawnDust(int particleCount, const Vector2f&position, const Vector2f& playerVelocity, ParticleManager* pParticleManager)
 {
     const int
@@ -39,7 +41,14 @@ void VFX::SpawnDust(int particleCount, const Vector2f&position, const Vector2f& 
         };
 
 
-       pParticleManager->SpawnCosmeticParticle(ParticleManager::CosmeticParticleType::dust, spawnPos, velocity, 0.35f);
+       pParticleManager->SpawnCosmeticParticle(
+           CosmeticParticle::CosmeticParticleType::dust, 
+           false,
+           0.f,
+           spawnPos, 
+           velocity, 
+           0.35f
+       );
     }
 }
 
@@ -69,10 +78,58 @@ void VFX::SpawnBloodFountain(const Vector2f& position, ParticleManager* pParticl
         float lifetime{ 0.5f + static_cast<float>(rand() % 50) / 100.f };
 
         pParticleManager->SpawnCosmeticParticle(
-            ParticleManager::CosmeticParticleType::blood,
+            CosmeticParticle::CosmeticParticleType::blood,
+            true,
+            0.f,
             position,
             velocity,
             lifetime
+        );
+    }
+}
+
+void VFX::SpawnBloodSlash(const Vector2f& position, const Vector2f& slashVelocity, ParticleManager* pParticleManager)
+{
+    const float
+        spreadAngle{ 30.f };
+
+    const int
+        maxParticleCount{ 10 },
+        minParticleCount{ 5 },
+        maxSpeed{ 800 },
+        minSpeed{ 300 };
+
+    int 
+        count{ (rand() % (maxParticleCount - minParticleCount)) + minParticleCount };
+
+    float baseAngle{
+        atan2f(slashVelocity.y, slashVelocity.x)
+    };
+
+    for (int counter{ 0 }; counter < count; ++counter)
+    {
+        const float
+            spread{ spreadAngle * static_cast<float>(M_PI) / 180.f },
+            randomOffset{ (static_cast<float>(rand() % 100) / 100.f - 0.5f) *  spread },
+            finalAngle{ baseAngle + randomOffset };
+
+        int 
+            speed{ (rand() % (maxSpeed - minSpeed)) + minSpeed };
+
+        Vector2f velocity{
+             cosf(finalAngle) * speed,
+             sinf(finalAngle) * speed
+        };
+
+        std::cout << finalAngle * 180.f/static_cast<float>(M_PI) << std::endl;
+
+        pParticleManager->SpawnCosmeticParticle(
+            CosmeticParticle::CosmeticParticleType::bloodSlash,
+            false,
+            baseAngle * (180.f / static_cast<float>(M_PI)),
+            position,
+            velocity,
+            0.3f
         );
     }
 }

@@ -2,18 +2,23 @@
 #include "ParticleManager.h"
 #include "Entity.h"
 
-#include "CosmeticParticle.h"
 #include "SpriteManager.h"
 #include "JsonImporter.h"
 
 ParticleManager::ParticleManager(int attackInstanceCount, int cosmeticInstanceCount, SpriteManager* pSpriteManager)
 {
-	m_pSpriteTemplates.resize(static_cast<size_t>(CosmeticParticleType::count));
-	m_pSpriteTemplates[static_cast<int>(CosmeticParticleType::dust)] = pSpriteManager->CreateSprite("img/vfx/dustParticleSprites.png");
-	m_pSpriteTemplates[static_cast<int>(CosmeticParticleType::dust)]->SetAnimationFrameInfo(JsonImporter::ImportAnimationFrameObjects("json/dustParticleAnimationInfo.json")[0]);
-	m_pSpriteTemplates[static_cast<int>(CosmeticParticleType::blood)] = pSpriteManager->CreateSprite("img/vfx/bloodParticleSprites.png");
-	m_pSpriteTemplates[static_cast<int>(CosmeticParticleType::blood)]->SetAnimationFrameInfo(JsonImporter::ImportAnimationFrameObjects("json/bloodParticleAnimationInfo.json")[0]);
-	m_pSpriteTemplates[static_cast<int>(CosmeticParticleType::blood)]->SetStatic(true);
+	m_pSpriteTemplates.resize(static_cast<size_t>(CosmeticParticle::CosmeticParticleType::count));
+	m_pSpriteTemplates[static_cast<int>(CosmeticParticle::CosmeticParticleType::dust)] = pSpriteManager->CreateSprite("img/vfx/dustParticleSprites.png");
+	m_pSpriteTemplates[static_cast<int>(CosmeticParticle::CosmeticParticleType::dust)]->SetAnimationFrameInfo(JsonImporter::ImportAnimationFrameObjects("json/dustParticleAnimationInfo.json")[0]);
+
+	m_pSpriteTemplates[static_cast<int>(CosmeticParticle::CosmeticParticleType::blood)] = pSpriteManager->CreateSprite("img/vfx/bloodParticleSprites.png");
+	m_pSpriteTemplates[static_cast<int>(CosmeticParticle::CosmeticParticleType::blood)]->SetAnimationFrameInfo(JsonImporter::ImportAnimationFrameObjects("json/bloodParticleAnimationInfo.json")[0]);
+	m_pSpriteTemplates[static_cast<int>(CosmeticParticle::CosmeticParticleType::blood)]->SetStatic(true);
+
+	m_pSpriteTemplates[static_cast<int>(CosmeticParticle::CosmeticParticleType::bloodSlash)] = pSpriteManager->CreateSprite("img/vfx/bloodSlashParticleSprites.png");
+	m_pSpriteTemplates[static_cast<int>(CosmeticParticle::CosmeticParticleType::bloodSlash)]->SetAnimationFrameInfo(JsonImporter::ImportAnimationFrameObjects("json/bloodSlashParticleAnimationInfo.json")[0]);
+	m_pSpriteTemplates[static_cast<int>(CosmeticParticle::CosmeticParticleType::bloodSlash)]->SetStatic(true);
+
 
 	m_pAttackParticles.reserve(attackInstanceCount);
 
@@ -197,7 +202,7 @@ void ParticleManager::SpawnThrownObject(
 	}
 }
 
-void ParticleManager::SpawnCosmeticParticle(CosmeticParticleType type, const Vector2f& position, const Vector2f& velocity, float lifeTime) const
+void ParticleManager::SpawnCosmeticParticle(CosmeticParticle::CosmeticParticleType type, float applyGravity, float rotation, const Vector2f& position, const Vector2f& velocity, float lifeTime) const
 {
 	CosmeticParticle* pParticle{
 		GetFreeCosmeticParticle()
@@ -205,13 +210,20 @@ void ParticleManager::SpawnCosmeticParticle(CosmeticParticleType type, const Vec
 
 	if (pParticle != nullptr)
 	{
-		if (type == CosmeticParticleType::dust)
+		if (type == CosmeticParticle::CosmeticParticleType::dust)
 		{
-			pParticle->Spawn(position, velocity, lifeTime, false, m_pSpriteTemplates[static_cast<int>(type)]);
+			pParticle->Spawn(type, position, velocity, lifeTime, applyGravity, rotation, m_pSpriteTemplates[static_cast<int>(type)]);
 		}
-		else if (type == CosmeticParticleType::blood)
+		else if (type == CosmeticParticle::CosmeticParticleType::blood)
 		{
-			pParticle->Spawn(position, velocity, lifeTime, true, m_pSpriteTemplates[static_cast<int>(type)]);
+			pParticle->Spawn(type, position, velocity, lifeTime, applyGravity, rotation, m_pSpriteTemplates[static_cast<int>(type)]);
+
+			pParticle->SetRandomFrame();
+		}
+		else if (type == CosmeticParticle::CosmeticParticleType::bloodSlash)
+		{
+			pParticle->Spawn(type, position, velocity, lifeTime, applyGravity, rotation, m_pSpriteTemplates[static_cast<int>(type)]);
+
 			pParticle->SetRandomFrame();
 		}
 	}

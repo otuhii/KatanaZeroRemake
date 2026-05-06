@@ -3,6 +3,7 @@
 #include "Texture.h"
 
 #include <iostream>
+#include "CosmeticParticle.h"
 
 Sprite::Sprite(const std::string& spritesheetTexturePath)
 	: m_AccumulatedTime{ 0.f }, m_FrameCount{ 0 }, m_IsVisible{ true }, m_ScaleValue{ 1.f }

@@ -1,22 +1,13 @@
 #pragma once
 #include "AttackParticle.h"
+#include "CosmeticParticle.h"
 
-class CosmeticParticle;
 class SpriteManager;
 class Sprite;
 
 class ParticleManager final
 {
 public:
-	enum class CosmeticParticleType {
-		none,
-
-		dust,
-		blood,
-
-		count
-	};
-
 	ParticleManager(int attackInstanceCount, int cosmeticInstanceCount, SpriteManager* pSpriteManager);
 
 	~ParticleManager();
@@ -58,7 +49,9 @@ public:
 	) const;
 
 	void SpawnCosmeticParticle(
-		CosmeticParticleType type,
+		CosmeticParticle::CosmeticParticleType type,
+		float applyGravity,
+		float rotation,
 		const Vector2f& position,
 		const Vector2f& velocity,
 		float lifeTime

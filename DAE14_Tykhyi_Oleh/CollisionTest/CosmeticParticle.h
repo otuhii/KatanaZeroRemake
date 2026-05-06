@@ -6,13 +6,25 @@ class Sprite;
 class CosmeticParticle final
 { 
 public:
+	enum class CosmeticParticleType {
+		none,
+
+		dust,
+		blood,
+		bloodSlash,
+
+		count
+	};
+
 	CosmeticParticle(SpriteManager* pSpriteManager);
 
 	void Spawn(
+		CosmeticParticleType type,
 		const Vector2f& position,
 		const Vector2f& velocity,
 		float lifetime,
 		bool applyGravity,
+		float spriteRotation,
 		Sprite* pTemplateSprite
 	);
 
@@ -26,6 +38,8 @@ public:
 
 	void SetRandomFrame();
 private:
+	CosmeticParticleType m_Type{ CosmeticParticleType::none };
+
 	Sprite*
 		m_pSprite;
 

@@ -64,7 +64,7 @@ void Enemy::Update(float elapsedSec, ParticleManager* particleManager, const Map
 	}
 	else if (!IsAlive() && !IsSpriteAnimationFinished())
 	{
-		VFX::SpawnBloodFountain(GetPosition(), particleManager);
+		//VFX::SpawnBloodFountain(GetPosition(), particleManager);
 	}
 }
 
