@@ -50,7 +50,7 @@ public:
 
 	void SpawnCosmeticParticle(
 		CosmeticParticle::CosmeticParticleType type,
-		float applyGravity,
+		bool applyGravity,
 		float rotation,
 		const Vector2f& position,
 		const Vector2f& velocity,

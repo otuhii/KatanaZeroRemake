@@ -9,7 +9,7 @@ public:
     ThrowableObject(Sprite* pSprite, const Vector2f& position, float interactionRange, float scale, int floor);
 
     void Draw() const override;
-    void Interact() override;
+    void Interact(SoundManager* pSoundManager) override;
 
     Sprite* GetSprite() const;
 

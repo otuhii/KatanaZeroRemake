@@ -19,6 +19,10 @@ ParticleManager::ParticleManager(int attackInstanceCount, int cosmeticInstanceCo
 	m_pSpriteTemplates[static_cast<int>(CosmeticParticle::CosmeticParticleType::bloodSlash)]->SetAnimationFrameInfo(JsonImporter::ImportAnimationFrameObjects("json/bloodSlashParticleAnimationInfo.json")[0]);
 	m_pSpriteTemplates[static_cast<int>(CosmeticParticle::CosmeticParticleType::bloodSlash)]->SetStatic(true);
 
+	m_pSpriteTemplates[static_cast<int>(CosmeticParticle::CosmeticParticleType::cracks)] = pSpriteManager->CreateSprite("img/vfx/cracksParticleSprite.png");
+	m_pSpriteTemplates[static_cast<int>(CosmeticParticle::CosmeticParticleType::cracks)]->SetAnimationFrameInfo(JsonImporter::ImportAnimationFrameObjects("json/cracksParticleAnimationInfo.json")[0]);
+	m_pSpriteTemplates[static_cast<int>(CosmeticParticle::CosmeticParticleType::cracks)]->SetStatic(true);
+
 
 	m_pAttackParticles.reserve(attackInstanceCount);
 
@@ -202,7 +206,7 @@ void ParticleManager::SpawnThrownObject(
 	}
 }
 
-void ParticleManager::SpawnCosmeticParticle(CosmeticParticle::CosmeticParticleType type, float applyGravity, float rotation, const Vector2f& position, const Vector2f& velocity, float lifeTime) const
+void ParticleManager::SpawnCosmeticParticle(CosmeticParticle::CosmeticParticleType type, bool applyGravity, float rotation, const Vector2f& position, const Vector2f& velocity, float lifeTime) const
 {
 	CosmeticParticle* pParticle{
 		GetFreeCosmeticParticle()
@@ -212,19 +216,23 @@ void ParticleManager::SpawnCosmeticParticle(CosmeticParticle::CosmeticParticleTy
 	{
 		if (type == CosmeticParticle::CosmeticParticleType::dust)
 		{
-			pParticle->Spawn(type, position, velocity, lifeTime, applyGravity, rotation, m_pSpriteTemplates[static_cast<int>(type)]);
+			pParticle->Spawn(type, position, velocity, lifeTime, applyGravity, rotation, m_pSpriteTemplates[static_cast<int>(type)], 2.f);
 		}
 		else if (type == CosmeticParticle::CosmeticParticleType::blood)
 		{
-			pParticle->Spawn(type, position, velocity, lifeTime, applyGravity, rotation, m_pSpriteTemplates[static_cast<int>(type)]);
+			pParticle->Spawn(type, position, velocity, lifeTime, applyGravity, rotation, m_pSpriteTemplates[static_cast<int>(type)], 1.f);
 
 			pParticle->SetRandomFrame();
 		}
 		else if (type == CosmeticParticle::CosmeticParticleType::bloodSlash)
 		{
-			pParticle->Spawn(type, position, velocity, lifeTime, applyGravity, rotation, m_pSpriteTemplates[static_cast<int>(type)]);
+			pParticle->Spawn(type, position, velocity, lifeTime, applyGravity, rotation, m_pSpriteTemplates[static_cast<int>(type)], 1.5f);
 
 			pParticle->SetRandomFrame();
+		}
+		else if (type == CosmeticParticle::CosmeticParticleType::cracks)
+		{
+			pParticle->Spawn(type, position, velocity, lifeTime, applyGravity, rotation, m_pSpriteTemplates[static_cast<int>(type)], 0.5f);;
 		}
 	}
 }

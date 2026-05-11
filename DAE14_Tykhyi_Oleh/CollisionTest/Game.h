@@ -8,6 +8,7 @@ class EnemyManager;
 class CollisionManager;
 class ParticleManager;
 class CombatManager;
+class SoundManager;
 
 class Camera;
 class Cursor;
@@ -69,6 +70,7 @@ private:
 	SpriteManager*		m_pSpriteManager{};
 	CollisionManager*	m_pCollisionManager{};
 	ParticleManager*	m_pParticleManager{};
+	SoundManager*		m_pSoundManager{};
 
 	Map*				m_pMap;
 	Player*				m_pPlayer{};

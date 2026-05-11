@@ -1,12 +1,14 @@
 #include "pch.h"
 #include "CollisionManager.h"
 #include "ParticleManager.h"
+#include "SoundManager.h"
 
 #include "InteractableObject.h"
 #include "Door.h"
 
 #include "utils.h"
 #include "UserUtils.h"
+#include "VFX.h"
 
 void CollisionManager::HandleMovement(Entity* pEntity, const Map* pMap, float elapsedSec, bool updateFloorInfo) const
 {
@@ -24,7 +26,7 @@ void CollisionManager::HandleMovement(Entity* pEntity, const Map* pMap, float el
 	CheckCollision(elapsedSec, pEntity, pMap, false, updateFloorInfo);
 }
 
-void CollisionManager::HandleParticles(ParticleManager* pParticleManager, const Map* pMap)
+void CollisionManager::HandleParticles(ParticleManager* pParticleManager, SoundManager* pSoundManager, const Map* pMap)
 {
 	for (AttackParticle* pParticle : pParticleManager->GetAttackParticles())
 	{
@@ -35,6 +37,26 @@ void CollisionManager::HandleParticles(ParticleManager* pParticleManager, const 
 			{
 				if (IsOverlappingWithMap(pParticle->GetWorldCoordinates(), pMap))
 				{
+					if (pParticle->GetAttackType() == AttackParticle::AttackType::thrownObject)
+					{
+						pSoundManager->Play(SoundManager::SoundEffectType::plantBreak, 0);
+						VFX::SpawnCracks(
+							pParticle->GetPosition(),
+							UserUtils::PredictNormalWithVelocity(pParticle->GetVelocity()),
+							pParticleManager
+						);
+					}
+					else if (pParticle->GetAttackType() == AttackParticle::AttackType::bullet)
+					{
+						if (pParticle->GetOwnerType() == AttackParticle::OwnerType::Enemy)
+						{
+							pSoundManager->Play(SoundManager::SoundEffectType::bulletDie, 0);
+						}
+						else if (pParticle->GetOwnerType() == AttackParticle::OwnerType::Player)
+						{
+							pSoundManager->Play(SoundManager::SoundEffectType::masterswordBulletDie, 0);
+						}
+					}
 					pParticle->Deactivate();
 				}
 			}

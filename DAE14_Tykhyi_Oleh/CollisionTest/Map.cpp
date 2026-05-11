@@ -45,22 +45,22 @@ void Map::Draw() const
 		if (pObj->IsActive())
 		{
 			pObj->Draw();
-			/*if (pObj->GetType() == InteractableObject::InteractableType::door)
+			if (pObj->GetType() == InteractableObject::InteractableType::door)
 			{
 				const Door* pDoor = static_cast<const Door*>(pObj);
 				utils::SetColor(Color4f{ 0.f, 1.f, 0.f, 1.f });
-				utils::DrawRect(pDoor->GetCurrentCollider());
-			}*/
+				//utils::DrawRect(pDoor->GetCurrentCollider());
+			}
 		}
 	}
 
 }
 
-void Map::Update(float elapsedSec)
+void Map::Update(float elapsedSec, SoundManager* pSoundManager)
 {
 	for (InteractableObject* pObj : m_pInteractableObjects)
 	{
-		pObj->Update(elapsedSec);
+		pObj->Update(elapsedSec, pSoundManager);
 	}
 }
 

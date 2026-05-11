@@ -11,9 +11,9 @@ public:
 
 	void Draw() const override;
 
-	void Update(float elapsedSec) override;
+	void Update(float elapsedSec, SoundManager* pSoundManager) override;
 
-	void Interact() override;
+	void Interact(SoundManager* pSoundManager) override;
 
 	bool IsOpened() const;
 	bool IsOpening() const;

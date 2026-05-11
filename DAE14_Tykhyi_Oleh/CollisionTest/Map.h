@@ -5,6 +5,7 @@
 #include "ControlPoint.h"
 
 class InteractableObject;
+class SoundManager;
 
 class Map final
 {
@@ -13,7 +14,7 @@ public:
 
 	void Draw() const;
 
-	void Update(float elapsedSec);
+	void Update(float elapsedSec, SoundManager* pSoundManager);
 
 	const std::vector<EnvironmentActiveObject>& GetEnvironmentActiveObjects() const;
 

@@ -214,3 +214,8 @@ void AttackParticle::UpdateHitboxGeometry()
 
 	m_GlobalHitbox = transformation.Transform(m_LocalHitbox);
 }
+
+const Vector2f& AttackParticle::GetPosition() const
+{
+	return m_Position;
+}

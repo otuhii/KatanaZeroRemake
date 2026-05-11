@@ -83,3 +83,29 @@ bool UserUtils::ArePolygonsOverlapping(const std::vector<Vector2f>& poly1, const
 
 	return false;
 }
+
+Vector2f UserUtils::PredictNormalWithVelocity(const Vector2f& velocity)
+{
+	if (std::abs(velocity.x) > std::abs(velocity.y))
+	{
+		if (velocity.x > 0)
+		{
+			return Vector2f{ -1.f, 0.f };
+		}
+		else
+		{
+			return Vector2f{ 1.f, 0.f };
+		}
+	}
+	else
+	{
+		if (velocity.y > 0)
+		{
+			return Vector2f{ 0.f, -1.f };
+		}
+		else
+		{
+			return Vector2f{ 0.f, 1.f };
+		}
+	}
+}

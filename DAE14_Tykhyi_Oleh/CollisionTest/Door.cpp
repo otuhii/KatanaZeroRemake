@@ -28,7 +28,7 @@ Door::Door(
 	m_pSprite->FlipHorizontally();
 }
 
-void Door::Update(float elapsedSec)
+void Door::Update(float elapsedSec, SoundManager* pSoundManager)
 {
 	if (m_pSprite->IsFinished() && m_IsOpening)
 	{
@@ -42,7 +42,7 @@ void Door::Draw() const
 	m_pSprite->Draw(GetPosition(), true, false);
 }
 
-void Door::Interact()
+void Door::Interact(SoundManager* pSoundManager)
 {
 	m_pSprite->SetStatic(false);
 	m_IsOpening = true;

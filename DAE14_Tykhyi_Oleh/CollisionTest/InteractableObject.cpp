@@ -6,7 +6,7 @@ InteractableObject::InteractableObject(const Vector2f& position, int floor, floa
 {
 }
 
-void InteractableObject::Update(float elapsedSec)
+void InteractableObject::Update(float elapsedSec, SoundManager* pSoundManager)
 {
 
 }

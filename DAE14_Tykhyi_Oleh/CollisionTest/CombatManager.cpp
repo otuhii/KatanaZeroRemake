@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "EnemyManager.h"
 #include "ParticleManager.h"
+#include "SoundManager.h"
 #include "Map.h"
 
 #include "InteractableObject.h"
@@ -15,7 +16,8 @@ void CombatManager::ResolveCombat(
 	Player* pPlayer,
 	EnemyManager* enemyManager,
 	ParticleManager* particleManager,
-	Map* pMap
+	Map* pMap,
+	SoundManager* pSoundManager
 )
 {	
 	Vector2f
@@ -91,7 +93,7 @@ void CombatManager::ResolveCombat(
 						{
 							if (UserUtils::IsPolyInRectRaycast(pAttackParticle->GetWorldCoordinates(), pDoor->GetCurrentCollider()))
 							{
-								pDoor->Interact();
+								pDoor->Interact(pSoundManager);
 							}
 						}
 					}

@@ -2,6 +2,7 @@
 #include "UserUtils.h"
 
 class ParticleManager;
+class SoundManager;
 class EnemyManager;
 class Map;
 class Player;
@@ -11,7 +12,7 @@ class AttackParticle;
 class CombatManager final
 {
 public:
-	void ResolveCombat(Player* pPlayer, EnemyManager* enemyManager, ParticleManager* particleManager, Map* pMap);
+	void ResolveCombat(Player* pPlayer, EnemyManager* enemyManager, ParticleManager* particleManager, Map* pMap, SoundManager* pSoundManager);
 
 	Vector2f CalculateHitImpulse(const Entity* pHitter, const Entity* pReceiver, const AttackParticle* pParticle);
 };

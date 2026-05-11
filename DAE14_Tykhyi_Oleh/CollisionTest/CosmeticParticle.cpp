@@ -15,12 +15,14 @@ void CosmeticParticle::Spawn(
 	float lifetime, 
 	bool applyGravity,
 	float spriteRotation,
-	Sprite* pTemplateSprite
+	Sprite* pTemplateSprite,
+	float scale
 )
 {
 	m_pSprite->CopyFrom(pTemplateSprite);
-	m_pSprite->SetScale(2.f);
 	m_pSprite->RotateBy(spriteRotation);
+
+	m_pSprite->SetScale(scale);
 
 	m_Lifetime = lifetime;
 	m_Position = position;
@@ -31,12 +33,15 @@ void CosmeticParticle::Spawn(
 
 void CosmeticParticle::Draw() const
 {
-	m_pSprite->Draw(m_Position, true, true);
+	if (m_pSprite)
+	{
+		m_pSprite->Draw(m_Position, true, true);
+	}
 }
 
 void CosmeticParticle::Update(float elapsedSec)
 {
-	float
+	const float
 		gravity{ -981.f };
 
 	m_Lifetime -= elapsedSec;

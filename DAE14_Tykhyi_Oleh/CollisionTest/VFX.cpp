@@ -3,8 +3,6 @@
 
 #include "ParticleManager.h"
 
-#include <iostream>
-
 void VFX::SpawnDust(int particleCount, const Vector2f&position, const Vector2f& playerVelocity, ParticleManager* pParticleManager)
 {
     const int
@@ -14,7 +12,6 @@ void VFX::SpawnDust(int particleCount, const Vector2f&position, const Vector2f& 
         maxYSpeed{ 160 },
         positionMaxOffsetX{ 10 },
         positionMinOffsetX{ -10 };
-
 
     float
         particleDirection{ 1.f };
@@ -63,7 +60,7 @@ void VFX::SpawnBloodFountain(const Vector2f& position, ParticleManager* pParticl
         maxYSpeed{ 300 };
 
     int
-        particleCount{ 1/*(rand() % (maxCount - minCount)) + minCount*/ };
+        particleCount{ (rand() % (maxCount - minCount)) + minCount };
 
     for (int counter{ 0 }; counter < particleCount; ++counter)
     {
@@ -75,7 +72,7 @@ void VFX::SpawnBloodFountain(const Vector2f& position, ParticleManager* pParticl
         Vector2f
             velocity{ horizontalSpeed, verticalSpeed };
 
-        float lifetime{ 0.5f + static_cast<float>(rand() % 50) / 100.f };
+        float lifetime{ 0.1f + static_cast<float>(rand() % 50) / 100.f };
 
         pParticleManager->SpawnCosmeticParticle(
             CosmeticParticle::CosmeticParticleType::blood,
@@ -98,7 +95,7 @@ void VFX::SpawnBloodSlash(const Vector2f& position, const Vector2f& slashVelocit
         minParticleCount{ 5 },
         maxSpeed{ 800 },
         minSpeed{ 300 };
-
+    
     int 
         count{ (rand() % (maxParticleCount - minParticleCount)) + minParticleCount };
 
@@ -121,8 +118,6 @@ void VFX::SpawnBloodSlash(const Vector2f& position, const Vector2f& slashVelocit
              sinf(finalAngle) * speed
         };
 
-        std::cout << finalAngle * 180.f/static_cast<float>(M_PI) << std::endl;
-
         pParticleManager->SpawnCosmeticParticle(
             CosmeticParticle::CosmeticParticleType::bloodSlash,
             false,
@@ -132,4 +127,47 @@ void VFX::SpawnBloodSlash(const Vector2f& position, const Vector2f& slashVelocit
             0.3f
         );
     }
+}
+
+void VFX::SpawnCracks(const Vector2f& position, const Vector2f& surfaceNormal, ParticleManager* pParticleManager)
+{
+    const int
+        particleCount{ 10 };
+
+    const int
+        minSpeed{ 300 },
+        maxSpeed{ 600 };
+
+    const float
+        spreadAngle{ 60.f };
+
+    float
+        baseAngle{ atan2f(surfaceNormal.y, surfaceNormal.x) };
+
+    for (int counter{ 0 }; counter < particleCount; ++counter)
+    {
+        float
+            randomOffset{ (static_cast<float>(rand() % 100) / 100.f - 0.5f) * spreadAngle },
+            finalAngle{ baseAngle + randomOffset },
+            speed{ static_cast<float>(rand() % (maxSpeed - minSpeed) + minSpeed) };
+
+
+        Vector2f velocity{
+            cosf(finalAngle) * speed,
+            sinf(finalAngle) * speed * (0.5f * surfaceNormal.y)
+        };
+
+        float
+            lifeTime{ (static_cast<float>(rand() % 40) / 100.f) + 0.2f };
+
+        pParticleManager->SpawnCosmeticParticle(
+            CosmeticParticle::CosmeticParticleType::cracks,
+            true,
+            0.f,
+            position,
+            velocity,
+            lifeTime
+        );
+    }
+
 }

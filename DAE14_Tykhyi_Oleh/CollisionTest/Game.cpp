@@ -6,6 +6,7 @@
 #include "EnemyManager.h"
 #include "ParticleManager.h"
 #include "CombatManager.h"
+#include "SoundManager.h"
 
 #include "Camera.h"
 #include "Cursor.h"
@@ -34,6 +35,8 @@ void Game::Initialize( )
 	m_pMap = new Map{};
 	m_pParticleManager = new ParticleManager{100, 300, m_pSpriteManager};
 	m_pCombatManager = new CombatManager{};
+	m_pSoundManager = new SoundManager{};
+
 
 	m_pCamera = new Camera{ GetViewPort().width, GetViewPort().height };
 	m_pCursor = new Cursor{ m_pSpriteManager->CreateSprite("img/spr_cursor.png") };
@@ -69,6 +72,7 @@ void Game::Cleanup( )
 	delete m_pEnemyManager;
 	delete m_pParticleManager;
 	delete m_pCombatManager;
+	delete m_pSoundManager;
 	delete m_pCamera;
 	delete m_pCursor;
 }
@@ -87,21 +91,21 @@ void Game::Update( float elapsedSec )
 		timeDivider = 0.2f;
 	}
 
-	m_pPlayer->Update(timeDivider*elapsedSec, m_pMap, pStates, GetViewPort(), m_pParticleManager);
+	m_pPlayer->Update(timeDivider*elapsedSec, m_pMap, pStates, GetViewPort(), m_pParticleManager, m_pSoundManager);
 
 	m_pCollisionManager->HandleMovement(m_pPlayer, m_pMap, timeDivider*elapsedSec, true);
 
 	m_pEnemyManager->Update(timeDivider*elapsedSec, m_pMap, m_pParticleManager, m_pCollisionManager);
 
-	m_pCombatManager->ResolveCombat(m_pPlayer, m_pEnemyManager, m_pParticleManager, m_pMap);
+	m_pCombatManager->ResolveCombat(m_pPlayer, m_pEnemyManager, m_pParticleManager, m_pMap, m_pSoundManager);
 
 	m_pSpriteManager->Update(timeDivider*elapsedSec);
 
 	m_pParticleManager->Update(timeDivider * elapsedSec);
 
-	m_pCollisionManager->HandleParticles(m_pParticleManager, m_pMap);
+	m_pCollisionManager->HandleParticles(m_pParticleManager, m_pSoundManager, m_pMap);
 
-	m_pMap->Update(timeDivider * elapsedSec);
+	m_pMap->Update(timeDivider * elapsedSec, m_pSoundManager);
 
 	m_pCamera->Update(timeDivider * elapsedSec, m_pPlayer->GetPosition(), 1756.f, 750.f);
 }

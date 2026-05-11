@@ -20,6 +20,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CatWork", "CatWork\CatWork.
 		{5ADAB721-CB6C-4EF5-89EB-20EC51A13CFC} = {5ADAB721-CB6C-4EF5-89EB-20EC51A13CFC}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BlendingsTest", "BlendingsTest\BlendingsTest.vcxproj", "{8DE7C888-5E1D-4F16-8B9D-0150B62C6A22}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5ADAB721-CB6C-4EF5-89EB-20EC51A13CFC} = {5ADAB721-CB6C-4EF5-89EB-20EC51A13CFC}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -60,6 +65,14 @@ Global
 		{86E6A597-980D-4FCF-80C7-EEC6E8DDF209}.Release|x64.Build.0 = Release|x64
 		{86E6A597-980D-4FCF-80C7-EEC6E8DDF209}.Release|x86.ActiveCfg = Release|Win32
 		{86E6A597-980D-4FCF-80C7-EEC6E8DDF209}.Release|x86.Build.0 = Release|Win32
+		{8DE7C888-5E1D-4F16-8B9D-0150B62C6A22}.Debug|x64.ActiveCfg = Debug|x64
+		{8DE7C888-5E1D-4F16-8B9D-0150B62C6A22}.Debug|x64.Build.0 = Debug|x64
+		{8DE7C888-5E1D-4F16-8B9D-0150B62C6A22}.Debug|x86.ActiveCfg = Debug|Win32
+		{8DE7C888-5E1D-4F16-8B9D-0150B62C6A22}.Debug|x86.Build.0 = Debug|Win32
+		{8DE7C888-5E1D-4F16-8B9D-0150B62C6A22}.Release|x64.ActiveCfg = Release|x64
+		{8DE7C888-5E1D-4F16-8B9D-0150B62C6A22}.Release|x64.Build.0 = Release|x64
+		{8DE7C888-5E1D-4F16-8B9D-0150B62C6A22}.Release|x86.ActiveCfg = Release|Win32
+		{8DE7C888-5E1D-4F16-8B9D-0150B62C6A22}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

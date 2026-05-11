@@ -13,7 +13,7 @@ void ThrowableObject::Draw() const
 	m_pSprite->Draw(GetPosition(), true, false);
 }
 
-void ThrowableObject::Interact()
+void ThrowableObject::Interact(SoundManager* pSoundManager)
 {
 	SetInactive();
 }

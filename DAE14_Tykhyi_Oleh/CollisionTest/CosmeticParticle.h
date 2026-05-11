@@ -7,11 +7,12 @@ class CosmeticParticle final
 { 
 public:
 	enum class CosmeticParticleType {
-		none,
+		none=-1,
 
 		dust,
 		blood,
 		bloodSlash,
+		cracks,
 
 		count
 	};
@@ -25,7 +26,8 @@ public:
 		float lifetime,
 		bool applyGravity,
 		float spriteRotation,
-		Sprite* pTemplateSprite
+		Sprite* pTemplateSprite,
+		float scale
 	);
 
 	void Draw() const;

@@ -4,6 +4,8 @@
 #include "AnimationFrameInfo.h"
 #include "UserUtils.h"
 #include "ParticleManager.h"
+#include "SoundManager.h"
+
 #include "Map.h"
 
 #include "InteractableObject.h"
@@ -48,20 +50,20 @@ void Player::Draw() const
 	DrawSplash();
 }
 
-void Player::Update(float elapsedSec, Map* pMap, const Uint8* pStates, const Rectf& viewport, ParticleManager* pParticleManager)
+void Player::Update(float elapsedSec, Map* pMap, const Uint8* pStates, const Rectf& viewport, ParticleManager* pParticleManager, SoundManager* pSoundManager)
 {
 	if (m_IsAutoWalking)
 	{
-		HandleAutowalk();
+		HandleAutowalk(pSoundManager);
 		return;
 	}
-	HandleKeyboard(pMap, pStates, elapsedSec, pParticleManager);
+	HandleKeyboard(pMap, pStates, elapsedSec, pParticleManager, pSoundManager);
 	UpdateCurrentState(elapsedSec);
 	UpdateCooldowns(elapsedSec);
 	Entity::Update(elapsedSec, viewport);
 }
 
-void Player::SetState(PlayerState state, ParticleManager* pParticleManager)
+void Player::SetState(PlayerState state, ParticleManager* pParticleManager, SoundManager* pSoundManager)
 {
 	if (m_State == state) { return; } // no animation flickering
 
@@ -81,6 +83,16 @@ void Player::SetState(PlayerState state, ParticleManager* pParticleManager)
 	if (m_State == PlayerState::run)
 	{
 		VFX::SpawnDust(10, GetPosition(), GetVelocity(), pParticleManager);
+	}
+
+	if (m_State == PlayerState::roll)
+	{
+		pSoundManager->Play(SoundManager::SoundEffectType::roll, 0);
+	}
+
+	if (m_State == PlayerState::jump)
+	{
+		pSoundManager->Play(SoundManager::SoundEffectType::playerJump, 0);
 	}
 
 	GetSprite()->SetAnimationFrameInfo(m_PlayerSpriteFrames[static_cast<int>(m_State)]);
@@ -119,7 +131,7 @@ void Player::Kill(const Vector2f& impulse)
 {
 	Entity::Kill(impulse);
 
-	SetState(PlayerState::hurtFly, nullptr);
+	SetState(PlayerState::hurtFly, nullptr, nullptr);
 }
 
 void Player::DrawSplash() const
@@ -280,15 +292,15 @@ Player::PlayerState Player::GetNextGroundState(bool isMoving, bool roll, bool cr
 	return m_State;
 }
 
-void Player::ProcessStateChange(bool isMoving, bool roll, bool crouch, ParticleManager* pParticleManager)
+void Player::ProcessStateChange(bool isMoving, bool roll, bool crouch, ParticleManager* pParticleManager, SoundManager* pSoundManager)
 {
 	PlayerState
 		nextState{ GetNextState(isMoving, roll, crouch) };
 
-	SetState(nextState, pParticleManager);
+	SetState(nextState, pParticleManager, pSoundManager);
 }
 
-void Player::HandleKeyboard(Map* pMap, const Uint8* pStates, float elapsedSec, ParticleManager* pParticleManager)
+void Player::HandleKeyboard(Map* pMap, const Uint8* pStates, float elapsedSec, ParticleManager* pParticleManager, SoundManager* pSoundManager)
 {
 	bool
 		moveRight	{ static_cast<bool>(pStates[SDL_SCANCODE_D]) },
@@ -300,7 +312,7 @@ void Player::HandleKeyboard(Map* pMap, const Uint8* pStates, float elapsedSec, P
 
 	if (interactionButton && IsOnGround())
 	{
-		Interact(pMap, pParticleManager);
+		Interact(pMap, pParticleManager, pSoundManager);
 		return;
 	}
 
@@ -328,7 +340,8 @@ void Player::HandleKeyboard(Map* pMap, const Uint8* pStates, float elapsedSec, P
 		isMoving,
 		rollIntent,
 		downButton && !isMoving,
-		pParticleManager
+		pParticleManager,
+		pSoundManager
 	);
 
 	if (rollIntent)
@@ -337,7 +350,7 @@ void Player::HandleKeyboard(Map* pMap, const Uint8* pStates, float elapsedSec, P
 	}
 }
 
-void Player::HandleAutowalk()
+void Player::HandleAutowalk(SoundManager* pSoundManager)
 {
 	const float
 		targetOffset{ 50.f };
@@ -363,11 +376,11 @@ void Player::HandleAutowalk()
 		SetPositionX(targetX);
 		m_IsAutoWalking = false;
 
-		SetState(PlayerState::catPet, nullptr);//TODO hardcoding this because i probably wont use it much for anything else but i can review it later
+		SetState(PlayerState::catPet, nullptr, nullptr);//TODO hardcoding this because i probably wont use it much for anything else but i can review it later
 		GetSprite()->ResetHorizontalFlip();
 		if (m_pTargetObject)
 		{
-			m_pTargetObject->Interact();
+			m_pTargetObject->Interact(pSoundManager);
 		}
 	}
 	else
@@ -384,7 +397,7 @@ void Player::HandleAutowalk()
 	
 }
 
-void Player::Interact(Map* pMap, ParticleManager* pParticleManager)
+void Player::Interact(Map* pMap, ParticleManager* pParticleManager, SoundManager* pSoundManager)
 {
 	if (m_State == PlayerState::catPet || m_IsAutoWalking)
 	{
@@ -403,11 +416,11 @@ void Player::Interact(Map* pMap, ParticleManager* pParticleManager)
 		{
 			m_pTargetObject = pInteractableObject;
 			m_IsAutoWalking = true;
-			SetState(PlayerState::run, pParticleManager);
+			SetState(PlayerState::run, pParticleManager, pSoundManager);
 		}
 		else if (type == InteractableObject::InteractableType::throwableObject)
 		{
-			pInteractableObject->Interact();
+			pInteractableObject->Interact(pSoundManager);
 			m_pHeldObject = static_cast<ThrowableObject*>(pInteractableObject);
 		}
 	}
@@ -415,7 +428,7 @@ void Player::Interact(Map* pMap, ParticleManager* pParticleManager)
 
 void Player::Attack(const Vector2f& mousePos, ParticleManager* particleManager)
 {
-	SetState(PlayerState::attack, nullptr);
+	SetState(PlayerState::attack, particleManager, nullptr);
 	AttackDash(mousePos);
 	SetCanJumpThroughPlatform(true);
 

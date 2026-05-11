@@ -20,11 +20,11 @@ public:
 
 	void Draw() const override;
 
-	void Update(float elapsedSec) override;
+	void Update(float elapsedSec, SoundManager* pSoundManager) override;
 
-	void SetState(CatState state);
+	void SetState(CatState state, SoundManager* pSoundManager);
 
-	void Interact() override;
+	void Interact(SoundManager* pSoundManager) override;
 private:
 	Sprite* m_pSprite{};
 
@@ -39,5 +39,6 @@ private:
 	int
 		m_LickCycles{ 0 },
 		m_TargetLickCycles{ 1 };
+
 };
 

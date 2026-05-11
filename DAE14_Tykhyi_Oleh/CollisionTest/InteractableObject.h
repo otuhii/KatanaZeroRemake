@@ -1,5 +1,7 @@
 #pragma once
 
+class SoundManager;
+
 class InteractableObject
 {
 public:
@@ -18,9 +20,9 @@ public:
 
 	virtual void Draw() const = 0;
 
-	virtual void Update(float elapsedSec);
+	virtual void Update(float elapsedSec, SoundManager* pSoundManager);
 
-	virtual void Interact() = 0;
+	virtual void Interact(SoundManager* pSoundManager) = 0;
 
 	bool IsPlayerInRange(const Vector2f& playerPos, int playerFloor) const;
 

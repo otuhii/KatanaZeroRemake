@@ -1,13 +1,15 @@
 #include "pch.h"
 #include "Cat.h"
 
+#include "SoundManager.h"
+
 Cat::Cat(Sprite* pSprite, const std::vector<AnimationFrameInfo>& catAnimation, const Vector2f& position, int floor, float interactionRange, float scale)
 	: InteractableObject{ position, floor, interactionRange, InteractableType::cat },
 	m_pSprite{ pSprite },
 	m_CatSpriteFrames{ catAnimation }
 {
 	m_pSprite->SetScale(scale);
-	SetState(CatState::idle);
+	SetState(CatState::idle, nullptr);
 }
 
 void Cat::Draw() const
@@ -15,7 +17,7 @@ void Cat::Draw() const
 	m_pSprite->Draw(GetPosition(), true, false);
 }
 
-void Cat::Update(float elapsedSec)
+void Cat::Update(float elapsedSec, SoundManager* pSoundManager)
 {
 	switch (m_State)
 	{
@@ -34,11 +36,11 @@ void Cat::Update(float elapsedSec)
 
 			if (rand() % 10 < 8)
 			{
-				SetState(CatState::toLick);
+				SetState(CatState::toLick, pSoundManager);
 			}
 			else
 			{
-				SetState(CatState::lookBack);
+				SetState(CatState::lookBack, pSoundManager);
 			}
 		}
 		break;
@@ -55,7 +57,7 @@ void Cat::Update(float elapsedSec)
 			m_LickCycles = 0;
 			m_TargetLickCycles = (rand() % (maxLickCycles - minLickCycles + 1)) + minLickCycles;
 
-			SetState(CatState::licking);
+			SetState(CatState::licking, pSoundManager);
 		}
 		break;
 	}
@@ -66,7 +68,7 @@ void Cat::Update(float elapsedSec)
 			m_LickCycles++;
 			if (m_LickCycles >= m_TargetLickCycles)
 			{
-				SetState(CatState::fromLick);
+				SetState(CatState::fromLick, pSoundManager);
 			}
 		}
 
@@ -76,7 +78,7 @@ void Cat::Update(float elapsedSec)
 	{
 		if (m_pSprite->IsFinished())
 		{
-			SetState(CatState::idle);
+			SetState(CatState::idle, pSoundManager);
 		}
 		break;
 	}
@@ -84,7 +86,7 @@ void Cat::Update(float elapsedSec)
 	{
 		if (m_pSprite->IsFinished())
 		{
-			SetState(CatState::idle);
+			SetState(CatState::idle, pSoundManager);
 		}
 		break;
 	}
@@ -92,7 +94,7 @@ void Cat::Update(float elapsedSec)
 	{
 		if (m_pSprite->IsFinished())
 		{
-			SetState(CatState::idle);
+			SetState(CatState::idle, pSoundManager);
 		}
 		break;
 	}
@@ -100,17 +102,26 @@ void Cat::Update(float elapsedSec)
 
 }
 
-void Cat::SetState(CatState state)
+void Cat::SetState(CatState state, SoundManager* pSoundManager)
 {
 	if (m_State == state) { return; }
 
 	m_State = state;
 
+	if (m_State == CatState::petting)
+	{
+		pSoundManager->Play(SoundManager::SoundEffectType::catPet, 0);
+	}
+	else if (m_State == CatState::lookBack)
+	{
+		pSoundManager->Play(SoundManager::SoundEffectType::meow, 0);
+	}
+
 	m_pSprite->SetAnimationFrameInfo(m_CatSpriteFrames[static_cast<int>(m_State)]);
 	m_pSprite->ResetAnimation();
 }
 
-void Cat::Interact()
+void Cat::Interact(SoundManager* pSoundManager)
 {
-	SetState(CatState::petting);
+	SetState(CatState::petting, pSoundManager);
 }

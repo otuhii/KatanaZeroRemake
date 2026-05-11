@@ -3,7 +3,7 @@
 
 class Map;
 class ParticleManager;
-
+class SoundManager;
 class InteractableObject;
 class ThrowableObject;
 
@@ -37,9 +37,9 @@ public:
 
 	void Draw() const override;
 
-	void Update(float elapsedSec, Map* pMap, const Uint8* pStates, const Rectf& viewport, ParticleManager* pParticleManager);
+	void Update(float elapsedSec, Map* pMap, const Uint8* pStates, const Rectf& viewport, ParticleManager* pParticleManager, SoundManager* pSoundManager);
 
-	void SetState(PlayerState state, ParticleManager* pParticleManager);
+	void SetState(PlayerState state, ParticleManager* pParticleManager, SoundManager* pSoundManager);
 
 	void ProcessMouseUpEvent(const SDL_MouseButtonEvent& e, const Vector2f& offset, ParticleManager* particleManager, const Rectf& viewport);
 
@@ -107,17 +107,17 @@ private:
 	void DrawSplash() const;
 	
 	void UpdateCurrentState(float elapsedSec);
-	void ProcessStateChange(bool isMoving, bool roll, bool crouch, ParticleManager* pParticleManager);
+	void ProcessStateChange(bool isMoving, bool roll, bool crouch, ParticleManager* pParticleManager, SoundManager* pSoundManager);
 
 	PlayerState GetNextState(bool isMoving, bool roll, bool crouch);
 	PlayerState GetNextAirState();
 	PlayerState GetNextGroundState(bool isMoving, bool roll, bool crouch);
 
-	void HandleKeyboard(Map* pMap, const Uint8* pStates, float elapsedSec, ParticleManager* pParticleManager);
+	void HandleKeyboard(Map* pMap, const Uint8* pStates, float elapsedSec, ParticleManager* pParticleManager, SoundManager* pSoundManager);
 
-	void HandleAutowalk();
+	void HandleAutowalk(SoundManager* pSoundManager);
 
-	void Interact(Map* pMap, ParticleManager* pParticleManager);
+	void Interact(Map* pMap, ParticleManager* pParticleManager, SoundManager* pSoundManager);
 	void Attack(const Vector2f& mousePos, ParticleManager* particleManager);
 
 	void SpawnAttackParticle(ParticleManager* particleManager) const;
