@@ -2,6 +2,7 @@
 #include "SoundManager.h"
 
 #include "SoundEffect.h"
+#include "SoundStream.h"
 
 SoundManager::SoundManager()
 {
@@ -31,7 +32,7 @@ SoundManager::SoundManager()
 	m_pSoundEffects[static_cast<int>(SoundEffectType::doorKick)] = new SoundEffect{ "sounds/sound_player_doorkick.wav" };
 	m_pSoundEffects[static_cast<int>(SoundEffectType::doorKick)]->SetVolume(10);
 
-	m_pSoundEffects[static_cast<int>(SoundEffectType::footstep)]d new SoundEffect{ "sounds/sound_player_footstep.wav" };
+	m_pSoundEffects[static_cast<int>(SoundEffectType::footstep)] =  new SoundEffect{ "sounds/sound_player_footstep.wav" };
 	m_pSoundEffects[static_cast<int>(SoundEffectType::footstep)]->SetVolume(5);
 
 	m_pSoundEffects[static_cast<int>(SoundEffectType::land)] = new SoundEffect{ "sounds/sound_player_land.wav" };
@@ -74,7 +75,11 @@ SoundManager::SoundManager()
 	m_pSoundEffects[static_cast<int>(SoundEffectType::enemyDeathMasterSword)] = new SoundEffect{ "sounds/enemy_death_mastersword.wav" };
 	m_pSoundEffects[static_cast<int>(SoundEffectType::enemyDeathMasterSword)]->SetVolume(10);
 
+	m_pSoundStreams.resize(static_cast<int>(SoundStreamTypes::count));
 
+	m_pSoundStreams[static_cast<int>(SoundStreamTypes::youWillNeverKnow)] = new SoundStream{ "sounds/song_youwillneverknow.ogg" };
+	m_pSoundStreams[static_cast<int>(SoundStreamTypes::youWillNeverKnow)]->SetVolume(25);
+	m_pSoundStreams[static_cast<int>(SoundStreamTypes::youWillNeverKnow)]->Play(true);
 }
 
 SoundManager::~SoundManager()
@@ -82,6 +87,11 @@ SoundManager::~SoundManager()
 	for (SoundEffect* pSoundEffect : m_pSoundEffects)
 	{
 		delete pSoundEffect;
+	}
+
+	for (SoundStream* pSoundStream : m_pSoundStreams)
+	{
+		delete pSoundStream;
 	}
 }
 

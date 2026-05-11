@@ -81,7 +81,7 @@ void Game::Update( float elapsedSec )
 {
 	const Uint8 *pStates = SDL_GetKeyboardState( nullptr );
 
-	//FPS(elapsedSec);
+	FPS(elapsedSec);
 
 	float
 		timeDivider{ 1.f };

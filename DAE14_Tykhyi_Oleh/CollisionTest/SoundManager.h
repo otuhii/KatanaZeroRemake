@@ -34,6 +34,14 @@ public:
 		count
 	};
 
+	enum class SoundStreamTypes {
+		none=-1,
+		
+		youWillNeverKnow,
+
+		count
+	};
+
 	SoundManager();
 
 	SoundManager(const SoundManager&) = delete;
@@ -45,6 +53,6 @@ public:
 	void Stop(SoundEffectType type) const;
 private:
 	std::vector<SoundEffect*> m_pSoundEffects{};
-	std::vector<SoundStream*> m_pSoundStream{};
+	std::vector<SoundStream*> m_pSoundStreams{};
 };
 
