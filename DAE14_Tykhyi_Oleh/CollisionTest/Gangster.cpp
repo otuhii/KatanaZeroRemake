@@ -2,12 +2,14 @@
 #include "Gangster.h"
 
 #include "ParticleManager.h"
+#include "SoundManager.h"
 
 Gangster::Gangster(
 	Sprite* pSprite,
 	Sprite* pGunSprite,
 	Sprite* pBulletProjectile,
 	const Entity* pTarget,
+	const SoundManager* pSoundManager,
 	const std::vector<AnimationFrameInfo>* enemyAnimationFrames, 
 	const Vector2f& position,
 	float speed, 
@@ -20,6 +22,7 @@ Gangster::Gangster(
 		EnemyState::idle,
 		pSprite,
 		pTarget,
+		pSoundManager,
 		enemyAnimationFrames,
 		position,
 		speed,
@@ -161,6 +164,8 @@ void Gangster::UpdateAimTime(float elapsedSec)
 
 void Gangster::Shoot(ParticleManager* particleManager)
 {
+	GetSoundManager()->Play(SoundManager::SoundEffectType::gunFire, 0);
+
 	float angleRad{
 		m_pGunSprite->GetRotation() * (static_cast<float>(M_PI) / 180.f)
 	};

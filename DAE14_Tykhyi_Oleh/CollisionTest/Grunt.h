@@ -8,6 +8,7 @@ public:
         Sprite* pSprite,
         Sprite* pSlashSprite,
         const Entity* pTarget,
+        const SoundManager* pSoundManager,
         const std::vector<AnimationFrameInfo>* enemyAnimationFrames,
         const std::vector<AnimationFrameInfo>* enemyProjectileAnimationFrames,
         const Vector2f& position,

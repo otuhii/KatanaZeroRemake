@@ -56,7 +56,7 @@ void Game::Initialize( )
 		importedGameInfo.playerScale,
 		importedGameInfo.playerFloor
 	);
-	m_pEnemyManager = new EnemyManager{m_pPlayer};
+	m_pEnemyManager = new EnemyManager{m_pPlayer, m_pSoundManager};
 
 	MapSetup(importedGameInfo);
 	EnemyTypeInitialization(importedGameInfo);
@@ -81,7 +81,7 @@ void Game::Update( float elapsedSec )
 {
 	const Uint8 *pStates = SDL_GetKeyboardState( nullptr );
 
-	FPS(elapsedSec);
+	//FPS(elapsedSec);
 
 	float
 		timeDivider{ 1.f };
@@ -162,7 +162,7 @@ void Game::ProcessMouseDownEvent( const SDL_MouseButtonEvent& e )
 
 void Game::ProcessMouseUpEvent( const SDL_MouseButtonEvent& e )
 {
-	m_pPlayer->ProcessMouseUpEvent(e, m_pCamera->GetBasePoint(), m_pParticleManager, GetViewPort());
+	m_pPlayer->ProcessMouseUpEvent(e, m_pCamera->GetBasePoint(), m_pParticleManager, m_pSoundManager, GetViewPort());
 }
 
 void Game::ClearBackground( ) const

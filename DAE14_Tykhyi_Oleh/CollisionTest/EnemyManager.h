@@ -7,11 +7,12 @@ class SpriteManager;
 class Map;
 class CollisionManager;
 class SpriteManager;
+class SoundManager;
 
 class EnemyManager final
 {
 public:
-	EnemyManager(const Entity* pTarget);
+	EnemyManager(const Entity* pTarget, const SoundManager* pSoundManager);
 	
 	EnemyManager(const EnemyManager&) = delete;
 	EnemyManager& operator=(const EnemyManager&) = delete;
@@ -49,7 +50,10 @@ private:
 		float attackRange{};
 	};
 
-	const Entity* m_pTarget{};
+	const Entity*
+		m_pTarget{};
+	const SoundManager*
+		m_pSoundManager{};
 
 	std::vector<Enemy*>				 m_pEnemies{};
 	std::vector<EnemyTypeTemplate>   m_EnemyTypeTemplates{};

@@ -9,6 +9,7 @@ public:
         Sprite* pGunsprite,
         Sprite* pBulletProjectile,
         const Entity* pTarget,
+        const SoundManager* pSoundManager,
         const std::vector<AnimationFrameInfo>* enemyAnimationFrames,
         const Vector2f& position,
         float speed,

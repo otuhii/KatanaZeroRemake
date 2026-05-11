@@ -41,7 +41,7 @@ public:
 
 	void SetState(PlayerState state, ParticleManager* pParticleManager, SoundManager* pSoundManager);
 
-	void ProcessMouseUpEvent(const SDL_MouseButtonEvent& e, const Vector2f& offset, ParticleManager* particleManager, const Rectf& viewport);
+	void ProcessMouseUpEvent(const SDL_MouseButtonEvent& e, const Vector2f& offset, ParticleManager* particleManager, SoundManager* pSoundManager, const Rectf& viewport);
 
 	void Kill(const Vector2f& impulse) override;
 
@@ -118,7 +118,7 @@ private:
 	void HandleAutowalk(SoundManager* pSoundManager);
 
 	void Interact(Map* pMap, ParticleManager* pParticleManager, SoundManager* pSoundManager);
-	void Attack(const Vector2f& mousePos, ParticleManager* particleManager);
+	void Attack(const Vector2f& mousePos, ParticleManager* particleManager, SoundManager* pSoundManager);
 
 	void SpawnAttackParticle(ParticleManager* particleManager) const;
 	void SpawnRangeAttackParticle(ParticleManager* particleManager) const;

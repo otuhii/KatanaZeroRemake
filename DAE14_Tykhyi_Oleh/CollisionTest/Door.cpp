@@ -3,6 +3,7 @@
 
 #include "pch.h"
 #include "Door.h"
+#include "SoundManager.h"
 
 Door::Door(
 	Sprite* pSprite,
@@ -44,6 +45,10 @@ void Door::Draw() const
 
 void Door::Interact(SoundManager* pSoundManager)
 {
+	if (!m_IsOpened)
+	{
+		pSoundManager->Play(SoundManager::SoundEffectType::doorKick, 0);
+	}
 	m_pSprite->SetStatic(false);
 	m_IsOpening = true;
 }

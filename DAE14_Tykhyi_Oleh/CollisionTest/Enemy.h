@@ -5,6 +5,7 @@
 #include <vector>
 
 class ParticleManager;
+class SoundManager;
 class Map;
 
 class Enemy : public Entity
@@ -31,6 +32,7 @@ public:
 		EnemyState state,
 		Sprite* pSprite, 
 		const Entity* pTarget,
+		const SoundManager* pSoundManager,
 		const std::vector<AnimationFrameInfo>* playerAnimation, 
 		const Vector2f& position, 
 		float speed,
@@ -80,12 +82,18 @@ protected:
 	bool MoveTo(const ControlPoint& controlPoint, float speedMultiplier);
 
 	virtual void ResetAnimation() const;
+
+	const SoundManager* GetSoundManager();
 private:
+
 	EnemyState m_State;
 	EnemyType  m_Type;
 
 	const Entity* 
 		m_pTarget{};
+
+	const SoundManager*
+		m_pSoundManager{};
 
 	const std::vector<AnimationFrameInfo>* m_EnemySpriteFrames{};
 

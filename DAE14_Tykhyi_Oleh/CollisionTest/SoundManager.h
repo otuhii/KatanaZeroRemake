@@ -19,11 +19,17 @@ public:
 		land,
 		masterswordCharged,
 		masterswordImpact,
+		masterswordSlash,
 		playerPrerun,
 		roll,
 		bulletSlash,
 		masterswordBulletDie,
 		plantBreak,
+		playerDie,
+		enemyDeathBullet,
+		enemyDeathMasterSword,
+		enemyDeathRegular,
+		enemyDeathSword,
 
 		count
 	};

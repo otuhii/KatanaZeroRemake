@@ -2,6 +2,7 @@
 #include "Enemy.h"
 
 #include "PathFinder.h"
+#include "SoundManager.h"
 #include "Map.h"
 
 #include "utils.h"
@@ -13,6 +14,7 @@ Enemy::Enemy(
 	EnemyState state,
 	Sprite* pSprite, 
 	const Entity* pTarget,
+	const SoundManager* pSoundManager,
 	const std::vector<AnimationFrameInfo>* enemyAnimationFrames,
 	const Vector2f& position,
 	float speed, 
@@ -28,7 +30,8 @@ Enemy::Enemy(
 	m_Type{type},
 	m_AttackRange{attackRange},
 	m_DetectionRange{playerDetectionRange},
-	m_pTarget{pTarget}
+	m_pTarget{pTarget},
+	m_pSoundManager{pSoundManager}
 {
 	GetSprite()->SetAnimationFrameInfo((*m_EnemySpriteFrames)[static_cast<int>(m_State)]);
 	GetSprite()->SetScale(scale);
@@ -68,7 +71,6 @@ void Enemy::Update(float elapsedSec, ParticleManager* particleManager, const Map
 	}
 }
 
-//all enemies will have flipped sprite, i should flip it on the rendering and i need each enemy to have variable that corresponds to that
 void Enemy::UpdateSprite()
 {
 	if (m_State == EnemyState::turn)
@@ -109,7 +111,17 @@ void Enemy::SetState(EnemyState state)
 	if (state == m_State) { return; }
 
 	m_State = state;
-	
+
+
+	///ITS BAD - move to grunt class 
+	if (m_State == EnemyState::attack && 
+		m_Type == EnemyType::grunt)
+	{
+		m_pSoundManager->Play(SoundManager::SoundEffectType::enemyPunch, 0);
+	}
+	////
+
+
 	StateInitialization(m_State);
 	
 	GetSprite()->SetAnimationFrameInfo((*m_EnemySpriteFrames)[static_cast<int>(m_State)]);
@@ -401,6 +413,11 @@ bool Enemy::MoveTo(const ControlPoint& controlPoint, float speedMultiplier)
 void Enemy::ResetAnimation() const
 {
 	GetSprite()->ResetAnimation();
+}
+
+const SoundManager* Enemy::GetSoundManager()
+{
+	return m_pSoundManager;
 }
 
 bool Enemy::CanSeeTarget(const Map* pMap)

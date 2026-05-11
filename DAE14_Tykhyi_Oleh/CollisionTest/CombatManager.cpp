@@ -45,6 +45,7 @@ void CombatManager::ResolveCombat(
 								pOtherParticle->GetWorldCoordinates())
 								)
 							{
+								pSoundManager->Play(SoundManager::SoundEffectType::bulletSlash, 0);
 								pOtherParticle->Deflect();
 							}
 						}
@@ -70,6 +71,23 @@ void CombatManager::ResolveCombat(
 								pEnemy->Kill(impulse);
 
 								VFX::SpawnBloodSlash(pEnemy->GetPosition(), impulse, particleManager);
+
+								if (pAttackParticle->GetAttackType() == AttackParticle::AttackType::bullet)
+								{
+									pSoundManager->Play(SoundManager::SoundEffectType::enemyDeathBullet, 0);
+								}
+								else if (pAttackParticle->GetAttackType() == AttackParticle::AttackType::melee)
+								{
+									pSoundManager->Play(SoundManager::SoundEffectType::enemyDeathSword, 0);
+									pSoundManager->Play(SoundManager::SoundEffectType::enemyDeathRegular, 0);
+								}
+								else if (pAttackParticle->GetAttackType() == AttackParticle::AttackType::thrownObject)
+								{
+									pSoundManager->Play(SoundManager::SoundEffectType::enemyDeathRegular, 0);
+								}
+
+
+
 
 								if (pAttackParticle->GetAttackType() == AttackParticle::AttackType::bullet ||
 									pAttackParticle->GetAttackType() == AttackParticle::AttackType::thrownObject)
@@ -104,6 +122,12 @@ void CombatManager::ResolveCombat(
 				if (UserUtils::IsPolyInRectAABB(pAttackParticle->GetWorldCoordinates(), pPlayer->GetCurrentHitbox()))
 				{
 					pPlayer->Kill(CalculateHitImpulse(pAttackParticle->GetOwnerEntity(), pPlayer, pAttackParticle));
+					if (pAttackParticle->GetAttackType() == AttackParticle::AttackType::melee)
+					{
+						pSoundManager->Play(SoundManager::SoundEffectType::enemyHit, 0);
+					}
+					pSoundManager->Play(SoundManager::SoundEffectType::playerDie, 0);
+
 					pAttackParticle->Deactivate();
 				}
 			}

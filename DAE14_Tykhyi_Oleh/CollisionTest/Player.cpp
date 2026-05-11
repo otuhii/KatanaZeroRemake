@@ -78,11 +78,22 @@ void Player::SetState(PlayerState state, ParticleManager* pParticleManager, Soun
 		SetCanJumpThroughPlatform(false);
 	}
 
+	if (m_State == PlayerState::fall && state == PlayerState::staying)
+	{
+		pSoundManager->Play(SoundManager::SoundEffectType::land, 0);
+	}
+
 	m_State = state;
 
-	if (m_State == PlayerState::run)
+	if (m_State == PlayerState::attack)
+	{
+		pSoundManager->Play(SoundManager::SoundEffectType::masterswordSlash, 0);
+	}
+
+	if (m_State == PlayerState::beforeRun)
 	{
 		VFX::SpawnDust(10, GetPosition(), GetVelocity(), pParticleManager);
+		pSoundManager->Play(SoundManager::SoundEffectType::playerPrerun, 0);
 	}
 
 	if (m_State == PlayerState::roll)
@@ -100,7 +111,7 @@ void Player::SetState(PlayerState state, ParticleManager* pParticleManager, Soun
 	m_SplashSprite->ResetAnimation();
 }
 
-void Player::ProcessMouseUpEvent(const SDL_MouseButtonEvent & e, const Vector2f& offset, ParticleManager* particleManager, const Rectf& viewport)
+void Player::ProcessMouseUpEvent(const SDL_MouseButtonEvent & e, const Vector2f& offset, ParticleManager* particleManager, SoundManager* pSoundManager, const Rectf& viewport)
 {
 	if (IsAlive())
 	{
@@ -121,7 +132,7 @@ void Player::ProcessMouseUpEvent(const SDL_MouseButtonEvent & e, const Vector2f&
 					return;
 				}
 				m_AttackCooldownTimer = m_AttackCooldown;
-				Attack(mousePos, particleManager);
+				Attack(mousePos, particleManager, pSoundManager);
 			}
 		}
 	}
@@ -426,9 +437,9 @@ void Player::Interact(Map* pMap, ParticleManager* pParticleManager, SoundManager
 	}
 }
 
-void Player::Attack(const Vector2f& mousePos, ParticleManager* particleManager)
+void Player::Attack(const Vector2f& mousePos, ParticleManager* particleManager, SoundManager* pSoundManager)
 {
-	SetState(PlayerState::attack, particleManager, nullptr);
+	SetState(PlayerState::attack, particleManager, pSoundManager);
 	AttackDash(mousePos);
 	SetCanJumpThroughPlatform(true);
 

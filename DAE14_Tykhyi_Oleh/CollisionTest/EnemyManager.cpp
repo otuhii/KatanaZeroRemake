@@ -7,8 +7,8 @@
 
 #include "utils.h"
 
-EnemyManager::EnemyManager(const Entity* pTarget)
-	: m_pTarget{pTarget}
+EnemyManager::EnemyManager(const Entity* pTarget, const SoundManager* pSoundManager)
+	: m_pTarget{pTarget}, m_pSoundManager{pSoundManager}
 {
 	size_t typeOptionCount{
 		static_cast<size_t>(Enemy::EnemyType::count)
@@ -60,6 +60,7 @@ void EnemyManager::AddEnemy(Enemy::EnemyType type, const Vector2f& position, flo
 			pSpriteManager->CreateCopySprite(m_EnemyTypeTemplates[static_cast<int>(type)].spriteSheet),
 			pSpriteManager->CreateCopySprite(m_EnemyTypeTemplates[static_cast<int>(type)].additionSprite),
 			m_pTarget,
+			m_pSoundManager,
 			&m_EnemyTypeTemplates[static_cast<int>(type)].enemyAnimationFrameInfo,
 			&m_EnemyTypeTemplates[static_cast<int>(type)].additionalSpriteFrameInfo,
 			position,
@@ -77,6 +78,7 @@ void EnemyManager::AddEnemy(Enemy::EnemyType type, const Vector2f& position, flo
 			pSpriteManager->CreateCopySprite(m_EnemyTypeTemplates[static_cast<int>(type)].additionSprite),
 			pSpriteManager->CreateCopySprite(m_EnemyTypeTemplates[static_cast<int>(type)].projectileSprite),
 			m_pTarget,
+			m_pSoundManager,
 			&m_EnemyTypeTemplates[static_cast<int>(type)].enemyAnimationFrameInfo,
 			position,
 			speed,
