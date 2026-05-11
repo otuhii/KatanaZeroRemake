@@ -145,6 +145,7 @@ void Player::Kill(const Vector2f& impulse)
 	SetState(PlayerState::hurtFly, nullptr, nullptr);
 }
 
+
 void Player::DrawSplash() const
 {
 	Vector2f

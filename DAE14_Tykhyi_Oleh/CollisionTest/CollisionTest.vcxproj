@@ -177,6 +177,7 @@ xcopy "$(ProjectDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Gangster.cpp" />
     <ClCompile Include="Grunt.cpp" />
+    <ClCompile Include="Hud.cpp" />
     <ClCompile Include="InteractableObject.cpp" />
     <ClCompile Include="JsonImporter.cpp" />
     <ClCompile Include="main.cpp" />
@@ -211,6 +212,7 @@ xcopy "$(ProjectDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClInclude Include="Game.h" />
     <ClInclude Include="Gangster.h" />
     <ClInclude Include="Grunt.h" />
+    <ClInclude Include="Hud.h" />
     <ClInclude Include="InteractableObject.h" />
     <ClInclude Include="JsonImporter.h" />
     <ClInclude Include="Map.h" />

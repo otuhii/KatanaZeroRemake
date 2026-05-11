@@ -10,6 +10,7 @@
 
 #include "Camera.h"
 #include "Cursor.h"
+#include "Hud.h"
 
 #include "Player.h"
 #include "Map.h"
@@ -58,6 +59,9 @@ void Game::Initialize( )
 	);
 	m_pEnemyManager = new EnemyManager{m_pPlayer, m_pSoundManager};
 
+	m_pHud = new Hud{ m_pPlayer, m_pSpriteManager };
+
+
 	MapSetup(importedGameInfo);
 	EnemyTypeInitialization(importedGameInfo);
 	CreateEnemies(importedGameInfo, m_pSpriteManager);
@@ -75,6 +79,7 @@ void Game::Cleanup( )
 	delete m_pSoundManager;
 	delete m_pCamera;
 	delete m_pCursor;
+	delete m_pHud;
 }
 
 void Game::Update( float elapsedSec )
@@ -90,6 +95,9 @@ void Game::Update( float elapsedSec )
 	{
 		timeDivider = 0.2f;
 	}
+
+
+	m_pHud->Update(elapsedSec);
 
 	m_pPlayer->Update(timeDivider*elapsedSec, m_pMap, pStates, GetViewPort(), m_pParticleManager, m_pSoundManager);
 
@@ -108,6 +116,7 @@ void Game::Update( float elapsedSec )
 	m_pMap->Update(timeDivider * elapsedSec, m_pSoundManager);
 
 	m_pCamera->Update(timeDivider * elapsedSec, m_pPlayer->GetPosition(), 1756.f, 750.f);
+
 }
 
 void Game::Draw( ) const
@@ -128,6 +137,8 @@ void Game::Draw( ) const
 	m_pCamera->Reset();
 
 	m_pCursor->Draw();
+
+	m_pHud->Draw(GetViewPort());
 
 }
 

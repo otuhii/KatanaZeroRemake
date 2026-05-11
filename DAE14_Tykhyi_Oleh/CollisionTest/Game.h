@@ -2,7 +2,6 @@
 #include "BaseGame.h"
 #include "JsonImporter.h"
 
-
 class SpriteManager;
 class EnemyManager;
 class CollisionManager;
@@ -12,6 +11,7 @@ class SoundManager;
 
 class Camera;
 class Cursor;
+class Hud;
 
 class Player;
 class Map;
@@ -58,12 +58,12 @@ private:
 	void FPS(float elapsedSec);
 #pragma endregion FPS
 
-
 	bool 
 		m_SlowMo{ false };
 
 	Camera*				m_pCamera{};
 	Cursor*				m_pCursor{};
+	Hud*				m_pHud{};
 
 	CombatManager*		m_pCombatManager{};
 	EnemyManager*		m_pEnemyManager{};
