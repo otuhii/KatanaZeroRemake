@@ -18,6 +18,12 @@ void ThrowableObject::Interact(SoundManager* pSoundManager)
 	SetInactive();
 }
 
+void ThrowableObject::Reset()
+{
+	InteractableObject::Reset();
+	m_pSprite->ResetRotation();
+}
+
 Sprite* ThrowableObject::GetSprite() const
 {
 	return m_pSprite;

@@ -105,3 +105,11 @@ const std::vector<Enemy*>& EnemyManager::GetEnemies()
 {
 	return m_pEnemies;
 }
+
+void EnemyManager::ResetEnemies() const
+{
+	for (Enemy* pEnemy : m_pEnemies)
+	{
+		pEnemy->Reset();
+	}
+}

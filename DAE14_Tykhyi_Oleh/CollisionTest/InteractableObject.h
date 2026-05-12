@@ -24,6 +24,8 @@ public:
 
 	virtual void Interact(SoundManager* pSoundManager) = 0;
 
+	virtual void Reset();
+
 	bool IsPlayerInRange(const Vector2f& playerPos, int playerFloor) const;
 
 	const Vector2f&		GetPosition() const;

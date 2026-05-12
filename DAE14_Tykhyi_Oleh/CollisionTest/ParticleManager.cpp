@@ -265,3 +265,24 @@ CosmeticParticle* ParticleManager::GetFreeCosmeticParticle() const
 	}
 	return nullptr;
 }
+
+
+void ParticleManager::Reset()
+{
+	for (CosmeticParticle* pParticle : m_pCosmeticParticles)
+	{
+		if (pParticle->IsActive())
+		{
+			pParticle->Deactivate();
+		}
+	}
+
+	for (AttackParticle* pParticle : m_pAttackParticles)
+	{
+		if (pParticle->IsActive())
+		{
+			pParticle->Deactivate();
+		}
+	}
+}
+

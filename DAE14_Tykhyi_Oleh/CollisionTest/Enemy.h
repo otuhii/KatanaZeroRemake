@@ -57,6 +57,7 @@ public:
 
 	void Kill(const Vector2f& impulse) override;
 
+	void Reset() override;
 protected:
 	bool CanSeeTarget(const Map* pMap);
 	bool IsTargetInAttackRange();
@@ -85,9 +86,10 @@ protected:
 
 	const SoundManager* GetSoundManager();
 private:
-
-	EnemyState m_State;
-	EnemyType  m_Type;
+	const EnemyState
+		m_BaseState{};
+	EnemyState m_State{};
+	EnemyType  m_Type{};
 
 	const Entity* 
 		m_pTarget{};

@@ -1,8 +1,6 @@
 #include "pch.h"
 #include "Door.h"
 
-#include "pch.h"
-#include "Door.h"
 #include "SoundManager.h"
 
 Door::Door(
@@ -51,6 +49,18 @@ void Door::Interact(SoundManager* pSoundManager)
 	}
 	m_pSprite->SetStatic(false);
 	m_IsOpening = true;
+}
+
+void Door::Reset()
+{
+	InteractableObject::Reset();
+
+	m_IsOpening = false;
+	m_IsOpened = false;
+	m_pSprite->ResetAnimation();
+	m_pSprite->SetStatic(true);
+	m_pSprite->SetLooping(false);
+	m_pSprite->FlipHorizontally();
 }
 
 bool Door::IsOpened() const

@@ -31,7 +31,8 @@ Enemy::Enemy(
 	m_AttackRange{attackRange},
 	m_DetectionRange{playerDetectionRange},
 	m_pTarget{pTarget},
-	m_pSoundManager{pSoundManager}
+	m_pSoundManager{pSoundManager},
+	m_BaseState{state}
 {
 	GetSprite()->SetAnimationFrameInfo((*m_EnemySpriteFrames)[static_cast<int>(m_State)]);
 	GetSprite()->SetScale(scale);
@@ -132,6 +133,12 @@ void Enemy::Kill(const Vector2f& impulse)
 {
 	Entity::Kill(impulse);
 	SetState(EnemyState::dead);
+}
+
+void Enemy::Reset()
+{
+	Entity::Reset();
+	SetState(m_BaseState);
 }
 
 const Entity* Enemy::GetTarget()

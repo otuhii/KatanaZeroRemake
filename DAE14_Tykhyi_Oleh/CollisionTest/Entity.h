@@ -42,7 +42,6 @@ public:
 	float			GetVelocityY()	const;
 	const Vector2f& GetVelocity()	const;
 
-
 	float			GetPositionX()  const;
 	float			GetPositionY()	const;
 	const Vector2f& GetPosition()	const;
@@ -58,6 +57,8 @@ public:
 
 	virtual void	Kill(const Vector2f& impulse);
 	bool			IsAlive() const;
+
+	virtual void Reset();
 protected:
 	Sprite* GetSprite() const;
 
@@ -80,6 +81,7 @@ private:
 
 	Vector2f m_Velocity{};
 	Vector2f m_Position{};
+	Vector2f m_InitialPosition{};
 
 	Rectf
 		m_CurrentHitbox{},

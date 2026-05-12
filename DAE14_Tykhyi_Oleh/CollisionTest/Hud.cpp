@@ -2,12 +2,13 @@
 #include "Hud.h"
 
 #include "SpriteManager.h"
+#include "LevelManager.h"
 #include "Player.h"
 #include "ThrowableObject.h"
 
 
-Hud::Hud(const Rectf& viewport, Player* pPlayer, SpriteManager* pSpriteManager)
-	: m_pPlayer{pPlayer}
+Hud::Hud(const Rectf& viewport, Player* pPlayer, SpriteManager* pSpriteManager, LevelManager* pLevelManager)
+	: m_pPlayer{pPlayer}, m_pLevelManager{pLevelManager}
 {
 	const float
 		scale{ 2.f };
@@ -15,7 +16,8 @@ Hud::Hud(const Rectf& viewport, Player* pPlayer, SpriteManager* pSpriteManager)
 	m_pHudVisuals.resize(static_cast<int>(HudPartSprites::count));
 
 	m_pHudVisuals[static_cast<int>(HudPartSprites::battery)] = pSpriteManager->CreateSprite("img/hud/spr_hud_battery.png");
-	m_pHudVisuals[static_cast<int>(HudPartSprites::betteryFillPart)] = pSpriteManager->CreateSprite("img/hud/spr_battery_part.png");
+	m_pHudVisuals[static_cast<int>(HudPartSprites::betteryFillPartCharged)] = pSpriteManager->CreateSprite("img/hud/spr_battery_part_charged.png");
+	m_pHudVisuals[static_cast<int>(HudPartSprites::betteryFillPartNotCharged)] = pSpriteManager->CreateSprite("img/hud/spr_battery_part_not_charged.png");
 	m_pHudVisuals[static_cast<int>(HudPartSprites::hudBar)] = pSpriteManager->CreateSprite("img/hud/spr_hud.png");
 	m_pHudVisuals[static_cast<int>(HudPartSprites::subWeaponTexture)] = pSpriteManager->CreateSprite("img/hud/spr_hud_subweapon.png");
 	m_pHudVisuals[static_cast<int>(HudPartSprites::timerFill)] = pSpriteManager->CreateSprite("img/hud/spr_timer.png");
@@ -51,19 +53,21 @@ void Hud::Draw() const
 
 void Hud::Update(float elapsedSec, const Uint8* pStates)
 {
-	m_CurrentLevelTime -= elapsedSec;
-	if (m_CurrentLevelTime <= 0.f)
-	{
-		//m_pPlayer->Kill(Vector2f{});
-	}
-
 	m_IsSpacePressed = static_cast<bool>(pStates[SDL_SCANCODE_SPACE]);
 	m_IsShiftPressed = static_cast<bool>(pStates[SDL_SCANCODE_LSHIFT]);
 
 	Rectf
 		newFrameDimension{ m_pHudVisuals[static_cast<int>(HudPartSprites::timerFill)]->GetCurrentFrameDimensions() };
 	
-	newFrameDimension.width = m_TimerFillFullWidth * (m_CurrentLevelTime / m_MaxLevelTime);
+	if (m_pLevelManager->GetPassTimeRatio() <= 0)
+	{
+		newFrameDimension.width = 0.1f;
+	}
+	else
+	{
+		newFrameDimension.width = m_TimerFillFullWidth * m_pLevelManager->GetPassTimeRatio();
+	}
+
 
 	m_pHudVisuals[static_cast<int>(HudPartSprites::timerFill)]->SetAnimationFrameInfo(newFrameDimension, 1, 1);
 
@@ -169,11 +173,21 @@ void Hud::DrawBattery() const
 		DrawPart(HudPartSprites::shiftReleased, m_Layout.batteryButtonIconPos);
 	}
 	
-	int activeCells{ static_cast<int>(11 ) };
+	const int
+		maxChargeCells{ 11 };
+
+	int activeCells{ static_cast<int>(11 * m_pLevelManager->GetSlowMotionDurationRatio() ) };
 	Vector2f cellPos{ m_Layout.batterFillPos };
-	for (int counter{ 0 }; counter < activeCells; ++counter)
+	for (int counter{ 0 }; counter < maxChargeCells; ++counter)
 	{
-		DrawPart(HudPartSprites::betteryFillPart, cellPos);
+		if (counter < activeCells)
+		{
+			DrawPart(HudPartSprites::betteryFillPartCharged, cellPos);
+		}
+		else
+		{
+			DrawPart(HudPartSprites::betteryFillPartNotCharged, cellPos);
+		}
 		cellPos += m_Layout.batteryFillOffset;
 	}
 

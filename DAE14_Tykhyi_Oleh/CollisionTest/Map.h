@@ -26,6 +26,8 @@ public:
 
 	const std::vector<InteractableObject*>& GetInteractableObjects() const;
 	InteractableObject* GetClosestInteractableObject(const Vector2f& playerPos, int playerFloor) const;
+
+	void Reset() const;
 private:
 	std::vector<EnvironmentActiveObject>	m_EnvironmentActiveObjects{};
 	std::vector<EnvironmentCosmeticObject>	m_EnvironmentCosmeticObjects{};

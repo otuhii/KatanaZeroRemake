@@ -39,6 +39,8 @@ public:
 	void SetControlPoints(const std::vector<ControlPoint>& controlPoints);
 
 	const std::vector<Enemy*>& GetEnemies();
+
+	void ResetEnemies() const;
 private:
 	struct EnemyTypeTemplate {
 		Sprite* spriteSheet{};

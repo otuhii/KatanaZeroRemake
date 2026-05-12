@@ -14,6 +14,8 @@ public:
 	void Update(float elapsedSec, SoundManager* pSoundManager) override;
 
 	void Interact(SoundManager* pSoundManager) override;
+	
+	void Reset() override;
 
 	bool IsOpened() const;
 	bool IsOpening() const;

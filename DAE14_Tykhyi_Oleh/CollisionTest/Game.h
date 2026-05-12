@@ -8,6 +8,9 @@ class CollisionManager;
 class ParticleManager;
 class CombatManager;
 class SoundManager;
+class LevelManager;
+
+class ScreenOverlay;
 
 class Camera;
 class Cursor;
@@ -58,9 +61,7 @@ private:
 	void FPS(float elapsedSec);
 #pragma endregion FPS
 
-	bool 
-		m_SlowMo{ false };
-
+	ScreenOverlay*		m_pScreenOverlay{};
 	Camera*				m_pCamera{};
 	Cursor*				m_pCursor{};
 	Hud*				m_pHud{};
@@ -71,6 +72,7 @@ private:
 	CollisionManager*	m_pCollisionManager{};
 	ParticleManager*	m_pParticleManager{};
 	SoundManager*		m_pSoundManager{};
+	LevelManager*		m_pLevelManager;
 
 	Map*				m_pMap;
 	Player*				m_pPlayer{};

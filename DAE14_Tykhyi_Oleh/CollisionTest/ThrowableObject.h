@@ -11,6 +11,8 @@ public:
     void Draw() const override;
     void Interact(SoundManager* pSoundManager) override;
 
+    void Reset() override;
+
     Sprite* GetSprite() const;
 
 private:

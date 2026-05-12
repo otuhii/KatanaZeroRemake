@@ -137,3 +137,11 @@ InteractableObject* Map::GetClosestInteractableObject(const Vector2f& playerPos,
 	return nullptr;
 }
 
+void Map::Reset() const
+{
+	for (InteractableObject* pObj : m_pInteractableObjects)
+	{
+		pObj->Reset();
+	}
+}
+

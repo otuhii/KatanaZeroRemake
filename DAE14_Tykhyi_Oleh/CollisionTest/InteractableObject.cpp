@@ -31,6 +31,11 @@ bool InteractableObject::IsActive() const
     return m_IsActive;
 }
 
+void InteractableObject::Reset()
+{
+    m_IsActive = true;
+}
+
 InteractableObject::InteractableType InteractableObject::GetType() const
 {
     return m_Type;

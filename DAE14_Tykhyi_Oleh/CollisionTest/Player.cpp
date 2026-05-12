@@ -150,6 +150,13 @@ ThrowableObject* Player::GetHeldObject() const
 	return m_pHeldObject;
 }
 
+void Player::Reset()
+{
+	Entity::Reset();
+	SetState(PlayerState::staying, nullptr, nullptr);
+	m_pHeldObject = nullptr;
+}
+
 void Player::DrawSplash() const
 {
 	Vector2f

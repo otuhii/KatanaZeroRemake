@@ -3,13 +3,14 @@
 #include <vector>
 
 class SpriteManager;
+class LevelManager;
 class Sprite;
 class Player;
 
 class Hud final
 {
 public:
-	Hud(const Rectf& viewport, Player* pPlayer, SpriteManager* pSpriteManager);
+	Hud(const Rectf& viewport, Player* pPlayer, SpriteManager* pSpriteManager, LevelManager* pLevelManager);
 
 	void Draw() const;
 
@@ -24,7 +25,8 @@ private:
 		timerFill,
 		subWeaponTexture,
 		battery,
-		betteryFillPart,
+		betteryFillPartCharged,
+		betteryFillPartNotCharged,
 		spacePressed,
 		spaceReleased,
 		shiftPressed,
@@ -55,22 +57,15 @@ private:
 
 	std::vector<Sprite*> m_pHudVisuals{};
 	Player* m_pPlayer;
+	LevelManager* m_pLevelManager;
 
 	Layout
 		m_Layout{};
 
-	const float
-		m_MaxSlowTime{4.f},
-		m_MaxLevelTime{15.f};
-
-
 	float
-		m_CurrentSlowTime{},
-		m_CurrentLevelTime{m_MaxLevelTime},
 		m_TimerFillFullWidth{};
 
 	bool
-		m_IsSlowmo{},
 		m_IsShiftPressed{ false },
 		m_IsSpacePressed{ false };
 

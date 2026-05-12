@@ -61,6 +61,8 @@ public:
 
 	AttackParticle* GetFreeAttackParticle() const;
 	CosmeticParticle* GetFreeCosmeticParticle() const;
+
+	void Reset();
 private:
 	std::vector<AttackParticle*> m_pAttackParticles{};
 	std::vector<CosmeticParticle*> m_pCosmeticParticles{};

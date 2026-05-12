@@ -7,6 +7,9 @@
 #include "ParticleManager.h"
 #include "CombatManager.h"
 #include "SoundManager.h"
+#include "LevelManager.h"
+
+#include "ScreenOverlay.h"
 
 #include "Camera.h"
 #include "Cursor.h"
@@ -38,6 +41,7 @@ void Game::Initialize( )
 	m_pCombatManager = new CombatManager{};
 	m_pSoundManager = new SoundManager{};
 
+	m_pScreenOverlay = new ScreenOverlay{m_pSpriteManager};
 
 	m_pCamera = new Camera{ GetViewPort().width, GetViewPort().height };
 	m_pCursor = new Cursor{ m_pSpriteManager->CreateSprite("img/spr_cursor.png") };
@@ -59,12 +63,13 @@ void Game::Initialize( )
 	);
 	m_pEnemyManager = new EnemyManager{m_pPlayer, m_pSoundManager};
 
-	m_pHud = new Hud{ GetViewPort(), m_pPlayer, m_pSpriteManager };
-
-
-	MapSetup(importedGameInfo);
 	EnemyTypeInitialization(importedGameInfo);
 	CreateEnemies(importedGameInfo, m_pSpriteManager);
+	MapSetup(importedGameInfo);
+
+	m_pLevelManager = new LevelManager{m_pPlayer, m_pEnemyManager};
+
+	m_pHud = new Hud{ GetViewPort(), m_pPlayer, m_pSpriteManager, m_pLevelManager };
 }
 
 void Game::Cleanup( )
@@ -80,6 +85,8 @@ void Game::Cleanup( )
 	delete m_pCamera;
 	delete m_pCursor;
 	delete m_pHud;
+	delete m_pLevelManager;
+	delete m_pScreenOverlay;
 }
 
 void Game::Update( float elapsedSec )
@@ -88,13 +95,10 @@ void Game::Update( float elapsedSec )
 
 	FPS(elapsedSec);
 
-	float
-		timeDivider{ 1.f };
+	m_pLevelManager->Update(elapsedSec, pStates);
 
-	if (m_SlowMo)
-	{
-		timeDivider = 0.2f;
-	}
+	float
+		timeDivider{ m_pLevelManager->GetTimeMultiplier() };
 
 
 	m_pHud->Update(elapsedSec, pStates);
@@ -139,26 +143,17 @@ void Game::Draw( ) const
 
 	m_pHud->Draw();
 
+	m_pScreenOverlay->Draw(m_pLevelManager, GetViewPort());
+
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 {
-	switch (e.keysym.sym)
-	{
-	case SDLK_LSHIFT:
-		m_SlowMo = true;
-		break;
-	}
+	
 }
 
 void Game::ProcessKeyUpEvent( const SDL_KeyboardEvent& e )
 {
-	switch ( e.keysym.sym )
-	{
-	case SDLK_LSHIFT:
-		m_SlowMo = false;
-		break;
-	}
 }
 
 void Game::ProcessMouseMotionEvent( const SDL_MouseMotionEvent& e )
@@ -173,6 +168,7 @@ void Game::ProcessMouseDownEvent( const SDL_MouseButtonEvent& e )
 void Game::ProcessMouseUpEvent( const SDL_MouseButtonEvent& e )
 {
 	m_pPlayer->ProcessMouseUpEvent(e, m_pCamera->GetBasePoint(), m_pParticleManager, m_pSoundManager, GetViewPort());
+	m_pLevelManager->ProcessMouseUpEvent(e, m_pMap, m_pParticleManager);
 }
 
 void Game::ClearBackground( ) const

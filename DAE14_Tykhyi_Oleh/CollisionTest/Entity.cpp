@@ -7,7 +7,7 @@
 #include "AttackParticle.h"
 
 Entity::Entity(Sprite* sprite, EntityType type, const Vector2f& position, const Vector2f& velocity, float speed, int floor)
-	: m_pSprite(sprite), m_Velocity(velocity), m_Speed(speed), m_IsOnGround(true), m_Position{position}, m_Floor{floor}, m_Type{type}
+	: m_pSprite(sprite), m_Velocity(velocity), m_Speed(speed), m_IsOnGround(true), m_Position{position}, m_Floor{floor}, m_Type{type}, m_InitialPosition{position}
 {
 }
 
@@ -198,6 +198,14 @@ void Entity::Kill(const Vector2f& impulse)
 bool Entity::IsAlive() const
 {
 	return m_IsAlive;
+}
+
+void Entity::Reset() 
+{
+	GetSprite()->SetLooping(true);
+	m_Position = m_InitialPosition;
+	m_Velocity = Vector2f{};
+	m_IsAlive = true;
 }
 
 Sprite* Entity::GetSprite() const

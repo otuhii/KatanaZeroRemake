@@ -46,6 +46,8 @@ public:
 	void Kill(const Vector2f& impulse) override;
 
 	ThrowableObject* GetHeldObject() const;
+
+	void Reset() override;
 private:
 	PlayerState m_State;
 	
@@ -105,21 +107,6 @@ private:
 	const float
 		m_ArrivalThreshold{ 5.f };
 #pragma endregion interaction
-
-//#pragma region slowmo
-//	const float
-//		m_RechargeRate{ 0.5f };
-//	
-//	float 
-//		m_MaxFocusDuration{ 2.f };
-//
-//	float
-//		m_CurrentFocusDuration{ m_MaxFocusDuration };
-//
-//	bool
-//		m_IsFocusing{false};
-//
-//#pragma endregion slowmo
 
 	void DrawSplash() const;
 	
