@@ -145,6 +145,10 @@ void Player::Kill(const Vector2f& impulse)
 	SetState(PlayerState::hurtFly, nullptr, nullptr);
 }
 
+ThrowableObject* Player::GetHeldObject() const
+{
+	return m_pHeldObject;
+}
 
 void Player::DrawSplash() const
 {
