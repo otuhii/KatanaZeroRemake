@@ -80,30 +80,49 @@ void Player::SetState(PlayerState state, ParticleManager* pParticleManager, Soun
 
 	if (m_State == PlayerState::fall && state == PlayerState::staying)
 	{
-		pSoundManager->Play(SoundManager::SoundEffectType::land, 0);
+		if (pSoundManager)
+		{
+			pSoundManager->Play(SoundManager::SoundEffectType::land, 0);
+		}
 	}
 
 	m_State = state;
 
 	if (m_State == PlayerState::attack)
 	{
-		pSoundManager->Play(SoundManager::SoundEffectType::masterswordSlash, 0);
+		if (pSoundManager)
+		{
+			pSoundManager->Play(SoundManager::SoundEffectType::masterswordSlash, 0);
+		}
 	}
 
 	if (m_State == PlayerState::beforeRun)
 	{
-		VFX::SpawnDust(10, GetPosition(), GetVelocity(), pParticleManager);
-		pSoundManager->Play(SoundManager::SoundEffectType::playerPrerun, 0);
+		if (pParticleManager)
+		{
+			VFX::SpawnDust(10, GetPosition(), GetVelocity(), pParticleManager);
+		}
+
+		if (pSoundManager)
+		{
+			pSoundManager->Play(SoundManager::SoundEffectType::playerPrerun, 0);
+		}
 	}
 
 	if (m_State == PlayerState::roll)
 	{
-		pSoundManager->Play(SoundManager::SoundEffectType::roll, 0);
+		if (pSoundManager)
+		{
+			pSoundManager->Play(SoundManager::SoundEffectType::roll, 0);
+		}
 	}
 
 	if (m_State == PlayerState::jump)
 	{
-		pSoundManager->Play(SoundManager::SoundEffectType::playerJump, 0);
+		if (pSoundManager)
+		{
+			pSoundManager->Play(SoundManager::SoundEffectType::playerJump, 0);
+		}
 	}
 
 	GetSprite()->SetAnimationFrameInfo(m_PlayerSpriteFrames[static_cast<int>(m_State)]);
@@ -155,6 +174,37 @@ void Player::Reset()
 	Entity::Reset();
 	SetState(PlayerState::staying, nullptr, nullptr);
 	m_pHeldObject = nullptr;
+}
+
+bool Player::CanDeflect() const
+{
+	if (m_State == PlayerState::attack)
+	{
+		const int
+			startDeflectionFrame{ 1 },
+			endDeflectionFrame{ GetSprite()->GetCurrentMaxFrameCount() };
+
+		return (GetSprite()->GetCurrentFrameCount() > startDeflectionFrame &&
+			GetSprite()->GetCurrentFrameCount() < endDeflectionFrame);
+	}
+
+	return false;
+}
+
+bool Player::IsInsensible() const
+{
+	/*if (m_State == PlayerState::roll)
+	{
+		const int
+			startInsensibleFrame{ 1 },
+			endDeInsensibleFrame{ GetSprite()->GetCurrentMaxFrameCount() };
+
+		return (GetSprite()->GetCurrentFrameCount() > startInsensibleFrame &&
+			GetSprite()->GetCurrentFrameCount() < endDeInsensibleFrame);
+	}
+	return false;*/
+
+	return (m_State == PlayerState::roll);
 }
 
 void Player::DrawSplash() const
@@ -338,7 +388,7 @@ void Player::HandleKeyboard(Map* pMap, const Uint8* pStates, float elapsedSec, P
 		jumpButton	{ static_cast<bool>(pStates[SDL_SCANCODE_W]) },
 		interactionButton{ static_cast<bool>(pStates[SDL_SCANCODE_SPACE]) };
 
-	if (interactionButton && IsOnGround())
+	if (interactionButton && IsOnGround() && IsAlive())
 	{
 		Interact(pMap, pParticleManager, pSoundManager);
 		return;
@@ -461,7 +511,10 @@ void Player::Interact(Map* pMap, ParticleManager* pParticleManager, SoundManager
 void Player::Attack(const Vector2f& mousePos, ParticleManager* particleManager, SoundManager* pSoundManager)
 {
 	SetState(PlayerState::attack, particleManager, pSoundManager);
-	AttackDash(mousePos);
+	if (IsOnGround())
+	{
+		AttackDash(mousePos);
+	}
 	SetCanJumpThroughPlatform(true);
 
 	if (mousePos.x < GetPositionX())
@@ -572,7 +625,7 @@ void Player::AttackDash(const Vector2f& mousePos)
 	Vector2f
 		finalDashVelocity{ m_BaseDashForce * dashDirection };
 	finalDashVelocity.y += GetVelocityY();
-	finalDashVelocity.y *= std::powf(decayFactor, static_cast<float>(m_AirAttackCount - 1)); //decaying y velocity to prevent flying
+	//finalDashVelocity.y *= std::powf(decayFactor, static_cast<float>(m_AirAttackCount - 1)); //decaying y velocity to prevent flying
 
 	SetVelocity(finalDashVelocity);
 }

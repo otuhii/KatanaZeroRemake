@@ -2,6 +2,7 @@
 #include "Cat.h"
 
 #include "SoundManager.h"
+#include "Player.h"
 
 Cat::Cat(Sprite* pSprite, const std::vector<AnimationFrameInfo>& catAnimation, const Vector2f& position, int floor, float interactionRange, float scale)
 	: InteractableObject{ position, floor, interactionRange, InteractableType::cat },
@@ -17,7 +18,7 @@ void Cat::Draw() const
 	m_pSprite->Draw(GetPosition(), true, false);
 }
 
-void Cat::Update(float elapsedSec, SoundManager* pSoundManager)
+void Cat::Update(float elapsedSec, SoundManager* pSoundManager, Player* pPlayer)
 {
 	switch (m_State)
 	{
@@ -34,13 +35,21 @@ void Cat::Update(float elapsedSec, SoundManager* pSoundManager)
 			m_IdleTimer = 0.f;
 			m_IdleDuration = static_cast<float>((rand() % (maxIdleDuration - minIdleDuration + 1)) + minIdleDuration);
 
-			if (rand() % 10 < 8)
+
+			if (rand() % 10 < 3)
 			{
 				SetState(CatState::toLick, pSoundManager);
 			}
 			else
 			{
-				SetState(CatState::lookBack, pSoundManager);
+				if (IsPlayerInRange(pPlayer->GetPosition(), pPlayer->GetFloor()))
+				{
+					SetState(CatState::lookBack, pSoundManager);
+				}
+				else
+				{
+					SetState(CatState::toLick, pSoundManager);
+				}
 			}
 		}
 		break;

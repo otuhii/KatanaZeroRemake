@@ -48,6 +48,9 @@ public:
 	ThrowableObject* GetHeldObject() const;
 
 	void Reset() override;
+
+	bool CanDeflect() const;
+	bool IsInsensible() const;
 private:
 	PlayerState m_State;
 	
@@ -93,7 +96,6 @@ private:
 
 	int
 		m_AirAttackCount{};
-
 
 #pragma region interaction
 	bool

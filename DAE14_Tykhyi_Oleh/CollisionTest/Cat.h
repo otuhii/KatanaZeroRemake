@@ -2,6 +2,7 @@
 #include "InteractableObject.h"
 #include "Sprite.h"
 
+
 class Cat final:
     public InteractableObject
 {
@@ -20,7 +21,7 @@ public:
 
 	void Draw() const override;
 
-	void Update(float elapsedSec, SoundManager* pSoundManager) override;
+	void Update(float elapsedSec, SoundManager* pSoundManager, Player* pPlayer) override;
 
 	void SetState(CatState state, SoundManager* pSoundManager);
 

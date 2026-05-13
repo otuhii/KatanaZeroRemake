@@ -56,11 +56,11 @@ void Map::Draw() const
 
 }
 
-void Map::Update(float elapsedSec, SoundManager* pSoundManager)
+void Map::Update(float elapsedSec, SoundManager* pSoundManager, Player* pPlayer)
 {
 	for (InteractableObject* pObj : m_pInteractableObjects)
 	{
-		pObj->Update(elapsedSec, pSoundManager);
+		pObj->Update(elapsedSec, pSoundManager, pPlayer);
 	}
 }
 

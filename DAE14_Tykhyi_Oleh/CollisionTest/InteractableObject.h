@@ -1,6 +1,7 @@
 #pragma once
 
 class SoundManager;
+class Player;
 
 class InteractableObject
 {
@@ -20,7 +21,7 @@ public:
 
 	virtual void Draw() const = 0;
 
-	virtual void Update(float elapsedSec, SoundManager* pSoundManager);
+	virtual void Update(float elapsedSec, SoundManager* pSoundManager, Player* pPlayer);
 
 	virtual void Interact(SoundManager* pSoundManager) = 0;
 

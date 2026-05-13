@@ -6,6 +6,7 @@
 
 class InteractableObject;
 class SoundManager;
+class Player;
 
 class Map final
 {
@@ -14,7 +15,7 @@ public:
 
 	void Draw() const;
 
-	void Update(float elapsedSec, SoundManager* pSoundManager);
+	void Update(float elapsedSec, SoundManager* pSoundManager, Player* pPlayer);
 
 	const std::vector<EnvironmentActiveObject>& GetEnvironmentActiveObjects() const;
 

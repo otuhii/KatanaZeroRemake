@@ -11,7 +11,7 @@ public:
 
 	void Draw() const override;
 
-	void Update(float elapsedSec, SoundManager* pSoundManager) override;
+	void Update(float elapsedSec, SoundManager* pSoundManager, Player* pPlayer) override;
 
 	void Interact(SoundManager* pSoundManager) override;
 	

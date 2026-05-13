@@ -207,7 +207,7 @@ void Enemy::UpdateWalk(float elapsedSec, const Map* pMap)
 
 	if (m_pTarget != nullptr)
 	{
-		if (CanSeeTarget(pMap))
+		if (CanSeeTarget(pMap) && m_pTarget->IsAlive())
 		{
 			SetState(EnemyState::run);
 		}
@@ -217,7 +217,14 @@ void Enemy::UpdateWalk(float elapsedSec, const Map* pMap)
 
 void Enemy::UpdateRun(float elapsedSec)
 {
-	Chase(elapsedSec);
+	if (m_pTarget->IsAlive())
+	{
+		Chase(elapsedSec);
+	}
+	else
+	{
+		SetState(EnemyState::walk);
+	}
 }
 
 void Enemy::UpdateAttack(float elapsedSec, ParticleManager* particleManager) 

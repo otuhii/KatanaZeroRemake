@@ -32,21 +32,24 @@ void CombatManager::ResolveCombat(
 			if (pAttackParticle->GetOwnerType() == AttackParticle::OwnerType::Player)
 			{
 				//deflection
-				if (pAttackParticle->GetAttackType() == AttackParticle::AttackType::melee)
+				if (pPlayer->CanDeflect())
 				{
-					for (AttackParticle* pOtherParticle : particleManager->GetAttackParticles())
+					if (pAttackParticle->GetAttackType() == AttackParticle::AttackType::melee)
 					{
-						if (pOtherParticle->IsActive() &&
-							pOtherParticle->GetAttackType() == AttackParticle::AttackType::bullet &&
-							pOtherParticle->GetOwnerType() == AttackParticle::OwnerType::Enemy)
+						for (AttackParticle* pOtherParticle : particleManager->GetAttackParticles())
 						{
-							if (UserUtils::ArePolygonsOverlapping(
-								pAttackParticle->GetWorldCoordinates(),
-								pOtherParticle->GetWorldCoordinates())
-								)
+							if (pOtherParticle->IsActive() &&
+								pOtherParticle->GetAttackType() == AttackParticle::AttackType::bullet &&
+								pOtherParticle->GetOwnerType() == AttackParticle::OwnerType::Enemy)
 							{
-								pSoundManager->Play(SoundManager::SoundEffectType::bulletSlash, 0);
-								pOtherParticle->Deflect();
+								if (UserUtils::ArePolygonsOverlapping(
+									pAttackParticle->GetWorldCoordinates(),
+									pOtherParticle->GetWorldCoordinates())
+									)
+								{
+									pSoundManager->Play(SoundManager::SoundEffectType::bulletSlash, 0);
+									pOtherParticle->Deflect();
+								}
 							}
 						}
 					}
@@ -119,16 +122,19 @@ void CombatManager::ResolveCombat(
 			}
 			else if (pAttackParticle->GetOwnerType() == AttackParticle::OwnerType::Enemy)
 			{
-				if (UserUtils::IsPolyInRectAABB(pAttackParticle->GetWorldCoordinates(), pPlayer->GetCurrentHitbox()))
+				if (!pPlayer->IsInsensible())
 				{
-					pPlayer->Kill(CalculateHitImpulse(pAttackParticle->GetOwnerEntity(), pPlayer, pAttackParticle));
-					if (pAttackParticle->GetAttackType() == AttackParticle::AttackType::melee)
+					if (UserUtils::IsPolyInRectAABB(pAttackParticle->GetWorldCoordinates(), pPlayer->GetCurrentHitbox()))
 					{
-						pSoundManager->Play(SoundManager::SoundEffectType::enemyHit, 0);
-					}
-					pSoundManager->Play(SoundManager::SoundEffectType::playerDie, 0);
+						pPlayer->Kill(CalculateHitImpulse(pAttackParticle->GetOwnerEntity(), pPlayer, pAttackParticle));
+						if (pAttackParticle->GetAttackType() == AttackParticle::AttackType::melee)
+						{
+							pSoundManager->Play(SoundManager::SoundEffectType::enemyHit, 0);
+						}
+						pSoundManager->Play(SoundManager::SoundEffectType::playerDie, 0);
 
-					pAttackParticle->Deactivate();
+						pAttackParticle->Deactivate();
+					}
 				}
 			}
 

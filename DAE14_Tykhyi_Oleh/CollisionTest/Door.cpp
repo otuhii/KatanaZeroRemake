@@ -27,7 +27,7 @@ Door::Door(
 	m_pSprite->FlipHorizontally();
 }
 
-void Door::Update(float elapsedSec, SoundManager* pSoundManager)
+void Door::Update(float elapsedSec, SoundManager* pSoundManager, Player* pPlayer)
 {
 	if (m_pSprite->IsFinished() && m_IsOpening)
 	{
