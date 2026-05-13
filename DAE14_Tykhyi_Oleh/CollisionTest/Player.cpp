@@ -229,6 +229,11 @@ Player::PlayerState Player::GetNextState(bool isMoving, bool roll, bool crouch)
 
 	if (m_State == PlayerState::attack || m_State == PlayerState::roll)
 	{
+		if (m_State == PlayerState::roll && !IsOnGround())
+		{
+			return GetNextAirState();
+		}
+
 		if (IsSpriteAnimationFinished())
 		{
 			if (m_State == PlayerState::roll) { SetVelocityX(0.f); }
@@ -443,8 +448,12 @@ void Player::Interact(Map* pMap, ParticleManager* pParticleManager, SoundManager
 		}
 		else if (type == InteractableObject::InteractableType::throwableObject)
 		{
-			pInteractableObject->Interact(pSoundManager);
-			m_pHeldObject = static_cast<ThrowableObject*>(pInteractableObject);
+			if (m_pHeldObject == nullptr)
+			{
+				pInteractableObject->Interact(pSoundManager);
+				m_pHeldObject = static_cast<ThrowableObject*>(pInteractableObject);
+
+			}
 		}
 	}
 }
