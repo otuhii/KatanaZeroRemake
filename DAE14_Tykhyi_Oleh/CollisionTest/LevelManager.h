@@ -17,8 +17,6 @@ public:
 	float GetSlowMotionDurationRatio() const;
 	bool IsPlayerAlive() const;
 	
-	
-
 	void ProcessMouseUpEvent(const SDL_MouseButtonEvent& e, Map* pMap, ParticleManager* pParticleManager);
 
 	//CanFinishLevel
@@ -35,7 +33,7 @@ private:
 	const float
 		m_SlowMotionMaxDuration{ 4.f },
 		m_SlowMotionRechargeValue{ 0.5f },
-		m_MaxLevelTime{ 15.f };
+		m_MaxLevelTime{ 30.f };
 
 	float
 		m_SlowMotionCurrentDuration{ m_SlowMotionMaxDuration },
@@ -48,6 +46,5 @@ private:
 		m_SlowMoTimeMultiplier{ 0.2f };
 
 	void ResetLevel(Map* pMap, ParticleManager* pParticleManager);
-
 };
 

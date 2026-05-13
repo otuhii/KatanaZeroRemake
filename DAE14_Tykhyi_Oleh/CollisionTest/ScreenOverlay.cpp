@@ -8,6 +8,7 @@
 ScreenOverlay::ScreenOverlay(SpriteManager* pSpriteManager)
 {
 	m_pRestartMessage = pSpriteManager->CreateSprite("img/overlay/restart_message.png");
+	m_pRestartMessage->SetScale(0.3f);
 }
 
 

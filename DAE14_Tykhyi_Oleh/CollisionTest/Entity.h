@@ -71,6 +71,9 @@ private:
 	float
 		m_Speed{};
 
+	const int
+		m_InitialFloor{};
+
 	int
 		m_Floor{};
 

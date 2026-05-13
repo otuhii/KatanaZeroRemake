@@ -125,7 +125,6 @@ void Game::Update( float elapsedSec )
 void Game::Draw( ) const
 {
 	ClearBackground( );
-	PaintBlackBackground();
 
 	m_pCamera->Aim();
 
@@ -173,7 +172,7 @@ void Game::ProcessMouseUpEvent( const SDL_MouseButtonEvent& e )
 
 void Game::ClearBackground( ) const
 {
-	glClearColor( 0.0f, 0.0f, 0.3f, 1.0f );
+	glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
 	glClear( GL_COLOR_BUFFER_BIT );
 }
 
@@ -232,12 +231,6 @@ void Game::MapSetup(const JsonImporter::GameData& gameData)
 	m_pMap->SetEnvironmentActiveObjects(gameData.activeObjects);
 	m_pMap->SetEnvironmentCosmeticObjects(gameData.cosmeticObjects);
 	m_pMap->SetInteractableObjects(gameData.interactableObjects);
-}
-
-void Game::PaintBlackBackground() const
-{
-	utils::SetColor(Color4f{ 0.f, 0.f, 0.f, 1.f });
-	utils::FillRect(GetViewPort());
 }
 
 void Game::FPS(float elapsedSec)
