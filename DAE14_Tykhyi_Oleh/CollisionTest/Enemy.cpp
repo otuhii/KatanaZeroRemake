@@ -281,6 +281,11 @@ void Enemy::Patrol(float elapsedSec)
 		return;
 	}
 
+	if (m_CurrentTargetControlPoint == -1)
+	{
+		return;
+	}
+
 	if ((*m_ControlPoints)[m_CurrentTargetControlPoint].type == ControlPoint::ControlPointType::stairSignifier)
 	{
 		m_CurrentTargetControlPoint = PathFinder::GetNextControlPointIdxByType(
@@ -290,6 +295,11 @@ void Enemy::Patrol(float elapsedSec)
 			ControlPoint::ControlPointType::leadingPoint,
 			(*m_ControlPoints)
 		);
+	}
+
+	if (m_CurrentTargetControlPoint == -1)
+	{
+		return;
 	}
 
 	if (MoveTo((*m_ControlPoints)[m_CurrentTargetControlPoint], m_PatrolSpeedMultiplier))

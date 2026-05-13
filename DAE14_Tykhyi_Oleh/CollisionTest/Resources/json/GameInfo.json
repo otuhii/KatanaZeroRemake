@@ -173,9 +173,9 @@
           "floor": 0,
           "colliders": [],
           "controlPointType": "stairsignifier",
-          "id": 3,
+          "id": 2,
           "neighborIds": [
-            2
+            0
           ]
         },
         {
@@ -188,7 +188,7 @@
           "floor": 1,
           "colliders": [],
           "controlPointType": "leadingpoint",
-          "id": 0,
+          "id": 3,
           "neighborIds": []
         },
         {
@@ -201,9 +201,9 @@
           "floor": 1,
           "colliders": [],
           "controlPointType": "stairsignifier",
-          "id": 2,
+          "id": 0,
           "neighborIds": [
-            3
+            2
           ]
         },
         {
@@ -297,8 +297,8 @@
           "texturePath": "spr_gangstermask_ghost.png",
           "objectType": "enemygangster",
           "renderLayer": 0,
-          "xPosition": 43.0,
-          "yPosition": 358.0,
+          "xPosition": 51.0,
+          "yPosition": 356.0,
           "scale": 2.0,
           "floor": 1,
           "colliders": [],
@@ -309,7 +309,7 @@
           "objectType": "enemygrunt",
           "renderLayer": 0,
           "xPosition": 1276.10144,
-          "yPosition": 356.0,
+          "yPosition": 354.681976,
           "scale": 2.0,
           "floor": 1,
           "colliders": [],
@@ -385,6 +385,16 @@
           "type": "throwableobject"
         },
         {
+          "texturePath": "office_background.png",
+          "objectType": "cosmetic",
+          "renderLayer": 0,
+          "xPosition": -36.6999969,
+          "yPosition": 357.5,
+          "scale": 1.0,
+          "floor": 0,
+          "colliders": []
+        },
+        {
           "texturePath": "secondFloorBackgroundTexture.png",
           "objectType": "cosmetic",
           "renderLayer": 0,
@@ -400,16 +410,6 @@
           "renderLayer": 0,
           "xPosition": -38.1,
           "yPosition": 33.2,
-          "scale": 1.0,
-          "floor": 0,
-          "colliders": []
-        },
-        {
-          "texturePath": "office_background.png",
-          "objectType": "cosmetic",
-          "renderLayer": 0,
-          "xPosition": -36.6999969,
-          "yPosition": 357.5,
           "scale": 1.0,
           "floor": 0,
           "colliders": []
@@ -780,14 +780,14 @@
         },
         {
           "objectType": "stairs",
-          "xPosition": -484.0,
-          "yPosition": 21.0,
+          "xPosition": -487.0,
+          "yPosition": -138.0,
           "scale": 1.0,
           "floor": 1,
           "colliders": [
             {
-              "left": -485.0,
-              "bottom": 20.0,
+              "left": -488.0,
+              "bottom": -139.0,
               "width": 485.0,
               "height": 1401.0
             }
@@ -796,14 +796,14 @@
         },
         {
           "objectType": "stairs",
-          "xPosition": 1774.0,
-          "yPosition": 359.0,
+          "xPosition": 1756.0,
+          "yPosition": -13.0,
           "scale": 1.0,
           "floor": 1,
           "colliders": [
             {
-              "left": 1773.0,
-              "bottom": 358.0,
+              "left": 1755.0,
+              "bottom": -14.0,
               "width": 485.0,
               "height": 1401.0
             }
@@ -811,37 +811,72 @@
           "isTrigger": false
         },
         {
-          "texturePath": "spr_potted_plant_0.png",
-          "objectType": "interactable",
+          "texturePath": "spr_gangstermask_ghost.png",
+          "objectType": "enemygangster",
           "renderLayer": 0,
-          "xPosition": 596.0,
-          "yPosition": 49.0,
-          "scale": 1.0,
+          "xPosition": 1026.223,
+          "yPosition": 404.494873,
+          "scale": 2.0,
           "floor": 1,
-          "colliders": [
-            {
-              "left": 588.0,
-              "bottom": 49.0,
-              "width": 15.0,
-              "height": 64.0
-            }
-          ],
-          "isTrigger": false,
-          "interactionRange": 50.0,
-          "type": "throwableobject"
+          "colliders": [],
+          "speed": 250.0
+        },
+        {
+          "texturePath": "spr_gangstermask_ghost.png",
+          "objectType": "enemygangster",
+          "renderLayer": 0,
+          "xPosition": 1433.55469,
+          "yPosition": 375.289978,
+          "scale": 2.0,
+          "floor": 1,
+          "colliders": [],
+          "speed": 250.0
+        },
+        {
+          "texturePath": "spr_gangstermask.png",
+          "objectType": "enemygrunt",
+          "renderLayer": 0,
+          "xPosition": 1024.4,
+          "yPosition": 360.5,
+          "scale": 2.0,
+          "floor": 1,
+          "colliders": [],
+          "speed": 150.0
+        },
+        {
+          "texturePath": "spr_gangstermask.png",
+          "objectType": "enemygrunt",
+          "renderLayer": 0,
+          "xPosition": 1589.4,
+          "yPosition": 363.1,
+          "scale": 2.0,
+          "floor": 1,
+          "colliders": [],
+          "speed": 150.0
+        },
+        {
+          "texturePath": "spr_gangstermask.png",
+          "objectType": "enemygrunt",
+          "renderLayer": 0,
+          "xPosition": 1464.4,
+          "yPosition": 366.1,
+          "scale": 2.0,
+          "floor": 1,
+          "colliders": [],
+          "speed": 150.0
         },
         {
           "texturePath": "spr_potted_plant_0.png",
           "objectType": "interactable",
           "renderLayer": 0,
-          "xPosition": 496.0,
-          "yPosition": 47.0,
+          "xPosition": 421.0,
+          "yPosition": 65.0,
           "scale": 1.0,
           "floor": 1,
           "colliders": [
             {
-              "left": 488.0,
-              "bottom": 47.0,
+              "left": 413.0,
+              "bottom": 65.0,
               "width": 15.0,
               "height": 64.0
             }
@@ -854,13 +889,73 @@
           "texturePath": "spr_lamp_0.png",
           "objectType": "interactable",
           "renderLayer": 0,
-          "xPosition": 370.0,
-          "yPosition": 45.0,
+          "xPosition": 571.0,
+          "yPosition": 57.0,
           "scale": 1.0,
           "floor": 1,
           "colliders": [
             {
-              "left": 362.0,
+              "left": 563.0,
+              "bottom": 57.0,
+              "width": 15.0,
+              "height": 64.0
+            }
+          ],
+          "isTrigger": false,
+          "interactionRange": 50.0,
+          "type": "throwableobject"
+        },
+        {
+          "texturePath": "spr_lamp_0.png",
+          "objectType": "interactable",
+          "renderLayer": 0,
+          "xPosition": 252.5022,
+          "yPosition": 51.4379272,
+          "scale": 1.0,
+          "floor": 1,
+          "colliders": [
+            {
+              "left": 245.0,
+              "bottom": 51.0,
+              "width": 15.0,
+              "height": 64.0
+            }
+          ],
+          "isTrigger": false,
+          "interactionRange": 50.0,
+          "type": "throwableobject"
+        },
+        {
+          "texturePath": "spr_potted_plant_0.png",
+          "objectType": "interactable",
+          "renderLayer": 0,
+          "xPosition": 387.871216,
+          "yPosition": 48.0,
+          "scale": 1.0,
+          "floor": 1,
+          "colliders": [
+            {
+              "left": 380.0,
+              "bottom": 48.0,
+              "width": 15.0,
+              "height": 64.0
+            }
+          ],
+          "isTrigger": false,
+          "interactionRange": 50.0,
+          "type": "throwableobject"
+        },
+        {
+          "texturePath": "spr_potted_plant_0.png",
+          "objectType": "interactable",
+          "renderLayer": 0,
+          "xPosition": 783.916565,
+          "yPosition": 45.9500122,
+          "scale": 1.0,
+          "floor": 1,
+          "colliders": [
+            {
+              "left": 776.0,
               "bottom": 45.0,
               "width": 15.0,
               "height": 64.0
@@ -871,17 +966,17 @@
           "type": "throwableobject"
         },
         {
-          "texturePath": "spr_lamp_0.png",
+          "texturePath": "spr_potted_plant_0.png",
           "objectType": "interactable",
           "renderLayer": 0,
-          "xPosition": 766.0,
-          "yPosition": 41.0,
+          "xPosition": 719.0,
+          "yPosition": 52.0,
           "scale": 1.0,
           "floor": 1,
           "colliders": [
             {
-              "left": 758.0,
-              "bottom": 41.0,
+              "left": 711.0,
+              "bottom": 52.0,
               "width": 15.0,
               "height": 64.0
             }
@@ -889,92 +984,6 @@
           "isTrigger": false,
           "interactionRange": 50.0,
           "type": "throwableobject"
-        },
-        {
-          "texturePath": "spr_lamp_0.png",
-          "objectType": "interactable",
-          "renderLayer": 0,
-          "xPosition": 250.0,
-          "yPosition": 45.0,
-          "scale": 1.0,
-          "floor": 1,
-          "colliders": [
-            {
-              "left": 242.0,
-              "bottom": 45.0,
-              "width": 15.0,
-              "height": 64.0
-            }
-          ],
-          "isTrigger": false,
-          "interactionRange": 50.0,
-          "type": "throwableobject"
-        },
-        {
-          "texturePath": "spr_gangstermask_ghost.png",
-          "objectType": "enemygangster",
-          "renderLayer": 0,
-          "xPosition": 973.4321,
-          "yPosition": 419.004883,
-          "scale": 2.0,
-          "floor": 1,
-          "colliders": [],
-          "speed": 250.0
-        },
-        {
-          "texturePath": "spr_gangstermask_ghost.png",
-          "objectType": "enemygangster",
-          "renderLayer": 0,
-          "xPosition": 1446.0708,
-          "yPosition": 456.686859,
-          "scale": 2.0,
-          "floor": 1,
-          "colliders": [],
-          "speed": 250.0
-        },
-        {
-          "texturePath": "spr_gangstermask_ghost.png",
-          "objectType": "enemygangster",
-          "renderLayer": 0,
-          "xPosition": 1652.783,
-          "yPosition": 423.311462,
-          "scale": 2.0,
-          "floor": 1,
-          "colliders": [],
-          "speed": 250.0
-        },
-        {
-          "texturePath": "spr_gangstermask.png",
-          "objectType": "enemygrunt",
-          "renderLayer": 0,
-          "xPosition": 1061.0,
-          "yPosition": 395.0,
-          "scale": 2.0,
-          "floor": 1,
-          "colliders": [],
-          "speed": 150.0
-        },
-        {
-          "texturePath": "spr_gangstermask.png",
-          "objectType": "enemygrunt",
-          "renderLayer": 0,
-          "xPosition": 912.0,
-          "yPosition": 403.0,
-          "scale": 2.0,
-          "floor": 1,
-          "colliders": [],
-          "speed": 150.0
-        },
-        {
-          "texturePath": "spr_gangstermask_ghost.png",
-          "objectType": "enemygangster",
-          "renderLayer": 0,
-          "xPosition": 1493.44238,
-          "yPosition": 389.936,
-          "scale": 2.0,
-          "floor": 1,
-          "colliders": [],
-          "speed": 250.0
         }
       ]
     }

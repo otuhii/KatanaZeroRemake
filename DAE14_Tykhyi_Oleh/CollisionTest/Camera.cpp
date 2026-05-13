@@ -25,6 +25,7 @@ void Camera::Update(
 	}
 
 	m_CurrentCenter += (trackCenter - m_CurrentCenter) * m_CameraTrackSpeed * elapsedSec;
+	m_CurrentCenter = trackCenter;
 	
 	m_BasePoint.x = m_CurrentCenter.x - m_ScreenWidth * 0.5f;
 	m_BasePoint.y = m_CurrentCenter.y - m_ScreenHeight * 0.5f;
@@ -52,7 +53,7 @@ void Camera::Aim()
 {
 
 	glPushMatrix();
-	glTranslatef(-m_BasePoint.x, -m_BasePoint.y, 0.f);
+	glTranslatef(std::floor(-m_BasePoint.x), std::floor(-m_BasePoint.y), 0.f);
 }
 
 void Camera::Reset()
