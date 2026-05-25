@@ -41,6 +41,8 @@ public:
 	const std::vector<Enemy*>& GetEnemies();
 
 	void ResetEnemies() const;
+
+	void ApplySnapshots(const std::vector<EnemySnapshot>& snapshots);
 private:
 	struct EnemyTypeTemplate {
 		Sprite* spriteSheet{};

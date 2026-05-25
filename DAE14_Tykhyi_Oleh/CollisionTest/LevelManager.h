@@ -1,4 +1,5 @@
 #pragma once
+#include "Snapshots.h"
 
 class Player;
 class EnemyManager;
@@ -8,9 +9,16 @@ class Map;
 class LevelManager
 {
 public:
+	enum class LevelState {
+		Gameplay,
+		Replay
+	};
+
 	LevelManager(Player* pPlayer, EnemyManager* pEnemyManager);
 
 	void Update(float elapsedSec, const Uint8* pStates);
+
+	LevelState GetCurrentState() const;
 
 	float GetTimeMultiplier() const;
 	float GetPassTimeRatio() const;
@@ -18,6 +26,8 @@ public:
 	bool IsPlayerAlive() const;
 	
 	void ProcessMouseUpEvent(const SDL_MouseButtonEvent& e, Map* pMap, ParticleManager* pParticleManager);
+
+	void TriggerReplay();
 
 	//CanFinishLevel
 private:
@@ -29,6 +39,14 @@ private:
 
 	Vector2f
 		m_PlayerStartPosition;
+
+	std::vector<ReplayFrame> m_ReplayBuffer{};
+
+	LevelState
+		m_State{LevelState::Gameplay};
+
+	int
+		m_ReplayFrameIndex{};
 
 	const float
 		m_SlowMotionMaxDuration{ 4.f },
@@ -46,5 +64,8 @@ private:
 		m_SlowMoTimeMultiplier{ 0.2f };
 
 	void ResetLevel(Map* pMap, ParticleManager* pParticleManager);
+	
+	void RecordCurrentFrame();
+	void PlaybackFrame();
 };
 

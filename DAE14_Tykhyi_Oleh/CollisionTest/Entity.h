@@ -51,7 +51,10 @@ public:
 	const Rectf& GetCurrentHitbox()		const;
 	const Rectf& GetPreviousHitbox() const;
 
+	int GetCurrentFrame() const;
+
 	int				GetFacingDirection() const;
+	
 	bool			IsSpriteAnimationFinished() const;
 	bool			CanJumpThroughPlatform() const;
 
@@ -59,6 +62,8 @@ public:
 	bool			IsAlive() const;
 
 	virtual void Reset();
+
+	
 protected:
 	Sprite* GetSprite() const;
 

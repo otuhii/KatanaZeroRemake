@@ -4,6 +4,7 @@
 
 #include "Map.h"
 #include "CollisionManager.h"
+#include "Snapshots.h"
 
 #include "utils.h"
 
@@ -111,5 +112,18 @@ void EnemyManager::ResetEnemies() const
 	for (Enemy* pEnemy : m_pEnemies)
 	{
 		pEnemy->Reset();
+	}
+}
+
+void EnemyManager::ApplySnapshots(const std::vector<EnemySnapshot>& snapshots)
+{
+	if (snapshots.size() != m_pEnemies.size())
+	{
+		return;
+	}
+
+	for (size_t index{ 0 }; index < m_pEnemies.size(); ++index)
+	{
+		m_pEnemies[index]->ApplySnapshot(&snapshots[index]);
 	}
 }

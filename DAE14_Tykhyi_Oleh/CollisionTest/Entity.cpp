@@ -166,6 +166,11 @@ const Rectf& Entity::GetPreviousHitbox() const
 	return m_PreviousHitbox;
 }
 
+int Entity::GetCurrentFrame() const
+{
+	return m_pSprite->GetCurrentFrameCount();
+}
+
 int Entity::GetFacingDirection() const
 {
 	if (m_pSprite->IsFlippedHorizontally())

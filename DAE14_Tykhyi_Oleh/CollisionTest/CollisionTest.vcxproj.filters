@@ -218,6 +218,9 @@
     <ClInclude Include="ScreenOverlay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Snapshots.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Prog2Game.targets" />

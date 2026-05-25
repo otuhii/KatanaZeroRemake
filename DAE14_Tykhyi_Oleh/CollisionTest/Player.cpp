@@ -10,6 +10,7 @@
 
 #include "InteractableObject.h"
 #include "ThrowableObject.h"
+#include "Snapshots.h"
 
 #include "VFX.h"
 
@@ -130,6 +131,11 @@ void Player::SetState(PlayerState state, ParticleManager* pParticleManager, Soun
 	m_SplashSprite->ResetAnimation();
 }
 
+Player::PlayerState Player::GetState() const
+{
+	return m_State;
+}
+
 void Player::ProcessMouseUpEvent(const SDL_MouseButtonEvent & e, const Vector2f& offset, ParticleManager* particleManager, SoundManager* pSoundManager, const Rectf& viewport)
 {
 	if (IsAlive())
@@ -205,6 +211,41 @@ bool Player::IsInsensible() const
 	return false;*/
 
 	return (m_State == PlayerState::roll);
+}
+
+void Player::ApplySnapshot(const PlayerSnapshot* snapshot)
+{
+	SetPosition(snapshot->position);
+	SetState(snapshot->state, nullptr, nullptr);
+	
+	GetSprite()->SetCurrentFrame(snapshot->currentFrame);
+	if (snapshot->isFlipped)
+	{
+		GetSprite()->FlipHorizontally();
+	}
+	else
+	{
+		GetSprite()->ResetHorizontalFlip();
+	}
+
+	m_SplashSprite->SetCurrentFrame(snapshot->currentSplashFrame);
+	m_SplashSprite->RotateBy(snapshot->splashRotation);
+	m_SplashSprite->SetVisible(snapshot->isDrawingSplash);
+}
+
+bool Player::IsSplashDrawn() const
+{
+	return m_SplashSprite->IsVisible();
+}
+
+int Player::GetSplashAnimationFrame() const
+{
+	return m_SplashSprite->GetCurrentFrameCount();
+}
+
+float Player::GetSplashRotation() const
+{
+	return m_SplashSprite->GetRotation();
 }
 
 void Player::DrawSplash() const

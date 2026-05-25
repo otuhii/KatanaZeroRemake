@@ -6,6 +6,7 @@ class ParticleManager;
 class SoundManager;
 class InteractableObject;
 class ThrowableObject;
+struct PlayerSnapshot;
 
 #include <vector>
 
@@ -40,6 +41,7 @@ public:
 	void Update(float elapsedSec, Map* pMap, const Uint8* pStates, const Rectf& viewport, ParticleManager* pParticleManager, SoundManager* pSoundManager);
 
 	void SetState(PlayerState state, ParticleManager* pParticleManager, SoundManager* pSoundManager);
+	PlayerState GetState() const;
 
 	void ProcessMouseUpEvent(const SDL_MouseButtonEvent& e, const Vector2f& offset, ParticleManager* particleManager, SoundManager* pSoundManager, const Rectf& viewport);
 
@@ -51,6 +53,13 @@ public:
 
 	bool CanDeflect() const;
 	bool IsInsensible() const;
+
+	void ApplySnapshot(const PlayerSnapshot* snapshot);
+
+
+	bool IsSplashDrawn() const;
+	int GetSplashAnimationFrame() const;
+	float GetSplashRotation() const;
 private:
 	PlayerState m_State;
 	

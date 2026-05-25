@@ -94,32 +94,39 @@ void Game::Update( float elapsedSec )
 	const Uint8 *pStates = SDL_GetKeyboardState( nullptr );
 
 	FPS(elapsedSec);
-
 	m_pLevelManager->Update(elapsedSec, pStates);
 
-	float
-		timeDivider{ m_pLevelManager->GetTimeMultiplier() };
+
+	if (m_pLevelManager->GetCurrentState() == LevelManager::LevelState::Gameplay)
+	{
+		float
+			timeDivider{ m_pLevelManager->GetTimeMultiplier() };
 
 
-	m_pHud->Update(elapsedSec, pStates);
+		m_pHud->Update(elapsedSec, pStates);
 
-	m_pPlayer->Update(timeDivider*elapsedSec, m_pMap, pStates, GetViewPort(), m_pParticleManager, m_pSoundManager);
+		m_pPlayer->Update(timeDivider * elapsedSec, m_pMap, pStates, GetViewPort(), m_pParticleManager, m_pSoundManager);
 
-	m_pCollisionManager->HandleMovement(m_pPlayer, m_pMap, timeDivider*elapsedSec, true);
+		m_pCollisionManager->HandleMovement(m_pPlayer, m_pMap, timeDivider * elapsedSec, true);
 
-	m_pEnemyManager->Update(timeDivider*elapsedSec, m_pMap, m_pParticleManager, m_pCollisionManager);
+		m_pEnemyManager->Update(timeDivider * elapsedSec, m_pMap, m_pParticleManager, m_pCollisionManager);
 
-	m_pCombatManager->ResolveCombat(m_pPlayer, m_pEnemyManager, m_pParticleManager, m_pMap, m_pSoundManager);
+		m_pCombatManager->ResolveCombat(m_pPlayer, m_pEnemyManager, m_pParticleManager, m_pMap, m_pSoundManager);
 
-	m_pSpriteManager->Update(timeDivider*elapsedSec);
+		m_pSpriteManager->Update(timeDivider * elapsedSec);
 
-	m_pParticleManager->Update(timeDivider * elapsedSec);
+		m_pParticleManager->Update(timeDivider * elapsedSec);
 
-	m_pCollisionManager->HandleParticles(m_pParticleManager, m_pSoundManager, m_pMap);
+		m_pCollisionManager->HandleParticles(m_pParticleManager, m_pSoundManager, m_pMap);
 
-	m_pMap->Update(timeDivider * elapsedSec, m_pSoundManager, m_pPlayer);
+		m_pMap->Update(timeDivider * elapsedSec, m_pSoundManager, m_pPlayer);
 
-	m_pCamera->Update(timeDivider * elapsedSec, m_pPlayer->GetPosition(), 1756.f, 750.f);
+	}
+	
+
+
+	m_pCamera->Update(elapsedSec, m_pPlayer->GetPosition(), 1756.f, 750.f);
+
 }
 
 void Game::Draw( ) const
@@ -153,6 +160,12 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 
 void Game::ProcessKeyUpEvent( const SDL_KeyboardEvent& e )
 {
+	switch ( e.keysym.sym )
+	{
+	case SDLK_r:
+		m_pLevelManager->TriggerReplay();
+		break;
+	}
 }
 
 void Game::ProcessMouseMotionEvent( const SDL_MouseMotionEvent& e )

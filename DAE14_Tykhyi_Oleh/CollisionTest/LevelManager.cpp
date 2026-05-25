@@ -14,37 +14,58 @@ LevelManager::LevelManager(Player* pPlayer, EnemyManager* pEnemyManager)
 
 void LevelManager::Update(float elapsedSec, const Uint8* pStates)
 {
-	m_CurrentLevelTime -= elapsedSec;
-	if (m_CurrentLevelTime <= 0)
+	if (m_State == LevelState::Gameplay)
 	{
-		m_CurrentLevelTime = 0.f;
-		if (m_pPlayer->IsAlive())
+		m_CurrentLevelTime -= elapsedSec;
+		if (m_CurrentLevelTime <= 0)
 		{
-			m_pPlayer->Kill(Vector2f{});
+			m_CurrentLevelTime = 0.f;
+			if (m_pPlayer->IsAlive())
+			{
+				m_pPlayer->Kill(Vector2f{});
+			}
 		}
-	}
 
-	m_IsSlowMoActive = pStates[SDL_SCANCODE_LSHIFT];
+		m_IsSlowMoActive = pStates[SDL_SCANCODE_LSHIFT];
 
-	if (m_IsSlowMoActive && m_SlowMotionCurrentDuration > 0)
-	{
-		m_SlowMotionCurrentDuration -= elapsedSec;
-		if (m_SlowMotionCurrentDuration <= 0)
+		if (m_IsSlowMoActive && m_SlowMotionCurrentDuration > 0)
+		{
+			m_SlowMotionCurrentDuration -= elapsedSec;
+			if (m_SlowMotionCurrentDuration <= 0)
+			{
+				m_IsSlowMoActive = false;
+				m_SlowMotionCurrentDuration = 0.f;
+			}
+		}
+		else
 		{
 			m_IsSlowMoActive = false;
-			m_SlowMotionCurrentDuration = 0.f;
-		}
-	}
-	else
-	{
-		m_IsSlowMoActive = false;
-		if (m_SlowMotionCurrentDuration < m_SlowMotionMaxDuration)
-		{
-			
-			m_SlowMotionCurrentDuration += elapsedSec * m_SlowMotionRechargeValue;
-		}
-	}
+			if (m_SlowMotionCurrentDuration < m_SlowMotionMaxDuration)
+			{
 
+				m_SlowMotionCurrentDuration += elapsedSec * m_SlowMotionRechargeValue;
+			}
+		}
+
+		//replay
+		RecordCurrentFrame();
+
+		if (!IsPlayerAlive())
+		{
+			m_ReplayBuffer.clear();
+		}
+	}
+	else if (m_State == LevelState::Replay)
+	{
+		PlaybackFrame();
+	}
+	
+
+}
+
+LevelManager::LevelState LevelManager::GetCurrentState() const
+{
+	return m_State;
 }
 
 float LevelManager::GetTimeMultiplier() const
@@ -83,6 +104,58 @@ void LevelManager::ProcessMouseUpEvent(const SDL_MouseButtonEvent& e, Map* pMap,
 			ResetLevel(pMap, pParticleManager);
 		}
 	}
+}
+
+void LevelManager::TriggerReplay()
+{
+	m_State = LevelState::Replay;
+	m_ReplayFrameIndex = 0;
+}
+
+void LevelManager::RecordCurrentFrame()
+{
+	ReplayFrame frame{};
+
+	frame.player.position = m_pPlayer->GetPosition();
+	frame.player.state = m_pPlayer->GetState();
+	frame.player.currentFrame = m_pPlayer->GetCurrentFrame();
+	frame.player.isFlipped = (m_pPlayer->GetFacingDirection() == -1);
+	frame.player.splashRotation = m_pPlayer->GetSplashRotation();
+	frame.player.isDrawingSplash = m_pPlayer->IsSplashDrawn();
+	frame.player.currentSplashFrame = m_pPlayer->GetSplashAnimationFrame();
+
+	const std::vector<Enemy*>& enemies = m_pEnemyManager->GetEnemies();
+
+	for (Enemy* pEnemy : enemies)
+	{
+		EnemySnapshot enemySnap{};
+		enemySnap.position = pEnemy->GetPosition();
+		enemySnap.state = pEnemy->GetState();
+
+		enemySnap.currentFrame = pEnemy->GetCurrentFrame();
+		enemySnap.isFlipped = (pEnemy->GetFacingDirection() == -1);
+
+		frame.enemies.push_back(enemySnap);
+	}
+
+	m_ReplayBuffer.push_back(frame);
+}
+
+void LevelManager::PlaybackFrame()
+{
+	if (m_ReplayFrameIndex >= m_ReplayBuffer.size())
+	{
+		m_ReplayFrameIndex = 0;
+		return;
+	}
+
+	
+	const ReplayFrame& currentFrame = m_ReplayBuffer[m_ReplayFrameIndex];
+
+	m_pPlayer->ApplySnapshot(&currentFrame.player);
+	m_pEnemyManager->ApplySnapshots(currentFrame.enemies);
+
+	m_ReplayFrameIndex++;
 }
 
 void LevelManager::ResetLevel(Map* pMap, ParticleManager* pParticleManager)

@@ -7,6 +7,7 @@
 class ParticleManager;
 class SoundManager;
 class Map;
+struct EnemySnapshot;
 
 class Enemy : public Entity
 {
@@ -54,18 +55,19 @@ public:
 	const Entity*	GetTarget();
 
 	void SetState(EnemyState state);
+	EnemyState GetState() const;
 
 	void Kill(const Vector2f& impulse) override;
 
 	void Reset() override;
+
+	void ApplySnapshot(const EnemySnapshot* snapshot);
 protected:
 	bool CanSeeTarget(const Map* pMap);
 	bool IsTargetInAttackRange();
 
 	virtual void Attack( ParticleManager* particleManager) = 0;
 
-	EnemyState GetState() const;
-	
 	float GetAttackCooldown() const;
 	void ResetAttackCooldown() ;
 

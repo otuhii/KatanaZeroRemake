@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Enemy.h"
+#include "Snapshots.h"
 
 #include "PathFinder.h"
 #include "SoundManager.h"
@@ -129,6 +130,11 @@ void Enemy::SetState(EnemyState state)
 	ResetAnimation();
 }
 
+Enemy::EnemyState Enemy::GetState() const
+{
+	return m_State;
+}
+
 void Enemy::Kill(const Vector2f& impulse)
 {
 	Entity::Kill(impulse);
@@ -139,6 +145,22 @@ void Enemy::Reset()
 {
 	Entity::Reset();
 	SetState(m_BaseState);
+}
+
+void Enemy::ApplySnapshot(const EnemySnapshot* snapshot)
+{
+	SetPosition(snapshot->position);
+	SetState(snapshot->state);
+
+	GetSprite()->SetCurrentFrame(snapshot->currentFrame);
+	if (snapshot->isFlipped)
+	{
+		GetSprite()->FlipHorizontally();
+	}
+	else
+	{
+		GetSprite()->ResetHorizontalFlip();
+	}
 }
 
 const Entity* Enemy::GetTarget()
@@ -494,11 +516,6 @@ bool Enemy::IsTargetInAttackRange()
 	{
 		return false;
 	}
-}
-
-Enemy::EnemyState Enemy::GetState() const
-{
-	return m_State;
 }
 
 float Enemy::GetAttackCooldown() const
