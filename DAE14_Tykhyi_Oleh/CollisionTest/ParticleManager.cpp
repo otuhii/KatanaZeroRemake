@@ -2,6 +2,7 @@
 #include "ParticleManager.h"
 #include "Entity.h"
 
+#include "LevelManager.h"
 #include "SpriteManager.h"
 #include "JsonImporter.h"
 
@@ -123,6 +124,23 @@ void ParticleManager::SpawnBullet(
 			nullptr,
 			pSprite
 		);
+
+		if(m_pLevelManager && m_pLevelManager->GetCurrentState() == LevelManager::LevelState::Gameplay)
+		{
+			ReplayParticleEvent* pEvent = new ReplayParticleEvent();
+			pEvent->type = ReplayParticleType::bullet;
+			pEvent->position = position;
+			pEvent->positionOffset = positionOffset;
+			pEvent->velocity = velocity;
+			pEvent->rotationAngle = rotationAngle;
+			pEvent->isFlippedHorizontally = isFlippedHorizontally;
+			pEvent->isFlippedVertically = isFlippedVertically;
+			pEvent->pSprite = pSprite;
+			pEvent->lifetime = m_FlyingParticleLifeTime; 
+
+			m_pLevelManager->RecordParticleEvent(pEvent);
+			pParticle->LinkReplayEvent(pEvent); 
+		}
 	}
 }
 
@@ -193,7 +211,7 @@ void ParticleManager::SpawnThrownObject(
 			AttackParticle::OwnerType::Player,
 			AttackParticle::AttackType::thrownObject,
 			position,
-			Vector2f{0.f, 0.f},
+			Vector2f{ 0.f, 0.f },
 			velocity,
 			localHitbox,
 			m_FlyingParticleLifeTime,
@@ -203,6 +221,23 @@ void ParticleManager::SpawnThrownObject(
 			nullptr,
 			pSprite
 		);
+
+		if (m_pLevelManager && m_pLevelManager->GetCurrentState() == LevelManager::LevelState::Gameplay)
+		{
+			ReplayParticleEvent* pEvent = new ReplayParticleEvent();
+			pEvent->type = ReplayParticleType::thrownObject;
+			pEvent->position = position;
+			pEvent->positionOffset = Vector2f{ 0.f, 0.f };
+			pEvent->velocity = velocity;
+			pEvent->rotationAngle = 0.f;
+			pEvent->isFlippedHorizontally = false;
+			pEvent->isFlippedVertically = false;
+			pEvent->pSprite = pSprite;
+			pEvent->lifetime = m_FlyingParticleLifeTime;
+
+			m_pLevelManager->RecordParticleEvent(pEvent);
+			pParticle->LinkReplayEvent(pEvent);
+		}
 	}
 }
 
@@ -264,6 +299,11 @@ CosmeticParticle* ParticleManager::GetFreeCosmeticParticle() const
 		}
 	}
 	return nullptr;
+}
+
+void ParticleManager::LinkLevelManager(LevelManager* pLevelManager)
+{
+	m_pLevelManager = pLevelManager;
 }
 
 

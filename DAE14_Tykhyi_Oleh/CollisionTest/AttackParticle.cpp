@@ -7,6 +7,8 @@
 #include "InteractableObject.h"
 #include "CosmeticParticle.h"
 
+#include "Snapshots.h"
+
 void AttackParticle::Spawn(
 	OwnerType ownerType, 
 	AttackType attackType, 
@@ -40,6 +42,9 @@ void AttackParticle::Spawn(
 	m_Lifetime = lifetime;
 	m_pOwnerEntity = pOwnerEntity;
 
+	m_TimeAlive = 0.f;
+	m_pLinkedEvent = nullptr;
+
 	m_IsActive = true;
 
 	UpdateHitboxGeometry();
@@ -47,7 +52,7 @@ void AttackParticle::Spawn(
 
 void AttackParticle::Draw() const
 {
-	if (!m_IsActive || m_GlobalHitbox.empty())
+	if (!m_IsActive )
 	{
 		return;
 	}
@@ -72,7 +77,7 @@ void AttackParticle::Draw() const
 		}
 		else
 		{
-			m_pSprite->Draw(m_GlobalHitbox[0], false, false);
+			m_pSprite->Draw(m_Position, false, false);
 		}
 	}
 }
@@ -85,6 +90,7 @@ void AttackParticle::Update(float elapsedSec)
 	}
 
 	m_Lifetime -= elapsedSec;
+	m_TimeAlive += elapsedSec;
 
 	if (m_Lifetime <= 0.f)
 	{
@@ -130,6 +136,11 @@ void AttackParticle::Deactivate()
 	m_AttackType = AttackType::none;
 	m_OwnerType = OwnerType::none;
 	m_pSprite = nullptr;
+
+	if (m_pLinkedEvent)
+	{
+		m_pLinkedEvent->lifetime = m_TimeAlive;
+	}
 }
 
 void AttackParticle::Deflect()
@@ -148,6 +159,11 @@ void AttackParticle::Deflect()
 bool AttackParticle::IsActive() const
 {
 	return m_IsActive;
+}
+
+void AttackParticle::LinkReplayEvent(ReplayParticleEvent* pEvent)
+{
+	m_pLinkedEvent = pEvent;
 }
 
 AttackParticle::OwnerType AttackParticle::GetOwnerType() const

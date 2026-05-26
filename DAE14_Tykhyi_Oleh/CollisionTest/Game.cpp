@@ -69,6 +69,9 @@ void Game::Initialize( )
 
 	m_pLevelManager = new LevelManager{m_pPlayer, m_pEnemyManager};
 
+	m_pLevelManager->LinkParticleManager(m_pParticleManager);
+	m_pParticleManager->LinkLevelManager(m_pLevelManager);
+
 	m_pHud = new Hud{ GetViewPort(), m_pPlayer, m_pSpriteManager, m_pLevelManager };
 }
 
@@ -94,13 +97,19 @@ void Game::Update( float elapsedSec )
 	const Uint8 *pStates = SDL_GetKeyboardState( nullptr );
 
 	FPS(elapsedSec);
+	float
+		timeDivider{ 1.f };
+
+	m_pSpriteManager->Update(timeDivider * elapsedSec);
+	m_pParticleManager->Update(timeDivider * elapsedSec);
 	m_pLevelManager->Update(elapsedSec, pStates);
 
+	
 
 	if (m_pLevelManager->GetCurrentState() == LevelManager::LevelState::Gameplay)
 	{
-		float
-			timeDivider{ m_pLevelManager->GetTimeMultiplier() };
+		
+		timeDivider = m_pLevelManager->GetTimeMultiplier();
 
 
 		m_pHud->Update(elapsedSec, pStates);
@@ -113,17 +122,12 @@ void Game::Update( float elapsedSec )
 
 		m_pCombatManager->ResolveCombat(m_pPlayer, m_pEnemyManager, m_pParticleManager, m_pMap, m_pSoundManager);
 
-		m_pSpriteManager->Update(timeDivider * elapsedSec);
-
-		m_pParticleManager->Update(timeDivider * elapsedSec);
 
 		m_pCollisionManager->HandleParticles(m_pParticleManager, m_pSoundManager, m_pMap);
 
 		m_pMap->Update(timeDivider * elapsedSec, m_pSoundManager, m_pPlayer);
 
 	}
-	
-
 
 	m_pCamera->Update(elapsedSec, m_pPlayer->GetPosition(), 1756.f, 750.f);
 

@@ -5,6 +5,8 @@
 class Entity;
 class Sprite;
 
+struct ReplayParticleEvent;
+
 class AttackParticle final
 {
 public:
@@ -50,7 +52,7 @@ public:
 
 	bool IsActive() const;
 
-
+	void LinkReplayEvent(ReplayParticleEvent* pEvent);
 
 	OwnerType						GetOwnerType()			const;
 	AttackType						GetAttackType()			const;
@@ -65,6 +67,9 @@ private:
 	Sprite*
 		m_pSprite{};
 
+	ReplayParticleEvent*
+		m_pLinkedEvent{};
+
 	bool
 		m_IsActive{ false },
 		m_IsFlippedVertically{ false },
@@ -72,7 +77,8 @@ private:
 
 	float
 		m_Lifetime{},
-		m_RotationAngle{};
+		m_RotationAngle{},
+		m_TimeAlive{};
 
 	Vector2f
 		m_Position{},

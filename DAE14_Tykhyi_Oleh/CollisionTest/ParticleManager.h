@@ -2,6 +2,7 @@
 #include "AttackParticle.h"
 #include "CosmeticParticle.h"
 
+class LevelManager;
 class SpriteManager;
 class Sprite;
 
@@ -62,12 +63,17 @@ public:
 	AttackParticle* GetFreeAttackParticle() const;
 	CosmeticParticle* GetFreeCosmeticParticle() const;
 
+	void LinkLevelManager(LevelManager* pLevelManager);
+
 	void Reset();
 private:
 	std::vector<AttackParticle*> m_pAttackParticles{};
 	std::vector<CosmeticParticle*> m_pCosmeticParticles{};
 
 	std::vector<Sprite*> m_pSpriteTemplates{};
+
+	LevelManager*
+		m_pLevelManager{};
 
 	const float
 		m_FlyingParticleLifeTime{ 5.f };

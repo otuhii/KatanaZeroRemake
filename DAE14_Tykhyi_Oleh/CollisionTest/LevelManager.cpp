@@ -12,6 +12,19 @@ LevelManager::LevelManager(Player* pPlayer, EnemyManager* pEnemyManager)
 {
 }
 
+LevelManager::~LevelManager()
+{
+	for (ReplayFrame& frame : m_ReplayBuffer)
+    {
+        for (ReplayParticleEvent* pEvent : frame.particleEvents)
+        {
+            delete pEvent;
+        }
+        frame.particleEvents.clear();
+    }
+    m_ReplayBuffer.clear();
+}
+
 void LevelManager::Update(float elapsedSec, const Uint8* pStates)
 {
 	if (m_State == LevelState::Gameplay)
@@ -112,6 +125,22 @@ void LevelManager::TriggerReplay()
 	m_ReplayFrameIndex = 0;
 }
 
+void LevelManager::RecordParticleEvent(ReplayParticleEvent* pEvent)
+{
+	if (m_ReplayBuffer.empty() || m_State != LevelState::Gameplay)
+	{
+		return;
+	}
+
+	m_ReplayBuffer.back().particleEvents.push_back(pEvent);
+
+}
+
+void LevelManager::LinkParticleManager(ParticleManager* pParticleManager)
+{
+	m_pParticleManager = pParticleManager;
+}
+
 void LevelManager::RecordCurrentFrame()
 {
 	ReplayFrame frame{};
@@ -148,14 +177,69 @@ void LevelManager::PlaybackFrame()
 		m_ReplayFrameIndex = 0;
 		return;
 	}
-
 	
 	const ReplayFrame& currentFrame = m_ReplayBuffer[m_ReplayFrameIndex];
 
 	m_pPlayer->ApplySnapshot(&currentFrame.player);
 	m_pEnemyManager->ApplySnapshots(currentFrame.enemies);
+	ProcessParticleReplayEvents(currentFrame);
 
 	m_ReplayFrameIndex++;
+}
+
+void LevelManager::ProcessParticleReplayEvents(const ReplayFrame& currentFrame) const
+{
+	if (m_pParticleManager)
+	{
+		for (ReplayParticleEvent* pEvent : currentFrame.particleEvents)
+		{
+			AttackParticle* pAttackPart{ nullptr };
+
+			switch (pEvent->type)
+			{
+			case ReplayParticleType::bullet:
+			{
+				pAttackPart = m_pParticleManager->GetFreeAttackParticle();
+				if (pAttackPart)
+				{
+					pAttackPart->Spawn(
+						AttackParticle::OwnerType::none,
+						AttackParticle::AttackType::bullet,
+						pEvent->position,
+						pEvent->positionOffset,
+						pEvent->velocity,
+						{},
+						pEvent->lifetime,
+						pEvent->rotationAngle,
+						pEvent->isFlippedHorizontally,
+						pEvent->isFlippedVertically,
+						nullptr,
+						pEvent->pSprite);
+				}
+				break;
+			}
+			case ReplayParticleType::thrownObject:
+				pAttackPart = m_pParticleManager->GetFreeAttackParticle();
+				if (pAttackPart)
+				{
+					pAttackPart->Spawn(
+						AttackParticle::OwnerType::none,
+						AttackParticle::AttackType::thrownObject,
+						pEvent->position,
+						pEvent->positionOffset,
+						pEvent->velocity,
+						{},
+						pEvent->lifetime,
+						pEvent->rotationAngle,
+						pEvent->isFlippedHorizontally,
+						pEvent->isFlippedVertically,
+						nullptr,
+						pEvent->pSprite);
+				}
+				break;
+			}
+		}
+	}
 }
 
 void LevelManager::ResetLevel(Map* pMap, ParticleManager* pParticleManager)
@@ -167,4 +251,14 @@ void LevelManager::ResetLevel(Map* pMap, ParticleManager* pParticleManager)
 
 	m_CurrentLevelTime = m_MaxLevelTime;
 	m_SlowMotionCurrentDuration = m_SlowMotionMaxDuration;
+
+	for (ReplayFrame& frame : m_ReplayBuffer)
+	{
+		for (ReplayParticleEvent* pEvent : frame.particleEvents)
+		{
+			delete pEvent;
+		}
+		frame.particleEvents.clear();
+	}
+	m_ReplayBuffer.clear();
 }

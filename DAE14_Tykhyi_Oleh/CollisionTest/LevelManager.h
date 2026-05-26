@@ -6,7 +6,7 @@ class EnemyManager;
 class ParticleManager;
 class Map;
 
-class LevelManager
+class LevelManager final
 {
 public:
 	enum class LevelState {
@@ -15,6 +15,8 @@ public:
 	};
 
 	LevelManager(Player* pPlayer, EnemyManager* pEnemyManager);
+
+	~LevelManager();
 
 	void Update(float elapsedSec, const Uint8* pStates);
 
@@ -28,6 +30,10 @@ public:
 	void ProcessMouseUpEvent(const SDL_MouseButtonEvent& e, Map* pMap, ParticleManager* pParticleManager);
 
 	void TriggerReplay();
+
+	void RecordParticleEvent(ReplayParticleEvent* pEvent);
+
+	void LinkParticleManager(ParticleManager* pParticleManager);
 
 	//CanFinishLevel
 private:
@@ -44,6 +50,9 @@ private:
 
 	LevelState
 		m_State{LevelState::Gameplay};
+
+	ParticleManager*
+		m_pParticleManager{};
 
 	int
 		m_ReplayFrameIndex{};
@@ -67,5 +76,7 @@ private:
 	
 	void RecordCurrentFrame();
 	void PlaybackFrame();
+
+	void ProcessParticleReplayEvents(const ReplayFrame& currentFrame) const;
 };
 
