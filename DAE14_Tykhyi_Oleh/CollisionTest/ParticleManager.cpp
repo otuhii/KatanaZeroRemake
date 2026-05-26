@@ -101,7 +101,8 @@ void ParticleManager::SpawnBullet(
 	float rotationAngle, 
 	bool isFlippedHorizontally, 
 	bool isFlippedVertically,
-	Sprite* pSprite
+	Sprite* pSprite,
+	float lifetime
 ) const
 {
 	AttackParticle* pParticle{
@@ -117,7 +118,7 @@ void ParticleManager::SpawnBullet(
 			positionOffset,
 			velocity,
 			localHitbox,
-			m_FlyingParticleLifeTime,
+			lifetime,
 			rotationAngle,
 			isFlippedHorizontally,
 			isFlippedVertically,
@@ -182,7 +183,8 @@ void ParticleManager::SpawnMelee(
 void ParticleManager::SpawnThrownObject(
 	const Vector2f& position, 
 	const Vector2f& velocity,
-	Sprite* pSprite
+	Sprite* pSprite,
+	float lifetime 
 ) const
 {
 	AttackParticle* pParticle{
@@ -214,7 +216,7 @@ void ParticleManager::SpawnThrownObject(
 			Vector2f{ 0.f, 0.f },
 			velocity,
 			localHitbox,
-			m_FlyingParticleLifeTime,
+			lifetime,
 			0.f,
 			false,
 			false,
@@ -252,23 +254,80 @@ void ParticleManager::SpawnCosmeticParticle(CosmeticParticle::CosmeticParticleTy
 		if (type == CosmeticParticle::CosmeticParticleType::dust)
 		{
 			pParticle->Spawn(type, position, velocity, lifeTime, applyGravity, rotation, m_pSpriteTemplates[static_cast<int>(type)], 2.f);
+			if (m_pLevelManager && m_pLevelManager->GetCurrentState() == LevelManager::LevelState::Gameplay)
+			{
+				ReplayParticleEvent* pEvent = new ReplayParticleEvent();
+				pEvent->type = ReplayParticleType::cosmetic;
+				pEvent->cosmeticType = CosmeticParticle::CosmeticParticleType::dust;
+				pEvent->position = position;
+				pEvent->velocity = velocity;
+				pEvent->pSprite = m_pSpriteTemplates[static_cast<int>(type)];
+				pEvent->lifetime = lifeTime;
+				pEvent->applyGravity = applyGravity;
+
+				m_pLevelManager->RecordParticleEvent(pEvent);
+			}
 		}
 		else if (type == CosmeticParticle::CosmeticParticleType::blood)
 		{
 			pParticle->Spawn(type, position, velocity, lifeTime, applyGravity, rotation, m_pSpriteTemplates[static_cast<int>(type)], 1.f);
 
 			pParticle->SetRandomFrame();
+
+			if (m_pLevelManager && m_pLevelManager->GetCurrentState() == LevelManager::LevelState::Gameplay)
+			{
+				ReplayParticleEvent* pEvent = new ReplayParticleEvent();
+				pEvent->type = ReplayParticleType::cosmetic;
+				pEvent->cosmeticType = CosmeticParticle::CosmeticParticleType::blood;
+				pEvent->position = position;
+				pEvent->velocity = velocity;
+				pEvent->pSprite = m_pSpriteTemplates[static_cast<int>(type)];
+				pEvent->lifetime = lifeTime;
+				pEvent->applyGravity = applyGravity;
+
+				m_pLevelManager->RecordParticleEvent(pEvent);
+			}
 		}
 		else if (type == CosmeticParticle::CosmeticParticleType::bloodSlash)
 		{
 			pParticle->Spawn(type, position, velocity, lifeTime, applyGravity, rotation, m_pSpriteTemplates[static_cast<int>(type)], 1.5f);
 
 			pParticle->SetRandomFrame();
+
+			if (m_pLevelManager && m_pLevelManager->GetCurrentState() == LevelManager::LevelState::Gameplay)
+			{
+				ReplayParticleEvent* pEvent = new ReplayParticleEvent();
+				pEvent->type = ReplayParticleType::cosmetic;
+				pEvent->cosmeticType = CosmeticParticle::CosmeticParticleType::bloodSlash;
+				pEvent->position = position;
+				pEvent->velocity = velocity;
+				pEvent->pSprite = m_pSpriteTemplates[static_cast<int>(type)];
+				pEvent->lifetime = lifeTime;
+				pEvent->applyGravity = applyGravity;
+
+				m_pLevelManager->RecordParticleEvent(pEvent);
+			}
 		}
 		else if (type == CosmeticParticle::CosmeticParticleType::cracks)
 		{
-			pParticle->Spawn(type, position, velocity, lifeTime, applyGravity, rotation, m_pSpriteTemplates[static_cast<int>(type)], 0.5f);;
+			pParticle->Spawn(type, position, velocity, lifeTime, applyGravity, rotation, m_pSpriteTemplates[static_cast<int>(type)], 0.5f);
+
+			if (m_pLevelManager && m_pLevelManager->GetCurrentState() == LevelManager::LevelState::Gameplay)
+			{
+				ReplayParticleEvent* pEvent = new ReplayParticleEvent();
+				pEvent->type = ReplayParticleType::cosmetic;
+				pEvent->cosmeticType = CosmeticParticle::CosmeticParticleType::cracks;
+				pEvent->position = position;
+				pEvent->velocity = velocity;
+				pEvent->pSprite = m_pSpriteTemplates[static_cast<int>(type)];
+				pEvent->lifetime = lifeTime;
+				pEvent->applyGravity = applyGravity;
+
+				m_pLevelManager->RecordParticleEvent(pEvent);
+			}
 		}
+
+		
 	}
 }
 

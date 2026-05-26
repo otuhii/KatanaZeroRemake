@@ -3,6 +3,9 @@
 #include "Player.h"
 #include "Enemy.h"
 
+#include "CosmeticParticle.h"
+#include "SoundManager.h"
+
 enum class ReplayParticleType {
 	bullet,
 	melee,
@@ -38,12 +41,15 @@ struct ReplayParticleEvent {
 	bool isFlippedHorizontally{};
 	bool isFlippedVertically{};
 	Sprite* pSprite{};
+
+	CosmeticParticle::CosmeticParticleType cosmeticType{};
+	bool applyGravity{};
 };
 
 struct ReplayFrame {
 	PlayerSnapshot player{};
 
 	std::vector<EnemySnapshot> enemies{};
-
-	std::vector<ReplayParticleEvent*> particleEvents;
+	std::vector<SoundManager::SoundEffectType> sounds{};
+	std::vector<ReplayParticleEvent*> particleEvents{};
 };

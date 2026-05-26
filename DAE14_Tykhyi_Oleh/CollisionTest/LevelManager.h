@@ -4,6 +4,7 @@
 class Player;
 class EnemyManager;
 class ParticleManager;
+class SoundManager;
 class Map;
 
 class LevelManager final
@@ -32,11 +33,14 @@ public:
 	void TriggerReplay();
 
 	void RecordParticleEvent(ReplayParticleEvent* pEvent);
+	void RecordSound(SoundManager::SoundEffectType type);
 
 	void LinkParticleManager(ParticleManager* pParticleManager);
+	void LinkSoundManager(SoundManager* pSoundManager);
 	
 	void Forward();
 	void Backward();
+
 	//CanFinishLevel
 private:
 	Player*
@@ -44,6 +48,9 @@ private:
 
 	EnemyManager*
 		m_pEnemyManager{};
+
+	SoundManager*
+		m_pSoundManager{};
 
 	Vector2f
 		m_PlayerStartPosition;
@@ -80,6 +87,7 @@ private:
 	void PlaybackFrame();
 
 	void ProcessParticleReplayEvents(const ReplayFrame& currentFrame) const;
+	void ProcessSoundReplay(const ReplayFrame& currentFrame) const;
 	
 	void ClearReplayBuffer();
 };

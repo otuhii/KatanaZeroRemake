@@ -70,7 +70,10 @@ void Game::Initialize( )
 	m_pLevelManager = new LevelManager{m_pPlayer, m_pEnemyManager};
 
 	m_pLevelManager->LinkParticleManager(m_pParticleManager);
+	m_pLevelManager->LinkSoundManager(m_pSoundManager);
 	m_pParticleManager->LinkLevelManager(m_pLevelManager);
+	m_pSoundManager->LinkLevelManager(m_pLevelManager);
+
 
 	m_pHud = new Hud{ GetViewPort(), m_pPlayer, m_pSpriteManager, m_pLevelManager };
 }
@@ -180,10 +183,7 @@ void Game::ProcessKeyUpEvent( const SDL_KeyboardEvent& e )
 		m_pLevelManager->TriggerReplay();
 		break;
 	}
-
-	
 }
-
 
 
 void Game::ProcessMouseMotionEvent( const SDL_MouseMotionEvent& e )

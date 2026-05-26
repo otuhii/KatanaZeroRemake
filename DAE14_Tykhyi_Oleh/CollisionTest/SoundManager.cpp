@@ -4,6 +4,8 @@
 #include "SoundEffect.h"
 #include "SoundStream.h"
 
+#include "LevelManager.h"
+
 SoundManager::SoundManager()
 {
 	m_pSoundEffects.resize(static_cast<int>(SoundEffectType::count));
@@ -95,9 +97,19 @@ SoundManager::~SoundManager()
 	}
 }
 
+void SoundManager::LinkLevelManager(LevelManager* pLevelManager)
+{
+	m_pLevelManager = pLevelManager;
+}
+
 void SoundManager::Play(SoundEffectType type, int replayCount) const
 {
 	m_pSoundEffects[static_cast<int>(type)]->Play(replayCount);
+
+	if (m_pLevelManager)
+	{
+		m_pLevelManager->RecordSound(type);
+	}
 }
 
 void SoundManager::Stop(SoundEffectType type) const

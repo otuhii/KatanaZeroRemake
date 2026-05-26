@@ -28,7 +28,8 @@ public:
 		float rotationAngle,
 		bool isFlippedHorizontally, 
 		bool isFlippedVertically,
-		Sprite* pSprite
+		Sprite* pSprite,
+		float lifetime=5.f
 	) const;
 
 	void SpawnMelee(
@@ -46,7 +47,8 @@ public:
 	void SpawnThrownObject(
 		const Vector2f& position,
 		const Vector2f& velocity,
-		Sprite* pSprite
+		Sprite* pSprite,
+		float lifetime=5.f
 	) const;
 
 	void SpawnCosmeticParticle(

@@ -3,6 +3,7 @@
 class SpriteManager;
 class Sprite;
 
+
 class CosmeticParticle final
 { 
 public:
@@ -40,7 +41,8 @@ public:
 
 	void SetRandomFrame();
 private:
-	CosmeticParticleType m_Type{ CosmeticParticleType::none };
+	CosmeticParticleType 
+		m_Type{ CosmeticParticleType::none };
 
 	Sprite*
 		m_pSprite;

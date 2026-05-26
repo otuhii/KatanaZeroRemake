@@ -5,11 +5,12 @@
 #include "Map.h"
 #include "EnemyManager.h"
 #include "ParticleManager.h"
-
+#include "SoundManager.h"
 
 LevelManager::LevelManager(Player* pPlayer, EnemyManager* pEnemyManager)
 	: m_pPlayer{ pPlayer }, m_pEnemyManager{pEnemyManager}
 {
+
 }
 
 LevelManager::~LevelManager()
@@ -67,8 +68,6 @@ void LevelManager::Update(float elapsedSec, const Uint8* pStates)
 			PlaybackFrame();
 		}
 	}
-	
-
 }
 
 LevelManager::LevelState LevelManager::GetCurrentState() const
@@ -131,9 +130,24 @@ void LevelManager::RecordParticleEvent(ReplayParticleEvent* pEvent)
 
 }
 
+void LevelManager::RecordSound(SoundManager::SoundEffectType type)
+{
+	if (m_ReplayBuffer.empty() || m_State != LevelState::Gameplay)
+	{
+		return;
+	}
+
+	m_ReplayBuffer.back().sounds.push_back(type);
+}
+
 void LevelManager::LinkParticleManager(ParticleManager* pParticleManager)
 {
 	m_pParticleManager = pParticleManager;
+}
+
+void LevelManager::LinkSoundManager(SoundManager* pSoundManager)
+{
+	m_pSoundManager = pSoundManager;
 }
 
 void LevelManager::Forward()
@@ -200,6 +214,7 @@ void LevelManager::PlaybackFrame()
 	m_pPlayer->ApplySnapshot(&currentFrame.player);
 	m_pEnemyManager->ApplySnapshots(currentFrame.enemies);
 	ProcessParticleReplayEvents(currentFrame);
+	ProcessSoundReplay(currentFrame);
 
 	m_ReplayFrameIndex++;
 }
@@ -210,51 +225,58 @@ void LevelManager::ProcessParticleReplayEvents(const ReplayFrame& currentFrame) 
 	{
 		for (ReplayParticleEvent* pEvent : currentFrame.particleEvents)
 		{
-			AttackParticle* pAttackPart{ nullptr };
-
 			switch (pEvent->type)
 			{
 			case ReplayParticleType::bullet:
 			{
-				pAttackPart = m_pParticleManager->GetFreeAttackParticle();
-				if (pAttackPart)
-				{
-					pAttackPart->Spawn(
-						AttackParticle::OwnerType::none,
-						AttackParticle::AttackType::bullet,
-						pEvent->position,
-						pEvent->positionOffset,
-						pEvent->velocity,
-						{},
-						pEvent->lifetime,
-						pEvent->rotationAngle,
-						pEvent->isFlippedHorizontally,
-						pEvent->isFlippedVertically,
-						nullptr,
-						pEvent->pSprite);
-				}
+				m_pParticleManager->SpawnBullet(
+					AttackParticle::OwnerType::none,
+					pEvent->position,
+					pEvent->positionOffset,
+					{},
+					pEvent->velocity,
+					pEvent->rotationAngle,
+					pEvent->isFlippedHorizontally,
+					pEvent->isFlippedVertically,
+					pEvent->pSprite,
+					pEvent->lifetime
+				);
 				break;
 			}
 			case ReplayParticleType::thrownObject:
-				pAttackPart = m_pParticleManager->GetFreeAttackParticle();
-				if (pAttackPart)
-				{
-					pAttackPart->Spawn(
-						AttackParticle::OwnerType::none,
-						AttackParticle::AttackType::thrownObject,
-						pEvent->position,
-						pEvent->positionOffset,
-						pEvent->velocity,
-						{},
-						pEvent->lifetime,
-						pEvent->rotationAngle,
-						pEvent->isFlippedHorizontally,
-						pEvent->isFlippedVertically,
-						nullptr,
-						pEvent->pSprite);
-				}
+			{
+				m_pParticleManager->SpawnThrownObject(
+					pEvent->position,
+					pEvent->velocity,
+					pEvent->pSprite,
+					pEvent->lifetime
+				);
 				break;
 			}
+			case ReplayParticleType::cosmetic:
+			{
+				m_pParticleManager->SpawnCosmeticParticle(
+					pEvent->cosmeticType,
+					pEvent->applyGravity,
+					pEvent->rotationAngle,
+					pEvent->position,
+					pEvent->velocity,
+					pEvent->lifetime
+				);
+				break;
+			}
+			}
+		}
+	}
+}
+
+void LevelManager::ProcessSoundReplay(const ReplayFrame& currentFrame) const
+{
+	for (SoundManager::SoundEffectType type : currentFrame.sounds)
+	{
+		if (m_pSoundManager)
+		{
+			m_pSoundManager->Play(type, 0);
 		}
 	}
 }

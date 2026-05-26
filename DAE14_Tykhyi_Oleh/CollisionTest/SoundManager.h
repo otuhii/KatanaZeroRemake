@@ -2,6 +2,7 @@
 
 class SoundEffect;
 class SoundStream;
+class LevelManager;
 
 class SoundManager final
 {
@@ -47,11 +48,17 @@ public:
 	SoundManager(const SoundManager&) = delete;
 	SoundManager& operator=(const SoundManager&) = delete;
 
+	void LinkLevelManager(LevelManager* pLevelManager);
+
 	~SoundManager();
 
 	void Play(SoundEffectType type, int replayCount) const;
 	void Stop(SoundEffectType type) const;
 private:
+	LevelManager*
+		m_pLevelManager;
+
+
 	std::vector<SoundEffect*> m_pSoundEffects{};
 	std::vector<SoundStream*> m_pSoundStreams{};
 };
