@@ -100,18 +100,17 @@ void Game::Update( float elapsedSec )
 	float
 		timeDivider{ 1.f };
 
+	if (m_pLevelManager->GetCurrentState() == LevelManager::LevelState::Gameplay)
+	{
+		timeDivider = m_pLevelManager->GetTimeMultiplier();
+	}
+
 	m_pSpriteManager->Update(timeDivider * elapsedSec);
 	m_pParticleManager->Update(timeDivider * elapsedSec);
 	m_pLevelManager->Update(elapsedSec, pStates);
 
-	
-
 	if (m_pLevelManager->GetCurrentState() == LevelManager::LevelState::Gameplay)
 	{
-		
-		timeDivider = m_pLevelManager->GetTimeMultiplier();
-
-
 		m_pHud->Update(elapsedSec, pStates);
 
 		m_pPlayer->Update(timeDivider * elapsedSec, m_pMap, pStates, GetViewPort(), m_pParticleManager, m_pSoundManager);
@@ -121,7 +120,6 @@ void Game::Update( float elapsedSec )
 		m_pEnemyManager->Update(timeDivider * elapsedSec, m_pMap, m_pParticleManager, m_pCollisionManager);
 
 		m_pCombatManager->ResolveCombat(m_pPlayer, m_pEnemyManager, m_pParticleManager, m_pMap, m_pSoundManager);
-
 
 		m_pCollisionManager->HandleParticles(m_pParticleManager, m_pSoundManager, m_pMap);
 

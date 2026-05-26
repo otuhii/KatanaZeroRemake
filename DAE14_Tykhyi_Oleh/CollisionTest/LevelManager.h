@@ -35,6 +35,7 @@ public:
 
 	void LinkParticleManager(ParticleManager* pParticleManager);
 
+	
 	//CanFinishLevel
 private:
 	Player*
@@ -78,5 +79,7 @@ private:
 	void PlaybackFrame();
 
 	void ProcessParticleReplayEvents(const ReplayFrame& currentFrame) const;
+	
+	void ClearReplayBuffer();
 };
 

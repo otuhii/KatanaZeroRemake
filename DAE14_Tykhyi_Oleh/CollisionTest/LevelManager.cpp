@@ -14,15 +14,7 @@ LevelManager::LevelManager(Player* pPlayer, EnemyManager* pEnemyManager)
 
 LevelManager::~LevelManager()
 {
-	for (ReplayFrame& frame : m_ReplayBuffer)
-    {
-        for (ReplayParticleEvent* pEvent : frame.particleEvents)
-        {
-            delete pEvent;
-        }
-        frame.particleEvents.clear();
-    }
-    m_ReplayBuffer.clear();
+	ClearReplayBuffer();
 }
 
 void LevelManager::Update(float elapsedSec, const Uint8* pStates)
@@ -65,7 +57,7 @@ void LevelManager::Update(float elapsedSec, const Uint8* pStates)
 
 		if (!IsPlayerAlive())
 		{
-			m_ReplayBuffer.clear();
+			ClearReplayBuffer();
 		}
 	}
 	else if (m_State == LevelState::Replay)
@@ -242,6 +234,19 @@ void LevelManager::ProcessParticleReplayEvents(const ReplayFrame& currentFrame) 
 	}
 }
 
+void LevelManager::ClearReplayBuffer()
+{
+	for (ReplayFrame& frame : m_ReplayBuffer)
+	{
+		for (ReplayParticleEvent* pEvent : frame.particleEvents)
+		{
+			delete pEvent;
+		}
+		frame.particleEvents.clear();
+	}
+	m_ReplayBuffer.clear();
+}
+
 void LevelManager::ResetLevel(Map* pMap, ParticleManager* pParticleManager)
 {
 	pMap->Reset();
@@ -252,13 +257,5 @@ void LevelManager::ResetLevel(Map* pMap, ParticleManager* pParticleManager)
 	m_CurrentLevelTime = m_MaxLevelTime;
 	m_SlowMotionCurrentDuration = m_SlowMotionMaxDuration;
 
-	for (ReplayFrame& frame : m_ReplayBuffer)
-	{
-		for (ReplayParticleEvent* pEvent : frame.particleEvents)
-		{
-			delete pEvent;
-		}
-		frame.particleEvents.clear();
-	}
-	m_ReplayBuffer.clear();
+	ClearReplayBuffer();
 }
