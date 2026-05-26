@@ -153,11 +153,23 @@ void Game::Draw( ) const
 
 	m_pScreenOverlay->Draw(m_pLevelManager, GetViewPort());
 
+
+	//utils::SetColor(Color4f{ 0.3f, 0.3f, 0.3f, 0.5f });
+	//utils::FillRect(GetViewPort());
+
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 {
-	
+	switch (e.keysym.sym)
+	{
+	case SDLK_LEFT:
+		m_pLevelManager->Backward();
+		break;
+	case SDLK_RIGHT:
+		m_pLevelManager->Forward();
+		break;
+	}
 }
 
 void Game::ProcessKeyUpEvent( const SDL_KeyboardEvent& e )
@@ -168,7 +180,11 @@ void Game::ProcessKeyUpEvent( const SDL_KeyboardEvent& e )
 		m_pLevelManager->TriggerReplay();
 		break;
 	}
+
+	
 }
+
+
 
 void Game::ProcessMouseMotionEvent( const SDL_MouseMotionEvent& e )
 {

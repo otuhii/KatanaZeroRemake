@@ -34,8 +34,9 @@ public:
 	void RecordParticleEvent(ReplayParticleEvent* pEvent);
 
 	void LinkParticleManager(ParticleManager* pParticleManager);
-
 	
+	void Forward();
+	void Backward();
 	//CanFinishLevel
 private:
 	Player*

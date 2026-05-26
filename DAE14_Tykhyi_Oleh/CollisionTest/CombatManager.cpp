@@ -90,8 +90,6 @@ void CombatManager::ResolveCombat(
 								}
 
 
-
-
 								if (pAttackParticle->GetAttackType() == AttackParticle::AttackType::bullet ||
 									pAttackParticle->GetAttackType() == AttackParticle::AttackType::thrownObject)
 								{
@@ -103,18 +101,21 @@ void CombatManager::ResolveCombat(
 				}
 
 
-				//door opening and other interactions maybe
-				for (InteractableObject* pObject : pMap->GetInteractableObjects())
+				if (pAttackParticle->GetAttackType() == AttackParticle::AttackType::melee)
 				{
-					if (pObject->GetType() == InteractableObject::InteractableType::door)
+					//door opening and other interactions maybe
+					for (InteractableObject* pObject : pMap->GetInteractableObjects())
 					{
-						Door* pDoor{ static_cast<Door*>(pObject) };
-
-						if (!pDoor->IsOpened() || !pDoor->IsOpening())
+						if (pObject->GetType() == InteractableObject::InteractableType::door)
 						{
-							if (UserUtils::IsPolyInRectRaycast(pAttackParticle->GetWorldCoordinates(), pDoor->GetCurrentCollider()))
+							Door* pDoor{ static_cast<Door*>(pObject) };
+
+							if (!pDoor->IsOpened() || !pDoor->IsOpening())
 							{
-								pDoor->Interact(pSoundManager);
+								if (UserUtils::IsPolyInRectRaycast(pAttackParticle->GetWorldCoordinates(), pDoor->GetCurrentCollider()))
+								{
+									pDoor->Interact(pSoundManager);
+								}
 							}
 						}
 					}
