@@ -44,6 +44,9 @@ void ScreenOverlay::Draw() const
 void ScreenOverlay::Update(float elapsedSec, const Uint8* pStates)
 {
 	m_pHud->Update(elapsedSec, pStates, m_pLevelManager);
+
+	m_TrackingTimer += elapsedSec * 50.0f; 
+	if (m_TrackingTimer > m_Viewport.height) m_TrackingTimer = -50.0f;
 }
 
 void ScreenOverlay::DrawRestartMessage() const
@@ -85,7 +88,6 @@ void ScreenOverlay::DrawRestartMessage() const
 		utils::SetColor(Color4f{ 0.f, 0.f, 0.f, currentAlpha });
 		utils::FillRect(currentRect);
 	}
-
 
 	m_pRestartMessage->Draw(Vector2f{ m_Viewport.width * 0.5f, m_Viewport.height * 0.5f }, true, true);
 

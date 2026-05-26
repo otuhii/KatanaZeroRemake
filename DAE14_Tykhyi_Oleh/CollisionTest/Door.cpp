@@ -3,6 +3,8 @@
 
 #include "SoundManager.h"
 
+#include "Snapshots.h"
+
 Door::Door(
 	Sprite* pSprite,
 	const std::vector<AnimationFrameInfo>& doorAnimation,
@@ -83,4 +85,16 @@ const Rectf& Door::GetCurrentCollider() const
 	{
 		return m_ClosedHitbox;
 	}
+}
+
+void Door::SaveSnapshot(InteractableObjectSnapshot& snapshot)
+{
+	InteractableObject::SaveSnapshot(snapshot);
+
+	snapshot.currentFrame = m_pSprite->GetCurrentFrameCount();
+}
+
+void Door::ApplySnapshot(const InteractableObjectSnapshot& snapshot)
+{
+	m_pSprite->SetCurrentFrame(snapshot.currentFrame);
 }

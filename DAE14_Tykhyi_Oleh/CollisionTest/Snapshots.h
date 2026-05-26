@@ -46,10 +46,20 @@ struct ReplayParticleEvent {
 	bool applyGravity{};
 };
 
+struct InteractableObjectSnapshot {
+	bool isActive{ true };
+	int state{};
+	int currentFrame{ 0 };
+
+	bool doorIsOpening{ false };
+	bool doorIsOpened{};
+};
+
 struct ReplayFrame {
 	PlayerSnapshot player{};
 
 	std::vector<EnemySnapshot> enemies{};
+	std::vector<InteractableObjectSnapshot> interactables{};
 	std::vector<SoundManager::SoundEffectType> sounds{};
 	std::vector<ReplayParticleEvent*> particleEvents{};
 };

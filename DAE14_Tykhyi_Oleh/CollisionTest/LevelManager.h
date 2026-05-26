@@ -28,7 +28,7 @@ public:
 	float GetSlowMotionDurationRatio() const;
 	bool IsPlayerAlive() const;
 	
-	void ProcessMouseUpEvent(const SDL_MouseButtonEvent& e, Map* pMap, ParticleManager* pParticleManager);
+	void ProcessMouseUpEvent(const SDL_MouseButtonEvent& e);
 
 	void TriggerReplay();
 
@@ -37,6 +37,7 @@ public:
 
 	void LinkParticleManager(ParticleManager* pParticleManager);
 	void LinkSoundManager(SoundManager* pSoundManager);
+	void LinkMap(Map* pMap);
 	
 	Player* GetPlayer() const;
 
@@ -52,6 +53,9 @@ private:
 
 	SoundManager*
 		m_pSoundManager{};
+
+	Map*
+		m_pMap{};
 
 	Vector2f
 		m_PlayerStartPosition;
@@ -82,13 +86,15 @@ private:
 	float
 		m_SlowMoTimeMultiplier{ 0.2f };
 
-	void ResetLevel(Map* pMap, ParticleManager* pParticleManager);
+	void ResetLevel();
 	
 	void RecordCurrentFrame();
 	void PlaybackFrame();
+	void RecordInteractable(ReplayFrame& currentFrame);
 
 	void ProcessParticleReplayEvents(const ReplayFrame& currentFrame) const;
 	void ProcessSoundReplay(const ReplayFrame& currentFrame) const;
+	void ProcessInteractableObjectReplay(const ReplayFrame& currentFrame) const;
 	
 	void ClearReplayBuffer();
 

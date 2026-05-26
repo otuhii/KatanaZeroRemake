@@ -30,6 +30,9 @@ private:
 	Rectf
 		m_Viewport{};
 
+	float
+		m_TrackingTimer{ 0.f };
+
 	void DrawRestartMessage() const;
 	void DrawReplayOverlay() const;
 };

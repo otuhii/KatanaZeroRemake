@@ -2,7 +2,6 @@
 #include "InteractableObject.h"
 #include "Sprite.h"
 
-
 class Cat final:
     public InteractableObject
 {
@@ -26,6 +25,9 @@ public:
 	void SetState(CatState state, SoundManager* pSoundManager);
 
 	void Interact(SoundManager* pSoundManager) override;
+
+	void SaveSnapshot(InteractableObjectSnapshot& snapshot) override;
+	void ApplySnapshot(const InteractableObjectSnapshot& snapshot) override;
 private:
 	Sprite* m_pSprite{};
 

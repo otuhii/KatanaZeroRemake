@@ -70,6 +70,7 @@ void Game::Initialize( )
 
 	m_pLevelManager->LinkParticleManager(m_pParticleManager);
 	m_pLevelManager->LinkSoundManager(m_pSoundManager);
+	m_pLevelManager->LinkMap(m_pMap);
 	m_pParticleManager->LinkLevelManager(m_pLevelManager);
 	m_pSoundManager->LinkLevelManager(m_pLevelManager);
 }
@@ -178,7 +179,7 @@ void Game::ProcessMouseDownEvent( const SDL_MouseButtonEvent& e )
 void Game::ProcessMouseUpEvent( const SDL_MouseButtonEvent& e )
 {
 	m_pPlayer->ProcessMouseUpEvent(e, m_pCamera->GetBasePoint(), m_pParticleManager, m_pSoundManager, GetViewPort());
-	m_pLevelManager->ProcessMouseUpEvent(e, m_pMap, m_pParticleManager);
+	m_pLevelManager->ProcessMouseUpEvent(e);
 }
 
 void Game::ClearBackground( ) const

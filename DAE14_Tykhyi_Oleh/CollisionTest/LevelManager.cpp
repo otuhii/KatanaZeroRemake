@@ -6,6 +6,9 @@
 #include "EnemyManager.h"
 #include "ParticleManager.h"
 #include "SoundManager.h"
+#include "InteractableObject.h"
+
+#include "Snapshots.h"
 
 LevelManager::LevelManager(Player* pPlayer, EnemyManager* pEnemyManager)
 	: m_pPlayer{ pPlayer }, m_pEnemyManager{pEnemyManager}
@@ -113,13 +116,13 @@ bool LevelManager::IsPlayerAlive() const
 	return m_pPlayer->IsAlive();
 }
 
-void LevelManager::ProcessMouseUpEvent(const SDL_MouseButtonEvent& e, Map* pMap, ParticleManager* pParticleManager)
+void LevelManager::ProcessMouseUpEvent(const SDL_MouseButtonEvent& e)
 {
 	if (!m_pPlayer->IsAlive())
 	{
 		if (e.button == SDL_BUTTON_LEFT)
 		{
-			ResetLevel(pMap, pParticleManager);
+			ResetLevel();
 		}
 	}
 }
@@ -159,6 +162,11 @@ void LevelManager::LinkParticleManager(ParticleManager* pParticleManager)
 void LevelManager::LinkSoundManager(SoundManager* pSoundManager)
 {
 	m_pSoundManager = pSoundManager;
+}
+
+void LevelManager::LinkMap(Map* pMap)
+{
+	m_pMap = pMap;
 }
 
 Player* LevelManager::GetPlayer() const
@@ -213,8 +221,11 @@ void LevelManager::RecordCurrentFrame()
 	frame.player.isDrawingSplash = m_pPlayer->IsSplashDrawn();
 	frame.player.currentSplashFrame = m_pPlayer->GetSplashAnimationFrame();
 
-	const std::vector<Enemy*>& enemies = m_pEnemyManager->GetEnemies();
 
+	RecordInteractable(frame);
+
+
+	const std::vector<Enemy*>& enemies = m_pEnemyManager->GetEnemies();
 	for (Enemy* pEnemy : enemies)
 	{
 		EnemySnapshot enemySnap{};
@@ -244,8 +255,25 @@ void LevelManager::PlaybackFrame()
 	m_pEnemyManager->ApplySnapshots(currentFrame.enemies);
 	ProcessParticleReplayEvents(currentFrame);
 	ProcessSoundReplay(currentFrame);
+	ProcessInteractableObjectReplay(currentFrame);
 
 	m_ReplayFrameIndex++;
+}
+
+void LevelManager::RecordInteractable(ReplayFrame& currentFrame)
+{
+	if (!m_pMap)
+	{
+		return;
+	}
+
+	for (InteractableObject* pInteractableObject : m_pMap->GetInteractableObjects())
+	{
+		InteractableObjectSnapshot objSnap{};
+
+		pInteractableObject->SaveSnapshot(objSnap);
+		currentFrame.interactables.push_back(objSnap);
+	}
 }
 
 void LevelManager::ProcessParticleReplayEvents(const ReplayFrame& currentFrame) const
@@ -310,6 +338,27 @@ void LevelManager::ProcessSoundReplay(const ReplayFrame& currentFrame) const
 	}
 }
 
+void LevelManager::ProcessInteractableObjectReplay(const ReplayFrame& currentFrame) const
+{
+	if (!m_pMap)
+	{
+		return;
+	}
+
+	const std::vector<InteractableObject*>& interactableObjects = m_pMap->GetInteractableObjects();
+
+	if (interactableObjects.size() != currentFrame.interactables.size())
+	{
+		return;
+	}
+
+	for (size_t index{ 0 }; index < currentFrame.interactables.size(); ++index)
+	{
+		interactableObjects[index]->ApplySnapshot(currentFrame.interactables[index]);
+	}
+	
+}
+
 void LevelManager::ClearReplayBuffer()
 {
 	for (ReplayFrame& frame : m_ReplayBuffer)
@@ -323,12 +372,12 @@ void LevelManager::ClearReplayBuffer()
 	m_ReplayBuffer.clear();
 }
 
-void LevelManager::ResetLevel(Map* pMap, ParticleManager* pParticleManager)
+void LevelManager::ResetLevel()
 {
-	pMap->Reset();
+	m_pMap->Reset();
 	m_pEnemyManager->ResetEnemies();
 	m_pPlayer->Reset();
-	pParticleManager->Reset();
+	m_pParticleManager->Reset();
 
 	m_CurrentLevelTime = m_MaxLevelTime;
 	m_SlowMotionCurrentDuration = m_SlowMotionMaxDuration;

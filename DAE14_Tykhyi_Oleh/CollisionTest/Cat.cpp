@@ -4,6 +4,8 @@
 #include "SoundManager.h"
 #include "Player.h"
 
+#include "Snapshots.h"
+
 Cat::Cat(Sprite* pSprite, const std::vector<AnimationFrameInfo>& catAnimation, const Vector2f& position, int floor, float interactionRange, float scale)
 	: InteractableObject{ position, floor, interactionRange, InteractableType::cat },
 	m_pSprite{ pSprite },
@@ -133,4 +135,18 @@ void Cat::SetState(CatState state, SoundManager* pSoundManager)
 void Cat::Interact(SoundManager* pSoundManager)
 {
 	SetState(CatState::petting, pSoundManager);
+}
+
+void Cat::SaveSnapshot(InteractableObjectSnapshot& snapshot)
+{
+	InteractableObject::SaveSnapshot(snapshot);
+
+	snapshot.currentFrame = m_pSprite->GetCurrentFrameCount();
+	snapshot.state = static_cast<int>(m_State);
+}
+
+void Cat::ApplySnapshot(const InteractableObjectSnapshot& snapshot)
+{
+	m_pSprite->SetCurrentFrame(snapshot.currentFrame);
+	m_State = static_cast<CatState>(snapshot.state);
 }

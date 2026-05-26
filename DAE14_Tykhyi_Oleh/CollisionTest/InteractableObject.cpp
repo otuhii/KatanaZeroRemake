@@ -1,9 +1,12 @@
 #include "pch.h"
 #include "InteractableObject.h"
 
+#include "Snapshots.h"
+
 InteractableObject::InteractableObject(const Vector2f& position, int floor, float interactionRange, InteractableType type)
     : m_Position{ position }, m_Floor{ floor }, m_InteractionRange{ interactionRange }, m_Type{ type }
 {
+
 }
 
 void InteractableObject::Update(float elapsedSec, SoundManager* pSoundManager, Player* pPlayer)
@@ -34,6 +37,16 @@ bool InteractableObject::IsActive() const
 void InteractableObject::Reset()
 {
     m_IsActive = true;
+}
+
+void InteractableObject::SaveSnapshot(InteractableObjectSnapshot& snapshot)
+{
+    snapshot.isActive = m_IsActive;
+}
+
+void InteractableObject::ApplySnapshot(const InteractableObjectSnapshot& snapshot)
+{
+    m_IsActive = snapshot.isActive;
 }
 
 InteractableObject::InteractableType InteractableObject::GetType() const

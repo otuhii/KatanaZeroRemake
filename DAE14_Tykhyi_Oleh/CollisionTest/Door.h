@@ -21,6 +21,9 @@ public:
 	bool IsOpening() const;
 
 	const Rectf& GetCurrentCollider() const;
+
+	void SaveSnapshot(InteractableObjectSnapshot& snapshot) override;
+	void ApplySnapshot(const InteractableObjectSnapshot& snapshot) override;
 private:
 	Sprite* m_pSprite{};
 

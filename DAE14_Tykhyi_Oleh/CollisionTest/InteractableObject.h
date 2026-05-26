@@ -3,6 +3,8 @@
 class SoundManager;
 class Player;
 
+struct InteractableObjectSnapshot;
+
 class InteractableObject
 {
 public:
@@ -26,6 +28,9 @@ public:
 	virtual void Interact(SoundManager* pSoundManager) = 0;
 
 	virtual void Reset();
+
+	virtual void SaveSnapshot(InteractableObjectSnapshot& snapshot);
+	virtual void ApplySnapshot(const InteractableObjectSnapshot& snapshot);
 
 	bool IsPlayerInRange(const Vector2f& playerPos, int playerFloor) const;
 
