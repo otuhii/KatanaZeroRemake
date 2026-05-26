@@ -18,7 +18,6 @@
 #include "Player.h"
 #include "Map.h"
 
-#include <iostream>
 #include "utils.h"
 
 Game::Game( const Window& window ) 
@@ -41,7 +40,6 @@ void Game::Initialize( )
 	m_pCombatManager = new CombatManager{};
 	m_pSoundManager = new SoundManager{};
 
-	m_pScreenOverlay = new ScreenOverlay{m_pSpriteManager};
 
 	m_pCamera = new Camera{ GetViewPort().width, GetViewPort().height };
 	m_pCursor = new Cursor{ m_pSpriteManager->CreateSprite("img/spr_cursor.png") };
@@ -68,14 +66,12 @@ void Game::Initialize( )
 	MapSetup(importedGameInfo);
 
 	m_pLevelManager = new LevelManager{m_pPlayer, m_pEnemyManager};
+	m_pScreenOverlay = new ScreenOverlay{ m_pSpriteManager, GetViewPort(), m_pLevelManager };
 
 	m_pLevelManager->LinkParticleManager(m_pParticleManager);
 	m_pLevelManager->LinkSoundManager(m_pSoundManager);
 	m_pParticleManager->LinkLevelManager(m_pLevelManager);
 	m_pSoundManager->LinkLevelManager(m_pLevelManager);
-
-
-	m_pHud = new Hud{ GetViewPort(), m_pPlayer, m_pSpriteManager, m_pLevelManager };
 }
 
 void Game::Cleanup( )
@@ -90,7 +86,6 @@ void Game::Cleanup( )
 	delete m_pSoundManager;
 	delete m_pCamera;
 	delete m_pCursor;
-	delete m_pHud;
 	delete m_pLevelManager;
 	delete m_pScreenOverlay;
 }
@@ -112,10 +107,10 @@ void Game::Update( float elapsedSec )
 	m_pParticleManager->Update(timeDivider * elapsedSec);
 	m_pLevelManager->Update(elapsedSec, pStates);
 
+	m_pScreenOverlay->Update(elapsedSec, pStates);
+
 	if (m_pLevelManager->GetCurrentState() == LevelManager::LevelState::Gameplay)
 	{
-		m_pHud->Update(elapsedSec, pStates);
-
 		m_pPlayer->Update(timeDivider * elapsedSec, m_pMap, pStates, GetViewPort(), m_pParticleManager, m_pSoundManager);
 
 		m_pCollisionManager->HandleMovement(m_pPlayer, m_pMap, timeDivider * elapsedSec, true);
@@ -127,11 +122,9 @@ void Game::Update( float elapsedSec )
 		m_pCollisionManager->HandleParticles(m_pParticleManager, m_pSoundManager, m_pMap);
 
 		m_pMap->Update(timeDivider * elapsedSec, m_pSoundManager, m_pPlayer);
-
 	}
 
 	m_pCamera->Update(elapsedSec, m_pPlayer->GetPosition(), 1756.f, 750.f);
-
 }
 
 void Game::Draw( ) const
@@ -152,19 +145,12 @@ void Game::Draw( ) const
 
 	m_pCursor->Draw();
 
-	m_pHud->Draw();
-
-	m_pScreenOverlay->Draw(m_pLevelManager, GetViewPort());
-
-
-	//utils::SetColor(Color4f{ 0.3f, 0.3f, 0.3f, 0.5f });
-	//utils::FillRect(GetViewPort());
-
+	m_pScreenOverlay->Draw();
 }
 
 void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 {
-	switch (e.keysym.sym)
+	/*switch (e.keysym.sym)
 	{
 	case SDLK_LEFT:
 		m_pLevelManager->Backward();
@@ -172,17 +158,11 @@ void Game::ProcessKeyDownEvent( const SDL_KeyboardEvent & e )
 	case SDLK_RIGHT:
 		m_pLevelManager->Forward();
 		break;
-	}
+	}*/
 }
 
 void Game::ProcessKeyUpEvent( const SDL_KeyboardEvent& e )
 {
-	switch ( e.keysym.sym )
-	{
-	case SDLK_r:
-		m_pLevelManager->TriggerReplay();
-		break;
-	}
 }
 
 

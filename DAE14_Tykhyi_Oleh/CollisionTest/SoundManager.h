@@ -56,7 +56,7 @@ public:
 	void Stop(SoundEffectType type) const;
 private:
 	LevelManager*
-		m_pLevelManager;
+		m_pLevelManager{};
 
 
 	std::vector<SoundEffect*> m_pSoundEffects{};

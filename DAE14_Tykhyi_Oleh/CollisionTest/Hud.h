@@ -10,11 +10,11 @@ class Player;
 class Hud final
 {
 public:
-	Hud(const Rectf& viewport, Player* pPlayer, SpriteManager* pSpriteManager, LevelManager* pLevelManager);
+	Hud(SpriteManager* pSpriteManager, const Rectf& viewport);
 
-	void Draw() const;
+	void Draw(LevelManager* pLevelManager) const;
 
-	void Update(float elapsedSec, const Uint8* pStates);
+	void Update(float elapsedSec, const Uint8* pStates, LevelManager* pLevelManager);
 
 private:
 	enum class HudPartSprites {
@@ -56,8 +56,6 @@ private:
 	};
 
 	std::vector<Sprite*> m_pHudVisuals{};
-	Player* m_pPlayer;
-	LevelManager* m_pLevelManager;
 
 	Layout
 		m_Layout{};
@@ -74,8 +72,8 @@ private:
 	void DrawPart(HudPartSprites type, const Vector2f& pos) const;
 
 	void DrawTimer() const;
-	void DrawBattery() const;
-	void DrawSubweaponPart() const;
+	void DrawBattery(LevelManager* pLevelManager) const;
+	void DrawSubweaponPart(Player* pPlayer) const;
 	void DrawBar() const;
 };
 

@@ -233,6 +233,16 @@ void Player::ApplySnapshot(const PlayerSnapshot* snapshot)
 	m_SplashSprite->SetVisible(snapshot->isDrawingSplash);
 }
 
+void Player::SetCanFinish(bool canFinish)
+{
+	m_CanFinish = canFinish;
+}
+
+bool Player::CanFinish() const
+{
+	return m_CanFinish;
+}
+
 bool Player::IsSplashDrawn() const
 {
 	return m_SplashSprite->IsVisible();

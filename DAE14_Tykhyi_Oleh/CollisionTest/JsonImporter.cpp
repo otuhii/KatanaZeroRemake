@@ -129,7 +129,7 @@ void JsonImporter::ProcessJsonObject(const Json& object, GameData& dst, SpriteMa
 	{
 		AddControlPoint(object, dst);
 	}
-	else if (objectType == "platform" || objectType == "stairs" || objectType == "jumpthroughplatform")
+	else if (objectType == "platform" || objectType == "stairs" || objectType == "jumpthroughplatform" || objectType == "endtrigger")
 	{
 		AddActiveObject(object, dst, spriteManager);
 	}
@@ -305,6 +305,10 @@ EnvironmentActiveObject::EnvironmentObjectType JsonImporter::StringToObjectType(
 	else if (typeStr == "platform")
 	{
 		return EnvironmentActiveObject::EnvironmentObjectType::platform;
+	}
+	else if (typeStr == "endtrigger")
+	{
+		return EnvironmentActiveObject::EnvironmentObjectType::endTrigger;
 	}
 	else
 	{

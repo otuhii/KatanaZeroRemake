@@ -3,17 +3,34 @@
 class LevelManager;
 class SpriteManager;
 class Sprite;
+class Hud;
 
 class ScreenOverlay final
 {
 public:
-	ScreenOverlay(SpriteManager* pSpriteManager);
+	ScreenOverlay(SpriteManager* pSpriteManager, const Rectf& viewport, LevelManager* pLevelManager);
+	~ScreenOverlay();
 
-	void Draw(const LevelManager* pLevelManager, const Rectf& viewport) const;
+	void Draw() const;
+
+	void Update(float elapsedSec, const Uint8* pStates);
+
 private:
 	Sprite*
 		m_pRestartMessage{};
+	Sprite*
+		m_pReplayIcon{};
 
-	void DrawRestartMessage(const Rectf& viewport) const;
+	Hud* 
+		m_pHud{};
+
+	LevelManager* 
+		m_pLevelManager{};
+
+	Rectf
+		m_Viewport{};
+
+	void DrawRestartMessage() const;
+	void DrawReplayOverlay() const;
 };
 

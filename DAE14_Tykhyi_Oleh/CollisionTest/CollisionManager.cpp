@@ -5,6 +5,7 @@
 
 #include "InteractableObject.h"
 #include "Door.h"
+#include "Player.h"
 
 #include "utils.h"
 #include "UserUtils.h"
@@ -115,6 +116,16 @@ void CollisionManager::HandleAABB(float elapsedSec, Entity* pEntity, Environment
 	const float
 		eps{ 0.1f },
 		maxStepHeight{ 10.f };
+
+	if (type == EnvironmentActiveObject::EnvironmentObjectType::endTrigger && 
+		pEntity->GetType() == Entity::EntityType::player && 
+		isHorizontalMovement)
+	{
+		Player* pPlayer{ static_cast<Player*>(pEntity) };
+		pPlayer->SetCanFinish(utils::IsOverlapping(entityCurrentHitbox, objectCollider));
+		
+	}
+	
 
 	if (type == EnvironmentActiveObject::EnvironmentObjectType::jumpThroughPlatform)
 	{

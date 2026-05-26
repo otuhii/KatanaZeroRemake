@@ -10,7 +10,8 @@ public:
 
 		platform,
 		stairs,
-		jumpThroughPlatform
+		jumpThroughPlatform,
+		endTrigger
 	};
 
 	EnvironmentActiveObject(

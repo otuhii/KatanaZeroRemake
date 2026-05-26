@@ -38,10 +38,11 @@ public:
 	void LinkParticleManager(ParticleManager* pParticleManager);
 	void LinkSoundManager(SoundManager* pSoundManager);
 	
+	Player* GetPlayer() const;
+
 	void Forward();
 	void Backward();
 
-	//CanFinishLevel
 private:
 	Player*
 		m_pPlayer{};
@@ -90,5 +91,8 @@ private:
 	void ProcessSoundReplay(const ReplayFrame& currentFrame) const;
 	
 	void ClearReplayBuffer();
+
+	bool CanFinishLevel() const;
+
 };
 

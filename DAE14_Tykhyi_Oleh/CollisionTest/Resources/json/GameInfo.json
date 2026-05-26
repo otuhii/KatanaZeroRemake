@@ -173,9 +173,9 @@
           "floor": 0,
           "colliders": [],
           "controlPointType": "stairsignifier",
-          "id": 2,
+          "id": 0,
           "neighborIds": [
-            0
+            1
           ]
         },
         {
@@ -188,7 +188,7 @@
           "floor": 1,
           "colliders": [],
           "controlPointType": "leadingpoint",
-          "id": 3,
+          "id": 2,
           "neighborIds": []
         },
         {
@@ -201,9 +201,9 @@
           "floor": 1,
           "colliders": [],
           "controlPointType": "stairsignifier",
-          "id": 0,
+          "id": 1,
           "neighborIds": [
-            2
+            0
           ]
         },
         {
@@ -216,7 +216,7 @@
           "floor": 1,
           "colliders": [],
           "controlPointType": "leadingpoint",
-          "id": 1,
+          "id": 3,
           "neighborIds": []
         },
         {
@@ -795,15 +795,15 @@
           "isTrigger": false
         },
         {
-          "objectType": "stairs",
-          "xPosition": 1756.0,
-          "yPosition": -13.0,
+          "objectType": "endtrigger",
+          "xPosition": 1822.0,
+          "yPosition": -5.0,
           "scale": 1.0,
           "floor": 1,
           "colliders": [
             {
-              "left": 1755.0,
-              "bottom": -14.0,
+              "left": 1821.0,
+              "bottom": -6.0,
               "width": 485.0,
               "height": 1401.0
             }

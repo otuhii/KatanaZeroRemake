@@ -22,6 +22,17 @@ void LevelManager::Update(float elapsedSec, const Uint8* pStates)
 {
 	if (m_State == LevelState::Gameplay)
 	{
+		if (m_pPlayer->CanFinish())
+		{
+			if (CanFinishLevel())
+			{
+				TriggerReplay();
+				return;
+			}
+		}
+
+			
+
 		m_CurrentLevelTime -= elapsedSec;
 		if (m_CurrentLevelTime <= 0)
 		{
@@ -150,6 +161,11 @@ void LevelManager::LinkSoundManager(SoundManager* pSoundManager)
 	m_pSoundManager = pSoundManager;
 }
 
+Player* LevelManager::GetPlayer() const
+{
+	return m_pPlayer;
+}
+
 void LevelManager::Forward()
 {
 	if (m_State == LevelState::Replay)
@@ -170,6 +186,19 @@ void LevelManager::Backward()
 			m_ReplayFrameIndex -= 4;
 		}
 	}
+}
+
+bool LevelManager::CanFinishLevel() const
+{
+	for (Enemy* pEnemy : m_pEnemyManager->GetEnemies())
+	{
+		if (pEnemy->IsAlive())
+		{
+			return false;
+		}
+	}
+	return true;
+
 }
 
 void LevelManager::RecordCurrentFrame()

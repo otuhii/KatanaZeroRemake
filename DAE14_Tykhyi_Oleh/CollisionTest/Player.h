@@ -56,6 +56,8 @@ public:
 
 	void ApplySnapshot(const PlayerSnapshot* snapshot);
 
+	void SetCanFinish(bool canFinish);
+	bool CanFinish() const;
 
 	bool IsSplashDrawn() const;
 	int GetSplashAnimationFrame() const;
@@ -105,6 +107,9 @@ private:
 
 	int
 		m_AirAttackCount{};
+
+	bool
+		m_CanFinish{false};
 
 #pragma region interaction
 	bool

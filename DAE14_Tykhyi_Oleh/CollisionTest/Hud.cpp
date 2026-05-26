@@ -3,12 +3,10 @@
 
 #include "SpriteManager.h"
 #include "LevelManager.h"
-#include "Player.h"
 #include "ThrowableObject.h"
 
 
-Hud::Hud(const Rectf& viewport, Player* pPlayer, SpriteManager* pSpriteManager, LevelManager* pLevelManager)
-	: m_pPlayer{pPlayer}, m_pLevelManager{pLevelManager}
+Hud::Hud(SpriteManager* pSpriteManager, const Rectf& viewport)
 {
 	const float
 		scale{ 2.f };
@@ -43,15 +41,15 @@ Hud::Hud(const Rectf& viewport, Player* pPlayer, SpriteManager* pSpriteManager, 
 	m_Layout = CalculateLayout(viewport);
 }
 
-void Hud::Draw() const
+void Hud::Draw(LevelManager* pLevelManager) const
 {
 	DrawBar();
 	DrawTimer();
-	DrawBattery();
-	DrawSubweaponPart();
+	DrawBattery(pLevelManager);
+	DrawSubweaponPart(pLevelManager->GetPlayer());
 }
 
-void Hud::Update(float elapsedSec, const Uint8* pStates)
+void Hud::Update(float elapsedSec, const Uint8* pStates, LevelManager* pLevelManager)
 {
 	m_IsSpacePressed = static_cast<bool>(pStates[SDL_SCANCODE_SPACE]);
 	m_IsShiftPressed = static_cast<bool>(pStates[SDL_SCANCODE_LSHIFT]);
@@ -59,13 +57,13 @@ void Hud::Update(float elapsedSec, const Uint8* pStates)
 	Rectf
 		newFrameDimension{ m_pHudVisuals[static_cast<int>(HudPartSprites::timerFill)]->GetCurrentFrameDimensions() };
 	
-	if (m_pLevelManager->GetPassTimeRatio() <= 0)
+	if (pLevelManager->GetPassTimeRatio() <= 0)
 	{
 		newFrameDimension.width = 0.1f;
 	}
 	else
 	{
-		newFrameDimension.width = m_TimerFillFullWidth * m_pLevelManager->GetPassTimeRatio();
+		newFrameDimension.width = m_TimerFillFullWidth * pLevelManager->GetPassTimeRatio();
 	}
 
 
@@ -161,7 +159,7 @@ void Hud::DrawTimer() const
 	DrawPart(HudPartSprites::timerFill, m_Layout.timerFillPos);
 }
 
-void Hud::DrawBattery() const
+void Hud::DrawBattery(LevelManager* pLevelManager) const
 {
 	DrawPart(HudPartSprites::battery, m_Layout.batteryPos);
 	if (m_IsShiftPressed)
@@ -176,7 +174,7 @@ void Hud::DrawBattery() const
 	const int
 		maxChargeCells{ 11 };
 
-	int activeCells{ static_cast<int>(11 * m_pLevelManager->GetSlowMotionDurationRatio() ) };
+	int activeCells{ static_cast<int>(11 * pLevelManager->GetSlowMotionDurationRatio() ) };
 	Vector2f cellPos{ m_Layout.batterFillPos };
 	for (int counter{ 0 }; counter < maxChargeCells; ++counter)
 	{
@@ -193,15 +191,15 @@ void Hud::DrawBattery() const
 
 }
 
-void Hud::DrawSubweaponPart() const
+void Hud::DrawSubweaponPart(Player* pPlayer) const
 {
 	DrawPart(HudPartSprites::subWeaponTexture, m_Layout.subweaponPartPos);
 	DrawPart(HudPartSprites::katanaIcon, m_Layout.subweaponKatanaPos);
 	DrawPart(HudPartSprites::pickedItem, m_Layout.subweaponPickedPos);
 
-	if (m_pPlayer->GetHeldObject())
+	if (pPlayer->GetHeldObject())
 	{
-		m_pPlayer->GetHeldObject()->GetSprite()->Draw(m_Layout.subweaponPickedPos, false, false);
+		pPlayer->GetHeldObject()->GetSprite()->Draw(m_Layout.subweaponPickedPos, false, false);
 	}
 
 	DrawPart(HudPartSprites::leftClick, m_Layout.leftSubweaponButtonIconPos);

@@ -14,7 +14,6 @@ class ScreenOverlay;
 
 class Camera;
 class Cursor;
-class Hud;
 
 class Player;
 class Map;
@@ -62,7 +61,6 @@ private:
 	ScreenOverlay*		m_pScreenOverlay{};
 	Camera*				m_pCamera{};
 	Cursor*				m_pCursor{};
-	Hud*				m_pHud{};
 
 	CombatManager*		m_pCombatManager{};
 	EnemyManager*		m_pEnemyManager{};

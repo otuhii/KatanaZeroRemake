@@ -53,7 +53,7 @@ private:
 	static void AddControlPoint(const Json& object, GameData& dst) ;
 	static void AddCosmeticObject(const Json& object, GameData& dst, SpriteManager& spriteManager) ;
 	static void AddActiveObject(const Json& object, GameData& dst, SpriteManager& spriteManager) ;
-	static void AddInteractableObject(const Json& object, GameData& dst, SpriteManager& spriteManager) ;
+	static void AddInteractableObject(const Json& object, GameData& dst, SpriteManager& spriteManager);
 
 	static EnvironmentActiveObject::EnvironmentObjectType StringToObjectType(const std::string& typeStr);
 	static ControlPoint::ControlPointType				   StringToControlPointType(const std::string& typeStr) ;
