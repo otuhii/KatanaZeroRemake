@@ -38,7 +38,7 @@ void EnemyManager::Draw() const
 			controlPointRadius{ 16.f };
 
 		utils::SetColor(Color4f{ 1.f, 0.f, 0.f, 1.f });
-		utils::FillEllipse(point.position, controlPointRadius, controlPointRadius);
+		//utils::FillEllipse(point.position, controlPointRadius, controlPointRadius);
 	}
 }
 
