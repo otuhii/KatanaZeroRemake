@@ -9,23 +9,33 @@ Camera::Camera(float screenWidth, float screenHeight)
 
 void Camera::Update(
 	float elapsedSec, 
+	const Vector2f& mouseScreenPos,
 	const Vector2f& trackCenter, 
 	float levelWidth, 
 	float levelHeight
 )
 {
+
+	Vector2f 
+		screenCenter{ m_ScreenWidth * 0.5f, m_ScreenHeight * 0.5f };
+
+	Vector2f 
+		mouseOffset{ mouseScreenPos.x - screenCenter.x, mouseScreenPos.y - screenCenter.y };
+
+	Vector2f 
+		targetCenter{ trackCenter.x + mouseOffset.x * m_MouseInfluence, trackCenter.y + mouseOffset.y * m_MouseInfluence };
+
 	float
 		yLimit{ -50.f };
 
 	//current = current + (target - current) * elapsedSec * speed
 	if (!m_IsInitialized)
 	{
-		m_CurrentCenter = trackCenter;
+		m_CurrentCenter = targetCenter;
 		m_IsInitialized = true;
 	}
 
-	m_CurrentCenter += (trackCenter - m_CurrentCenter) * m_CameraTrackSpeed * elapsedSec;
-	m_CurrentCenter = trackCenter;
+	m_CurrentCenter += (targetCenter - m_CurrentCenter) * m_CameraTrackSpeed * elapsedSec;
 	
 	m_BasePoint.x = m_CurrentCenter.x - m_ScreenWidth * 0.5f;
 	m_BasePoint.y = m_CurrentCenter.y - m_ScreenHeight * 0.5f;

@@ -122,7 +122,7 @@ void Game::Update( float elapsedSec )
 		m_pMap->Update(timeDivider * elapsedSec, m_pSoundManager, m_pPlayer);
 	}
 
-	m_pCamera->Update(elapsedSec, m_pPlayer->GetPosition(), 1756.f, 750.f);
+	m_pCamera->Update(elapsedSec, m_pCursor->GetPosition(), m_pPlayer->GetPosition(), 1756.f, 750.f);
 }
 
 void Game::Draw( ) const

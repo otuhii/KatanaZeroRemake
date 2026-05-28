@@ -16,6 +16,7 @@ public:
 
 	void Update(const SDL_MouseMotionEvent& event);
 
+	const Vector2f& GetPosition() const;
 private:
 	Sprite* m_pCursorSprite{};
 	Vector2f m_Position{};

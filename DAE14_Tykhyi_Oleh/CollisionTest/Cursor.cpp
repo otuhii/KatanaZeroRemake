@@ -20,3 +20,9 @@ void Cursor::Update(const SDL_MouseMotionEvent& event)
 	m_Position.x = static_cast<float>(event.x);
 	m_Position.y = static_cast<float>(event.y);
 }
+
+const Vector2f& Cursor::GetPosition() const
+{
+	return m_Position;
+}
+

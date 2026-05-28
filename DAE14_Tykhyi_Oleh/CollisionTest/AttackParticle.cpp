@@ -77,7 +77,14 @@ void AttackParticle::Draw() const
 		}
 		else
 		{
-			m_pSprite->Draw(m_Position, false, false);
+			if (!m_GlobalHitbox.empty())
+			{
+				m_pSprite->Draw(m_GlobalHitbox[0], false, false);
+			}
+			else
+			{
+				m_pSprite->Draw(m_Position, false, false);
+			}
 		}
 	}
 }
@@ -135,6 +142,10 @@ void AttackParticle::Deactivate()
 	m_GlobalHitbox.clear();
 	m_AttackType = AttackType::none;
 	m_OwnerType = OwnerType::none;
+	if (m_pSprite)
+	{
+		m_pSprite->ResetRotation();
+	}
 	m_pSprite = nullptr;
 
 	if (m_pLinkedEvent)

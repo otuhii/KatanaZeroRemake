@@ -78,10 +78,7 @@ void LevelManager::Update(float elapsedSec, const Uint8* pStates)
 	}
 	else if (m_State == LevelState::Replay)
 	{
-		if (!pStates[SDL_SCANCODE_L] || pStates[SDL_SCANCODE_RIGHT])
-		{
-			PlaybackFrame();
-		}
+		PlaybackFrame();
 	}
 }
 
@@ -143,6 +140,7 @@ void LevelManager::RecordParticleEvent(ReplayParticleEvent* pEvent)
 {
 	if (m_ReplayBuffer.empty() || m_State != LevelState::Gameplay)
 	{
+		delete pEvent;
 		return;
 	}
 
@@ -251,7 +249,8 @@ void LevelManager::PlaybackFrame()
 {
 	if (m_ReplayFrameIndex >= m_ReplayBuffer.size())
 	{
-		m_ReplayFrameIndex = 0;
+		ResetLevel();
+		m_State = LevelState::Gameplay;
 		return;
 	}
 	

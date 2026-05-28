@@ -7,6 +7,7 @@ public:
 
 	void Update(
 		float elapsedSec, 
+		const Vector2f& mouseScreenPos,
 		const Vector2f& trackCenter,
 		float levelWidth, 
 		float levelHeight
@@ -21,7 +22,8 @@ private:
 	const float
 		m_ScreenWidth{},
 		m_ScreenHeight{},
-		m_CameraTrackSpeed{10.f};
+		m_CameraTrackSpeed{ 10.f },
+		m_MouseInfluence{ 0.15f };
 
 	Vector2f
 		m_CurrentCenter{},
