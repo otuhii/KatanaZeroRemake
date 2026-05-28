@@ -117,6 +117,11 @@ bool LevelManager::IsPlayerAlive() const
 	return m_pPlayer->IsAlive();
 }
 
+bool LevelManager::IsSlowMotionActive() const
+{
+	return m_IsSlowMoActive;
+}
+
 void LevelManager::ProcessMouseUpEvent(const SDL_MouseButtonEvent& e)
 {
 	if (!m_pPlayer->IsAlive())

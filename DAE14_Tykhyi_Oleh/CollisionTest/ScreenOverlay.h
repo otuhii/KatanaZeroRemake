@@ -40,5 +40,6 @@ private:
 
 	void DrawRestartMessage() const;
 	void DrawReplayOverlay() const;
+	void DrawSlowmoOverlay() const;
 };
 

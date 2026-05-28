@@ -19,6 +19,7 @@
 #include "Map.h"
 
 #include "utils.h"
+#include <iostream>
 
 Game::Game( const Window& window ) 
 	:BaseGame{ window }
@@ -140,7 +141,10 @@ void Game::Draw( ) const
 
 	m_pCamera->Reset();
 
-	m_pCursor->Draw();
+	if (m_pLevelManager->GetCurrentState() == LevelManager::LevelState::Gameplay)
+	{
+		m_pCursor->Draw();
+	}
 
 	m_pScreenOverlay->Draw();
 }

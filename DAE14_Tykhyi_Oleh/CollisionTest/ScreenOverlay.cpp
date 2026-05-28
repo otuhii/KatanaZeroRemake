@@ -29,6 +29,11 @@ void ScreenOverlay::Draw() const
 {
 	if (m_pLevelManager->GetCurrentState() == LevelManager::LevelState::Gameplay)
 	{
+		if (m_pLevelManager->IsSlowMotionActive())
+		{
+			DrawSlowmoOverlay();
+		}
+
 		m_pHud->Draw(m_pLevelManager);
 		if (!m_pLevelManager->IsPlayerAlive())
 		{
@@ -95,13 +100,14 @@ void ScreenOverlay::DrawRestartMessage() const
 
 void ScreenOverlay::DrawReplayOverlay() const
 {
+	float 
+		scanlineHeight{ 2.0f },
+		gap{ 2.0f };
+
 	utils::SetColor(Color4f{ 0.3f, 0.3f, 0.3f, 0.3f });
 	utils::FillRect(m_Viewport);
 
 	utils::SetColor(Color4f{ 0.0f, 0.0f, 0.0f, 0.15f });
-
-	float scanlineHeight{ 2.0f };
-	float gap{ 2.0f };
 
 	for (float y = 0; y < m_Viewport.height; y += (scanlineHeight + gap))
 	{
@@ -109,4 +115,38 @@ void ScreenOverlay::DrawReplayOverlay() const
 	}
 
 	m_pReplayIcon->Draw(Vector2f{ m_Viewport.width * 0.1f, m_Viewport.height * 0.9f }, false, false);
+}
+
+void ScreenOverlay::DrawSlowmoOverlay() const
+{
+	float 
+		scanlineHeight{ 1.5f }, 
+		gap{ 2.5f };
+
+	utils::SetColor(Color4f{ 0.05f, 0.65f, 0.75f, 0.2f });
+	utils::FillRect(m_Viewport);
+	utils::SetColor(Color4f{ 0.0f, 0.0f, 0.0f, 0.5f });
+	utils::FillRect(0, 0, m_Viewport.width, m_Viewport.height * 0.12f); 
+	utils::FillRect(0, m_Viewport.height * 0.88f, m_Viewport.width, m_Viewport.height * 0.12f); 
+
+	utils::SetColor(Color4f{ 0.0f, 0.8f, 0.9f, 0.12f });
+	utils::FillRect(0, m_TrackingTimer, m_Viewport.width, 25.0f);
+
+	utils::SetColor(Color4f{ 0.8f, 0.0f, 0.5f, 0.08f });
+	utils::FillRect(0, m_TrackingTimer - 12.0f, m_Viewport.width, 15.0f);
+
+	utils::SetColor(Color4f{ 1.0f, 1.0f, 1.0f, 0.1f });
+	utils::FillRect(0, m_TrackingTimer + 35.0f, m_Viewport.width, 3.0f);
+
+	utils::SetColor(Color4f{ 0.0f, 0.8f, 0.8f, 0.05f });
+	utils::FillRect(0, fmod(m_TrackingTimer * 2.1f, m_Viewport.height), m_Viewport.width, 5.0f);
+	utils::FillRect(0, fmod(m_TrackingTimer * 1.5f + 150.f, m_Viewport.height), m_Viewport.width, 2.0f);
+
+	utils::SetColor(Color4f{ 0.0f, 0.0f, 0.0f, 0.25f });
+	
+
+	for (float y = 0; y < m_Viewport.height; y += (scanlineHeight + gap))
+	{
+		utils::FillRect(0.0f, y, m_Viewport.width, scanlineHeight);
+	}
 }

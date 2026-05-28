@@ -10,6 +10,8 @@ class Player;
 class Map final
 {
 public:
+	Map() = default;
+
 	~Map();
 
 	Map(const Map&) = delete;

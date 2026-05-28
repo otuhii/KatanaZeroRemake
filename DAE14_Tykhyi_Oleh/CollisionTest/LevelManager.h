@@ -31,8 +31,10 @@ public:
 	float GetTimeMultiplier() const;
 	float GetPassTimeRatio() const;
 	float GetSlowMotionDurationRatio() const;
+
 	bool IsPlayerAlive() const;
-	
+	bool IsSlowMotionActive() const;
+
 	void ProcessMouseUpEvent(const SDL_MouseButtonEvent& e);
 
 	void TriggerReplay();
@@ -48,6 +50,7 @@ public:
 
 	void Forward();
 	void Backward();
+
 
 private:
 	Player*
