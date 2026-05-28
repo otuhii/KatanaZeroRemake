@@ -31,7 +31,10 @@ public:
 		bool isFlippedHorizontally, 
 		bool isFlippedVertically,
 		Sprite* pSprite,
-		float lifetime=5.f
+		float lifetime=5.f,
+		bool isReplay = false,
+		bool wasDeflected = false,
+		float deflectionTime = 0.f
 	) const;
 
 	void SpawnMelee(

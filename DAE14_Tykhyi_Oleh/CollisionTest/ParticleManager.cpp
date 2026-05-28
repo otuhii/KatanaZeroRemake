@@ -102,7 +102,10 @@ void ParticleManager::SpawnBullet(
 	bool isFlippedHorizontally, 
 	bool isFlippedVertically,
 	Sprite* pSprite,
-	float lifetime
+	float lifetime,
+	bool isReplay,
+	bool wasDeflected,
+	float deflectionTime
 ) const
 {
 	AttackParticle* pParticle{
@@ -123,7 +126,10 @@ void ParticleManager::SpawnBullet(
 			isFlippedHorizontally,
 			isFlippedVertically,
 			nullptr,
-			pSprite
+			pSprite,
+			isReplay,
+			wasDeflected,
+			deflectionTime
 		);
 
 		if(m_pLevelManager && m_pLevelManager->GetCurrentState() == LevelManager::LevelState::Gameplay)
@@ -138,6 +144,8 @@ void ParticleManager::SpawnBullet(
 			pEvent->isFlippedVertically = isFlippedVertically;
 			pEvent->pSprite = pSprite;
 			pEvent->lifetime = m_FlyingParticleLifeTime; 
+			pEvent->wasDeflected = wasDeflected;
+			pEvent->deflectionTime = deflectionTime;
 
 			m_pLevelManager->RecordParticleEvent(pEvent);
 			pParticle->LinkReplayEvent(pEvent); 

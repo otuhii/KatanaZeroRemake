@@ -92,14 +92,11 @@ void Game::Update( float elapsedSec )
 {
 	const Uint8 *pStates = SDL_GetKeyboardState( nullptr );
 
-	FPS(elapsedSec);
+	//FPS(elapsedSec);
 	float
 		timeDivider{ 1.f };
 
-	if (m_pLevelManager->GetCurrentState() == LevelManager::LevelState::Gameplay)
-	{
-		timeDivider = m_pLevelManager->GetTimeMultiplier();
-	}
+	timeDivider = m_pLevelManager->GetTimeMultiplier();
 
 	m_pSpriteManager->Update(timeDivider * elapsedSec);
 	m_pParticleManager->Update(timeDivider * elapsedSec);
@@ -120,9 +117,14 @@ void Game::Update( float elapsedSec )
 		CombatManager::ResolveCombat(m_pPlayer, m_pEnemyManager, m_pParticleManager, m_pMap, m_pSoundManager);
 
 		m_pMap->Update(timeDivider * elapsedSec, m_pSoundManager, m_pPlayer);
-	}
 
-	m_pCamera->Update(elapsedSec, m_pCursor->GetPosition(), m_pPlayer->GetPosition(), 1756.f, 750.f);
+		m_pCamera->Update(elapsedSec, m_pCursor->GetPosition(), m_pPlayer->GetPosition(), 1756.f, 750.f);
+	}
+	else
+	{
+		m_pCamera->Update(elapsedSec, Vector2f{}, m_pPlayer->GetPosition(), 1756.f, 750.f);
+	}
+	
 }
 
 void Game::Draw( ) const

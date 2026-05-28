@@ -46,6 +46,9 @@ struct ReplayParticleEvent {
 
 	CosmeticParticle::CosmeticParticleType cosmeticType{};
 	bool applyGravity{};
+
+	float deflectionTime{ -1.f };
+	bool wasDeflected{ };
 };
 
 struct InteractableObjectSnapshot {
@@ -59,6 +62,8 @@ struct InteractableObjectSnapshot {
 
 struct ReplayFrame {
 	PlayerSnapshot player{};
+
+	bool isSlowMotionApplied{false};
 
 	std::vector<EnemySnapshot> enemies{};
 	std::vector<InteractableObjectSnapshot> interactables{};

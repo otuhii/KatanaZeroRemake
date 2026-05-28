@@ -21,7 +21,10 @@ void AttackParticle::Spawn(
 	bool isFlippedHorizontally, 
 	bool isFlippedVertically, 
 	const Entity* pOwnerEntity,
-	Sprite* pSprite
+	Sprite* pSprite,
+	bool isReplay,
+	bool wasDeflected,
+	float deflectionTime
 )
 {
 	m_OwnerType = ownerType;
@@ -46,6 +49,12 @@ void AttackParticle::Spawn(
 	m_pLinkedEvent = nullptr;
 
 	m_IsActive = true;
+
+	m_IsReplay = isReplay;
+
+	m_DeflectionTime = deflectionTime;
+
+	m_IsDeflected = wasDeflected;
 
 	UpdateHitboxGeometry();
 }
@@ -77,14 +86,7 @@ void AttackParticle::Draw() const
 		}
 		else
 		{
-			if (!m_GlobalHitbox.empty())
-			{
-				m_pSprite->Draw(m_GlobalHitbox[0], false, false);
-			}
-			else
-			{
-				m_pSprite->Draw(m_Position, false, false);
-			}
+			m_pSprite->Draw(m_Position + m_PositionOffset, false, false);
 		}
 	}
 }
@@ -98,6 +100,15 @@ void AttackParticle::Update(float elapsedSec)
 
 	m_Lifetime -= elapsedSec;
 	m_TimeAlive += elapsedSec;
+
+	if (m_IsReplay && m_IsDeflected && m_DeflectionTime >= 0.f)
+	{
+		if (m_TimeAlive >= m_DeflectionTime)
+		{
+			m_IsDeflected = false;
+			Deflect();
+		}
+	}
 
 	if (m_Lifetime <= 0.f)
 	{
@@ -150,6 +161,8 @@ void AttackParticle::Deactivate()
 
 	if (m_pLinkedEvent)
 	{
+		m_pLinkedEvent->wasDeflected = m_IsDeflected;
+		m_pLinkedEvent->deflectionTime = m_DeflectionTime;
 		m_pLinkedEvent->lifetime = m_TimeAlive;
 	}
 }
@@ -161,6 +174,11 @@ void AttackParticle::Deflect()
 
 	if (m_AttackType == AttackType::bullet)
 	{
+		if (!m_IsReplay)
+		{
+			m_IsDeflected = true;
+			m_DeflectionTime = m_TimeAlive;
+		}
 		m_OwnerType = OwnerType::Player;
 		m_Velocity.x = -m_Velocity.x * deflectMultiplier;
 		m_Velocity.y = -m_Velocity.y * deflectMultiplier;

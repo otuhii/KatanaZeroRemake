@@ -224,7 +224,7 @@ void LevelManager::RecordCurrentFrame()
 	frame.player.splashRotation = m_pPlayer->GetSplashRotation();
 	frame.player.isDrawingSplash = m_pPlayer->IsSplashDrawn();
 	frame.player.currentSplashFrame = m_pPlayer->GetSplashAnimationFrame();
-
+	frame.isSlowMotionApplied = m_IsSlowMoActive;
 
 	RecordInteractable(frame);
 
@@ -256,6 +256,7 @@ void LevelManager::PlaybackFrame()
 	
 	const ReplayFrame& currentFrame = m_ReplayBuffer[m_ReplayFrameIndex];
 
+	m_IsSlowMoActive = currentFrame.isSlowMotionApplied;
 	m_pPlayer->ApplySnapshot(&currentFrame.player);
 	m_pEnemyManager->ApplySnapshots(currentFrame.enemies);
 	ProcessParticleReplayEvents(currentFrame);
@@ -301,7 +302,10 @@ void LevelManager::ProcessParticleReplayEvents(const ReplayFrame& currentFrame) 
 					pEvent->isFlippedHorizontally,
 					pEvent->isFlippedVertically,
 					pEvent->pSprite,
-					pEvent->lifetime
+					pEvent->lifetime,
+					true,
+					pEvent->wasDeflected,
+					pEvent->deflectionTime
 				);
 				break;
 			}

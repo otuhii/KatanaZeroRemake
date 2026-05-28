@@ -39,7 +39,10 @@ public:
 		bool isFlippedHorizontally,
 		bool isFlippedVertically, 
 		const Entity* pOwnerEntity,
-		Sprite* pSprite
+		Sprite* pSprite,
+		bool isReplay=false,
+		bool wasDeflected=false,
+		float deflectionTime=0.f
 	);
 
 	void Draw() const;
@@ -78,7 +81,12 @@ private:
 	float
 		m_Lifetime{},
 		m_RotationAngle{},
-		m_TimeAlive{};
+		m_TimeAlive{},
+		m_DeflectionTime{};
+
+	bool
+		m_IsReplay{},
+		m_IsDeflected{};
 
 	Vector2f
 		m_Position{},
