@@ -24,7 +24,7 @@
     <ProjectGuid>{6f978733-33ac-428b-856c-a2bf101b83b7}</ProjectGuid>
     <RootNamespace>CollisionTest</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>PlayerMovementTest</ProjectName>
+    <ProjectName>KatanaZeroRemake</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
