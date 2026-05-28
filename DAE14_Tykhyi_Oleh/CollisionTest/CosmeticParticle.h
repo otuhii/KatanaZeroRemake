@@ -3,7 +3,6 @@
 class SpriteManager;
 class Sprite;
 
-
 class CosmeticParticle final
 { 
 public:
@@ -18,7 +17,7 @@ public:
 		count
 	};
 
-	CosmeticParticle(SpriteManager* pSpriteManager);
+	explicit CosmeticParticle(SpriteManager* pSpriteManager);
 
 	void Spawn(
 		CosmeticParticleType type,
@@ -45,7 +44,7 @@ private:
 		m_Type{ CosmeticParticleType::none };
 
 	Sprite*
-		m_pSprite;
+		m_pSprite{};
 
 	Vector2f
 		m_Position{},

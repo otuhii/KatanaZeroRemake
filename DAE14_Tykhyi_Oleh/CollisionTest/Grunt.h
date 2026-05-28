@@ -4,7 +4,7 @@ class Grunt final:
     public Enemy
 {
 public:
-    Grunt(
+    explicit Grunt(
         Sprite* pSprite,
         Sprite* pSlashSprite,
         const Entity* pTarget,

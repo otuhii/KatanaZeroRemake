@@ -62,10 +62,8 @@ private:
 	Camera*				m_pCamera{};
 	Cursor*				m_pCursor{};
 
-	CombatManager*		m_pCombatManager{};
 	EnemyManager*		m_pEnemyManager{};
 	SpriteManager*		m_pSpriteManager{};
-	CollisionManager*	m_pCollisionManager{};
 	ParticleManager*	m_pParticleManager{};
 	SoundManager*		m_pSoundManager{};
 	LevelManager*		m_pLevelManager;

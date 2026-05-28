@@ -8,10 +8,12 @@ class Sprite final
 {
 public:
 	Sprite() = default;
-	Sprite(const std::string& spritesheetTexturePath);
+	explicit Sprite(const std::string& spritesheetTexturePath);
 
 	Sprite(const Sprite&) = delete;
 	Sprite& operator=(const Sprite&) = delete;
+	Sprite(Sprite&&) = delete;
+	Sprite& operator=(Sprite&&) = delete;
 
 	~Sprite();
 
@@ -23,17 +25,16 @@ public:
 	void SetAnimationFrameInfo(const AnimationFrameInfo& animationState);
 
 	void RotateBy(float angle);
-
 	void ResetRotation();
-
 	void SetScale(float scale);
-
 	void SetVisible(bool isVisible);
+
+
 	void FlipHorizontally();
 	void FlipVertically();
-
 	void ResetHorizontalFlip();
 	void ResetVerticalFlip();
+
 
 	bool IsFinished() const;
 	bool IsFlippedHorizontally() const;
@@ -48,10 +49,8 @@ public:
 	float GetRotation() const;
 
 	void ResetAnimation();
-
 	void SetLooping(bool isLooping);
 	void SetStatic(bool isStatic);
-
 	void SetCurrentFrame(int frame);
 
 	void CopyFrom(const Sprite* pOther);

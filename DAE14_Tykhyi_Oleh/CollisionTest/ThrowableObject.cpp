@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "ThrowableObject.h"
+#include "Sprite.h"
 
 ThrowableObject::ThrowableObject(Sprite* pSprite, const Vector2f& position, float interactionRange, float scale, int floor)
 	:InteractableObject{ position, floor, interactionRange, InteractableType::throwableObject },

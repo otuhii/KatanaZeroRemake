@@ -1,5 +1,7 @@
 #include "pch.h"
 #include "JsonImporter.h"
+#include <fstream>
+#include <iostream>
 
 #include "Cat.h"
 #include "Door.h"

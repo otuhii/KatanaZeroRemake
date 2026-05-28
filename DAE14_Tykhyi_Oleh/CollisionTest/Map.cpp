@@ -79,7 +79,7 @@ void Map::SetEnvironmentCosmeticObjects(const std::vector<EnvironmentCosmeticObj
 	m_EnvironmentCosmeticObjects = cosmeticObjects;
 }
 
-void Map::SetInteractableObjects(const std::vector<InteractableObject*> pInteractableObjects)
+void Map::SetInteractableObjects(const std::vector<InteractableObject*>& pInteractableObjects)
 {
 	m_pInteractableObjects = pInteractableObjects;
 }

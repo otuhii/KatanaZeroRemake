@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 
 class SoundEffect;
 class SoundStream;
@@ -47,6 +48,8 @@ public:
 
 	SoundManager(const SoundManager&) = delete;
 	SoundManager& operator=(const SoundManager&) = delete;
+	SoundManager(SoundManager&&) = delete;
+	SoundManager& operator=(SoundManager&&) = delete;
 
 	void LinkLevelManager(LevelManager* pLevelManager);
 

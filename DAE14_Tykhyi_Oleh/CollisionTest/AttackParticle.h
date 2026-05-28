@@ -73,7 +73,7 @@ private:
 	bool
 		m_IsActive{ false },
 		m_IsFlippedVertically{ false },
-		m_IsFlippedHorizontally{ false};
+		m_IsFlippedHorizontally{ false };
 
 	float
 		m_Lifetime{},

@@ -4,7 +4,7 @@ class Gangster final:
     public Enemy
 {
 public:
-    Gangster(
+    explicit Gangster(
         Sprite* pSprite,
         Sprite* pGunsprite,
         Sprite* pBulletProjectile,

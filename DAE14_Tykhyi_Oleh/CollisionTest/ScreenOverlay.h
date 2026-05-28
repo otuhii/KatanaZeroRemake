@@ -8,8 +8,13 @@ class Hud;
 class ScreenOverlay final
 {
 public:
-	ScreenOverlay(SpriteManager* pSpriteManager, const Rectf& viewport, LevelManager* pLevelManager);
+	explicit ScreenOverlay(SpriteManager* pSpriteManager, const Rectf& viewport, LevelManager* pLevelManager);
 	~ScreenOverlay();
+
+	ScreenOverlay(const ScreenOverlay&) = delete;
+	ScreenOverlay& operator=(const ScreenOverlay&) = delete;
+	ScreenOverlay(ScreenOverlay&&) = delete;
+	ScreenOverlay& operator=(ScreenOverlay&&) = delete;
 
 	void Draw() const;
 

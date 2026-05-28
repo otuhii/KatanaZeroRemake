@@ -1,5 +1,4 @@
 #pragma once
-
 #include <vector>
 
 class SpriteManager;
@@ -10,7 +9,12 @@ class Player;
 class Hud final
 {
 public:
-	Hud(SpriteManager* pSpriteManager, const Rectf& viewport);
+	explicit Hud(SpriteManager* pSpriteManager, const Rectf& viewport);
+
+	Hud(const Hud&) = delete;
+	Hud& operator=(const Hud&) = delete;
+	Hud(Hud&&) = delete;
+	Hud& operator=(Hud&&) = delete;
 
 	void Draw(LevelManager* pLevelManager) const;
 

@@ -5,10 +5,12 @@ class Sprite;
 class Cursor final
 {
 public:
-	Cursor(Sprite* pCursorSprite);
+	explicit Cursor(Sprite* pCursorSprite);
 
 	Cursor(const Cursor&) = delete;
 	Cursor& operator=(const Cursor&) = delete;
+	Cursor(Cursor&&) = delete;
+	Cursor& operator=(Cursor&&) = delete;
 
 	void Draw() const;
 

@@ -9,13 +9,13 @@ public:
 		enemy
 	};
 
-	Entity(Sprite* sprite, EntityType type, const Vector2f& position, const Vector2f& velocity, float speed, int floor);
+	explicit Entity(Sprite* sprite, EntityType type, const Vector2f& position, const Vector2f& velocity, float speed, int floor);
+
+	virtual ~Entity() = default;
 
 	virtual void Draw() const;
 
 	virtual void Update(const float elapsedSec, const Rectf& viewport);
-
-	virtual ~Entity() = default;
 
 	void SetFloor(int floor);
 
@@ -62,8 +62,6 @@ public:
 	bool			IsAlive() const;
 
 	virtual void Reset();
-
-	
 protected:
 	Sprite* GetSprite() const;
 

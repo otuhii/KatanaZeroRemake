@@ -7,7 +7,15 @@ class Door final:
 {
 
 public:
-	Door(Sprite* pSprite, const std::vector<AnimationFrameInfo>& doorAnimation, const Vector2f& position, int floor, const Rectf& openedHitbox, const Rectf& closedHitbox, float scale);
+	explicit Door(
+		Sprite* pSprite, 
+		const std::vector<AnimationFrameInfo>& doorAnimation, 
+		const Vector2f& position, 
+		int floor, 
+		const Rectf& openedHitbox, 
+		const Rectf& closedHitbox, 
+		float scale
+	);
 
 	void Draw() const override;
 

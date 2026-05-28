@@ -9,12 +9,14 @@ class Sprite;
 class ParticleManager final
 {
 public:
-	ParticleManager(int attackInstanceCount, int cosmeticInstanceCount, SpriteManager* pSpriteManager);
+	explicit ParticleManager(int attackInstanceCount, int cosmeticInstanceCount, SpriteManager* pSpriteManager);
 
 	~ParticleManager();
 
 	ParticleManager(const ParticleManager&) = delete;
 	ParticleManager& operator=(const ParticleManager&) = delete;
+	ParticleManager(ParticleManager&&) = delete;
+	ParticleManager& operator=(ParticleManager&&) = delete;
 
 	void Draw() const;
 	void Update(float elapsedSec);
@@ -69,6 +71,7 @@ public:
 
 	void Reset();
 private:
+	//consider changing to instances as it will be faster to loop over
 	std::vector<AttackParticle*> m_pAttackParticles{};
 	std::vector<CosmeticParticle*> m_pCosmeticParticles{};
 

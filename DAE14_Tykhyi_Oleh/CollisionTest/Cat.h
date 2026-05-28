@@ -16,7 +16,14 @@ public:
 		lookBack
 	};
 
-	Cat(Sprite* pSprite, const std::vector<AnimationFrameInfo>& catAnimation, const Vector2f& position, int floor, float interactionRange, float scale);
+	explicit Cat(
+		Sprite* pSprite, 
+		const std::vector<AnimationFrameInfo>& catAnimation, 
+		const Vector2f& position, 
+		int floor, 
+		float interactionRange, 
+		float scale
+	);
 
 	void Draw() const override;
 

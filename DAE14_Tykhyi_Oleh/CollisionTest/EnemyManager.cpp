@@ -42,14 +42,14 @@ void EnemyManager::Draw() const
 	}
 }
 
-void EnemyManager::Update(float elapsedSec, const Map* gameMap, ParticleManager* particleManager, const CollisionManager* collisionManager)
+void EnemyManager::Update(float elapsedSec, const Map* gameMap, ParticleManager* particleManager)
 {
 	for (Enemy* pEnemy : m_pEnemies)
 	{
 		pEnemy->UpdateControlPoints(&m_ControlPoints);
 		pEnemy->Update(elapsedSec, particleManager, gameMap, Rectf{});
 
-		collisionManager->HandleMovement(pEnemy, gameMap, elapsedSec, false);
+		CollisionManager::HandleMovement(pEnemy, gameMap, elapsedSec, false);
 	}
 }
 

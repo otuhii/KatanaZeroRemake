@@ -14,7 +14,7 @@ public:
 		endTrigger
 	};
 
-	EnvironmentActiveObject(
+	explicit EnvironmentActiveObject(
 		float positionX,
 		float positionY,
 		const std::vector<Rectf>& colliders,

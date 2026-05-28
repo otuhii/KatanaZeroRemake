@@ -121,11 +121,17 @@ void Cat::SetState(CatState state, SoundManager* pSoundManager)
 
 	if (m_State == CatState::petting)
 	{
-		pSoundManager->Play(SoundManager::SoundEffectType::catPet, 0);
+		if (pSoundManager)
+		{
+			pSoundManager->Play(SoundManager::SoundEffectType::catPet, 0);
+		}
 	}
 	else if (m_State == CatState::lookBack)
 	{
-		pSoundManager->Play(SoundManager::SoundEffectType::meow, 0);
+		if (pSoundManager)
+		{
+			pSoundManager->Play(SoundManager::SoundEffectType::meow, 0);
+		}
 	}
 
 	m_pSprite->SetAnimationFrameInfo(m_CatSpriteFrames[static_cast<int>(m_State)]);
@@ -147,6 +153,6 @@ void Cat::SaveSnapshot(InteractableObjectSnapshot& snapshot)
 
 void Cat::ApplySnapshot(const InteractableObjectSnapshot& snapshot)
 {
+	SetState(static_cast<CatState>(snapshot.state), nullptr);
 	m_pSprite->SetCurrentFrame(snapshot.currentFrame);
-	m_State = static_cast<CatState>(snapshot.state);
 }

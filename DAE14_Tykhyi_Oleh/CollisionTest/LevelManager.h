@@ -15,9 +15,14 @@ public:
 		Replay
 	};
 
-	LevelManager(Player* pPlayer, EnemyManager* pEnemyManager);
+	explicit LevelManager(Player* pPlayer, EnemyManager* pEnemyManager);
 
 	~LevelManager();
+
+	LevelManager(const LevelManager&) = delete;
+	LevelManager& operator=(const LevelManager&) = delete;
+	LevelManager(LevelManager&&) = delete;
+	LevelManager& operator=(LevelManager&&) = delete;
 
 	void Update(float elapsedSec, const Uint8* pStates);
 

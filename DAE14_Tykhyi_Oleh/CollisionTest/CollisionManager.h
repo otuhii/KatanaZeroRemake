@@ -8,15 +8,46 @@ class SoundManager;
 class CollisionManager final
 {
 public:
-	void HandleMovement(Entity* pEntity, const Map* pMap, float elapsedSec, bool updateFloorInfo) const;
+	static void HandleMovement(
+		Entity* pEntity, 
+		const Map* pMap, 
+		float elapsedSec, 
+		bool updateFloorInfo
+	);
 
-	void HandleParticles(ParticleManager* particleManager, SoundManager* pSoundManager, const Map* pMap);
+	static void HandleParticles(
+		ParticleManager* particleManager, 
+		SoundManager* pSoundManager, 
+		const Map* pMap
+	);
 private:
-	void CheckCollision(float elapsedSec, Entity* pEntity, const Map* pMap, bool isHorizontalMovement, bool updateFloorInfo) const;
-	void HandleAABB(float elapsedSec, Entity* pEntity, EnvironmentActiveObject::EnvironmentObjectType type, const Rectf& objectCollider, int objectFloor, bool isHorizontalMovement, bool updateFloorInfo) const;
+	static void CheckCollision(
+		float elapsedSec, 
+		Entity* pEntity, 
+		const Map* pMap,
+		bool isHorizontalMovement,
+		bool updateFloorInfo
+	);
+	static void HandleAABB(
+		float elapsedSec, 
+		Entity* pEntity, 
+		EnvironmentActiveObject::EnvironmentObjectType type, 
+		const Rectf& objectCollider,
+		int objectFloor, 
+		bool isHorizontalMovement, 
+		bool updateFloorInfo
+	);
 
-	bool CanMoveThroughPlatform(float elapsedSec, Entity* pEntity, const Rectf& objectCollider, bool isHorizontalMovement) const;
+	static bool CanMoveThroughPlatform(
+		float elapsedSec,
+		Entity* pEntity, 
+		const Rectf& objectCollider, 
+		bool isHorizontalMovement
+	);
 
-	bool IsOverlappingWithMap(const std::vector<Vector2f>& poly, const Map* pMap) const;
+	static bool IsOverlappingWithMap(
+		const std::vector<Vector2f>& poly, 
+		const Map* pMap
+	);
 };
 

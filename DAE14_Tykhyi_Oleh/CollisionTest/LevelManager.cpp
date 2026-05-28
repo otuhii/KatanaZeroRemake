@@ -72,6 +72,7 @@ void LevelManager::Update(float elapsedSec, const Uint8* pStates)
 
 		if (!IsPlayerAlive())
 		{
+			m_pParticleManager->Reset();
 			ClearReplayBuffer();
 		}
 	}

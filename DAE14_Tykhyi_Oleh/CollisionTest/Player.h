@@ -1,5 +1,7 @@
 #pragma once
 #include "Entity.h"
+#include <vector>
+
 
 class Map;
 class ParticleManager;
@@ -8,7 +10,6 @@ class InteractableObject;
 class ThrowableObject;
 struct PlayerSnapshot;
 
-#include <vector>
 
 class Player final : public Entity
 {
@@ -34,7 +35,17 @@ public:
 		count
 	};
 
-	Player(Sprite* sprite, Sprite* splashSprite, Sprite* rangeProjectileSprite, const std::vector<AnimationFrameInfo>& playerAnimation, const std::vector<AnimationFrameInfo>& rangeProjectileSpriteFrameInfo, const Vector2f& position, float speed, float scale, int floor);
+	Player(
+		Sprite* sprite,
+		Sprite* splashSprite,
+		Sprite* rangeProjectileSprite, 
+		const std::vector<AnimationFrameInfo>& playerAnimation,
+		const std::vector<AnimationFrameInfo>& rangeProjectileSpriteFrameInfo, 
+		const Vector2f& position, 
+		float speed, 
+		float scale, 
+		int floor
+	);
 
 	void Draw() const override;
 

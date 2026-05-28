@@ -3,7 +3,6 @@
 
 class PathFinder final
 {
-
 public:
 	static std::vector<int> CalculatePathToFloor(int currentIndex, int targetFloor, int currentFloor, const std::vector<ControlPoint>& controlPoints);
 

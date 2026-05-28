@@ -17,9 +17,14 @@ public:
 	};
 
 
-	InteractableObject(const Vector2f& position, int floor, float interactionRange, InteractableType type);
+	explicit InteractableObject(const Vector2f& position, int floor, float interactionRange, InteractableType type);
 
 	virtual ~InteractableObject() = default;
+
+	InteractableObject(const InteractableObject&) = delete;
+	InteractableObject& operator=(const InteractableObject&) = delete;
+	InteractableObject(InteractableObject&&) = delete;
+	InteractableObject& operator=(InteractableObject&&) = delete;
 
 	virtual void Draw() const = 0;
 

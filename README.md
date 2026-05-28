@@ -101,14 +101,14 @@ Explain which project (version) must be run.
 
 
 <!-- HOW TO PLAY -->
-## How to play
-
-Use this space to show useful examples of how a game can be played. 
-Additional screenshots and demos work well in this space. 
+## How to play 
 
 ### Controls
-* keys, .. 
-* .. 
+* Movement is performed with w a s d keys: a and d keys move you to the sides, w key corresponds to jumping, s key makes you crouch
+* a + s or d + s - you roll in either right or left direction
+* To interact with environment objects(like flower pots or lamps or if you want to pet a cat) you need to press space
+* When throwable object is picked, next attack(left click) will throw it
+* In order to slow the time you need to press left shift
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -118,10 +118,19 @@ Additional screenshots and demos work well in this space.
 ## Class structure 
 
 ### Object composition 
-If you applied object composition (optional); explain where and how.
+I applied object composition(aggregation) for Entity, Enemy(and enemyType child classes), Player, child classes of interactable objects, screenoverlay, particle implementation, hud and other classes which needed some textures, they contain sprite pointer which is used for drawing specific animations, but they don't own this sprite(all sprites are managed by sprite manager). Sprite contains pointer to Texture class which is kind of object composition but not every sprite owns its texture. 
+Player constains interactableObject and throwable object pointers in order to handle specific interactions with objects.
+My enemy class constains a pointer to base class entity which is used for movement to target like player.
+In order to achieve handling particles in replay, i contain pointer to ReplayParticleEvent inside particle classes which is linked to particle when particle is created during gameplay, when particle is deactivated i change value of lifetime inside that specific ReplayParticleEvent to specific m_TimeAlive of that particle.
+
+I use association inside:
+LevelManager <-> particleManager
+LevelManager <-> SoundManager
 
 ### Inheritance 
-Explain where you applied inheritance (mandatory).
+I applied inheritance for entity -> player and entity -> enemy -> enemyType structures.
+I use entity as general interface for checking collisions and basic physics stuff. Enemy base class contains general implementation for ai, which is then modified in specific enemyType classes.
+Also i applied inheritance for interactable object class, which constains basic interface for player interactions with certain type of objects(door, cat, throwable object)
 
 ### ..
 
@@ -132,19 +141,19 @@ Explain where you applied inheritance (mandatory).
 ## Checklist
 
 - [x] Accept / set up github project
-- [ ] week 01 topics applied
-    - [ ] const keyword applied proactively (variables, functions,..)
-    - [ ] static keyword applied proactively (class variables, static functions,..)
-    - [ ] object composition (optional)
-- [ ] week 02 topics applied
-- [ ] week 03 topics applied
-- [ ] week 04 topics applied
-- [ ] week 05 topics applied
-- [ ] week 06 topics applied
-- [ ] week 07 topics applied
-- [ ] week 08 topics applied
-- [ ] week 09 topics applied (optional)
-- [ ] week 10 topics applied (optional)
+- [x] week 01 topics applied
+    - [x] const keyword applied proactively (variables, functions,..)
+    - [x] static keyword applied proactively (class variables, static functions,..)
+    - [x] object composition (optional)
+- [x] week 02 topics applied
+- [x] week 03 topics applied
+- [x] week 04 topics applied
+- [x] week 05 topics applied
+- [x] week 06 topics applied
+- [x] week 07 topics applied
+- [x] week 08 topics applied
+- [x] week 09 topics applied (optional)
+- [x] week 10 topics applied (optional)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -161,10 +170,10 @@ Project Link: [https://github.com/HowestDAE/gd14-olehtykhyi#](https://github.com
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-Use this space to list resources you find helpful and would like to give credit to. 
-
-* [Example 1: cpp reference on std::vector](https://en.cppreference.com/w/cpp/container/vector)
-* ..
+* https://github.com/nlohmann/json
+* https://json.nlohmann.me/api/basic_json/
+* https://github.com/Marcel-Rei/Prog-2-Unity-JSON-Exporter
+* https://en.cppreference.com/
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

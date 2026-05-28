@@ -5,23 +5,24 @@
 
 class SpriteManager;
 class Map;
-class CollisionManager;
 class SpriteManager;
 class SoundManager;
 
 class EnemyManager final
 {
 public:
-	EnemyManager(const Entity* pTarget, const SoundManager* pSoundManager);
+	explicit EnemyManager(const Entity* pTarget, const SoundManager* pSoundManager);
 	
 	EnemyManager(const EnemyManager&) = delete;
 	EnemyManager& operator=(const EnemyManager&) = delete;
+	EnemyManager(EnemyManager&&) = delete;
+	EnemyManager& operator=(EnemyManager&&) = delete;
 
 	~EnemyManager();
 
 	void Draw() const;
 
-	void Update(float elapsedSec, const Map* gameMap, ParticleManager* particleManager, const CollisionManager* collisionManager);
+	void Update(float elapsedSec, const Map* gameMap, ParticleManager* particleManager);
 
 	void AddEnemy(Enemy::EnemyType type, const Vector2f& position, float speed, float scale, int floor, SpriteManager* pSpriteManager);
 
@@ -56,6 +57,7 @@ private:
 
 	const Entity*
 		m_pTarget{};
+
 	const SoundManager*
 		m_pSoundManager{};
 

@@ -3,7 +3,7 @@
 class Camera
 {
 public:
-	Camera(float screenWidth, float screenHeight);
+	explicit Camera(float screenWidth, float screenHeight);
 
 	void Update(
 		float elapsedSec, 

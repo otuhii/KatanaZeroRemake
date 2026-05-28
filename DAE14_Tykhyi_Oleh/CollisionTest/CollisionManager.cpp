@@ -11,7 +11,7 @@
 #include "UserUtils.h"
 #include "VFX.h"
 
-void CollisionManager::HandleMovement(Entity* pEntity, const Map* pMap, float elapsedSec, bool updateFloorInfo) const
+void CollisionManager::HandleMovement(Entity* pEntity, const Map* pMap, float elapsedSec, bool updateFloorInfo)
 {
 	Vector2f
 		entityVelocity{ pEntity->GetVelocity() },
@@ -65,7 +65,7 @@ void CollisionManager::HandleParticles(ParticleManager* pParticleManager, SoundM
 	}
 }
 
-void CollisionManager::CheckCollision(float elapsedSec, Entity* pEntity, const Map* pMap, bool isHorizontalMovement, bool updateFloorInfo) const
+void CollisionManager::CheckCollision(float elapsedSec, Entity* pEntity, const Map* pMap, bool isHorizontalMovement, bool updateFloorInfo)
 {
 	for (const EnvironmentActiveObject& object : pMap->GetEnvironmentActiveObjects())
 	{
@@ -107,7 +107,7 @@ void CollisionManager::CheckCollision(float elapsedSec, Entity* pEntity, const M
 	}
 }
 
-void CollisionManager::HandleAABB(float elapsedSec, Entity* pEntity, EnvironmentActiveObject::EnvironmentObjectType type, const Rectf& objectCollider, int objectFloor, bool isHorizontalMovement, bool updateFloorInfo) const
+void CollisionManager::HandleAABB(float elapsedSec, Entity* pEntity, EnvironmentActiveObject::EnvironmentObjectType type, const Rectf& objectCollider, int objectFloor, bool isHorizontalMovement, bool updateFloorInfo)
 {
 	Rectf
 		entityCurrentHitbox{ pEntity->GetCurrentHitbox() },
@@ -201,7 +201,7 @@ void CollisionManager::HandleAABB(float elapsedSec, Entity* pEntity, Environment
 	
 }
 
-bool CollisionManager::CanMoveThroughPlatform(float elapsedSec, Entity* pEntity, const Rectf& objectCollider, bool isHorizontalMovement) const
+bool CollisionManager::CanMoveThroughPlatform(float elapsedSec, Entity* pEntity, const Rectf& objectCollider, bool isHorizontalMovement)
 {
 	const float
 		velEps{ 0.1f };
@@ -239,7 +239,7 @@ bool CollisionManager::CanMoveThroughPlatform(float elapsedSec, Entity* pEntity,
 }
 
 
-bool CollisionManager::IsOverlappingWithMap(const std::vector<Vector2f>& poly, const Map* map) const
+bool CollisionManager::IsOverlappingWithMap(const std::vector<Vector2f>& poly, const Map* map)
 {
 	for (const EnvironmentActiveObject& object : map->GetEnvironmentActiveObjects())
 	{

@@ -34,10 +34,8 @@ Game::~Game( )
 void Game::Initialize( )
 {
 	m_pSpriteManager = new SpriteManager{};
-	m_pCollisionManager = new CollisionManager{};
 	m_pMap = new Map{};
 	m_pParticleManager = new ParticleManager{100, 300, m_pSpriteManager};
-	m_pCombatManager = new CombatManager{};
 	m_pSoundManager = new SoundManager{};
 
 
@@ -79,11 +77,9 @@ void Game::Cleanup( )
 {
 	delete m_pMap;
 	delete m_pSpriteManager;
-	delete m_pCollisionManager;
 	delete m_pPlayer;
 	delete m_pEnemyManager;
 	delete m_pParticleManager;
-	delete m_pCombatManager;
 	delete m_pSoundManager;
 	delete m_pCamera;
 	delete m_pCursor;
@@ -114,13 +110,13 @@ void Game::Update( float elapsedSec )
 	{
 		m_pPlayer->Update(timeDivider * elapsedSec, m_pMap, pStates, GetViewPort(), m_pParticleManager, m_pSoundManager);
 
-		m_pCollisionManager->HandleMovement(m_pPlayer, m_pMap, timeDivider * elapsedSec, true);
+		CollisionManager::HandleMovement(m_pPlayer, m_pMap, timeDivider * elapsedSec, true);
 
-		m_pEnemyManager->Update(timeDivider * elapsedSec, m_pMap, m_pParticleManager, m_pCollisionManager);
+		m_pEnemyManager->Update(timeDivider * elapsedSec, m_pMap, m_pParticleManager);
 
-		m_pCombatManager->ResolveCombat(m_pPlayer, m_pEnemyManager, m_pParticleManager, m_pMap, m_pSoundManager);
+		CollisionManager::HandleParticles(m_pParticleManager, m_pSoundManager, m_pMap);
 
-		m_pCollisionManager->HandleParticles(m_pParticleManager, m_pSoundManager, m_pMap);
+		CombatManager::ResolveCombat(m_pPlayer, m_pEnemyManager, m_pParticleManager, m_pMap, m_pSoundManager);
 
 		m_pMap->Update(timeDivider * elapsedSec, m_pSoundManager, m_pPlayer);
 	}

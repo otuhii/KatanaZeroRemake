@@ -28,7 +28,7 @@ public:
 		dead
 	};
 
-	Enemy(
+	explicit Enemy(
 		EnemyType type,
 		EnemyState state,
 		Sprite* pSprite, 
@@ -43,7 +43,12 @@ public:
 		float attackRange
 	);
 
-	virtual ~Enemy() = default;
+	Enemy(const Enemy&) = delete;
+	Enemy& operator=(const Enemy&) = delete;
+	Enemy(Enemy&&) = delete;
+	Enemy& operator=(Enemy&&) = delete;
+
+	virtual ~Enemy() override = default;
 
 	virtual void Draw() const override;
 

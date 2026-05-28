@@ -1,12 +1,14 @@
 #pragma once
 #include "InteractableObject.h"
-#include "Sprite.h"
 
-class ThrowableObject :
+class SoundManager;
+class Sprite;
+
+class ThrowableObject final:
     public InteractableObject
 {
 public:
-    ThrowableObject(Sprite* pSprite, const Vector2f& position, float interactionRange, float scale, int floor);
+    explicit ThrowableObject(Sprite* pSprite, const Vector2f& position, float interactionRange, float scale, int floor);
 
     void Draw() const override;
     void Interact(SoundManager* pSoundManager) override;
@@ -14,7 +16,6 @@ public:
     void Reset() override;
 
     Sprite* GetSprite() const;
-
 private:
     Sprite* m_pSprite{};
 };
