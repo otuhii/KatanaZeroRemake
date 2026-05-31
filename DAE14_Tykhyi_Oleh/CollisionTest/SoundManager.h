@@ -61,7 +61,6 @@ private:
 	LevelManager*
 		m_pLevelManager{};
 
-
 	std::vector<SoundEffect*> m_pSoundEffects{};
 	std::vector<SoundStream*> m_pSoundStreams{};
 };

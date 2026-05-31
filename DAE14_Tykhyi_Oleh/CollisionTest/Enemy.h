@@ -42,13 +42,13 @@ public:
 		float playerDetectionRange,
 		float attackRange
 	);
+	virtual ~Enemy() override = default;
 
 	Enemy(const Enemy&) = delete;
 	Enemy& operator=(const Enemy&) = delete;
 	Enemy(Enemy&&) = delete;
 	Enemy& operator=(Enemy&&) = delete;
 
-	virtual ~Enemy() override = default;
 
 	virtual void Draw() const override;
 
@@ -74,7 +74,7 @@ protected:
 	virtual void Attack( ParticleManager* particleManager) = 0;
 
 	float GetAttackCooldown() const;
-	void ResetAttackCooldown() ;
+	void ResetAttackCooldown();
 
 	void			UpdateIdle(float elapsedSec, const Map* pMap);
 	void			UpdateWalk(float elapsedSec, const Map* pMap);

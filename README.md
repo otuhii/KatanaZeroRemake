@@ -117,22 +117,34 @@ Explain which project (version) must be run.
 <!-- CLASS STRUCTURE -->
 ## Class structure 
 
-### Object composition 
-I applied object composition(aggregation) for Entity, Enemy(and enemyType child classes), Player, child classes of interactable objects, screenoverlay, particle implementation, hud and other classes which needed some textures, they contain sprite pointer which is used for drawing specific animations, but they don't own this sprite(all sprites are managed by sprite manager). Sprite contains pointer to Texture class which is kind of object composition but not every sprite owns its texture. 
-Player constains interactableObject and throwable object pointers in order to handle specific interactions with objects.
-My enemy class constains a pointer to base class entity which is used for movement to target like player.
-In order to achieve handling particles in replay, i contain pointer to ReplayParticleEvent inside particle classes which is linked to particle when particle is created during gameplay, when particle is deactivated i change value of lifetime inside that specific ReplayParticleEvent to specific m_TimeAlive of that particle.
+## Object composition 
+Object composition is applied within ScreenOverlay class, which manages my Hud output and lifetime. \
+Most of my manager classes uses object composition owning a vector of specific type. 
+ * ParticleManager owns two pool vectors for AttackParticle pointers and CosmeticParticle pointers.
+ * EnemyManager owns vector of Enemy pointers.
+ * SoundManager owns vector of SoundEffect pointers and SoundStream pointers
+ * SpriteManager owns vector of Sprite pointers.
 
-I use association inside:
-LevelManager <-> particleManager
-LevelManager <-> SoundManager
+Also Map class owns three vectors of environment objects: EnvironmentActiveObject, EnvironmentCosmetiObject and InteractableObject. EnvironmentActiveObject instances and EnvironmentCosmeticObject instances are stored by value thus they are deleted automatically. But my InteractableObjects are stored via pointers because i use it to implement polymorphic behavior for player interactions with those objects.
 
-### Inheritance 
-I applied inheritance for entity -> player and entity -> enemy -> enemyType structures.
-I use entity as general interface for checking collisions and basic physics stuff. Enemy base class contains general implementation for ai, which is then modified in specific enemyType classes.
-Also i applied inheritance for interactable object class, which constains basic interface for player interactions with certain type of objects(door, cat, throwable object)
+## Object aggregation
+To enforce memory safety and perform easy management of animations and visuals, classes like 'Entity', 'Player', 'ScreenOverlay', 'EnvironmentActiveObject', 'EnvironmentCosmeticObject' and various 'InteractableObject' subclasses use aggregation. \ 
+They maintain pointer to 'Sprite' instances, allowing them to cycle through animations and draw themselves without owning the underlying asset lifetimes. All sprite allocations, updates and destructions are entirely controlled by 'SpriteManager'.
 
-### ..
+## Object association
+I use association inside 'LevelManager', 'ParticleManager' and 'SoundManager'.
+Those classes need to access data of each other to output correct data or store correct data for my replay mechanic.
+So i maintain these relations:
+* LevelManager <-> ParticleManager
+* LevelManager <-> SoundManager
+
+
+## Inheritance 
+I have two inheritance trees:
+* Entities: I have two main branches for that, which are 'Entity -> Player' and 'Entity -> Enemy -> EnemySubClass'. The base entity class functions are used as general interface for physics and collisions. The enemy base class includes generalized state machine and base AI for enemy instances(regular bfs pathfinding). To handle tracking mechanics, enemy base class maintains 'Entity' pointer to its current movement target(such as the 'Player'), so here it can also be easily used to track other entities than player. Specialized attack behaviors are then isolated inside subclasses of enemy type(Grunt class and Gangster class).
+  <img src="images_&_spritesheets/gitRepoImages/EntityTree.png" alt="EntityTree">
+* Interactable objects: InteractableObject class is abstract interface layout. This base class sets up basic possible interactions which then are extended inside child subclasses. In these child subclasses i handle specific animations, collisions and states for each subclass.
+  <img src="images_&_spritesheets/gitRepoImages/InteractableTree.png" alt="InteractableObjectTree">
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -175,7 +187,6 @@ Project Link: [https://github.com/HowestDAE/gd14-olehtykhyi#](https://github.com
 * https://github.com/Marcel-Rei/Prog-2-Unity-JSON-Exporter
 * https://en.cppreference.com/
 * https://github.com/UnderminersTeam/UndertaleModTool.git
-*
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

@@ -228,7 +228,6 @@ void LevelManager::RecordCurrentFrame()
 
 	RecordInteractable(frame);
 
-
 	const std::vector<Enemy*>& enemies = m_pEnemyManager->GetEnemies();
 	for (Enemy* pEnemy : enemies)
 	{

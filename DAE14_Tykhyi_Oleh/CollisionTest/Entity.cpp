@@ -208,11 +208,13 @@ bool Entity::IsAlive() const
 void Entity::Reset() 
 {
 	GetSprite()->SetLooping(true);
+	GetSprite()->ResetHorizontalFlip();
 	m_Position = m_InitialPosition;
 	m_Velocity = Vector2f{};
 	m_IsAlive = true;
 	m_Floor = m_InitialFloor;
 	m_CanJumpThroughPlatform = false;
+	
 }
 
 Sprite* Entity::GetSprite() const
