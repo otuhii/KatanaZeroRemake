@@ -15,7 +15,6 @@ void Camera::Update(
 	float levelHeight
 )
 {
-
 	Vector2f 
 		screenCenter{ m_ScreenWidth * 0.5f, m_ScreenHeight * 0.5f };
 
@@ -59,7 +58,7 @@ void Camera::Update(
 	}
 }
 
-void Camera::Aim()
+void Camera::Aim() const
 {
 
 	glPushMatrix();

@@ -4,6 +4,8 @@
 class PathFinder final
 {
 public:
+	PathFinder() = delete;
+
 	static std::vector<int> CalculatePathToFloor(int currentIndex, int targetFloor, int currentFloor, const std::vector<ControlPoint>& controlPoints);
 
 	static int GetNextControlPointIdxByType(int currentIndex, bool includeCurrentIndex, int currentFloor, ControlPoint::ControlPointType type, const std::vector<ControlPoint>& controlPoints);

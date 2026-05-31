@@ -13,7 +13,7 @@ public:
 		float levelHeight
 	);
 
-	void Aim();
+	void Aim() const;
 
 	void Reset();
 
@@ -30,5 +30,5 @@ private:
 		m_BasePoint{};
 
 	bool
-		m_IsInitialized{ true };//to correctly set on the first frame
+		m_IsInitialized{ true };
 };

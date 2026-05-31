@@ -39,6 +39,7 @@ public:
 		int playerFloor{};
 	};
 
+	JsonImporter() = delete;
 
 	static GameData ImportGameInfo(const std::string& jsonPath, SpriteManager& spriteManager) ;
 	static std::vector<AnimationFrameInfo> ImportAnimationFrameObjects(const std::string& jsonPath) ;

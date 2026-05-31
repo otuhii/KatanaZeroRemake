@@ -8,6 +8,8 @@ class SoundManager;
 class CollisionManager final
 {
 public:
+	CollisionManager() = delete;
+
 	static void HandleMovement(
 		Entity* pEntity, 
 		const Map* pMap, 

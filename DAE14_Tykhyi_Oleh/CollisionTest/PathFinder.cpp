@@ -11,7 +11,6 @@ std::vector<int> PathFinder::CalculatePathToFloor(int currentIndex, int targetFl
 
 	std::vector<int> parentIndices(controlPoints.size(), -1);
 	std::vector<bool> visited(controlPoints.size(), false);
-
 	std::vector<int> queue;
 
 	int
@@ -23,7 +22,7 @@ std::vector<int> PathFinder::CalculatePathToFloor(int currentIndex, int targetFl
 		currentFloor,
 		ControlPoint::ControlPointType::stairSignifier,
 		controlPoints
-	) };
+	)};
 
 	if (startIndex == -1)
 	{
@@ -104,7 +103,6 @@ int PathFinder::GetNextControlPointIdxByType(int currentIndex, bool includeCurre
 
 int PathFinder::GetIndexByPointId(int id, const std::vector<ControlPoint>& controlPoints)
 {
-	//i could use map but fuck that, not that much points for O(n)
 	for (size_t index{ 0 }; index < controlPoints.size(); ++index)
 	{
 		if (controlPoints[index].pointId == id)

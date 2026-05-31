@@ -183,6 +183,7 @@ xcopy "$(ProjectDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="MoveSemantics.cpp" />
     <ClCompile Include="ParticleManager.cpp" />
     <ClCompile Include="PathFinder.cpp" />
     <ClCompile Include="pch.cpp" />
@@ -219,6 +220,7 @@ xcopy "$(ProjectDir)Resources\*.*" "$(TargetDir)" /y /d /s</Command>
     <ClInclude Include="JsonImporter.h" />
     <ClInclude Include="LevelManager.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="MoveSemantics.h" />
     <ClInclude Include="ParticleManager.h" />
     <ClInclude Include="PathFinder.h" />
     <ClInclude Include="pch.h" />
