@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "MoveSemantics.h"
+#include "Texture.h"
 
 MoveSemantics::~MoveSemantics()
 {
