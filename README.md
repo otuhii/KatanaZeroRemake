@@ -128,7 +128,7 @@ Most of my manager classes uses object composition owning a vector of specific t
 Also Map class owns three vectors of environment objects: EnvironmentActiveObject, EnvironmentCosmetiObject and InteractableObject. EnvironmentActiveObject instances and EnvironmentCosmeticObject instances are stored by value thus they are deleted automatically. But my InteractableObjects are stored via pointers because i use it to implement polymorphic behavior for player interactions with those objects.
 
 ## Object aggregation
-To enforce memory safety and perform easy management of animations and visuals, classes like 'Entity', 'Player', 'ScreenOverlay', 'EnvironmentActiveObject', 'EnvironmentCosmeticObject' and various 'InteractableObject' subclasses use aggregation. \ 
+To enforce memory safety and perform easy management of animations and visuals, classes like 'Entity', 'Player', 'ScreenOverlay', 'EnvironmentActiveObject', 'EnvironmentCosmeticObject' and various 'InteractableObject' subclasses use aggregation. 
 They maintain pointer to 'Sprite' instances, allowing them to cycle through animations and draw themselves without owning the underlying asset lifetimes. All sprite allocations, updates and destructions are entirely controlled by 'SpriteManager'.
 
 ## Object association
