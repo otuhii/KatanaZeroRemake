@@ -7,8 +7,6 @@
   <h2 align="center">KATANA ZERO</h2>
 
   <p align="center">
-    SAMURAI IN NEON CITY
-    <br />
     <strong>Original game : </strong>
     <a href="https://en.wikipedia.org/wiki/Katana_Zero"><strong>General info »</strong></a>
     ·
@@ -20,85 +18,41 @@
 
 
 
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-    </li>
-    <li>
-      <a href="#my-version">My version</a>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-    </li>
-    <li><a href="#how-to-play">How To Play</a></li>
-    <li><a href="#class-structure">Class structure</a></li>
-    <li><a href="#checklist">Checklist</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
-</details>
-
-
-
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-<img src="images_&_spritesheets/gitRepoImages/city.jpg" alt="city">
+<img src="images_&_spritesheets/gitRepoImages/main.gif" alt="dancedancedance">
+<img src="images_&_spritesheets/gitRepoImages/slowmo.gif" alt="dancedancedance" width=100%>
+<img src="images_&_spritesheets/gitRepoImages/replay.gif" alt="dancedancedance" width=100%>
 <img src="images_&_spritesheets/gitRepoImages/dancedancedance.gif" alt="dancedancedance">
-
-Here's why:
- 
-* An absolute masterpiece of a game
-* Technically challenging due to some complex mechanics
-* Interesting to make
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 ## My version
 
-This section gives a clear and detailed overview of which parts of the original game I planned to make.
-
-### The minimum I will most certainly develop:
 * Basic fighting mechanics(regular melee range katana attack) performed by your mouse
 * Interection with environment items(flowerpot, bottles) that can be picked up and then thrown
 * Time slow ability(no visuals)
 * Ability to pet a cat
 * HUD(and other signifiers for example time left to pass the level)
 * Smooth movement that feels nice
-
-### What I will probably make as well:
 * Extended fighting mechanics(big range katana attack)
 * Dust particles for running
-
-### What I plan to create if I have enough time left:
-* More advanced ai for enemies
 * Time reverse animation at the end
-* Visuals for time slow mechanic
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 <!-- GETTING STARTED -->
 ## Getting Started
-Detailed instructions on how to run your game project are in this section.
+
+Project is written in c++14
 
 ### Prerequisites
-
-This is an example of how to list things you need to use the software and how to install them.
 * Visual Studio 2022
 
 ### How to run the project
 
-Explain which project (version) must be run.
-* any extra steps if required 
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
+To run project, you clone repository, set up dependancies inside visual studio(game project depends on engine project inside vs solution) and just compile.
 
 <!-- HOW TO PLAY -->
 ## How to play 
@@ -115,7 +69,9 @@ Explain which project (version) must be run.
 
 
 <!-- CLASS STRUCTURE -->
-## Class structure 
+<div align="center">
+  <h2 align="center">Class structure</h2>
+</div>
 
 ## Object composition 
 Object composition is applied within ScreenOverlay class, which manages my Hud output and lifetime. \
@@ -148,37 +104,6 @@ I have two inheritance trees:
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-<!-- CHECKLIST -->
-## Checklist
-
-- [x] Accept / set up github project
-- [x] week 01 topics applied
-    - [x] const keyword applied proactively (variables, functions,..)
-    - [x] static keyword applied proactively (class variables, static functions,..)
-    - [x] object composition (optional)
-- [x] week 02 topics applied
-- [x] week 03 topics applied
-- [x] week 04 topics applied
-- [x] week 05 topics applied
-- [x] week 06 topics applied
-- [x] week 07 topics applied
-- [x] week 08 topics applied
-- [x] week 09 topics applied (optional)
-- [x] week 10 topics applied (optional)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- CONTACT -->
-## Contact
-
-Oleh Tykhyi - oleh.tykhyi@student.howest.be
-
-Project Link: [https://github.com/HowestDAE/gd14-olehtykhyi#](https://github.com/your_username/repo_name)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
@@ -187,6 +112,4 @@ Project Link: [https://github.com/HowestDAE/gd14-olehtykhyi#](https://github.com
 * https://github.com/Marcel-Rei/Prog-2-Unity-JSON-Exporter
 * https://en.cppreference.com/
 * https://github.com/UnderminersTeam/UndertaleModTool.git
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
